@@ -7,7 +7,7 @@ import { Badge } from "../../../components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 import { FileText, Download, Eye, CheckCircle2, Clock, AlertTriangle, Zap, Trash2, Loader2, FolderOpen } from 'lucide-react'
 import { toast } from "sonner"
-import { Layout } from "./Layout"
+import { Layout } from "../../Dashboards/InvestorDashboard/Layout"
 import { useApplications } from "@/hooks/useApplications"
 
 const DocumentsPage = () => {
@@ -147,7 +147,7 @@ const DocumentsPage = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="flex min-h-screen items-center justify-center mt-[10%] bg-white dark:bg-black">
+        <div className="flex min-h-screen items-center justify-center mt-[10%] bg-white dark:bg-black ">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black dark:border-white mx-auto mb-4"></div>
             <p className="text-gray-600 dark:text-gray-400">Loading documents...</p>
@@ -206,13 +206,13 @@ const DocumentsPage = () => {
 
     return (
       <div
-        className={`group relative flex items-center justify-between gap-3 p-3.5 rounded-xl border transition-all duration-200
+        className={`group relative flex items-center justify-between gap-3 p-3.5 rounded-xl border transition-all duration-200 
           ${isResult
             ? 'bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-md'
             : 'bg-white dark:bg-black border-gray-200 dark:border-gray-700 hover:border-black dark:hover:border-white hover:shadow-md'}
           ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}
       >
-        <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="flex items-center gap-3 flex-1 min-w-0 ">
           <div
             className={`flex items-center justify-center w-9 h-9 rounded-lg shrink-0
               ${isResult
@@ -291,8 +291,8 @@ const DocumentsPage = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-white dark:bg-black transition-colors duration-200">
-        <div className="space-y-6 m-4 p-4">
+      <div className="min-h-screen bg-white dark:bg-black transition-colors duration-200 rounded-2xl">
+        <div className="space-y-6 m-4 p-2">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>

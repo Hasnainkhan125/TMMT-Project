@@ -18,9 +18,9 @@ import ResetPasswordPage from './pages/Auth/ResetPasswordPage';
 import AmerDashboard from './pages/BackOffice/AmerDashboard';
 import BackOffice from './pages/BackOffice/BackOffice';
 import ChatTestPage from './pages/Chat/ChatTestPage';
-import CompliancePage from './pages/Dashboards/InvestorDashboard/CompliancePage';
-import DocumentsPage from './pages/Dashboards/InvestorDashboard/DocumentPage';
-import ProfilePage from './pages/Dashboards/InvestorDashboard/ProfilePage';
+import CompliancePage from './pages/Portfolios/InvestorPortfolio/CompliancePage';
+import DocumentsPage from './pages/Portfolios/InvestorPortfolio/DocumentPage';
+import ProfilePage from './pages/Portfolios/InvestorPortfolio/ProfilePage';
 import UAEStatisticsPage from './pages/Dashboards/UAEStatisticsPage';
 import HomePage from './pages/Home/HomePageBrand';
 import TammatHomePage, { SiteHeader } from './pages/Home/TammatHomePage';
@@ -50,175 +50,199 @@ import { ApplicationsProvider } from '@/contexts/ApplicationsContext';
 import { ServicesGrid } from './components/Services/Service-Grid';
 import ApplicationSection from './components/Dashboard/ApplicationSection';
 import { UserProvider } from './lib/user-context';
-import  SubscriptionPage  from './pages/subscription/SubscriptionPage';
+import SubscriptionPage from './pages/subscription/SubscriptionPage';
+
+// Import the DashboardContent from AdvancedInvestorPortfolio or create a wrapper
+// If you can't export DashboardContent, create a wrapper component
+const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
+  return <AdvancedInvestorPortfolio>{children}</AdvancedInvestorPortfolio>;
+};
 
 function AppRouter() {
   return (
     <ThemeProvider>
       <AuthProvider>
         <I18nProvider>
-      <Router>
-        <SiteHeader />
-        <AnnouncementBanner />
-        {/* <div className="fixed top-4 right-4 z-50">
-          <LanguageSwitcher />
-        </div> */}
-        <Routes>
-          {/* Authentication Routes */}
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          
-          {/* Public Routes */}
-          <Route path="/" element={<TammatHomePage />} />
-          <Route path="/original" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/apply" element={<ApplyPage />} />
-          <Route path="/inquiry/:id" element={<InquiryPage />} />
-          {/* <Route path="/services" element={<ServicesPage />} /> */}
-          <Route path="/faqs" element={<FAQsPage />} />
-          <Route path="/services/enhanced/:id" element={<EnhancedServicePage />} />
-          <Route path="/faqs" element={<FAQsPage />} />
-          <Route path="/brand" element={<Brand />} />
+          <Router>
+            <SiteHeader />
+            <AnnouncementBanner />
+            <Routes>
+              {/* Authentication Routes */}
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
+              
+              {/* Public Routes */}
+              <Route path="/" element={<TammatHomePage />} />
+              <Route path="/original" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/apply" element={<ApplyPage />} />
+              <Route path="/inquiry/:id" element={<InquiryPage />} />
+              <Route path="/faqs" element={<FAQsPage />} />
+              <Route path="/services/enhanced/:id" element={<EnhancedServicePage />} />
+              <Route path="/faqs" element={<FAQsPage />} />
+              <Route path="/brand" element={<Brand />} />
 
-          {/* Protected Routes - Require Authentication */}
+              {/* Protected Routes - Require Authentication */}
+              <Route path="/dashboard" element={
+                <UserRoute>
+                  <DashboardPage />
+                </UserRoute>
+              } />
 
-          <Route path="/dashboard" element={
-            <UserRoute>
-              <DashboardPage />
-            </UserRoute>
-          } />
+              <Route path="/subscription" element={
+                <SubscriptionPage />
+              } />
+              
+              <Route path="/customer-dashboard" element={
+                <FormProvider>
+                  <UserProvider>
+                    <ApplicationsProvider>
+                      <ServicesGrid />
+                      <ApplicationSection />
+                    </ApplicationsProvider>
+                  </UserProvider>
+                </FormProvider>
+              } />
 
-          <Route path="/subscription" element={
+              {/* 🔥 FIX: All investor routes now use AdvancedInvestorPortfolio as wrapper */}
+              <Route path="/user/dashboard" element={
+                <UserRoute>
+                  <AdvancedInvestorPortfolio />
+                </UserRoute>
+              } />
 
-              <SubscriptionPage />
+              <Route path="/user/documents" element={
+                <UserRoute>
+                  <AdvancedInvestorPortfolio>
+                    <DocumentsPage />
+                  </AdvancedInvestorPortfolio>
+                </UserRoute>
+              } />
 
-          } />
-          <Route path="/customer-dashboard" element={
-            // <UserRoute>
-              <FormProvider>
-                    <UserProvider>
+              <Route path="/investor/documents" element={
+                <UserRoute>
+                  <AdvancedInvestorPortfolio>
+                    <DocumentsPage />
+                  </AdvancedInvestorPortfolio>
+                </UserRoute>
+              } />
 
-                <ApplicationsProvider>
-                  {/* <CustomerDashboard /> */}
-                  <ServicesGrid />
-                  <ApplicationSection  />
-                </ApplicationsProvider>
-                    </UserProvider>
-              </FormProvider>
-            // </UserRoute>
-          } />
-          <Route path="/user/dashboard" element={
-            <UserRoute>
-              <AdvancedInvestorPortfolio />
-            </UserRoute>
-          } />
-          {/* User/Investor profile aliases */}
-          <Route path="/investor/profile" element={
-            <UserRoute>
-              <ProfilePage />
-            </UserRoute>
-          } />
-          <Route path="/user/profile" element={
-            <UserRoute>
-              <ProfilePage />
-            </UserRoute>
-          } />
-          <Route path="/investor/documents" element={
-            <UserRoute>
-              <DocumentsPage />
-            </UserRoute>
-          } />
-          <Route path="/user/documents" element={
-            <UserRoute>
-              <DocumentsPage />
-            </UserRoute>
-          } />
-          <Route path="/investor/compliance" element={
-            <UserRoute>
-              <CompliancePage />
-            </UserRoute>
-          } />
-          <Route path="/notifications" element={
-            <UserRoute>
-              <NotificationsPage />
-            </UserRoute>
-          } />
-          <Route path="/family" element={
-            <UserRoute>
-              <FamilyPage />
-            </UserRoute>
-          } />
-          <Route path="/payments" element={
-            <UserRoute>
-              <PaymentsPage />
-            </UserRoute>
-          } />
-          <Route path="/knowledge" element={<KnowledgeHubPage />} />
-          <Route path="/admin" element={
-            <AdminRoute>
-              <AdminControlPanel />
-            </AdminRoute>
-          } />
-          <Route path="/officer" element={
-            <AmerRoute>
-              <OfficerDashboard />
-            </AmerRoute>
-          } />
+              <Route path="/investor/compliance" element={
+                <UserRoute>
+                  <AdvancedInvestorPortfolio>
+                    <CompliancePage />
+                  </AdvancedInvestorPortfolio>
+                </UserRoute>
+              } />
 
-          <Route path="/issuer/portfolio" element={
-            <ProtectedRoute>
-              <IssuerPortfolio />
-            </ProtectedRoute>
-          } />
-          <Route path="/issuer/dashboard" element={
-            <ProtectedRoute>
-              <IssuerDashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/setting" element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          } />
-          <Route path="/history" element={
-            <ProtectedRoute>
-              <History />
-            </ProtectedRoute>
-          } />
-          <Route path="/backoffice" element={
-            <ProtectedRoute>
-              <BackOffice />
-            </ProtectedRoute>
-          } />
-          <Route path="/applications" element={
-            <ProtectedRoute>
-              <Applications />
-            </ProtectedRoute>
-          } />
-          <Route path="/chat-test" element={
-            <ProtectedRoute>
-              <ChatTestPage />
-            </ProtectedRoute>
-          } />
-          
-          {/* Amer Dashboard - Requires Amer Role */}
-          <Route path="/amer-dashboard" element={
-            <AmerRoute>
-              <AmerDashboard />
-            </AmerRoute>
-          } />
-          
-          <Route path="/uae-statistics" element={
-            <ProtectedRoute>
-              <UAEStatisticsPage />
-            </ProtectedRoute>
-          } />
+              <Route path="/user/profile" element={
+                <UserRoute>
+                  <AdvancedInvestorPortfolio>
+                    <ProfilePage />
+                  </AdvancedInvestorPortfolio>
+                </UserRoute>
+              } />
 
-          {/* Catch-all route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        <Toaster position="top-right" />
-      </Router>
+              <Route path="/investor/profile" element={
+                <UserRoute>
+                  <AdvancedInvestorPortfolio>
+                    <ProfilePage />
+                  </AdvancedInvestorPortfolio>
+                </UserRoute>
+              } />
+
+              {/* Other routes */}
+              <Route path="/notifications" element={
+                <UserRoute>
+                  <NotificationsPage />
+                </UserRoute>
+              } />
+              
+              <Route path="/family" element={
+                <UserRoute>
+                  <FamilyPage />
+                </UserRoute>
+              } />
+              
+              <Route path="/payments" element={
+                <UserRoute>
+                  <PaymentsPage />
+                </UserRoute>
+              } />
+              
+              <Route path="/knowledge" element={<KnowledgeHubPage />} />
+              
+              <Route path="/admin" element={
+                <AdminRoute>
+                  <AdminControlPanel />
+                </AdminRoute>
+              } />
+              
+              <Route path="/officer" element={
+                <AmerRoute>
+                  <OfficerDashboard />
+                </AmerRoute>
+              } />
+
+              <Route path="/issuer/portfolio" element={
+                <ProtectedRoute>
+                  <IssuerPortfolio />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/issuer/dashboard" element={
+                <ProtectedRoute>
+                  <IssuerDashboard />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/setting" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/history" element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/backoffice" element={
+                <ProtectedRoute>
+                  <BackOffice />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/applications" element={
+                <ProtectedRoute>
+                  <Applications />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/chat-test" element={
+                <ProtectedRoute>
+                  <ChatTestPage />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/amer-dashboard" element={
+                <AmerRoute>
+                  <AmerDashboard />
+                </AmerRoute>
+              } />
+              
+              <Route path="/uae-statistics" element={
+                <ProtectedRoute>
+                  <UAEStatisticsPage />
+                </ProtectedRoute>
+              } />
+
+              {/* Catch-all route */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+            <Toaster position="top-right" />
+          </Router>
         </I18nProvider>
       </AuthProvider>
     </ThemeProvider>

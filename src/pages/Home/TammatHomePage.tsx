@@ -3162,14 +3162,6 @@ const EmailCapture = () => {
     );
   };
 
-
-
-
-
-
-
-
-
 // Animated Tammat Footer with clip text
 const TammatFooter = () => {
   const { t } = useTranslation();

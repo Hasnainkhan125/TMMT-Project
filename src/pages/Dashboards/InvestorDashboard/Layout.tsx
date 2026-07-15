@@ -2,8 +2,7 @@
 
 import { User, PieChart, BarChart3, FileText, Shield, PieChartIcon } from 'lucide-react';
 import { Button } from '../../../components/ui/button';
-import { Link, useLocation, useNavigate } from 'react-router';
-
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export const Sidebar = () => {
 
@@ -56,14 +55,23 @@ export const Sidebar = () => {
         </aside>
 	)
 } 
+
 export const Layout = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  
+  // Dashboard routes where AdvancedInvestorPortfolio handles its own layout
+  const dashboardRoutes = ['/user/dashboard', '/user/documents', '/investor/compliance', '/user/profile'];
+  
+  // If on dashboard routes, don't render the sidebar wrapper
+  if (dashboardRoutes.includes(location.pathname)) {
+    return <>{children}</>;
+  }
+
 	return (
 		<div className="flex min-h-screen w-full space-y-6 bg-gradient-to-br from-slate-50 to-slate-100">
-			{/* Header */}
 			<div className="">
 				<Sidebar />
 			</div>
-
 			<div className="w-full">{children}</div>
 		</div>
 	);

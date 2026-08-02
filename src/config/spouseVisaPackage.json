@@ -1,0 +1,2175 @@
+{
+    "serviceInfo": {
+        "Recordid": 438,
+        "cat_id": 12,
+        "sub_cat_id": 75,
+        "slug": "spouse-visa-dubai",
+        "serviceName": "Spouse Visa",
+        "imageSrc": "https://goodhand.b-cdn.net/Assets/Footer_pages/SpouseVisa/Employee%20-%20Family%20Visa%20Outside.jpg",
+        "imageSrc1": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Legal/legal-translation%20good%20hand%20website/Smart%20Petition-01.svg",
+        "imageSrc2": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Legal/legal-translation%20good%20hand%20website/Smart%20Petition-01.svg",
+        "imageSrc3": null,
+        "imageSrc4": null,
+        "imgAlt": "Spouse Visa",
+        "imgTitle": "Spouse Visa",
+        "serviceSub2Slug": "PK5",
+        "position": 16,
+        "isRemove": false,
+        "IsAdminOnly": true,
+        "IsPublic": true,
+        "IsFeatured": false,
+        "isPackage": true,
+        "PackageId": 3,
+        "serviceReviews": "4.88 (1k reviews)",
+        "IsModel": true,
+        "noOfApplication": "9.7K Process",
+        "serviceShortDescription": "Spouse residency visa issuance and renewals.",
+        "component": "ServiceDetailPage",
+        "required": "E",
+        "applicantType": "E",
+        "tooltipData": null,
+        "priceData": [
+            {
+                "PriceRecordId": 564,
+                "PriceType": "Start From",
+                "PriceAmount": 1653.55,
+                "OldPriceAmount": 0,
+                "PriceCurrency": "AED",
+                "Description": null,
+                "serviceid": 438,
+                "isRemove": false,
+                "IsAdminOnly": true,
+                "IsPublic": true
+            }
+        ],
+        "h1Title": "Spouse Visa Dubai – UAE Residency for Husband & Wife Sponsorship | Goodhand"
+    },
+    "allTitles": {
+        "id": 116,
+        "service_id": 438,
+        "section_1_title": "What is the UAE Spouse Visa?",
+        "section_1_line": "The UAE Spouse Visa allows residents to sponsor their legally married husband or wife to live in the UAE. This visa promotes family unity, offering access to healthcare, legally employable, legal residence, and lifestyle benefits. It’s available for both male and female sponsors who meet income and legal criteria.",
+        "section_2_title": " Visa Information  ",
+        "section_2_line": null,
+        "section_3_title": "Guaranteed Timeline for Every Process",
+        "section_3_line": null,
+        "section_4_title": "Required Documents for a UAE Spouse Visa",
+        "section_4_line": null,
+        "section_5_title": "Partner We Work With",
+        "section_5_line": null,
+        "section_6_title": "Causes of UAE Spouse Residency Application Decline",
+        "section_6_line": "Factors That Can Lead to Application Denial",
+        "section_7_title": "",
+        "section_7_line": "",
+        "section_8_title": null,
+        "section_8_line": null,
+        "section_9_title": "",
+        "section_9_line": "",
+        "section_10_title": "One Visa Across All 7 Emirates",
+        "section_10_line": "",
+        "section_11_title": null,
+        "section_11_line": null,
+        "section_12_title": "FAQ’s",
+        "section_12_line": "How can I get an Spouse visa in the UAE",
+        "created_by": null,
+        "created_at": "2025-05-24T15:35:41.450Z",
+        "updated_by": null,
+        "updated_at": "2025-05-24T15:35:41.450Z"
+    },
+    "serviceOption": [
+        {
+            "id": 198,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/bulb.svg",
+            "title": "Who Is Eligible for the UAE Spouse Visa?",
+            "description": "A UAE resident with a valid visa, minimum salary (AED 4,000), and an attested marriage certificate can apply. Medical fitness is required for the spouse.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null,
+            "price_id": null,
+            "price_type": null,
+            "section": "1"
+        },
+        {
+            "id": 199,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/bulb.svg",
+            "title": "What Are the Key Benefits of the UAE Spouse Visa?",
+            "description": "Allows your spouse to live legally in the UAE, access healthcare and lifestyle services, work with a permit, and enjoy a renewable visa every 1 to 3 years.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null,
+            "price_id": null,
+            "price_type": null,
+            "section": "1"
+        }
+    ],
+    "serviceInformation": [
+        {
+            "id": 518,
+            "service_id": 438,
+            "info_label": "Visa Type",
+            "info_description": "Residence Visa ",
+            "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-5.svg",
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 519,
+            "service_id": 438,
+            "info_label": "Length of Stay",
+            "info_description": "2-10 Years ",
+            "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-1.svg",
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 520,
+            "service_id": 438,
+            "info_label": "E-Visa Validity",
+            "info_description": "Up to 60 Days ",
+            "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-2.svg",
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 521,
+            "service_id": 438,
+            "info_label": "Entry Type",
+            "info_description": "Multiple Entry Allowed",
+            "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-3.svg",
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        }
+    ],
+    "requireDocs": {
+        "featureDocs": [
+            {
+                "RecordId": 742,
+                "service_id": 438,
+                "TagLine": "Sponsor’s UAE Visa Copy.",
+                "shortName": "Photo",
+                "is_featured": true,
+                "icon": "https://goodhand.b-cdn.net/Assets/cart/photo.svg",
+                "isImportant": false
+            },
+            {
+                "RecordId": 744,
+                "service_id": 438,
+                "TagLine": "Applicant’s Passport Copy.",
+                "shortName": "Passport",
+                "is_featured": true,
+                "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group-1.svg",
+                "isImportant": false
+            },
+            {
+                "RecordId": 745,
+                "service_id": 438,
+                "TagLine": "Applicant’s High-Resolution Digital Photo (Passport-Size)",
+                "shortName": "Emirates Id",
+                "is_featured": true,
+                "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group.svg",
+                "isImportant": false
+            }
+        ],
+        "requiredDocs": [
+            {
+                "RecordId": 740,
+                "service_id": 438,
+                "TagLine": "Sponsor’s Original Emirates ID.",
+                "shortName": null,
+                "is_featured": false,
+                "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group-1.svg",
+                "isImportant": false
+            },
+            {
+                "RecordId": 741,
+                "service_id": 438,
+                "TagLine": "Sponsor’s Passport Copy.",
+                "shortName": null,
+                "is_featured": false,
+                "icon": "",
+                "isImportant": false
+            },
+            {
+                "RecordId": 742,
+                "service_id": 438,
+                "TagLine": "Sponsor’s UAE Visa Copy.",
+                "shortName": "Photo",
+                "is_featured": true,
+                "icon": "https://goodhand.b-cdn.net/Assets/cart/photo.svg",
+                "isImportant": false
+            },
+            {
+                "RecordId": 743,
+                "service_id": 438,
+                "TagLine": "Sponsor’s Emirates ID Copy.",
+                "shortName": "",
+                "is_featured": false,
+                "icon": "",
+                "isImportant": false
+            },
+            {
+                "RecordId": 744,
+                "service_id": 438,
+                "TagLine": "Applicant’s Passport Copy.",
+                "shortName": "Passport",
+                "is_featured": true,
+                "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group-1.svg",
+                "isImportant": false
+            },
+            {
+                "RecordId": 745,
+                "service_id": 438,
+                "TagLine": "Applicant’s High-Resolution Digital Photo (Passport-Size)",
+                "shortName": "Emirates Id",
+                "is_featured": true,
+                "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group.svg",
+                "isImportant": false
+            },
+            {
+                "RecordId": 746,
+                "service_id": 438,
+                "TagLine": "Labor Contract (For Mainland/Private Sector Employees).",
+                "shortName": "",
+                "is_featured": false,
+                "icon": "",
+                "isImportant": false
+            },
+            {
+                "RecordId": 747,
+                "service_id": 438,
+                "TagLine": "Original Salary Certificate (For Free Zone Employees).",
+                "shortName": "",
+                "is_featured": false,
+                "icon": "",
+                "isImportant": false
+            },
+            {
+                "RecordId": 748,
+                "service_id": 438,
+                "TagLine": "Trade License and Memorandum of Association (MOA) (For Investors/Partners Sponsoring an Applicant).",
+                "shortName": "",
+                "is_featured": false,
+                "icon": "",
+                "isImportant": false
+            },
+            {
+                "RecordId": 749,
+                "service_id": 438,
+                "TagLine": "Arabic Salary Certificate (For Government/Semi-Government Employees).",
+                "shortName": "",
+                "is_featured": false,
+                "icon": "",
+                "isImportant": false
+            },
+            {
+                "RecordId": 751,
+                "service_id": 438,
+                "TagLine": "Marriage Certificate – A copy of the marriage certificate.",
+                "shortName": null,
+                "is_featured": false,
+                "icon": "",
+                "isImportant": false
+            }
+        ]
+    },
+    "importantDocs": {
+        "RecordId": 459,
+        "ServiceId": 438,
+        "insideDescription": "A minimum monthly salary of 4,000 AED is required.---Marriage certificates and other foreign documents must be attested by the home country’s embassy or consulate in the UAE and the UAE Ministry of Foreign Affairs (MOFA).---All non-Arabic and non-English documents must be translated into Arabic and attested for legal validity.---Investors or partners must pay a refundable AED 3,045 deposit per person when sponsoring their spouse, reclaimable after visa cancellation.---Applicant’s Passport Validity – The passport must be valid for at least six months.---Ensure all documents comply with the latest General Directorate of Residency and Foreign Affairs (GDRFA) guidelines.---Overstay fines, if any, must be clear and settled at the time of change status or visa stamping.",
+        "outsideDescription": "2*-year UAE residency to sponsor your husband or wife and live together legally.----Services include entry permit, change status, medical test, Emirates IDs, and visa stamping.",
+        "FormDescription": "FormDescription",
+        "AboutDescription": null,
+        "insidePageDescription": null
+    },
+    "channelPartner": [
+        {
+            "id": 1,
+            "service_id": 1,
+            "slug": "son--daughter-residence-visa",
+            "title": "Amer Center",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/amer.svg",
+            "alt": "Amer Center",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:00.257Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:00.257Z"
+        },
+        {
+            "id": 2,
+            "service_id": 1,
+            "slug": "emirates-id",
+            "title": "Emirates ID",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr2.svg",
+            "alt": "Emirates ID",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:01.020Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:01.020Z"
+        },
+        {
+            "id": 3,
+            "service_id": 1,
+            "slug": "tasheel",
+            "title": "Tasheel",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr6.svg",
+            "alt": "Tasheel",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:01.777Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:01.777Z"
+        },
+        {
+            "id": 4,
+            "service_id": 1,
+            "slug": "notary",
+            "title": "Notary",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr9.svg",
+            "alt": "Notary",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:02.590Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:02.590Z"
+        },
+        {
+            "id": 5,
+            "service_id": 1,
+            "slug": "dubai-economy",
+            "title": "Dubai Economy",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr4.svg",
+            "alt": "Dubai Economy",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:03.387Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:03.387Z"
+        },
+        {
+            "id": 6,
+            "service_id": 1,
+            "slug": "legal-translation",
+            "title": "Legal Translation",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr8.svg",
+            "alt": "Legal Translation",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:04.140Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:04.140Z"
+        },
+        {
+            "id": 8,
+            "service_id": 1,
+            "slug": "tawjeeh",
+            "title": "Tawjeeh",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/tawjeeh-logo-01.svg",
+            "alt": "Tawjeeh",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:05.657Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:05.657Z"
+        },
+        {
+            "id": 9,
+            "service_id": 1,
+            "slug": "immigration",
+            "title": "Immigration",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/fed.svg",
+            "alt": "Immigration",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:06.420Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:06.420Z"
+        },
+        {
+            "id": 10,
+            "service_id": 1,
+            "slug": "al-adheed",
+            "title": "Al Adheed",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/adheeed.svg",
+            "alt": "Al Adheed",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:07.183Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:07.183Z"
+        },
+        {
+            "id": 11,
+            "service_id": 1,
+            "slug": "dubai-land-department",
+            "title": "Dubai Land Department",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/DLD.svg",
+            "alt": "Dubai Land Department",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:07.987Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:07.987Z"
+        },
+        {
+            "id": 12,
+            "service_id": 1,
+            "slug": "road-transport-authority",
+            "title": "Road Transport Authority",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/RTA.svg",
+            "alt": "Road Transport Authority",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:08.813Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:08.813Z"
+        },
+        {
+            "id": 13,
+            "service_id": 1,
+            "slug": "security-industry-regulatory-agency",
+            "title": "Security Industry Regulatory Agency",
+            "image": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/SIRA.svg",
+            "alt": "Security Industry Regulatory Agency",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-02-22T16:53:09.577Z",
+            "updated_by": null,
+            "updated_at": "2025-02-22T16:53:09.577Z"
+        }
+    ],
+    "serviceRejection": [
+        {
+            "id": 747,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/nil.svg",
+            "title": "Incomplete or Incorrect Documentation",
+            "description": " Missing or erroneous information can result in rejection.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:20.330Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:20.330Z"
+        },
+        {
+            "id": 748,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/jail.svg",
+            "title": "Invalid Passport",
+            "description": "Passports must be valid for at least six months.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:21.077Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:21.077Z"
+        },
+        {
+            "id": 749,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/alert.svg",
+            "title": "Failure to Meet Eligibility Criteria",
+            "description": " Not meeting salary or accommodation requirements.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:21.847Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:21.847Z"
+        },
+        {
+            "id": 750,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/Medical%20Ineligibility.svg",
+            "title": "Criminal Record or Security Concerns",
+            "description": "Background checks revealing issues can lead to denial",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:22.603Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:22.603Z"
+        },
+        {
+            "id": 751,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/Security%20Concerns.svg",
+            "title": "Health Issues",
+            "description": "Failing the mandatory medical fitness test.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:23.370Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:23.370Z"
+        },
+        {
+            "id": 752,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/Incomplete%20or%20incorrect%20documentation.svg",
+            "title": "Previous Visa Violations",
+            "description": "History of overstays or illegal activities in the UAE.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:24.120Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:24.120Z"
+        },
+        {
+            "id": 753,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/jail.svg",
+            "title": "Inadequate Financial Proof",
+            "description": "Insufficient evidence of income or employment.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:25.330Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:25.330Z"
+        },
+        {
+            "id": 754,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/alert.svg",
+            "title": "Sponsorship Problems",
+            "description": "Issues with the sponsor's visa status or eligibility.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:26.327Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:26.327Z"
+        },
+        {
+            "id": 755,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/Insufficient%20Funds.svg",
+            "title": "Incorrect Visa Application Category",
+            "description": "Applying under the wrong visa type.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:27.080Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:27.080Z"
+        },
+        {
+            "id": 756,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/alert.svg",
+            "title": "Failure to Attend Required Appointments or Tests",
+            "description": "Missing scheduled medical or biometric appointments.",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:44:27.850Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:44:27.850Z"
+        }
+    ],
+    "serviceSteps": [],
+    "serviceGallery": [],
+    "serviceEmirates": [
+        {
+            "id": 875,
+            "service_id": 438,
+            "title": "Dubai",
+            "img_url": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20452.png",
+            "alt": "Dubai",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:45:19.080Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:45:19.080Z"
+        },
+        {
+            "id": 876,
+            "service_id": 438,
+            "title": "Abu Dhabi",
+            "img_url": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20453.png",
+            "alt": "Abu Dhabi",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:45:19.840Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:45:19.840Z"
+        },
+        {
+            "id": 877,
+            "service_id": 438,
+            "title": "Sharjah",
+            "img_url": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20454.png",
+            "alt": "Sharjah",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:45:20.593Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:45:20.593Z"
+        },
+        {
+            "id": 878,
+            "service_id": 438,
+            "title": "Ras Al Khaimah",
+            "img_url": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20455.png",
+            "alt": "Ras Al Khaimah",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:45:21.307Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:45:21.307Z"
+        },
+        {
+            "id": 879,
+            "service_id": 438,
+            "title": "Ajman",
+            "img_url": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20456.png",
+            "alt": "Ajman",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:45:22.080Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:45:22.080Z"
+        },
+        {
+            "id": 880,
+            "service_id": 438,
+            "title": "Umm Al Quwain",
+            "img_url": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20457.png",
+            "alt": "Umm Al Quwain",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:45:22.840Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:45:22.840Z"
+        },
+        {
+            "id": 881,
+            "service_id": 438,
+            "title": "Fujaira",
+            "img_url": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20458.png",
+            "alt": "Fujaira",
+            "is_active": true,
+            "created_by": null,
+            "created_at": "2025-05-29T11:45:23.927Z",
+            "updated_by": null,
+            "updated_at": "2025-05-29T11:45:23.927Z"
+        }
+    ],
+    "serviceReview": {
+        "sub1Recordid": 12,
+        "sub1ServiceName": "Packages",
+        "categoryTag": "Goodhand is officially authorized by Dubai Immigration (GDRFA).",
+        "sub1ImageSrc": "https://goodhand.b-cdn.net/Assets/Home/New-home/packagess.svg",
+        "sub1ImgAlt": "Packages",
+        "sub1ImgTitle": "",
+        "sub1SlugServiceMain": "PC",
+        "sub1Slug": "packages",
+        "page_url": null,
+        "imgInsideBanner": "https://goodhand.b-cdn.net/Assets/Emirates%20ID.mp4",
+        "position": 1,
+        "isRemove": false,
+        "IsAdminOnly": true,
+        "IsPublic": true,
+        "IsFeatured": false,
+        "jsonUrl": "https://goodhand.b-cdn.net/Assets/all-services/Package_Service.json",
+        "stickyNotes": "All services are subject to change as per government notification",
+        "reviewScript": "<div class=\"elfsight-app-d2cfea18-cfdf-4c51-ba39-59447615c39e\" data-elfsight-app-lazy></div>",
+        "Video_Description": null,
+        "homebanner": null,
+        "sideCardtitle": "Why Trust Goodhand Packages",
+        "hometitle": null,
+        "VideoThumbnail": null
+    },
+    "serviceFaq": [
+        {
+            "id": 1822,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "What is a UAE spouse visa, and who can apply for it?",
+            "answer": "A UAE spouse visa allows residents to sponsor their spouse to live with them in the UAE. Eligible sponsors include residents with a valid residency visa who meet the minimum salary requirement (AED 4,000).",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1823,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "What are the eligibility requirements for sponsoring a spouse in the UAE?",
+            "answer": "To sponsor your spouse in the UAE, you must hold a valid UAE residency visa, earn a minimum salary of AED 4,000, and provide a legalized marriage certificate attested by the relevant UAE authorities.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1824,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "What documents are needed for a UAE spouse visa application?",
+            "answer": "The key documents include the sponsor’s valid residency visa and Emirates ID, a legalized marriage certificate, passport copies of both the sponsor and the spouse, recent passport-size photographs of the spouse, and proof of accommodation along with utility bills.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1825,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "How long does it take to process a UAE spouse visa?",
+            "answer": "The process typically takes 2-3 weeks, depending on document verification and medical fitness test completion.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1826,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "Can I apply for a UAE spouse visa if my spouse is outside the country?",
+            "answer": "Yes, you can apply for a spouse visa even if your spouse is outside the UAE. After the visa is approved, they must enter the UAE within 60 days to complete the process. ",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1827,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "Do I need to take a medical fitness test for a spouse visa?",
+            "answer": "Yes, the spouse being sponsored must undergo a medical fitness test in the UAE as part of the visa application process.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1828,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "How long is a UAE spouse visa valid?",
+            "answer": "A spouse visa is typically valid for 2-10 years, depending on the sponsor’s residency visa duration. It can be renewed as needed.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1829,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "Can I sponsor my spouse if I am on a freelance visa?",
+            "answer": "Yes, freelancers can sponsor their spouses, provided they meet the salary and accommodation requirements.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1830,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "Are there any additional fees for a UAE spouse visa?",
+            "answer": "Yes, there are application fees, medical fitness test charges, and residency stamping costs. The total cost varies by emirate.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1831,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "Can I cancel a UAE spouse visa if needed?",
+            "answer": "Yes, the sponsor has the authority to cancel the spouse visa at any time by submitting a cancellation request through the relevant immigration department.",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        },
+        {
+            "id": 1832,
+            "service_id": 438,
+            "icon": "https://goodhand.b-cdn.net/Assets/cart/faq-qustn-icon.svg",
+            "question": "Can I work in the UAE if I am on a spouse visa?",
+            "answer": "Yes, individuals on a spouse visa can work in the UAE if they obtain a work permit from the Ministry of Human Resources and Emiratisation (MOHRE).",
+            "is_visa": false,
+            "is_active": true,
+            "created_by": null,
+            "created_at": null,
+            "updated_by": null,
+            "updated_at": null
+        }
+    ],
+    "serviceBanner": [
+        {
+            "BannerId": 21,
+            "compid": "12",
+            "images": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/service-details/im-01.jpg",
+            "alt": "Golden Packages",
+            "position": 1,
+            "is_active": true,
+            "serviceId": null
+        },
+        {
+            "BannerId": 22,
+            "compid": "12",
+            "images": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/service-details/im-02.jpg",
+            "alt": "Golden Packages",
+            "position": 2,
+            "is_active": true,
+            "serviceId": null
+        },
+        {
+            "BannerId": 23,
+            "compid": "12",
+            "images": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/service-details/im-03.jpg",
+            "alt": "Golden Packages",
+            "position": 3,
+            "is_active": true,
+            "serviceId": null
+        },
+        {
+            "BannerId": 24,
+            "compid": "12",
+            "images": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/service-details/im-04.jpg",
+            "alt": "Golden Packages",
+            "position": 4,
+            "is_active": true,
+            "serviceId": null
+        },
+        {
+            "BannerId": 25,
+            "compid": "12",
+            "images": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/service-details/im-05.jpg",
+            "alt": "Golden Packages",
+            "position": 5,
+            "is_active": true,
+            "serviceId": null
+        }
+    ],
+    "aboutService": {
+        "RecordId": 459,
+        "ServiceId": 438,
+        "insideDescription": "A minimum monthly salary of 4,000 AED is required.---Marriage certificates and other foreign documents must be attested by the home country’s embassy or consulate in the UAE and the UAE Ministry of Foreign Affairs (MOFA).---All non-Arabic and non-English documents must be translated into Arabic and attested for legal validity.---Investors or partners must pay a refundable AED 3,045 deposit per person when sponsoring their spouse, reclaimable after visa cancellation.---Applicant’s Passport Validity – The passport must be valid for at least six months.---Ensure all documents comply with the latest General Directorate of Residency and Foreign Affairs (GDRFA) guidelines.---Overstay fines, if any, must be clear and settled at the time of change status or visa stamping.",
+        "outsideDescription": "2*-year UAE residency to sponsor your husband or wife and live together legally.----Services include entry permit, change status, medical test, Emirates IDs, and visa stamping.",
+        "FormDescription": "FormDescription",
+        "AboutDescription": null,
+        "insidePageDescription": null
+    },
+    "authorizedPartners": [
+        {
+            "URL": "services/immigration",
+            "title": "Amer Services",
+            "description": "Handling visa applications, renewals, cancellations, and Emirates ID services with full compliance under GDRFA, ensuring fast and secure government transactions",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/fed.svg"
+        },
+        {
+            "URL": "services/dubai-economy",
+            "title": "Department of Economy & Tourism",
+            "description": "Providing assistance with business registration, trade name approvals, and economic permits to foster commercial growth in Dubai.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/DED.svg"
+        },
+        {
+            "URL": "services/tas-heel",
+            "title": "Tasheel Services",
+            "description": "Facilitating labor approvals, contract documentation, and visa-related services while ensuring full compliance with UAE labor law",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr6.svg"
+        },
+        {
+            "URL": "services/taw-jeeh",
+            "title": "Tawjeeh Services",
+            "description": "Delivering MOHRE-approved sessions that educate low-skilled workers on UAE labour laws, employee rights, and workplace responsibilities—ensuring legal compliance before employment begins.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/tawjeeh-logo-01.svg"
+        },
+        {
+            "URL": "services/al-adheed",
+            "title": "Al Adheed Services",
+            "description": "Offering expert legal support for case registration, document attestation, and dispute resolution under the jurisdiction of Dubai Courts.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/adheeed.svg"
+        },
+        {
+            "URL": "services/emirates-id",
+            "title": "Emirates Identity Authority",
+            "description": "Simplifying the application, renewal, and replacement of Emirates ID cards for identity verification and official transactions.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr2.svg"
+        },
+        {
+            "URL": "services/legal-translation",
+            "title": "Legal Translation",
+            "description": "Ensuring accurate, government-approved translations for legal documents required by courts, embassies, and official institutions.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr8.svg"
+        },
+        {
+            "URL": "services/notary-services",
+            "title": "Notary Services ",
+            "description": "Providing verified notary services for contracts, agreements, and official documents to ensure legal compliance and authenticity.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/Notary_logo%20center.svg"
+        },
+        {
+            "URL": "services/business-setup",
+            "title": "Business Setup",
+            "description": "Comprehensive support for company formation, licensing, and approvals, guiding investors through UAE regulations to establish businesses quickly, legally, and efficiently.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Business%20Setup/Business%20Setup.svg"
+        },
+        {
+            "URL": "services/business-setup",
+            "title": "Free Zone",
+            "description": "Comprehensive support for company formation, licensing, and approvals, guiding investors through UAE regulations to establish businesses quickly, legally, and efficiently.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Business%20Setup/Business%20Setup.svg"
+        },
+        {
+            "URL": "services/business-setup",
+            "title": "Mainland",
+            "description": "Comprehensive support for company formation, licensing, and approvals, guiding investors through UAE regulations to establish businesses quickly, legally, and efficiently.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Business%20Setup/Business%20Setup.svg"
+        },
+        {
+            "URL": "services/immigration",
+            "title": "Contact Us",
+            "description": null,
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/fed.svg"
+        },
+        {
+            "URL": "services/business-setup",
+            "title": "Offshore",
+            "description": "Comprehensive support for company formation, licensing, and approvals, guiding investors through UAE regulations to establish businesses quickly, legally, and efficiently.",
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Business%20Setup/Business%20Setup.svg"
+        },
+        {
+            "URL": "services/immigration",
+            "title": "Registration",
+            "description": null,
+            "img": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/fed.svg"
+        }
+    ],
+    "pageLinkDetail": [],
+    "packageDetails": [
+        {
+            "RecordId": 3,
+            "filter1": "Employee",
+            "filter2": "Spouse",
+            "filter3": "Outside",
+            "filter4": null,
+            "filter5": null,
+            "Name": "Employee - Family Visa Outside Country - (Spouse)",
+            "options": "8,276,85,38",
+            "outSide": "<p className=\"content\">\r\n    The Spouse Visa for individuals outside the UAE is designed for those wishing to join their working husband or wife in the UAE. Requirements include:\r\n</p>\r\n\r\n<ul>\r\n    <li>\r\n        Approval of the employee’s work contract or employment letter.\r\n    </li>\r\n    <li>\r\n        Valid marriage certificate attested by relevant authorities.\r\n    </li>\r\n    <li>\r\n        Proof of sufficient income from the employee to support the spouse.\r\n    </li>\r\n    <li>\r\n        Health insurance coverage for the spouse as per UAE regulations.\r\n    </li>\r\n</ul>\r\n",
+            "insidePoints": "Have at least 10 years of experience in their respective fields.,Proven track record of achievements in their field.",
+            "imgUrl": "https://goodhand.b-cdn.net/Assets/Footer_pages/SpouseVisa/Employee%20-%20Family%20Visa%20Outside.jpg",
+            "imgAlt": null,
+            "PackageMainId": 7,
+            "tempfilter": null,
+            "serviceId": 438,
+            "PackageName": "Spouse Visa",
+            "filter6": null,
+            "icon": null,
+            "OptionalServiceIds": null,
+            "Position": null,
+            "requireDocs": {
+                "featureDocs": [
+                    {
+                        "RecordId": 742,
+                        "service_id": 438,
+                        "TagLine": "Sponsor’s UAE Visa Copy.",
+                        "shortName": "Photo",
+                        "is_featured": true,
+                        "icon": "https://goodhand.b-cdn.net/Assets/cart/photo.svg",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 744,
+                        "service_id": 438,
+                        "TagLine": "Applicant’s Passport Copy.",
+                        "shortName": "Passport",
+                        "is_featured": true,
+                        "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group-1.svg",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 745,
+                        "service_id": 438,
+                        "TagLine": "Applicant’s High-Resolution Digital Photo (Passport-Size)",
+                        "shortName": "Emirates Id",
+                        "is_featured": true,
+                        "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group.svg",
+                        "isImportant": false
+                    }
+                ],
+                "requiredDocs": [
+                    {
+                        "RecordId": 740,
+                        "service_id": 438,
+                        "TagLine": "Sponsor’s Original Emirates ID.",
+                        "shortName": null,
+                        "is_featured": false,
+                        "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group-1.svg",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 741,
+                        "service_id": 438,
+                        "TagLine": "Sponsor’s Passport Copy.",
+                        "shortName": null,
+                        "is_featured": false,
+                        "icon": "",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 742,
+                        "service_id": 438,
+                        "TagLine": "Sponsor’s UAE Visa Copy.",
+                        "shortName": "Photo",
+                        "is_featured": true,
+                        "icon": "https://goodhand.b-cdn.net/Assets/cart/photo.svg",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 743,
+                        "service_id": 438,
+                        "TagLine": "Sponsor’s Emirates ID Copy.",
+                        "shortName": "",
+                        "is_featured": false,
+                        "icon": "",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 744,
+                        "service_id": 438,
+                        "TagLine": "Applicant’s Passport Copy.",
+                        "shortName": "Passport",
+                        "is_featured": true,
+                        "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group-1.svg",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 745,
+                        "service_id": 438,
+                        "TagLine": "Applicant’s High-Resolution Digital Photo (Passport-Size)",
+                        "shortName": "Emirates Id",
+                        "is_featured": true,
+                        "icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-document/Mask%20group.svg",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 746,
+                        "service_id": 438,
+                        "TagLine": "Labor Contract (For Mainland/Private Sector Employees).",
+                        "shortName": "",
+                        "is_featured": false,
+                        "icon": "",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 747,
+                        "service_id": 438,
+                        "TagLine": "Original Salary Certificate (For Free Zone Employees).",
+                        "shortName": "",
+                        "is_featured": false,
+                        "icon": "",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 748,
+                        "service_id": 438,
+                        "TagLine": "Trade License and Memorandum of Association (MOA) (For Investors/Partners Sponsoring an Applicant).",
+                        "shortName": "",
+                        "is_featured": false,
+                        "icon": "",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 749,
+                        "service_id": 438,
+                        "TagLine": "Arabic Salary Certificate (For Government/Semi-Government Employees).",
+                        "shortName": "",
+                        "is_featured": false,
+                        "icon": "",
+                        "isImportant": false
+                    },
+                    {
+                        "RecordId": 751,
+                        "service_id": 438,
+                        "TagLine": "Marriage Certificate – A copy of the marriage certificate.",
+                        "shortName": null,
+                        "is_featured": false,
+                        "icon": "",
+                        "isImportant": false
+                    }
+                ]
+            },
+            "serviceInformation": [
+                {
+                    "id": 518,
+                    "service_id": 438,
+                    "info_label": "Visa Type",
+                    "info_description": "Residence Visa ",
+                    "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-5.svg",
+                    "is_active": true,
+                    "created_by": null,
+                    "created_at": null,
+                    "updated_by": null,
+                    "updated_at": null
+                },
+                {
+                    "id": 519,
+                    "service_id": 438,
+                    "info_label": "Length of Stay",
+                    "info_description": "2-10 Years ",
+                    "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-1.svg",
+                    "is_active": true,
+                    "created_by": null,
+                    "created_at": null,
+                    "updated_by": null,
+                    "updated_at": null
+                },
+                {
+                    "id": 520,
+                    "service_id": 438,
+                    "info_label": "E-Visa Validity",
+                    "info_description": "Up to 60 Days ",
+                    "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-2.svg",
+                    "is_active": true,
+                    "created_by": null,
+                    "created_at": null,
+                    "updated_by": null,
+                    "updated_at": null
+                },
+                {
+                    "id": 521,
+                    "service_id": 438,
+                    "info_label": "Entry Type",
+                    "info_description": "Multiple Entry Allowed",
+                    "info_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-3.svg",
+                    "is_active": true,
+                    "created_by": null,
+                    "created_at": null,
+                    "updated_by": null,
+                    "updated_at": null
+                }
+            ],
+            "totalPrice": 1656.91,
+            "minPrice": 1656.91,
+            "maxPrice": 5990.91,
+            "packageOptions": [
+                {
+                    "PriceRecordId": 8,
+                    "PriceType": "Outside",
+                    "PriceAmount": 439,
+                    "PriceCurrency": "AED",
+                    "serviceName": "Spouse Residence Visa",
+                    "sub2ServiceName": "New Entry Permits",
+                    "sub2ImgSrc": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Immigration/New/New-Entry-Permits.webp",
+                    "insideDescription": "If the sponsor file has not been opened previously, it must be registered before proceeding with the visa application.---A minimum monthly salary of 4,000 AED is required.---Marriage certificates and other foreign documents must be attested by the home country’s embassy or consulate in the UAE and the UAE Ministry of Foreign Affairs (MOFA).---All non-Arabic and non-English documents must be translated into Arabic and attested for legal validity.---Investors or partners must pay a refundable AED 3,045 deposit per person when sponsoring their spouse, reclaimable after visa cancellation.---Applicant’s Passport Validity – The passport must be valid for at least six months.---Ensure all documents comply with the latest General Directorate of Residency and Foreign Affairs (GDRFA) guidelines.---Overstay fines, if any, must be clear and settled at the time of change status or visa stamping."
+                },
+                {
+                    "PriceRecordId": 276,
+                    "PriceType": "Normal",
+                    "PriceAmount": 322.5,
+                    "PriceCurrency": "AED",
+                    "serviceName": "Medical For New Entry Permit",
+                    "sub2ServiceName": "Medical Test",
+                    "sub2ImgSrc": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Dubai%20Health%20Authority/thumb-banner/DHA%20Banner%201/Medical%20Test.webp",
+                    "insideDescription": "Entry permit or e-visa copy is mandatory for medical test eligibility.---The original passport must be presented for identity verification.---An insurance card or payment receipt is required as proof of medical coverage.---Ensure all documents are valid, clear, and meet DHA and GDRFA guidelines to avoid processing delays."
+                },
+                {
+                    "PriceRecordId": 85,
+                    "PriceType": "Normal",
+                    "PriceAmount": 385.41,
+                    "PriceCurrency": "AED",
+                    "serviceName": "New Residency (1st time visiting) / 2 Year",
+                    "sub2ServiceName": "New Emirates ID",
+                    "sub2ImgSrc": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Emirates%20ID/Emirates_ID_banner/new_emirates_id.webp",
+                    "insideDescription": "The applicant must be inside the UAE to proceed with the application.---A valid e-visa or entry permit is mandatory before starting the process.---A high-resolution personal photo with a white background is required.---The applicant’s passport must be valid for at least six months.---Ensure all documents comply with the latest General Directorate of Residency and Foreign Affairs (GDRFA) guidelines."
+                },
+                {
+                    "PriceRecordId": 38,
+                    "PriceType": "Normal",
+                    "PriceAmount": 510,
+                    "PriceCurrency": "AED",
+                    "serviceName": "Spouse & Children Visa Stamping",
+                    "sub2ServiceName": "Visa Stamping",
+                    "sub2ImgSrc": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Immigration/New/Visa%20Stamping.webp",
+                    "insideDescription": "Entry Permit Validity – The entry permit must be valid before proceeding with visa stamping.---Passport Requirement – The dependent’s passport must have a minimum validity of six months.---Medical Fitness Test – Mandatory for visa stamping approval; not required for applicants under 18 years.---Emirates ID Application – Must be submitted before initiating the visa stamping process.---Fine Clearance – Any overstay or visa violation fines must be cleared before processing.---Overstay fines, if any, must be clear and settled at the time of change status or visa stamping."
+                }
+            ]
+        }
+    ],
+    "isPackage": true,
+    "isType": "package",
+    "PackagePageDetail": [
+        {
+            "id": 118,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 1,
+            "component_name": "ServiceDetailBanner",
+            "section_content": null,
+            "section_title": null,
+            "section_line": null,
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 119,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 2,
+            "component_name": "AllServices",
+            "section_content": null,
+            "section_title": "UAE Spouse Visa – Long Term Residency for Dependent Spouse",
+            "section_line": "Live, Love, Work, And Build Your Future Together In Dubai",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 120,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 3,
+            "component_name": "VisaRequirement",
+            "section_content": "100% Secure & Encrypted Data Handling",
+            "section_title": "Required Documents",
+            "section_line": "Essential Documents for a Smooth & Quick Process",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 121,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 4,
+            "component_name": "AboutDepartment",
+            "section_content": "The United Arab Emirates (UAE) is widely known for its high standard of living, exceptional safety, and welcoming multicultural environment making it an ideal destination for families. Whether you're relocating for work or already residing in the UAE, bringing your spouse to join you is not only possible but made easy through a streamlined UAE spouse visa process.---The UAE government has simplified the family sponsorship system, allowing expatriate residents to sponsor their spouses and children with minimal paperwork and clear eligibility requirements. With efficient processing times, strong infrastructure, and access to world-class healthcare, education, and housing, settling down in the UAE with your family has never been more accessible.---From medical insurance to Emirates ID registration and residence permits, the UAE offers a supportive and structured system to ensure a smooth transition for your loved ones. Whether you’re living in Dubai, Abu Dhabi, or any of the other emirates, the spouse visa process is designed to help families reunite quickly and securely.",
+            "section_title": "Why Couples Choose the UAE for Family Life",
+            "section_line": "Comprehensive Support from Application to Residency",
+            "section_media": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Frame.png",
+            "is_active": true
+        },
+        {
+            "id": 122,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 5,
+            "component_name": "CommonVisaInfo",
+            "section_content": null,
+            "section_title": "UAE Spouse Visa Information",
+            "section_line": "Essential Details for Spouse Residency Processing",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 123,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 6,
+            "component_name": "WhyChooseUs",
+            "section_content": "It’s not just a visa—it’s your golden key to stability, opportunity, and the future you’ve dreamed of. From financial freedom to family togetherness, the UAE Employment Visa transforms your life one benefit at a time.",
+            "section_title": "Why the UAE Spouse Visa",
+            "section_line": "Is More Than Just a Residency",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 124,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 7,
+            "component_name": "VisaFactors",
+            "section_content": "",
+            "section_title": "What You Need to Know Before Applying for a Spouse Visa",
+            "section_line": "Visa Process Depends on Where You Are",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 125,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 8,
+            "component_name": "VisaProcess",
+            "section_content": null,
+            "section_title": "A Systematic Guide to Completing Visa Application",
+            "section_line": "From Application to Approval  - UAE Spouse Visa Made Simple",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 126,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 9,
+            "component_name": "ServiceEmirate",
+            "section_content": null,
+            "section_title": "Family Residency across UAE",
+            "section_line": "Effortless UAE spouse visa solutions for seamless family living across every Emirate",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 127,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 10,
+            "component_name": "DepartmentRejection",
+            "section_content": null,
+            "section_title": "Causes of UAE Spouse Visa Application Decline",
+            "section_line": "Factors That Can Lead to Application Denial",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 128,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 11,
+            "component_name": "AllVisa",
+            "section_content": null,
+            "section_title": "Learn How to Simplify the Process of Getting Your Visa",
+            "section_line": " Discover tailored packages designed for professionals, families, investors, and beyond",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 129,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 12,
+            "component_name": "Employees",
+            "section_content": null,
+            "section_title": "Talented, Committed, Motivated, United, We Raise Workforce Awareness!",
+            "section_line": "Real People, Real Support, Real Visa Success",
+            "section_media": null,
+            "is_active": true
+        },
+        {
+            "id": 130,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 13,
+            "component_name": "ChannelPartner",
+            "section_content": null,
+            "section_title": "Official Channel Partner",
+            "section_line": "Authorized by UAE Government for Spouse Visa ",
+            "section_media": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/logo-Amer.png",
+            "is_active": true
+        },
+        {
+            "id": 131,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 15,
+            "component_name": "TrustedFactor",
+            "section_content": null,
+            "section_title": "Relied on by Millions",
+            "section_line": "Supporting Clients UAE",
+            "section_media": "https://goodhand.b-cdn.net/Assets/Immigration.mp4",
+            "is_active": true
+        },
+        {
+            "id": 133,
+            "slug_url": "spouse-visa-dubai",
+            "section_position": 17,
+            "component_name": "FaqDepartment",
+            "section_content": null,
+            "section_title": "FAQ’s",
+            "section_line": "How can I get an Spouse visa in the UAE",
+            "section_media": null,
+            "is_active": true
+        }
+    ],
+    "PackagePageLinkDetail": [
+        {
+            "id": 428,
+            "page_id": 122,
+            "page_title": "Visa Type",
+            "page_description": "Residence Visa ",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-5.svg",
+            "section": null
+        },
+        {
+            "id": 429,
+            "page_id": 122,
+            "page_title": "Length Of Stay",
+            "page_description": "2-10 Years ",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-1.svg",
+            "section": null
+        },
+        {
+            "id": 430,
+            "page_id": 122,
+            "page_title": "E-Visa Validity",
+            "page_description": "Up to 60 Days ",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-2.svg",
+            "section": null
+        },
+        {
+            "id": 431,
+            "page_id": 122,
+            "page_title": "Entry Options",
+            "page_description": "Multiple Entry Allowed",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-3.svg",
+            "section": null
+        },
+        {
+            "id": 432,
+            "page_id": 122,
+            "page_title": "Processing Time",
+            "page_description": "1-3 Weeks",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-4.svg",
+            "section": null
+        },
+        {
+            "id": 433,
+            "page_id": 122,
+            "page_title": "Eligibility Criteria",
+            "page_description": "Attested Marriage Certificate ",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group.svg",
+            "section": null
+        },
+        {
+            "id": 434,
+            "page_id": 122,
+            "page_title": "Sponsorship Requirement",
+            "page_description": "UAE Resident",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-6.svg",
+            "section": null
+        },
+        {
+            "id": 435,
+            "page_id": 122,
+            "page_title": "Renewal Option",
+            "page_description": "Renewable ",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-7.svg",
+            "section": null
+        },
+        {
+            "id": 436,
+            "page_id": 122,
+            "page_title": "Required Documents",
+            "page_description": "Passport, Photo, Marriage Certificate",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-8.svg",
+            "section": null
+        },
+        {
+            "id": 437,
+            "page_id": 122,
+            "page_title": "Overstay Penalty",
+            "page_description": "AED 50*/Day",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-9.svg",
+            "section": null
+        },
+        {
+            "id": 438,
+            "page_id": 122,
+            "page_title": "Permitted Activities",
+            "page_description": "Reside and work ",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-10.svg",
+            "section": null
+        },
+        {
+            "id": 439,
+            "page_id": 122,
+            "page_title": "Medical Test Requirement",
+            "page_description": "Mandatory",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-11.svg",
+            "section": null
+        },
+        {
+            "id": 440,
+            "page_id": 122,
+            "page_title": "Cancellation Policy",
+            "page_description": "Within 2-3 Days",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-12.svg",
+            "section": null
+        },
+        {
+            "id": 441,
+            "page_id": 122,
+            "page_title": "Grace Period",
+            "page_description": "30 Days",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-13.svg",
+            "section": null
+        },
+        {
+            "id": 442,
+            "page_id": 122,
+            "page_title": "Exit Requirement",
+            "page_description": "Return Ticket Required",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-14.svg",
+            "section": null
+        },
+        {
+            "id": 443,
+            "page_id": 122,
+            "page_title": "Conversion To Residency",
+            "page_description": "Allowed  Inside UAE",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/common-visa-info/Mask%20group-15.svg",
+            "section": null
+        },
+        {
+            "id": 444,
+            "page_id": 123,
+            "page_title": "Live Legally as a Couple",
+            "page_description": "Stay together in the UAE with full legal recognition of your relationship, giving you peace of mind and the comfort of a shared home.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_Visa_Icons/Benefits/benefits_1.svg",
+            "section": null
+        },
+        {
+            "id": 445,
+            "page_id": 123,
+            "page_title": "Enjoy Long-Term Stability",
+            "page_description": "Depending on your sponsor’s visa, you can access a residency that lasts from two to ten years with the option to renew and plan for the future.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_Visa_Icons/Benefits/benefits_2.svg",
+            "section": null
+        },
+        {
+            "id": 446,
+            "page_id": 123,
+            "page_title": "Access Healthcare and Services",
+            "page_description": "Use your visa to gain access to quality hospitals, clinics, banking services, and other essential benefits reserved for legal residents.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_Visa_Icons/Benefits/benefits_3.svg",
+            "section": null
+        },
+        {
+            "id": 447,
+            "page_id": 123,
+            "page_title": "Work if Eligible",
+            "page_description": "Apply for a work permit and take the opportunity to start a career, earn income, and support your family while living in the UAE.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_Visa_Icons/Benefits/benefits_4.svg",
+            "section": null
+        },
+        {
+            "id": 448,
+            "page_id": 123,
+            "page_title": "Travel Without Stress",
+            "page_description": "Your visa allows for easier movement in and out of the country without constantly reapplying for entry permission.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_Visa_Icons/Benefits/benefits_5.svg",
+            "section": null
+        },
+        {
+            "id": 449,
+            "page_id": 123,
+            "page_title": "Create a Future Together",
+            "page_description": "Whether you are starting a family or simply enjoying life with your partner, the spouse visa makes it easier to settle, grow, and live with purpose.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_Visa_Icons/Benefits/benefits_6.svg",
+            "section": null
+        },
+        {
+            "id": 450,
+            "page_id": 124,
+            "page_title": "What is inside the UAE Applicant?",
+            "page_description": "Individuals who are already inside the UAE with a visit visa or cancelled residence visa and wish to change status to a residence visa without exiting the country.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/filter_icon/inside.svg",
+            "section": "1"
+        },
+        {
+            "id": 451,
+            "page_id": 124,
+            "page_title": "What is an Outside UAE Applicant?",
+            "page_description": "Individuals who are outside the UAE and start the process with an entry permit to enter the UAE. After entry, the rest of the process starts with the medical test, and they do not need to follow the change status process.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/filter_icon/outside.svg",
+            "section": "2"
+        },
+        {
+            "id": 452,
+            "page_id": 125,
+            "page_title": "Prepare Documentation",
+            "page_description": "Gather all required documents, ensuring they are valid and attested.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-process/Mask%20group.svg",
+            "section": null
+        },
+        {
+            "id": 453,
+            "page_id": 125,
+            "page_title": "Apply for Entry Permit",
+            "page_description": "Submit the application through GDRFA or authorized typing centers.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-process/Mask%20group-1.svg",
+            "section": null
+        },
+        {
+            "id": 454,
+            "page_id": 125,
+            "page_title": "Medical Examination",
+            "page_description": "Schedule and complete the mandatory medical test.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-process/Mask%20group-2.svg",
+            "section": null
+        },
+        {
+            "id": 455,
+            "page_id": 125,
+            "page_title": "Emirates ID Application",
+            "page_description": "Apply for the Emirates ID, submitting biometrics as required.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-process/Mask%20group-3.svg",
+            "section": null
+        },
+        {
+            "id": 456,
+            "page_id": 125,
+            "page_title": "Visa Stamping",
+            "page_description": "Submit all documents for the residence visa to be stamped in the passport.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/req-process/Mask%20group-4.svg",
+            "section": null
+        },
+        {
+            "id": 457,
+            "page_id": 126,
+            "page_title": "Dubai",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20452.png",
+            "section": null
+        },
+        {
+            "id": 458,
+            "page_id": 126,
+            "page_title": "Abu Dhabi",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20453.png",
+            "section": null
+        },
+        {
+            "id": 459,
+            "page_id": 126,
+            "page_title": "Sharjah",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20454.png",
+            "section": null
+        },
+        {
+            "id": 460,
+            "page_id": 126,
+            "page_title": "Ras Al Khaimah",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20455.png",
+            "section": null
+        },
+        {
+            "id": 461,
+            "page_id": 126,
+            "page_title": "Ajman",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20456.png",
+            "section": null
+        },
+        {
+            "id": 462,
+            "page_id": 126,
+            "page_title": "Umm Al Quwain",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20457.png",
+            "section": null
+        },
+        {
+            "id": 463,
+            "page_id": 126,
+            "page_title": "Fujaira",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/cart/emirates/Frame%20458.png",
+            "section": null
+        },
+        {
+            "id": 464,
+            "page_id": 127,
+            "page_title": "Incomplete or Incorrect Documentation",
+            "page_description": " Missing or erroneous information can result in rejection.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-3.svg",
+            "section": null
+        },
+        {
+            "id": 465,
+            "page_id": 127,
+            "page_title": "Invalid Passport",
+            "page_description": "Passports must be valid for at least six months.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-1.svg",
+            "section": null
+        },
+        {
+            "id": 466,
+            "page_id": 127,
+            "page_title": "Failure to Meet Eligibility Criteria",
+            "page_description": " Not meeting salary or accommodation requirements.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-2.svg",
+            "section": null
+        },
+        {
+            "id": 467,
+            "page_id": 127,
+            "page_title": "Criminal Record or Security Concerns",
+            "page_description": "Background checks revealing issues can lead to denial",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-3.svg",
+            "section": null
+        },
+        {
+            "id": 468,
+            "page_id": 127,
+            "page_title": "Health Issues",
+            "page_description": "Failing the mandatory medical fitness test.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-4.svg",
+            "section": null
+        },
+        {
+            "id": 469,
+            "page_id": 127,
+            "page_title": "Previous Visa Violations",
+            "page_description": "History of overstays or illegal activities in the UAE.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-3.svg",
+            "section": ""
+        },
+        {
+            "id": 470,
+            "page_id": 127,
+            "page_title": "Inadequate Financial Proof",
+            "page_description": "Insufficient evidence of income or employment.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-2.svg",
+            "section": ""
+        },
+        {
+            "id": 471,
+            "page_id": 127,
+            "page_title": "Sponsorship Problems",
+            "page_description": "Issues with the sponsor's visa status or eligibility.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-3.svg",
+            "section": ""
+        },
+        {
+            "id": 472,
+            "page_id": 127,
+            "page_title": "Incorrect Visa Application Category",
+            "page_description": "Applying under the wrong visa type.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-4.svg",
+            "section": ""
+        },
+        {
+            "id": 473,
+            "page_id": 127,
+            "page_title": "Failure to Attend Required Appointments or Tests",
+            "page_description": "Missing scheduled medical or biometric appointments.",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Reject-reason/Mask%20group-3.svg",
+            "section": ""
+        },
+        {
+            "id": 474,
+            "page_id": 130,
+            "page_title": "Serving the UAE with Trusted Visa Solutions Since 2017",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/expetional.svg",
+            "section": null
+        },
+        {
+            "id": 475,
+            "page_id": 130,
+            "page_title": "Comprehensive Spouse Visa Services - All in One Place",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/wide-range.svg",
+            "section": null
+        },
+        {
+            "id": 476,
+            "page_id": 130,
+            "page_title": "Fast, Dependable, and Easy Online Application Assistance",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/provider.svg",
+            "section": null
+        },
+        {
+            "id": 477,
+            "page_id": 130,
+            "page_title": "Processing 150+ Spouse Visas Weekly - Growing Stronger Every Week",
+            "page_description": null,
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/expertize.svg",
+            "section": null
+        },
+        {
+            "id": 478,
+            "page_id": 131,
+            "page_title": "Skilled Visa Experts",
+            "page_description": "250+",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Heart.svg",
+            "section": null
+        },
+        {
+            "id": 479,
+            "page_id": 131,
+            "page_title": "Empowering Professionals",
+            "page_description": "200K+",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Mask%20group-2.svg",
+            "section": null
+        },
+        {
+            "id": 480,
+            "page_id": 131,
+            "page_title": "Visas Successfully Processed Worldwide",
+            "page_description": "3M+",
+            "page_icon": "https://goodhand.b-cdn.net/Assets/Footer_pages/Amer/Application_Process.svg",
+            "section": null
+        }
+    ],
+    "employeeData": [
+        {
+            "RecordId": 1,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Home/staff/staff1.JPG",
+            "ImgAlt": "Ahmad Ali Mohammad",
+            "name": "Ahmad Ali Mohammad",
+            "profession": "",
+            "department": "1",
+            "order_position": 1,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 56,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Aboobacker%20Kolatu%20Department%20Amer.jpg",
+            "ImgAlt": "Aboobacker Kolatu",
+            "name": "Aboobacker Kolatu",
+            "profession": "",
+            "department": "1",
+            "order_position": 42,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 84,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/09.jpg",
+            "ImgAlt": "Hemant Mallick",
+            "name": "Hemant Mallick",
+            "profession": null,
+            "department": "1",
+            "order_position": 63,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 17,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Akbar%20Shaik%20%20Department%20Amer.jpg",
+            "ImgAlt": "Akbar Shaik",
+            "name": "Akbar Shaik",
+            "profession": "",
+            "department": "1",
+            "order_position": 13,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 20,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Hannan%20Jamil%20Department%20Amer.jpg",
+            "ImgAlt": "Hannan Jamil",
+            "name": "Hannan Jamil",
+            "profession": "",
+            "department": "1",
+            "order_position": 16,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 29,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Sultan%20Jassem%20Altamimi%20Department%20Amer.jpg",
+            "ImgAlt": "Sultan Jassem",
+            "name": "Sultan Jassem",
+            "profession": "",
+            "department": "1",
+            "order_position": 23,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 32,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Ajas%20Ahammad%20Mohammad.jpg",
+            "ImgAlt": "Ajas Ahammad",
+            "name": "Ajas Ahammad",
+            "profession": "",
+            "department": "1",
+            "order_position": 24,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 34,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Jarrar%20Zahoor%20%20%20Department%20Amer.jpg",
+            "ImgAlt": "Jarrar Zahoor",
+            "name": "Jarrar Zahoor",
+            "profession": "",
+            "department": "1",
+            "order_position": 25,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 37,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Noof%20Ahmed%20Abdulla%20%20%20Department%20Amer.jpg",
+            "ImgAlt": "Noof Ahmed",
+            "name": "Noof Ahmed",
+            "profession": "",
+            "department": "1",
+            "order_position": 27,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 61,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Jafar%20Sulthan%20%20%20%20%20Department%20Amer.jpg",
+            "ImgAlt": "Jafar Sulthan",
+            "name": "Jafar Sulthan",
+            "profession": "",
+            "department": "1",
+            "order_position": 46,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 64,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Lamis%20Al%20Qahtan%20Department%20Amer.jpg",
+            "ImgAlt": "Lamis Al Qahtan",
+            "name": "Lamis Al Qahtan",
+            "profession": "",
+            "department": "1",
+            "order_position": 47,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 65,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Latifa%20Hasaan%20Mohammed%20Almaazmi%20Department%20Amer.jpg",
+            "ImgAlt": "Latifa Hasaan Mohammed ",
+            "name": "Latifa Hasaan Mohammed ",
+            "profession": "",
+            "department": "1",
+            "order_position": 48,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 67,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Meera%20Abdeljalil%20Almaazmi%20%20Department%20GoodHand.jpg",
+            "ImgAlt": "Meera Abdeljalil Almaazmi",
+            "name": "Meera Abdeljalil Almaazmi",
+            "profession": "",
+            "department": "1",
+            "order_position": 49,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 69,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Noorah%20Hatem%20Moosa.jpg",
+            "ImgAlt": "Noorah Hatem",
+            "name": "Noorah Hatem",
+            "profession": "",
+            "department": "1",
+            "order_position": 51,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 41,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/New%20Employees_Photos/Fatma%20Walid%20Mahmoud%20%20%20Department%20Amer.jpg",
+            "ImgAlt": "Fatma Walid Mahmoud",
+            "name": "Fatma Walid Mahmoud",
+            "profession": "",
+            "department": "1",
+            "order_position": 30,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 45,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/New%20Employees_Photos/Jijesh%20Naranthatta%20%20%20Department%20Amer.jpg",
+            "ImgAlt": "Jijesh Naranthatta",
+            "name": "Jijesh Naranthatta",
+            "profession": "",
+            "department": "1",
+            "order_position": 34,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 47,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/New%20Employees_Photos/Ma%20Ersa%20Pacang%20Cister%20%20Good%20Hand.jpg",
+            "ImgAlt": "Ma Ersa Pacang",
+            "name": "Ma Ersa Pacang",
+            "profession": "",
+            "department": "1",
+            "order_position": 35,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 73,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Zahra%20Abdulrahman.jpg",
+            "ImgAlt": "Zahra Abdulrahman",
+            "name": "Zahra Abdulrahman",
+            "profession": "",
+            "department": "1",
+            "order_position": 54,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 80,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Asifuddin%20Department%20AMER.jpg",
+            "ImgAlt": "Asifuddin",
+            "name": "Asifuddin",
+            "profession": "",
+            "department": "1",
+            "order_position": 60,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr1.svg"
+        },
+        {
+            "RecordId": 54,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Abdu%20Rahoof.jpg",
+            "ImgAlt": "Abdul Rahoof",
+            "name": "Abdul Rahoof",
+            "profession": "",
+            "department": "6",
+            "order_position": 41,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr4.svg"
+        },
+        {
+            "RecordId": 57,
+            "LinkSlug": null,
+            "ImgLocation": "https://goodhand.b-cdn.net/Assets/Goodhand_Employees/Goodhand%20Staff/Ahmed%20Bin%20Aslam%20Yamani.jpg",
+            "ImgAlt": "Ahmed Bin Aslam",
+            "name": "Ahmed Bin Aslam",
+            "profession": "",
+            "department": "6",
+            "order_position": 43,
+            "logo": "https://goodhand.b-cdn.net/Assets/Web_Goodhand_imgs/Home_Page_Icons/sr4.svg"
+        }
+    ],
+    "allVisas": [
+        {
+            "RecordId": 34,
+            "PackageMainId": 3,
+            "description": "10 years Residency",
+            "title": "Golden Visa",
+            "options": "230,280,930,93",
+            "img": "https://goodhand.b-cdn.net/Assets/Footer_pages/GoldenVisa/Golden%20Visa/doctor.png ",
+            "imgAlt": null,
+            "Position": 1,
+            "URL": "golden-visa-uae",
+            "amount": 4441.41,
+            "rn": "1"
+        },
+        {
+            "RecordId": 30,
+            "PackageMainId": 5,
+            "description": "Business Pathway",
+            "title": "Investor Visa",
+            "options": "24,276,85,47",
+            "img": "https://goodhand.b-cdn.net/Assets/Footer_pages/investor-visa/Investor%20Visa%20Outside%20Country.jpg",
+            "imgAlt": null,
+            "Position": 3,
+            "URL": "investor-visa-dubai",
+            "amount": 1730.91,
+            "rn": "1"
+        },
+        {
+            "RecordId": 51,
+            "PackageMainId": 6,
+            "description": "Family Reunification",
+            "title": "Parent Visa",
+            "options": "18,81,276,84,41",
+            "img": "https://goodhand.b-cdn.net/Assets/Footer_pages/ParentVisa/Partner%20-%20Family%20Visa%20Outside%20Country.jpg",
+            "imgAlt": null,
+            "Position": 4,
+            "URL": "parents-visa-dubai",
+            "amount": 6601.91,
+            "rn": "1"
+        },
+        {
+            "RecordId": 24,
+            "PackageMainId": 2,
+            "description": "Career Gateway",
+            "title": "Employment Visa",
+            "options": "191,276,85,37,196",
+            "img": "https://goodhand.b-cdn.net/Assets/Footer_pages/Employmentvisa/Employment/Company Cat 1 Renew Visa- skilled.jpg",
+            "imgAlt": null,
+            "Position": 6,
+            "URL": "employment-visa-uae",
+            "amount": 1407.19,
+            "rn": "1"
+        },
+        {
+            "RecordId": 7,
+            "PackageMainId": 1,
+            "description": "Dependent Sponsorship",
+            "title": "Child Visa",
+            "options": "2,85,44",
+            "img": "https://goodhand.b-cdn.net/Assets/Footer_pages/Childvisa/Child%20Visa/Employee%20-%20Family%20Visa%20Outside.jpg",
+            "imgAlt": null,
+            "Position": 7,
+            "URL": "children-visa-dubai",
+            "amount": 1334.41,
+            "rn": "1"
+        },
+        {
+            "RecordId": 52,
+            "PackageMainId": 8,
+            "description": "Infant Registration",
+            "title": "Newborn Visa",
+            "options": "83,33",
+            "img": "https://goodhand.b-cdn.net/Assets/Footer_pages/NewBornVisa/newborn_about.webp",
+            "imgAlt": null,
+            "Position": 10,
+            "URL": "new-born-baby-visa-dubai",
+            "amount": 895.41,
+            "rn": "1"
+        }
+    ],
+    "certification": [
+        {
+            "id": 1,
+            "title": "ISO 9001:2015 - Quality Management System (QMS)",
+            "line": null,
+            "alt": "ISO",
+            "logo": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/what-is-iso-9001-compliance.svg",
+            "originalimg": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/certificate11.png",
+            "thumbnail": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/certificate-1.png",
+            "is_active": true
+        },
+        {
+            "id": 2,
+            "title": "ISO 27001 - Information Security Management System (ISMS)",
+            "line": null,
+            "alt": "Information Security",
+            "logo": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/image%20115.svg",
+            "originalimg": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/270001.png",
+            "thumbnail": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/certificate-1.png",
+            "is_active": true
+        },
+        {
+            "id": 3,
+            "title": "IFA Certification (International Featured Standards - IFA)",
+            "line": null,
+            "alt": "IFA Certification",
+            "logo": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/image%20116.svg",
+            "originalimg": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/certificate11.png",
+            "thumbnail": "https://goodhand.b-cdn.net/Assets/Goodhand_Packages_Img/certificate-1.png",
+            "is_active": true
+        }
+    ],
+    "news": "Dubai Makes It Easier for Couples to Reunite With the UAE Spouse Visa, Offering Long-Term Residency, Access to Services, and a Stable Life Built on Love and Opportunity."
+}

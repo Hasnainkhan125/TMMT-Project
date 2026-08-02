@@ -1,0 +1,80 @@
+/* Chat Panel Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Theme-based hover effects */
+.theme-hover-primary {
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-hover-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.theme-hover-secondary {
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-hover-secondary:hover {
+  opacity: 0.8;
+  transform: scale(1.02);
+}
+
+/* Theme transition effects */
+.theme-transition {
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out, 
+              border-color 0.3s ease-in-out,
+              box-shadow 0.3s ease-in-out;
+}
+
+/* Accessibility focus states */
+.theme-focus:focus {
+  outline: 2px solid;
+  outline-offset: 2px;
+}
+
+/* Responsive animations */
+@media (max-width: 768px) {
+  @keyframes slideIn {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOut {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+}

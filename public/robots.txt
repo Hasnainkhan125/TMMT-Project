@@ -1,0 +1,23 @@
+# Allow all crawlers to access the site
+User-agent: *
+Allow: /
+
+# Disallow private/protected routes
+Disallow: /user/
+Disallow: /amer/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/
+
+# Allow crawling of public pages
+Allow: /services
+Allow: /about
+Allow: /contact
+Allow: /knowledge
+
+# Sitemap location
+Sitemap: https://tammat.ae/sitemap.xml
+
+# Crawl-delay for good measure (optional)
+Crawl-delay: 1
+

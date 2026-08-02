@@ -1,0 +1,46 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22'
+
+    - name: Install dependencies
+      run: |
+        npm install --legacy-peer-deps
+
+
+    - name: Build
+      run: |
+        export NODE_OPTIONS="--max_old_space_size=8192"
+        npm run build
+
+    - name: Deploy
+      env:
+        SSH_REIGN_SERVER_PRIVATE_KEY: ${{ secrets.SSH_REIGN_SERVER_PRIVATE_KEY }}
+      run: |
+        eval "$(ssh-agent -s)"
+        echo "$SSH_REIGN_SERVER_PRIVATE_KEY" > key.pem
+        chmod 600 key.pem
+        ssh-add key.pem
+
+        ssh-add -l
+
+        mkdir -p ~/.ssh
+        ssh-keyscan -H 93.127.194.180 >> ~/.ssh/known_hosts
+
+        ssh -o StrictHostKeyChecking=no root@93.127.194.180 "rm -rf /var/www/tammat/*"
+        scp -r ./dist/* root@93.127.194.180:/var/www/tammat/

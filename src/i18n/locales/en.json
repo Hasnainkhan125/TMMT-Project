@@ -1,0 +1,1951 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "upload": "Upload",
+    "download": "Download",
+    "send": "Send",
+    "submit": "Submit",
+    "continue": "Continue",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "open": "Open",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "reset": "Reset",
+    "clear": "Clear",
+    "select": "Select",
+    "selectAll": "Select All",
+    "deselect": "Deselect",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "apply": "Apply",
+    "create": "Create",
+    "update": "Update",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "forgotPassword": "Forgot Password",
+    "rememberMe": "Remember me",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "date": "Date",
+    "time": "Time",
+    "status": "Status",
+    "type": "Type",
+    "category": "Category",
+    "priority": "Priority",
+    "description": "Description",
+    "details": "Details",
+    "notes": "Notes",
+    "comments": "Comments",
+    "attachments": "Attachments",
+    "documents": "Documents",
+    "files": "Files",
+    "images": "Images",
+    "videos": "Videos",
+    "language": "Language",
+    "theme": "Theme",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "notifications": "Notifications",
+    "help": "Help",
+    "support": "Support",
+    "about": "About",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "contactUs": "Contact Us"
+  },
+
+  
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "applications": "Applications",
+    "services": "Services",
+    "documents": "Documents",
+    "account": "Account",
+    "admin": "Admin",
+    "amerDashboard": "Amer Dashboard",
+    "chat": "Chat",
+    "statistics": "Statistics",
+    "reports": "Reports",
+    "users": "Users",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": "Login",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create account",
+    "createYourAccount": "Create your account",
+    "resetPassword": "Reset password",
+    "email": "Email",
+    "password": "Password",
+    "nextGenUaeSmartServices": "Next-Gen UAE Smart Services",
+    "rememberMe": "Remember me",
+    "fullName": "Full name",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "enterFullName": "Enter your full name",
+    "confirmPassword": "Confirm your password",
+    "accountType": "Account Type",
+    "individualUser": "Individual User",
+    "amerOfficer": "Amer Officer",
+    "forgotPasswordQuestion": "Forgot your password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "firstTimeHere": "First time here?",
+    "logIn": "Log in",
+    "or": "or",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "signInGoogle": "Continue with Google",
+    "signInEmail": "Continue with email address",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "sendingResetLink": "Sending...",
+    "resetLinkSent": "Check your email",
+    "resetLinkSentDescription": "We've sent a password reset link to",
+    "backToSignIn": "Back to Sign In",
+    "sendResetLink": "Send Reset Link",
+    "getMostOutOf": "Get the most out of",
+    "tammat": "TAMMAT",
+    "passwordRequirement": "Must be at least 6 characters long",
+    "termsAgreement": "By logging in or signing up using the options above, you agree to TAMMAT's Terms & Conditions and Privacy Policy",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "support": "Support",
+    "uaeGovernmentApproved": "UAE Government Approved",
+    "soc2Compliant": "SOC 2 Compliant"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Overview",
+    "recentActivity": "Recent Activity",
+    "quickActions": "Quick Actions",
+    "statistics": "Statistics",
+    "totalApplications": "Total Applications",
+    "pendingReview": "Pending Review",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "inProgress": "In Progress"
+  },
+  "applications": {
+    "title": "Applications",
+    "newApplication": "New Application",
+    "myApplications": "My Applications",
+    "applicationDetails": "Application Details",
+    "applicationType": "Application Type",
+    "applicationStatus": "Application Status",
+    "submittedDate": "Submitted Date",
+    "lastUpdated": "Last Updated",
+    "processingTime": "Processing Time",
+    "requiredDocuments": "Required Documents",
+    "uploadDocuments": "Upload Documents",
+    "viewApplication": "View Application",
+    "editApplication": "Edit Application",
+    "deleteApplication": "Delete Application",
+    "submitApplication": "Submit Application",
+    "withdrawApplication": "Withdraw Application",
+    "trackApplication": "Track Application",
+    "applicationNumber": "Application Number",
+    "sponsor": "Sponsor",
+    "sponsored": "Sponsored Person",
+    "startApplication": "Start Application",
+    "chooseService": "Choose a Service",
+    "selectServiceType": "Select the type of service you need",
+    "aiGuidance": "AI Guidance",
+    "liveAssistance": "Live Assistance",
+    "connectWithOfficer": "Connect with Amer Officer",
+    "requestSent": "Request Sent",
+    "waitingForOfficer": "Waiting for an officer to accept your request",
+    "officerConnected": "Officer Connected",
+    "chatWithOfficer": "You're now connected with an Amer officer",
+    "noOfficersAvailable": "No officers are currently available. Please try again later.",
+    "conversationQueued": "Your conversation has been queued",
+    "chatEnded": "Chat session ended"
+  },
+  "documents": {
+    "title": "Documents",
+    "uploadDocument": "Upload Document",
+    "documentType": "Document Type",
+    "documentName": "Document Name",
+    "documentSize": "Document Size",
+    "uploadDate": "Upload Date",
+    "verificationStatus": "Verification Status",
+    "pending": "Pending",
+    "verified": "Verified",
+    "rejected": "Rejected",
+    "approved": "Approved",
+    "requested": "Requested",
+    "dragDropFiles": "Drag and drop files here, or click to select",
+    "supportedFormats": "Supported formats: PDF, JPG, PNG, DOC, DOCX",
+    "maxFileSize": "Maximum file size: 10MB",
+    "uploading": "Uploading...",
+    "uploadSuccess": "Upload successful",
+    "uploadError": "Upload failed",
+    "deleteDocument": "Delete Document",
+    "viewDocument": "View Document",
+    "downloadDocument": "Download Document",
+    "sponsorDocuments": "Sponsor's Documents",
+    "sponsoredDocuments": "Sponsored Documents",
+    "establishmentDocuments": "Establishment Documents",
+    "otherDocuments": "Other Documents",
+    "passport": "Passport",
+    "emirates_id": "Emirates ID",
+    "visa": "Visa",
+    "labor_card": "Labor Card",
+    "salary_certificate": "Salary Certificate",
+    "bank_statement": "Bank Statement",
+    "trade_license": "Trade License",
+    "establishment_card": "Establishment Card",
+    "immigration_card": "Immigration Card",
+    "review": "Review Documents",
+    "approveDocument": "Approve",
+    "rejectDocument": "Reject",
+    "rejectionReason": "Rejection Reason",
+    "provideRejectionReason": "Provide reason for rejection (required if rejecting)",
+    "documentReviewed": "This document has already been reviewed",
+    "selectDocument": "Select a document to review",
+    "noDocuments": "No documents uploaded yet",
+    "reuploadRequired": "Re-upload Required",
+    "fileName": "File Name",
+    "fileSize": "File Size",
+    "type": "Type",
+    "uploaded": "Uploaded",
+    "extractedInformation": "Extracted Information",
+    "reviewDocument": "Review Document",
+    "count": "docs",
+    "more": "more"
+  },
+  "chat": {
+    "typeMessage": "Type a message...",
+    "sendMessage": "Send message",
+    "aiAssistant": "AI Assistant",
+    "amerOfficer": "Amer Officer",
+    "connectingToOfficer": "Connecting to officer...",
+    "officerTyping": "Officer is typing...",
+    "youAreTyping": "You are typing...",
+    "chatHistory": "Chat History",
+    "startNewChat": "Start New Chat",
+    "endChat": "End Chat",
+    "chatSupport": "Chat Support",
+    "fileSharing": "File Sharing",
+    "shareFile": "Share File",
+    "fileUploaded": "File uploaded successfully",
+    "fileSizeExceeded": "File size exceeded the limit",
+    "unsupportedFileType": "Unsupported file type",
+    "chatCollapsed": "Chat collapsed",
+    "expandChat": "Expand chat",
+    "collapseChat": "Collapse chat"
+  },
+  
+  "services": {
+    "title": "Services",
+    "subtitle": "Stop wasting time searching across different government websites and offices. Get the right guidance, receive instant answers, or let TMMT complete the process for you",
+    "personalizedToYou": "All Your UAE Government Procedures in One Place",
+    "visaServices": "Visa Services",
+    "residencyServices": "Residency Services",
+    "workPermitServices": "Work Permit Services",
+    "familyServices": "Family Services",
+    "businessServices": "Business Services",
+    "renewalServices": "Renewal Services",
+    "newVisa": "New Visa",
+    "visaRenewal": "Visa Renewal",
+    "visaTransfer": "Visa Transfer",
+    "hideAll": "Hide All",
+    "overstayFineChecker": {
+      "title": "No time? We handle it"
+    },
+    "abscondingChecker": {
+      "title": "Absconding Checker"
+    },
+    "nawakas": {
+      "title": "Emirates ID expired? Don’t wait"
+    },
+    "SupervisorAccess": {
+      "title": "Got fines? Check them before they increase"
+    },
+    "travelBanChecker": {
+      "title": "Travel Ban Checker"
+    },
+    "establishmentCardBanChecker": {
+      "title": "Establishment Card Copy"
+    },
+    "visaCancellation": {
+      "title": "Visa Cancellation"
+    },
+    "familyVisa": {
+      "title": "Family Visa",
+      "duration": "per application"
+    },
+    "employmentVisa": "Employment Visa",
+    "investorVisa": "Investor Visa",
+    "touristVisa": "Tourist Visa",
+    "transitVisa": "Transit Visa",
+    "studyVisa": "Study Visa",
+    "retirementVisa": "Retirement Visa",
+    "applyNow": "Apply Now",
+    "emiratesId": {
+      "title": "Emirates ID"
+    },
+    "medicalScreening": {
+      "title": "Medical Screening"
+    },
+    "residenceVisa": {
+      "title": "Residence Visa"
+    },
+ 
+    "changeStatus": {
+      "title": "Change Status"
+    },
+    "mohreCancellation": {
+      "title": "MOHRE Cancellation"
+    },
+    "partnerVisaCancellation": {
+      "title": "Complicated request? We guide you"
+    },
+    "fineReduction": {
+      "title": "Visa issue? We make it easier"
+    },
+
+    "airportToAirport": {
+      "title": "Airport to Airport"
+    },
+    "browseAll": "Browse all services"
+  },
+
+
+
+  
+  "amerDashboard": {
+    "title": "TAMMAT Amer Dashboard",
+    "subtitle": "Manage visa applications and review documents",
+    "officerPortal": "Officer Portal",
+    "quickActions": "Quick Actions",
+    "quickActionsSubtitle": "Manage applications efficiently",
+    "fraudScan": "Fraud Scan",
+    "issuePenalty": "Issue Penalty",
+    "otpVerification": "OTP Verification",
+    "uploadDocuments": "Upload Documents",
+    "newInvites": "New Invites",
+    "securityMonitor": "Security Monitor",
+    "activeAlerts": "active alerts",
+    "pendingPenalties": "pending penalties",
+    "viewAlerts": "View Alerts",
+    "applications": "Applications",
+    "fraud": "Fraud",
+    "penalties": "Penalties",
+    "otp": "OTP",
+    "stats": "Stats",
+    "conversations": "Chat",
+    "activeRooms": "Active Rooms",
+    "selectRoom": "Select a room to start chatting",
+    "noActiveRooms": "No active rooms. Accept an invite to start.",
+    "acceptJoin": "Accept & Join",
+    "dismiss": "Dismiss",
+    "leave": "Leave",
+    "requestsAssistance": "requests assistance",
+    "service": "Service",
+    "joinedConversation": "Joined conversation",
+    "room": "Room",
+    "applicant": "Applicant",
+    "type": "Type",
+    "status": "Status",
+    "documents": "Documents",
+    "submitted": "Submitted",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "reviewDocuments": "Review Documents",
+    "fraudCheck": "Fraud Check",
+    "requestOTP": "Request OTP",
+    "setStage": {
+      "mohrePending": "MOHRE Pending",
+      "gdrfaPending": "GDRFA Pending",
+      "icpPending": "ICP Pending"
+    },
+    "documentsCount": "docs",
+    "readyForReview": "Ready for Review",
+    "moreDocuments": "more",
+    "underDevelopment": "under development"
+  },
+  "otp": {
+    "title": "Request OTP",
+    "description": "Send a one-time code to the applicant and verify within the selected time.",
+    "applicantPhone": "Applicant Phone",
+    "phoneExample": "e.g. +9715xxxxxxxx",
+    "minutes": "min",
+    "sendOTP": "Send OTP",
+    "expiresIn": "Expires in",
+    "enterCode": "Enter 6-digit code",
+    "verify": "Verify",
+    "resend": "Resend",
+    "otpSent": "OTP sent to applicant",
+    "otpVerified": "OTP verified",
+    "invalidCode": "Invalid code",
+    "verificationFailed": "Verification failed",
+    "failedToSend": "Failed to send OTP"
+  },
+  "theme": {
+    "selectTheme": "Select Theme",
+    "currentTheme": "Current Theme",
+    "themes": {
+      "tammat": "TAMMAT Navy",
+      "orange": "Orange Burst",
+      "canva": "Canva Brand",
+      "professional": "Professional Dark",
+      "playground": "Vibrant Playground"
+    },
+    "preview": "Preview",
+    "apply": "Apply Theme"
+  },
+  "errors": {
+    "general": "Something went wrong",
+    "networkError": "Network error. Please check your connection.",
+    "notFound": "Page not found",
+    "unauthorized": "You are not authorized to access this page",
+    "forbidden": "Access denied",
+    "serverError": "Server error. Please try again later.",
+    "validationError": "Please check your input and try again",
+    "fileUploadError": "File upload failed",
+    "fileSizeError": "File size is too large",
+    "fileTypeError": "File type is not supported",
+    "requiredField": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "phoneNumberInvalid": "Please enter a valid phone number"
+  },
+  "success": {
+    "saved": "Changes saved successfully",
+    "updated": "Updated successfully",
+    "created": "Created successfully",
+    "deleted": "Deleted successfully",
+    "uploaded": "Uploaded successfully",
+    "sent": "Sent successfully",
+    "verified": "Verified successfully",
+    "applicationSubmitted": "Application submitted successfully",
+    "documentUploaded": "Document uploaded successfully",
+    "profileUpdated": "Profile updated successfully",
+    "passwordChanged": "Password changed successfully",
+    "settingsSaved": "Settings saved successfully"
+  },
+  "placeholder": {
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "enterFirstName": "Enter your first name",
+    "enterLastName": "Enter your last name",
+    "enterPhoneNumber": "Enter your phone number",
+    "selectCountry": "Select your country",
+    "selectCity": "Select your city",
+    "enterAddress": "Enter your address",
+    "searchApplications": "Search applications...",
+    "searchDocuments": "Search documents...",
+    "selectDocumentType": "Select document type",
+    "enterDescription": "Enter description",
+    "enterNotes": "Enter notes",
+    "selectStatus": "Select status",
+    "selectPriority": "Select priority",
+    "selectCategory": "Select category"
+  },
+  "pricing": {
+    "title": "Our Pricing",
+    "subtitle": "No hidden fees. Just world-class services that fit your budget",
+    "standard": {
+      "name": "Standard Visa",
+      "features": [
+        "Family Visa Application (1 dependent)",
+        "Basic document review",
+        "1 round of corrections",
+        "Standard processing (10–15 days)",
+        "Digital updates in dashboard",
+        "Government fees excluded"
+      ]
+    },
+    "pro": {
+      "name": "Pro Visa",
+      "features": [
+        "Golden Visa or Family (up to 3 dependents)",
+        "AI-powered document extraction & validation",
+        "2 structured revisions",
+        "Priority processing (5–7 days)",
+        "Officer chat support",
+        "Digital receipt + notifications"
+      ]
+    },
+    "premium": {
+      "name": "Premium Visa",
+      "features": [
+        "Full Residency Solutions (Family + Business)",
+        "Advanced visa tracking & personalized officer support",
+        "Priority lane – 3–5 days processing",
+        "Unlimited document uploads + OCR extraction",
+        "AI insights & compliance checks",
+        "Official stamped receipt + digital copy of visa"
+      ]
+    },
+    "selectPlan": "Select Plan",
+    "viewExample": "View Example"
+  },
+  "footer": {
+    "tagline": "Your UAE journey, simplified.",
+    "copyright": "© {{year}} — TMMT UAE",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "termsConditions": "Terms & Conditions",
+    "revisionPolicy": "Revision Policy",
+    "support": "Support",
+    "about": "About",
+    "contact": "Contact",
+    "followUs": "Follow Us",
+    "newsletter": "Subscribe to our newsletter",
+    "enterEmailNewsletter": "Enter your email for updates",
+    "readyToStart": "Ready to Start Your Journey?",
+    "signUpFree": "Sign Up for Free",
+    "navigation": "Navigation",
+    "socialMedia": {
+      "title": "Social Media",
+      "twitter": "X",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn"
+    },
+    "legal": "Legal"
+  },
+  "landing": {
+    "hero": {
+      "title": "Next-Gen UAE Smart Services",
+      "subtitle": "Streamline your visa applications with AI-powered assistance and real-time processing",
+      "getStarted": "Get Started",
+      "learnMore": "Learn More",
+      "watchDemo": "Watch Demo"
+    },
+    "features": {
+      "title": "Why Choose TAMMAT?",
+      "subtitle": "Experience the future of government services",
+      "aiPowered": "AI-Powered",
+      "aiPoweredDesc": "Smart document processing and real-time guidance",
+      "secure": "Secure & Compliant",
+      "secureDesc": "Bank-level security with UAE government compliance",
+      "fast": "Lightning Fast",
+      "fastDesc": "AI-powered workflows reduce processing time by 70%",
+      "multilingual": "Multi-Language",
+      "multilingualDesc": "Available in Arabic, English, Urdu, Hindi & more",
+      "mobileFirst": "Mobile First",
+      "mobileFirstDesc": "Complete visa services from your smartphone",
+      "support": "24/7 Support",
+      "supportDesc": "Round-the-clock assistance when you need it"
+    },
+    "stats": {
+      "applicationsProcessed": "Applications Processed",
+      "successRate": "Success Rate",
+      "supportAvailable": "Support Available"
+    },
+    "testimonial": {
+      "quote": "TAMMAT revolutionized our visa process. What used to take weeks now takes days. The AI assistance is incredible!",
+      "author": "Sarah Al-Mansouri",
+      "position": "HR Director, Emirates Group"
+    },
+    "badges": {
+      "govApproved": "UAE Government Approved",
+      "socCompliant": "SOC 2 Compliant"
+    }
+  },
+  "hero": {
+    "title": "UAE VISA & RESIDENCY",
+    "subtitle": "personalized to you",
+    "tagline": "WITH AI POWER",
+    "description": "Experience hassle-free visa processing powered by AI technology. Fast, reliable, and completely digital.",
+    "cta": "Start Application"
+  },
+  "features": {
+    "title": "What makes us the best for you",
+    "subtitle": "Discover our unique approach to VISA & Residency",
+    "browseServices": "Browse Services",
+    "browseServicesDesc": "Experience the future of government services",
+    "aiProcessing": {
+      "title": "Smart AI Processing",
+      "description": "AI-powered document extraction and validation for faster processing"
+    },
+    "liveSupport": {
+      "title": "Real-time Officer Connection",
+      "description": "Chat directly with licensed Amer officers for instant support"
+    },
+    "govIntegration": {
+      "title": "Government Integration",
+      "description": "Direct integration with UAE government systems for seamless processing"
+    }
+  },
+  "header": {
+    "home": "Home",
+    "services": "Services",
+    "faq": "FAQ",
+    "guides": "Guides",
+    "about": "About",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "subscription": "Subscription"
+  },
+  "lifeUpgraded": {
+   
+    "microLabel": "YOUR UAE, SIMPLIFIED",
+    "headline": "From arrival to belonging — without the hassle.",
+    "headlineAlt1": "From your first step to full settlement — effortlessly.",
+    "headlineAlt2": "Your UAE journey, professionally handled.",
+    "description": "TMMT manages your entire transition into the UAE — from visas and IDs to banking, family relocation, and beyond — so you can focus on your work, your ambitions, and your life.",
+    "trustLine": "No queues. No confusion. No wasted time.",
+    "bullets": {
+      "experts": "Fast, guided process with real experts",
+      "updates": "Real-time progress updates, 24/7",
+      "secure": "Secure document handling & reminders",
+      "complete": "One partner for your complete UAE setup"
+    },
+    "cta": "Start Your Journey",
+    "ctaSubtext": "It only takes a few minutes.",
+    "forBusiness": "For Businesses",
+    "forIndividuals": "For Individuals",
+    "businessDescription": "Onboard your team with enterprise visa solutions. Bulk processing, compliance tracking, and dedicated account management.",
+    "individualDescription": "Personal visa and residency services tailored to your unique situation. From first-timers to renewals.",
+    "cards": {
+      "residenceVisa": "Residence Visa",
+      "medicalTest": "Medical Test",
+      "emiratesId": "Emirates ID",
+      "bankAccount": "Bank Account",
+      "familyVisa": "Family Visa",
+      "entryPermit": "Entry Permit",
+      "goldenVisa": "Golden Visa",
+      "documentVerified": "Documents Verified",
+      "drivingLicense": "Driving License",
+      "approved": "Approved",
+      "passed": "Passed",
+      "issued": "Issued",
+      "opened": "Opened",
+      "inProgress": "In Progress"
+    },
+    "trustReinforcement": "No queues. No confusion. No wasted time.",
+    "phoneSlides": {
+      "visa": {
+        "approved": "Visa Approved!",
+        "welcome": "Welcome to UAE 🇦🇪"
+      },
+      "emiratesId": {
+        "status": "✓ Issued",
+        "nextStep": "Collect from typing center",
+        "items": {
+          "biometrics": "Biometrics completed",
+          "photo": "Photo verified",
+          "ready": "ID printed & ready"
+        }
+      },
+      "medicalTest": {
+        "status": "✓ Passed",
+        "nextStep": "Results sent to ICP",
+        "items": {
+          "blood": "Blood test completed",
+          "xray": "Chest X-ray clear",
+          "fitness": "Fitness confirmed"
+        }
+      },
+      "residenceVisa": {
+        "status": "✓ Issued",
+        "nextStep": "Valid for 2 years",
+        "items": {
+          "entry": "Entry permit approved",
+          "status": "Status change complete",
+          "stamped": "Residence visa stamped"
+        }
+      },
+      "bankAccount": {
+        "status": "✓ Opened",
+        "nextStep": "Debit card ready",
+        "items": {
+          "kyc": "KYC verified",
+          "activated": "Account activated",
+          "online": "Online banking enabled"
+        }
+      },
+      "drivingLicense": {
+        "status": "✓ Issued",
+        "nextStep": "Valid for 10 years",
+        "items": {
+          "verified": "Documents verified",
+          "converted": "License converted",
+          "issued": "UAE license issued"
+        }
+      },
+      "complete": "✓ Complete",
+      "scrollHint": "↕ Scroll to see milestones"
+    }
+  },
+  "testimonials": {
+    "headline": "Hear it from",
+    "headlineHighlight": "our clients",
+    "reviews": {
+      "review1": {
+        "title": "Seamless visa process",
+        "text": "TMMT handled my entire residence visa process. From medical to Emirates ID - everything was tracked and completed without me visiting a single government office.",
+        "name": "Ahmed K.",
+        "role": "Business Owner"
+      },
+      "review2": {
+        "title": "Family visa made easy",
+        "text": "Brought my wife and kids to UAE within 3 weeks. The real-time updates kept me informed at every step. Highly recommend!",
+        "name": "Priya S.",
+        "role": "Software Engineer"
+      },
+      "review3": {
+        "title": "Best for company visa management",
+        "text": "We manage 50+ employee visas through TMMT. Never missed a renewal deadline. Their digital workers are a game changer.",
+        "name": "Mohammad R.",
+        "role": "HR Director"
+      },
+      "review4": {
+        "title": "Saved from overstay fines",
+        "text": "Their deadline alerts saved me from a potential overstay fine. The proactive reminders are worth every dirham.",
+        "name": "Sarah L.",
+        "role": "Freelancer"
+      }
+    }
+  },
+  "tammatFeatures": {
+    "headline": "Streamline",
+    "headlineHighlight": "every milestone",
+    "headlineEnd": "of your UAE journey",
+    "subheadline": "From arrival to belonging — we handle the complexity so you don't have to.",
+    "measureMatters": "Measure what matters.",
+    "categories": {
+      "individuals": "For Individuals",
+      "families": "For Families",
+      "businesses": "For Businesses",
+      "compliance": "Compliance"
+    },
+    "items": {
+      "residency": {
+        "title": "Residency & Visas",
+        "description": "Entry permits, residence visas, status changes, and renewals — all managed end-to-end.",
+        "tags": ["Entry Permit", "Residence Visa", "Status Change", "Renewals"]
+      },
+      "family": {
+        "title": "Bring Loved Ones",
+        "description": "Sponsor your family with confidence. We handle spouse, children, and parent visa applications.",
+        "tags": ["Spouse Visa", "Dependents", "Parent Visa", "Family Reunification"]
+      },
+      "identity": {
+        "title": "Emirates ID & Medical",
+        "description": "Book medical tests, track ID processing, and receive alerts when your documents are ready.",
+        "tags": ["Medical Screening", "Biometrics", "ID Issuance", "Renewals"]
+      },
+      "business": {
+        "title": "Business Setup",
+        "description": "Start your side hustle or enterprise. Trade licenses, investor visas, and PRO services.",
+        "tags": ["Trade License", "Investor Visa", "Freelance Permit", "PRO Services"]
+      },
+      "employees": {
+        "title": "Employee Management",
+        "description": "Bulk visa processing, compliance tracking, and dedicated account management for enterprises.",
+        "tags": ["Work Permits", "Bulk Processing", "Digital Workers", "Compliance"]
+      },
+      "compliance": {
+        "title": "Never Miss a Deadline",
+        "description": "Automated alerts for visa expiry, license renewals, and grace periods. Avoid fines, stay compliant.",
+        "tags": ["Expiry Alerts", "Renewal Reminders", "Fine Avoidance", "Grace Period Tracking"]
+      }
+    },
+    "includesServices": "Includes {{count}} services",
+    "cta": "Start Your Journey"
+  },
+ 
+  "faq": {
+    "headline": "Frequently Asked",
+    "headlineHighlight": "Questions",
+    "items": {
+      "q1": {
+        "question": "What is TMMT?",
+        "answer": "TMMT is a 100% digital platform that streamlines UAE visa and government services. We connect you with licensed PRO officers to handle residence visas, Emirates ID, medical tests, family visas, and business setup — all from the comfort of your home."
+      },
+      "q2": {
+        "question": "How does TMMT work?",
+        "answer": "Simply upload your documents, and our AI-powered system validates them instantly. Our licensed officers handle all government submissions, appointments, and follow-ups. Track everything in real-time through your dashboard."
+      },
+      "q3": {
+        "question": "What services does TMMT offer?",
+        "answer": "We offer comprehensive UAE services including: Residence Visas, Family Visas, Emirates ID, Medical Screening, Golden Visa, Business Setup, Trade License Renewals, Employee Visa Management, and PRO Services."
+      },
+      "q4": {
+        "question": "How long does the visa process take?",
+        "answer": "Processing times vary by service: Entry permits take 1-3 days, Residence visas 5-7 days, Emirates ID 3-5 days. Our priority processing can reduce these times by up to 50%."
+      },
+      "q5": {
+        "question": "Is my data secure with TMMT?",
+        "answer": "Absolutely. We use bank-level encryption and are compliant with UAE data protection regulations. Your documents are stored securely and never shared without your consent."
+      },
+      "q6": {
+        "question": "What are the fees?",
+        "answer": "Our fees are transparent with no hidden charges. Service fees vary by complexity — you can view detailed pricing on our pricing page. Government fees are separate and paid directly."
+      }
+    }
+  },
+
+  "emailCapture": {
+    "headline": "Unlock the free",
+    "headlineHighlight": "UAE Visa Guide",
+    "description": "Written by licensed Amer officers to simplify your journey.",
+    "placeholder": "Email",
+    "cta": "Get the guide",
+    "terms": "By creating an account using email, I agree to the",
+    "termsLink": "Terms & Conditions",
+    "privacyLink": "Privacy Policy"
+  },
+  
+  "analytics": {
+    "headline": "Members see results",
+    "headlineHighlight": "in just 30 days",
+    "stats": {
+      "timeSaved": {
+        "value": "60",
+        "label": "save time on visa processing",
+        "description": "Time Saved"
+      },
+      "costReduction": {
+        "value": "45",
+        "label": "reduce processing costs",
+        "description": "Cost Reduction"
+      },
+      "deadlinesMet": {
+        "value": "99",
+        "label": "never miss renewal deadlines",
+        "description": "Deadlines Met"
+      }
+    },
+    "footnote": "Based on data from over 10,000 TMMT users in the UAE"
+  },
+
+
+
+"membership": {
+  "badge": "TMMT Membership",
+  "headingLine1": "One Membership.",
+  "headingLine2": "Government Support All Year.",
+  "description": "TMMT membership gives you expert guidance, saves you time, prevents costly mistakes, and provides continuous support whenever you deal with UAE government procedures — all for less than the cost of a single fine.",
+  "cards": {
+    "expertGuidance": {
+      "title": "Expert Guidance",
+      "description": "Get accurate advice from experienced professionals before making any government decision."
+    },
+    "saveTime": {
+      "title": "Save Time",
+      "description": "Skip the confusion and long queues. We handle the paperwork while you focus on your life."
+    },
+    "preventMistakes": {
+      "title": "Prevent Mistakes",
+      "description": "Avoid costly errors, fines, and rejections with our thorough document review process."
+    },
+    "continuousSupport": {
+      "title": "Continuous Support",
+      "description": "24/7 access to assistance for all your UAE government needs, whenever you need it."
+    }
+  },
+  "fullService": {
+    "title": "Full Service Processing",
+    "description": "If you prefer not to handle the process yourself, TMMT can complete the entire process on your behalf for service fees plus government fees."
+  },
+  "smartRenewals": {
+    "title": "Smart Renewal Alerts",
+    "description": "Receive reminders through WhatsApp or email before the expiry of:",
+    "items": [
+      "Passports",
+      "Visas",
+      "Emirates IDs",
+      "Trade licenses",
+      "Establishment cards",
+      "Work permits",
+      "Driving licenses",
+      "Vehicle registrations"
+    ]
+  },
+  "howCanHelp": {
+    "title": "How Can TMMT Help You?",
+    "items": [
+      "Avoid late renewal fines",
+      "Avoid choosing the wrong business setup",
+      "Avoid unnecessary costs and fees",
+      "Avoid costly mistakes in government procedures",
+      "Save time and effort",
+      "Make informed decisions with confidence before taking action"
+    ]
+  },
+  "foundingMembers": {
+    "title": "Founding Members",
+    "limitedTime": "Limited Time",
+    "description": "Be among the first 1,000 members and secure exclusive lifetime benefits.",
+    "benefits": {
+      "badge": {
+        "title": "Founding Member Badge",
+        "description": "Exclusive badge on your account showing your founding member status."
+      },
+      "lifetime": {
+        "title": "Lifetime Pricing",
+        "description": "Lock in current membership pricing forever — even as prices increase."
+      },
+      "exclusive": {
+        "title": "Exclusive Benefits",
+        "description": "Access to premium features as they're added to the platform."
+      }
+    },
+    "footer": "Limited to first 1,000 members. Future prices may increase."
+  }
+},
+"successCard": {
+  "verified": "Verified",
+  "successRate": "Success Rate",
+  "approvedText": "Applications approved without resubmission through",
+  "expertReview": " expert review",
+  "processText": ", secure verification, and a streamlined application process.",
+  "approval": "Approval",
+  "monitoring": "Monitoring",
+  "expertAdvisors": "Expert Advisors",
+  "rating": "Rating"
+},
+"ctaCard": {
+  "trustedPlatform": "Trusted Platform",
+  "journeyBegins": "Your Journey Begins Here",
+  "startYour": "Start Your",
+  "dreamJourney": "Dream Journey",
+  "description": "Expert guidance, verified documentation, and seamless visa assistance — your pathway to success starts here.",
+  "applyNow": "Apply Now",
+  "applications": "10K+ Applications",
+  "successRate": "97% Success Rate",
+  "support": "24/7 Support"
+},
+
+
+
+
+
+
+
+  "serviceJourney": {
+    "headline": "Your visa journey",
+    "headlineHighlight": "Step by Step",
+    "subheadline": "Follow your application through every stage — with full visibility and real-time updates.",
+    "tabs": {
+      "residenceVisa": "Residence Visa",
+      "familyVisa": "Family Visa",
+      "goldenVisa": "Golden Visa",
+      "emiratesId": "Emirates ID",
+      "businessSetup": "Business Setup"
+    },
+    "steps": {
+      "step": "Step",
+      "duration": "Duration",
+      "days": "days",
+      "hours": "hours"
+    },
+    "residenceVisa": {
+      "title": "Residence Visa Journey",
+      "description": "Complete residence visa processing from application to stamping",
+      "totalDuration": "5-7 days total",
+      "step1": {
+        "title": "Document Collection",
+        "description": "Upload passport, photos, and required documents",
+        "duration": "1-2 hours"
+      },
+      "step2": {
+        "title": "Entry Permit",
+        "description": "Entry permit application and approval from GDRFA",
+        "duration": "1-2 days"
+      },
+      "step3": {
+        "title": "Medical Screening",
+        "description": "Health check at authorized medical center",
+        "duration": "Same day"
+      },
+      "step4": {
+        "title": "Emirates ID",
+        "description": "Biometrics and Emirates ID application",
+        "duration": "1-2 days"
+      },
+      "step5": {
+        "title": "Visa Stamping",
+        "description": "Final residence visa stamped in passport",
+        "duration": "1-2 days"
+      },
+      "completion": "Residence visa issued!"
+    },
+    "familyVisa": {
+      "title": "Family Visa Journey",
+      "description": "Bring your loved ones to UAE with complete sponsorship",
+      "totalDuration": "7-10 days total",
+      "step1": {
+        "title": "Sponsor Documents",
+        "description": "Salary certificate, tenancy contract, and Emirates ID",
+        "duration": "1-2 hours"
+      },
+      "step2": {
+        "title": "Family Documents",
+        "description": "Attested marriage/birth certificates and passports",
+        "duration": "1 day"
+      },
+      "step3": {
+        "title": "Entry Permit",
+        "description": "Family entry permit application and approval",
+        "duration": "2-3 days"
+      },
+      "step4": {
+        "title": "Medical & Biometrics",
+        "description": "Health check and Emirates ID for dependents",
+        "duration": "2-3 days"
+      },
+      "step5": {
+        "title": "Visa Stamping",
+        "description": "Residence visas stamped for all family members",
+        "duration": "1-2 days"
+      },
+      "completion": "Family reunited in UAE!"
+    },
+    "goldenVisa": {
+      "title": "Golden Visa Journey",
+      "description": "10-year residency for investors, entrepreneurs & talent",
+      "totalDuration": "10-15 days total",
+      "step1": {
+        "title": "Eligibility Check",
+        "description": "Verify qualification for Golden Visa category",
+        "duration": "1 day"
+      },
+      "step2": {
+        "title": "Document Preparation",
+        "description": "Property documents, investments, or talent proof",
+        "duration": "2-3 days"
+      },
+      "step3": {
+        "title": "Application Submission",
+        "description": "Submit to ICP for Golden Visa approval",
+        "duration": "3-5 days"
+      },
+      "step4": {
+        "title": "Medical & Biometrics",
+        "description": "Complete health screening and Emirates ID",
+        "duration": "2-3 days"
+      },
+      "step5": {
+        "title": "Golden Visa Issuance",
+        "description": "10-year residence visa stamped",
+        "duration": "2-3 days"
+      },
+      "completion": "Golden Visa holder!"
+    },
+    "emiratesId": {
+      "title": "Emirates ID Journey",
+      "description": "National identity card for all UAE residents",
+      "totalDuration": "3-5 days total",
+      "step1": {
+        "title": "Application",
+        "description": "Submit Emirates ID application online",
+        "duration": "30 minutes"
+      },
+      "step2": {
+        "title": "Appointment",
+        "description": "Book biometrics appointment at typing center",
+        "duration": "Same day"
+      },
+      "step3": {
+        "title": "Biometrics",
+        "description": "Fingerprint and photo capture",
+        "duration": "1 hour"
+      },
+      "step4": {
+        "title": "Processing",
+        "description": "ICP processes and prints your ID card",
+        "duration": "2-3 days"
+      },
+      "step5": {
+        "title": "Collection",
+        "description": "Collect your Emirates ID or home delivery",
+        "duration": "Same day"
+      },
+      "completion": "Emirates ID ready!"
+    },
+    "businessSetup": {
+      "title": "Business Setup Journey",
+      "description": "Start your company in UAE with full support",
+      "totalDuration": "7-14 days total",
+      "step1": {
+        "title": "Business Plan",
+        "description": "Define activity, license type, and jurisdiction",
+        "duration": "1 day"
+      },
+      "step2": {
+        "title": "Name Reservation",
+        "description": "Reserve your company trade name",
+        "duration": "1-2 days"
+      },
+      "step3": {
+        "title": "License Application",
+        "description": "Submit trade license application",
+        "duration": "2-3 days"
+      },
+      "step4": {
+        "title": "Visa Quota",
+        "description": "Apply for investor visa and employee quota",
+        "duration": "2-3 days"
+      },
+      "step5": {
+        "title": "Bank Account",
+        "description": "Open corporate bank account",
+        "duration": "3-5 days"
+      },
+      "completion": "Business ready to operate!"
+    },
+    "features": {
+      "realTimeTracking": "Real-time tracking",
+      "expertGuidance": "Expert guidance",
+      "secureProcess": "Secure process",
+      "noHiddenFees": "No hidden fees"
+    },
+    "cta": "Start Your Journey",
+    "learnMore": "Learn More"
+  },
+  "lifeUpgradedCards": {
+    "trackProgress": "Track your progress",
+    "realTimeUpdates": "Real-time updates on every step.",
+    "asOfToday": "As of today",
+    "successRate": "Success Rate",
+    "daysAvg": "Days avg.",
+    "support": "Support",
+    "allServices": "All services in one place",
+    "allServicesDesc": "From visas to IDs — everything you need.",
+    "yourCompleteJourney": "Your complete UAE journey",
+    "exploreServices": "Explore services"
+  },
+  "logoMarquee": {
+    "headline": "Our",
+    "headlineHighlight": "Partners"
+  },
+  "startApplication": {
+      "title": "TAMMAT Smart Hub",
+    "subtitle": "Smart UAE Visa & Residency Solutions",
+    "processingSpeed": "Processing Speed",
+    "tenXFaster": "10x Faster",
+    "progress": "Progress",
+    "officerOnline": "Officer Online",
+    "aiReady": "AI Ready",
+    "ministryCompliant": "Ministry Compliant",
+    "realTimeValidation": "Real-time Validation",
+    "uaeGovApproved": "UAE Government Approved",
+    "tabs": {
+      "service": "Service",
+      "sponsor": "Sponsor",
+      "documents": "Documents",
+      "guidance": "Guidance",
+      "submit": "Submit"
+    },
+    "serviceSelection": {
+      "title": "Service Selection",
+      "searchPlaceholder": "Describe what you need... (e.g., 'bring my wife to UAE')",
+      "fastProcessing": "Fast processing",
+      "docsRequired": "docs",
+      "selected": "Selected",
+      "readyToProceed": "Ready to proceed",
+      "next": "Next"
+    },
+    "sponsorInfo": {
+      "title": "Sponsor Information",
+      "required": "Required",
+      "sponsorType": "Sponsor Type",
+      "employee": "Employee",
+      "employeeDesc": "Working under company sponsorship",
+      "investor": "Investor",
+      "investorDesc": "Business owner with trade license",
+      "partner": "Partner",
+      "partnerDesc": "Business partner with ownership",
+      "location": "Your Current Location",
+      "insideUae": "Inside UAE",
+      "insideUaeDesc": "Currently residing in UAE",
+      "outsideUae": "Outside UAE",
+      "outsideUaeDesc": "Currently outside UAE",
+      "processingMethod": "Processing Method",
+      "tammatProcessing": "TMMT Processing",
+      "tammatDesc": "Recommended - Lower prices, fast response",
+      "amerProcessing": "Amer Processing",
+      "amerDesc": "Traditional government processing",
+      "processingFee": "Processing fee",
+      "benefits": "Benefits",
+      "lowerFees": "Lower processing fees",
+      "fasterResponse": "Faster response time",
+      "uaePassIntegration": "UAE Pass integration",
+      "support247": "24/7 support",
+      "govDirect": "Government direct processing",
+      "officialChannels": "Official channels",
+      "standardProcessing": "Standard processing time",
+      "recommended": "Recommended",
+      "emailAddress": "Email Address",
+      "phoneNumber": "Phone Number",
+      "ibanNumber": "IBAN Number",
+      "optional": "Optional",
+      "docRequirementsPreview": "Document Requirements Preview",
+      "basedOnSelection": "Based on your selection as",
+      "youWillNeed": "you will need to provide",
+      "studioPhoto": "Studio Photo",
+      "passportCopy": "Passport Copy",
+      "passportCoverPage": "Passport Cover Page",
+      "mohreApproval": "MOHRE approval and labor contract",
+      "tradeLicenseEst": "Trade license and establishment documents",
+      "nationalId": "National ID if Pakistan OR Iran",
+      "continueToDocUpload": "Continue to Document Upload",
+      "backToServiceSelection": "Back to Service Selection"
+    },
+    "docsUpload": {
+      "title": "Document Upload",
+      "secure": "Secure",
+      "continueToGuidance": "Continue to AI Guidance",
+      "backToSponsorInfo": "Back to Sponsor Info"
+    },
+    "aiGuidance": {
+      "title": "Eligibility Check",
+      "sponsorEmiratesId": "Sponsor Emirates ID",
+      "emiratesIdPlaceholder": "784-XXXX-XXXXXXX-X",
+      "phonePlaceholder": "+9715xxxxxxx",
+      "aiAnalysis": "AI Analysis",
+      "eligibleFor": "Eligible for",
+      "estimatedProcessing": "Estimated processing: 1-3 business days",
+      "requiredDocuments": "Required documents",
+      "items": "items",
+      "nextReview": "Next: Review",
+      "backToDocs": "Back to Documents"
+    },
+    "liveAssist": {
+      "title": "Live Assistance",
+      "aiActive": "AI Active",
+      "ai": "AI",
+      "officer": "Officer",
+      "call": "Call",
+      "requesting": "Requesting...",
+      "pending": "Pending...",
+      "connected": "Connected",
+      "awaiting": "Awaiting officer...",
+      "noOfficers": "No officers available",
+      "cancelRequest": "Cancel",
+      "liveGuidance": "Live Guidance",
+      "nextReviewSubmit": "Next: Review & Submit"
+    },
+    "reviewSubmit": {
+      "title": "Review & Submit Application",
+      "readyToSubmit": "Ready to Submit",
+      "applicationSummary": "Application Summary",
+      "serviceSelected": "Service Selected",
+      "sponsorType": "Sponsor Type",
+      "contactEmail": "Contact Email",
+      "phoneNumber": "Phone Number",
+      "documentsUploaded": "Documents Uploaded",
+      "of": "of",
+      "required": "required",
+      "processingTime": "Processing Time",
+      "businessDays": "1-3 business days",
+      "applicationFee": "Application Fee",
+      "status": "Status",
+      "allRequirementsMet": "All Requirements Met",
+      "documentChecklist": "Document Checklist",
+      "uploaded": "Uploaded",
+      "pendingUpload": "Pending",
+      "paymentCompleted": "Payment Completed Successfully",
+      "processedVia": "processed via test payment",
+      "allDocsUploaded": "All required documents uploaded",
+      "aiValidationPassed": "AI validation passed",
+      "eligibilityConfirmed": "Eligibility confirmed",
+      "submitApplication": "Submit Application",
+      "completePaymentFirst": "Complete Payment First",
+      "backToGuidance": "Back to AI Guidance"
+    },
+    "chat": {
+      "smartAssistant": "Smart Assistant",
+      "aiPoweredGuidance": "AI-powered guidance & real-time support",
+      "liveOfficerSupport": "Live Amer Officer Support",
+      "waitingForOfficer": "Waiting for officer...",
+      "requestingOfficer": "Requesting officer...",
+      "uaePass": "UAE Pass",
+      "connecting": "Connecting...",
+      "connectedUaePass": "Connected",
+      "minimizeChat": "Minimize chat panel",
+      "premiumSupport": "Premium Support",
+      "liveSupport": "Live Support",
+      "ready": "Ready",
+      "assistantActive": "Assistant Active",
+      "welcomeMessage": "Welcome! Ask me anything about",
+      "visaApplications": "visa applications",
+      "requirementsOrProcessing": "requirements, or processing.",
+      "suggestions": {
+        "whatDocs": "What documents do I need?",
+        "howLong": "How long will this take?",
+        "amIEligible": "Am I eligible?",
+        "connectOfficer": "Connect me to an officer"
+      },
+      "dropFilesHere": "Drop files here",
+      "dragDropFiles": "Drag & drop files or images here",
+      "pleaseLoginToChat": "Please log in to start chatting",
+      "poweredByAi": "Powered by advanced AI • Real-time assistance",
+      "voiceCallSoon": "Voice call feature coming soon!",
+      "openChatPanel": "Open chat panel"
+    },
+    "connection": {
+      "sendingRequest": "Sending request to available Amer officers...",
+      "requestSent": "Request sent to",
+      "officers": "officer(s). Please wait for an officer to accept...",
+      "connectedTo": "Connected to",
+      "youCanChatLive": "You can now chat live!",
+      "requestCancelled": "Request cancelled.",
+      "noOfficersAvailable": "No officers are currently available. Please try again later."
+    }
+  },
+  "laptopShowcase": {
+    "headline": "See how",
+    "headlineHighlight": "TMMT works",
+    "subheadline": "Experience seamless visa processing with our intuitive platform",
+    "features": {
+      "tracking": "Real-time Application Tracking",
+      "dashboard": "Comprehensive Dashboard",
+      "documents": "Smart Document Management",
+      "notifications": "Instant Notifications"
+    },
+    "cta": "Try it yourself"
+  },
+  "emirates": {
+    "headline": "One Visa, Endless Adventures",
+    "headlineHighlight": "Across All 7 Emirates",
+    "subheadline": "From Iconic Skylines to Desert Wonders",
+    "cities": {
+      "dubai": "Dubai",
+      "abuDhabi": "Abu Dhabi",
+      "sharjah": "Sharjah",
+      "rasAlKhaimah": "Ras Al Khaimah",
+      "ajman": "Ajman",
+      "ummAlQuwain": "Umm Al Quwain",
+      "fujairah": "Fujairah"
+    }
+  },
+  "tammatFlow": {
+    "subtitle": "Smart UAE Setup",
+    "progress": "Progress",
+    "saveExit": "Save & Exit",
+    "categoryTitle": "What would you like to do today?",
+    "categorySubtitle": "Select a category to get started",
+    "services": "services",
+    "selectService": "Select your service",
+    "serviceSubtitle": "Choose the option that fits your needs",
+    "documents": "documents",
+    "back": "Back",
+    "documentsTitle": "Upload your documents",
+    "documentsSubtitle": "We need these documents to process your application",
+    "of": "of",
+    "uploaded": "uploaded",
+    "complete": "Complete!",
+    "remaining": "remaining",
+    "dragDrop": "Drag and drop or click to upload",
+    "upload": "Upload",
+    "continue": "Continue",
+    "almostDone": "Almost done!",
+    "infoTitle": "Your information",
+    "infoSubtitle": "Fill in your details to complete the application",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "phone": "Phone Number",
+    "passport": "Passport Number",
+    "passportPlaceholder": "Enter passport number",
+    "nationality": "Nationality",
+    "nationalityPlaceholder": "Enter nationality",
+    "reviewApplication": "Review Application",
+    "reviewTitle": "You're all set!",
+    "reviewSubtitle": "Review your application before submitting",
+    "selectedService": "Selected Service",
+    "personalInfo": "Personal Information",
+    "name": "Name",
+    "submit": "Submit Application",
+    "assistantName": "Amer Assistant",
+    "assistantStatus": "Here to help",
+    "typing": "Typing...",
+    "quickHelp": "Quick help",
+    "helpDocs": "What docs do I need?",
+    "helpTime": "How long will this take?",
+    "categories": {
+      "family": {
+        "title": "Family Visa",
+        "desc": "Bring your loved ones to the UAE"
+      },
+      "residence": {
+        "title": "Residence Visa",
+        "desc": "Live and work in the UAE"
+      },
+      "identity": {
+        "title": "Emirates ID",
+        "desc": "National identity card"
+      },
+      "golden": {
+        "title": "Golden Visa",
+        "desc": "10-year residence program"
+      },
+      "business": {
+        "title": "Business Setup",
+        "desc": "Start or invest in UAE"
+      },
+      "renewal": {
+        "title": "Renewals",
+        "desc": "Extend or modify status"
+      }
+    },
+    "services": {
+      "spouseVisa": {
+        "name": "Spouse Residence Visa",
+        "desc": "Sponsor your spouse for UAE residence"
+      },
+      "childVisa": {
+        "name": "Child Dependent Visa",
+        "desc": "Sponsor your children under 18"
+      },
+      "parentVisa": {
+        "name": "Parent Sponsorship Visa",
+        "desc": "Bring your parents to live with you"
+      },
+      "employmentVisa": {
+        "name": "Employment Residence Visa",
+        "desc": "Work visa sponsored by employer"
+      },
+      "investorVisa": {
+        "name": "Investor Residence Visa",
+        "desc": "For business owners and investors"
+      },
+      "newEid": {
+        "name": "New Emirates ID",
+        "desc": "First-time ID application"
+      },
+      "renewEid": {
+        "name": "Renew Emirates ID",
+        "desc": "Extend your existing ID"
+      },
+      "goldenInvestor": {
+        "name": "Investor Golden Visa",
+        "desc": "For property/business investors"
+      },
+      "goldenTalent": {
+        "name": "Talent Golden Visa",
+        "desc": "For skilled professionals"
+      },
+      "freelanceVisa": {
+        "name": "Freelance Permit",
+        "desc": "Work independently in UAE"
+      },
+      "visaRenewal": {
+        "name": "Visa Renewal",
+        "desc": "Extend your current visa"
+      },
+      "statusChange": {
+        "name": "Status Change",
+        "desc": "Change your visa type"
+      }
+    },
+    "assistant": {
+      "greeting": "Welcome! 👋 I'm here to guide you through your UAE journey. What would you like to achieve today?",
+      "categorySelected": "Great choice! Let me show you what's available.",
+      "serviceSelected": "Excellent! Now let's gather your documents. I'll guide you through each one.",
+      "docUploaded": "Document uploaded! Keep going! 📄",
+      "allDocsUploaded": "All documents uploaded! 🎉 You're doing amazing. Just a few details and we're done.",
+      "infoStep": "Almost there! 🏁 Just need a few personal details to complete your application.",
+      "reviewStep": "You're ready! 🌟 Review everything below and submit when you're confident. I'm with you all the way.",
+      "submitted": "Congratulations! 🎊 Your application has been submitted. We'll keep you updated on every step."
+    }
+  },
+  "costCalculator": {
+    "pageTitle": "UAE Business Setup Cost Calculator",
+    "pageDescription": "Get an instant, transparent breakdown of your UAE business setup costs",
+    "hero": {
+      "badge": "FREE Cost Calculator — Zero Sales Pressure",
+      "title": "Know Your True UAE Business Setup Cost",
+      "titleHighlight": "Before Any Sales Call",
+      "subtitle": "Transparent, regulator-aware cost breakdowns for founders who want to build real companies — not just get a license.",
+      "credibility": "Used by founders, operators, and professionals building long-term businesses in the UAE.",
+      "microCommitment": "Takes less than 60 seconds • No phone number required yet"
+    },
+    "steps": {
+      "step1": "Business Type",
+      "step2": "Requirements",
+      "step3": "Unlock Results",
+      "step4": "Your Quote",
+      "stepOf": "Step {{current}} of {{total}}"
+    },
+    "setupType": {
+      "title": "How do you want to set up your business?",
+      "mainland": "UAE Mainland",
+      "mainlandDesc": "Trade anywhere in UAE & GCC, hire unlimited staff",
+      "freezone": "Free Zone",
+      "freezoneDesc": "100% ownership, tax benefits, fast setup",
+      "selectOne": "Select one to continue"
+    },
+    "freezones": {
+      "title": "Which Free Zone?",
+      "subtitle": "Select based on your budget and location preference",
+      "popular": "Popular",
+      "startingFrom": "From AED {{price}}"
+    },
+    "activities": {
+      "title": "What type of business?",
+      "subtitle": "Your answers help us calculate government fees, compliance requirements, and realistic first-year costs.",
+      "trading": "Trading",
+      "tradingDesc": "Import, export, general trading",
+      "services": "Services",
+      "servicesDesc": "Consultancy, professional services",
+      "techDigital": "Tech & Digital",
+      "techDigitalDesc": "IT, e-commerce, software",
+      "regulated": "Regulated",
+      "regulatedDesc": "Healthcare, education, food",
+      "other": "Other",
+      "otherDesc": "Manufacturing, logistics, other"
+    },
+    "subActivities": {
+      "generalTrading": "General Trading",
+      "importExport": "Import/Export",
+      "retail": "Retail",
+      "wholesale": "Wholesale",
+      "consultancy": "Consultancy",
+      "professionalServices": "Professional Services",
+      "mediaMarketing": "Media & Marketing",
+      "legalAccounting": "Legal/Accounting",
+      "itServices": "IT Services",
+      "ecommerce": "E-Commerce",
+      "software": "Software Development",
+      "digitalAgency": "Digital Agency",
+      "healthcare": "Healthcare",
+      "education": "Education & Training",
+      "foodBeverage": "Food & Beverage",
+      "tourism": "Tourism & Hospitality",
+      "manufacturing": "Manufacturing",
+      "logistics": "Logistics & Shipping",
+      "construction": "Construction",
+      "realEstate": "Real Estate"
+    },
+    "requirements": {
+      "title": "Your Requirements",
+      "subtitle": "Help us calculate the most accurate cost for you",
+      "visaTitle": "How many visas do you need?",
+      "visaHint": "Include yourself and employees",
+      "noVisa": "No visa needed",
+      "visa": "visa",
+      "visas": "visas",
+      "budgetTitle": "What's your budget range?",
+      "budgetHint": "This helps us recommend the right package",
+      "officeTitle": "Do you need office space?",
+      "officeNone": "No office needed (Virtual)",
+      "officeFlexiDesk": "Flexi Desk",
+      "officeDedicatedDesk": "Dedicated Desk",
+      "officePrivate": "Private Office",
+      "officeWarehouse": "Warehouse"
+    },
+    "budget": {
+      "starter": "Starter",
+      "starterDesc": "Freelancers & solo founders",
+      "growth": "Growth",
+      "growthDesc": "Small teams & startups",
+      "professional": "Professional",
+      "professionalDesc": "Established businesses",
+      "enterprise": "Enterprise",
+      "enterpriseDesc": "Large operations"
+    },
+    "liveEstimate": {
+      "title": "Live Cost Estimate",
+      "calculating": "Calculating...",
+      "breakdown": "License: {{license}} • Visas: {{visas}} • Office: {{office}}"
+    },
+    "gate": {
+      "title": "Your Cost Breakdown Is Ready",
+      "subtitle": "Enter your contact to view your personalized quote:",
+      "whatYouGet": "What you'll see:",
+      "item1": "Government fees breakdown",
+      "item2": "Visa costs per person",
+      "item3": "Setup timeline",
+      "item4": "Hidden charges to avoid",
+      "emailOption": "Send to Email",
+      "whatsappOption": "Send to WhatsApp",
+      "emailPlaceholder": "your@email.com",
+      "whatsappPlaceholder": "e.g. 50 123 4567",
+      "privacyNote": "We respect your privacy. No spam, ever.",
+      "unlockButton": "Unlock My Quote",
+      "unlocking": "Unlocking..."
+    },
+    "contact": {
+      "title": "Almost There!",
+      "subtitle": "Just a few details to personalize your quote",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "50 123 4567",
+      "nationality": "Nationality",
+      "nationalityPlaceholder": "Select your nationality",
+      "description": "Tell us more about your business",
+      "descriptionPlaceholder": "What's your business vision? (Optional)",
+      "descriptionHint": "This helps us prepare a more accurate quote"
+    },
+    "review": {
+      "title": "Review & Get Your Quote",
+      "subtitle": "Confirm your details and receive your personalized quotation",
+      "summaryTitle": "Your Selection Summary",
+      "setupType": "Setup Type",
+      "freeZone": "Free Zone",
+      "businessActivity": "Business Activity",
+      "visasRequired": "Visas Required",
+      "budgetRange": "Budget Range",
+      "contact": "Contact",
+      "estimatedTotal": "Estimated Total Investment",
+      "disclaimer": "Final quote will be provided by our consultant",
+      "termsLabel": "I agree to the",
+      "termsLink": "Terms & Conditions",
+      "privacyLabel": "I agree to the",
+      "privacyLink": "Privacy Policy",
+      "marketingLabel": "I'd like to receive updates, offers, and tips via email and WhatsApp"
+    },
+    "success": {
+      "title": "You're One Step Closer!",
+      "reference": "Reference",
+      "subtitle": "Our expert team will contact you within 24 hours with a detailed quotation.",
+      "estimateTitle": "Your Estimated Investment",
+      "basedOn": "Based on your selections",
+      "licenseFee": "License Fee",
+      "visaCost": "Visa Cost",
+      "officeCost": "Office",
+      "govFees": "Gov. Fees",
+      "totalInvestment": "Total Estimated Investment",
+      "finalQuoteNote": "*Final quote will be provided by our consultant",
+      "caseStudiesTitle": "See How Others Transformed Their Ideas",
+      "caseStudiesSubtitle": "Real businesses, real results. See the ROI our clients achieved.",
+      "successStories": "Success Stories",
+      "investment": "Investment",
+      "revenue": "Revenue",
+      "roi": "ROI",
+      "setupTime": "Setup Time",
+      "readyTitle": "Ready to Start Your Journey?",
+      "readySubtitle": "We'll reach out within 24 hours to discuss your business vision.",
+      "exploreServices": "Explore Our Services",
+      "whatsappUs": "WhatsApp Us"
+    },
+    "cta": {
+      "continue": "Continue",
+      "back": "Back",
+      "submit": "Get My Free Quote",
+      "submitting": "Submitting..."
+    },
+    "trust": {
+      "transparent": "100% Transparent",
+      "compare": "11+ Freezones",
+      "expert": "Expert Guidance",
+      "encrypted": "256-bit SSL",
+      "gdpr": "GDPR Compliant",
+      "response": "24hr Response"
+    },
+    "whyChoose": {
+      "title": "Why Founders Choose TMMT",
+      "expertGuidance": "Expert Guidance",
+      "expertGuidanceDesc": "Dedicated consultant",
+      "fastSetup": "Fast Setup",
+      "fastSetupDesc": "License in 48 hours",
+      "bestPrices": "Best Prices",
+      "bestPricesDesc": "No hidden fees",
+      "compliant": "100% Compliant",
+      "compliantDesc": "Government approved"
+    },
+    "positioning": {
+      "tagline1": "We structure companies properly",
+      "tagline2": "We prevent expensive mistakes",
+      "tagline3": "We don't disappear after license",
+      "howWeCalculate": "How We Calculate Costs",
+      "howWeCalculateDesc": "Our system uses automation and internal playbooks to monitor compliance, costs, and growth readiness as your business evolves."
+    },
+    "errors": {
+      "networkError": "Network error. Please check your connection and try again.",
+      "submitError": "Something went wrong. Please try again.",
+      "requiredFields": "Please fill in all required fields"
+    },
+    "nationalities": {
+      "indian": "Indian",
+      "pakistani": "Pakistani",
+      "filipino": "Filipino",
+      "egyptian": "Egyptian",
+      "british": "British",
+      "american": "American",
+      "canadian": "Canadian",
+      "australian": "Australian",
+      "southAfrican": "South African",
+      "nigerian": "Nigerian",
+      "chinese": "Chinese",
+      "russian": "Russian",
+      "german": "German",
+      "french": "French",
+      "lebanese": "Lebanese",
+      "jordanian": "Jordanian",
+      "syrian": "Syrian",
+      "iranian": "Iranian",
+      "bangladeshi": "Bangladeshi",
+      "sriLankan": "Sri Lankan",
+      "other": "Other"
+    }
+  },
+  "service": {
+    "title": "What do you want to get done today?",
+    "subtitle": "Choose a service — we handle everything for you",
+    "search": "Search services...",
+    "noResults": "No services found. Try a different search.",
+    "mostChosen": "Most chosen",
+    "docsRequired": "documents required",
+    "trustFooter": "10,000+ applications processed · 97% approval rate",
+    "cat": {
+      "all": "All",
+      "family": "Family",
+      "employ": "Employment",
+      "golden": "Golden Visa",
+      "renew": "Renewal",
+      "cancel": "Cancellation",
+      "establish": "Business"
+    }
+  },
+  "upload": {
+    "step": "Upload documents",
+    "title": "Upload your documents",
+    "subtitle": "We verify everything for you instantly",
+    "required": "Required documents",
+    "required_label": "required",
+    "of": "of",
+    "uploaded": "uploaded",
+    "aiChecking": "Checking your document...",
+    "viewSample": "What should this look like?",
+    "sampleTip": "Sample tip",
+    "reupload": "Replace",
+    "uploadFile": "Upload file",
+    "takePhoto": "Take a photo",
+    "additionalDocs": "Add additional documents",
+    "dropzone": "Drag & drop or tap — PDF, JPG, PNG up to 10 MB",
+    "tapOrDrag": "Tap or drag files here",
+    "formats": "PDF, JPG, PNG — up to 10 MB",
+    "reassurance": "Don't worry — we'll review everything before submission",
+    "uploadAtLeastOne": "Upload at least one document"
+  },
+  "flow": {
+    "step": "{{current}} of {{total}}",
+    "back": "Back",
+    "close": "Close",
+    "creating": "Creating your application…",
+    "loginRequired": "Sign in to continue",
+    "loginDesc": "Create a free account or sign in to save your application and track its progress.",
+    "loginBtn": "Sign in",
+    "signUpBtn": "Create account",
+    "group": {
+      "choose": "Choose",
+      "info": "Your Info",
+      "upload": "Documents",
+      "review": "Review",
+      "payment": "Payment",
+      "done": "Done"
+    },
+    "emailLabel": "Where should we send your updates?",
+    "emailSub": "We'll keep you informed at every step",
+    "phoneLabel": "Where can we reach you on WhatsApp?",
+    "phoneSub": "For real-time updates and quick support",
+    "sponsorLabel": "Who will sponsor this visa?",
+    "sponsor": {
+      "employee": "I work for a company",
+      "employeeDesc": "Your employer is sponsoring you",
+      "investor": "I own a business",
+      "investorDesc": "You are an investor or owner",
+      "partner": "I am a business partner",
+      "partnerDesc": "You co-own a business"
+    },
+    "locationLabel": "Where are you applying from?",
+    "location": {
+      "inside": "Inside UAE",
+      "insideDesc": "Already in the country",
+      "outside": "Outside UAE",
+      "outsideDesc": "Applying from abroad"
+    },
+    "chat": {
+      "title": "Application Assistant",
+      "placeholder": "Ask anything about your application…",
+      "send": "Send",
+      "helpBtn": "Need help?",
+      "thinking": "Thinking…",
+      "welcome": "Hi! I'm your application assistant. Ask me anything about your visa application, documents, or process.",
+      "close": "Close chat"
+    }
+  },
+  "payment": {
+    "cardDetails": "Card details",
+    "total": "Total",
+    "weAccept": "We accept",
+    "stripeSecured": "Stripe secured",
+    "sslEncrypted": "SSL encrypted",
+    "processing": "Processing…",
+    "payBtn": "Pay AED {{amount}} securely",
+    "success": "Payment successful!",
+    "received": "Payment received",
+    "processingNote": "Your application is now being processed",
+    "failed": "Payment failed",
+    "stripeNotLoaded": "Stripe not loaded",
+    "cardMissing": "Card element missing",
+    "intentFailed": "Failed to create payment intent",
+    "unexpectedStatus": "Unexpected payment status",
+    "payNow": "Pay Now",
+    "payLater": "Pay Later",
+    "applyingFor": "Applying for",
+    "serviceFee": "Service fee",
+    "processingFeeLabel": "Processing fee",
+    "processingFeeAmount": "AED 70",
+    "vatLabel": "VAT (5%)",
+    "insideUae": "Inside UAE",
+    "outsideUae": "Outside UAE",
+    "priceVaryNote": "Prices vary based on whether you are currently inside or outside the UAE when applying.",
+    "locationRecorded": "Your location was recorded as",
+    "govFeesNote": "Government fees are billed separately after approval",
+    "slotReserved": "Slot reserved for",
+    "slotExpired": "Your slot has expired — please restart your application.",
+    "pciDss": "Powered by Stripe — PCI DSS Level 1",
+    "ssl256": "256-bit SSL encryption",
+    "approvalRate": "97% approval rate on applications",
+    "completeApplication": "Complete your application",
+    "securePayment": "Secure payment — protected by Stripe",
+    "payViaLink": "Pay via secure link",
+    "payViaLinkDesc": "We'll generate a Stripe payment link. Use it from any browser or device — Apple Pay, Google Pay, or card.",
+    "linkValid": "Link valid for 24 hours",
+    "supportsApplePay": "Supports Apple Pay and Google Pay",
+    "appSaved": "Your application is already saved",
+    "payFromAnyDevice": "Pay from any device or share with someone else",
+    "linkReady": "Your payment link is ready",
+    "copy": "Copy",
+    "openLink": "Open link",
+    "generateNew": "Generate new",
+    "generateLink": "Generate payment link — AED {{amount}}",
+    "payAnytime": "Your application is saved. Pay anytime within 24 hours to keep your slot.",
+    "termsNote": "By paying you agree to our Terms of Service. Government fees are billed separately.",
+    "generating": "Generating…"
+  },
+  "review": {
+    "step": "Review your application",
+    "title": "You're all set",
+    "subtitle": "Let's finalize your application",
+    "applyingFor": "Applying for",
+    "whatWeHandle": "What we'll handle for you",
+    "benefit1": "Expert document verification by licensed professionals",
+    "benefit2": "Government submission handled entirely for you",
+    "benefit3": "Dedicated visa officer assigned to your case",
+    "benefit4": "Real-time WhatsApp updates at every stage",
+    "benefit5": "Zero confusion, zero mistakes guaranteed",
+    "rating": "Rating",
+    "fromReviews": "from 2,400+ reviews",
+    "applicationsLabel": "Applications",
+    "processedLabel": "processed",
+    "avgApproval": "Avg approval",
+    "businessDays": "business days",
+    "approvalRate": "Approval rate",
+    "withOurProcess": "with our process",
+    "urgencyMsg": "92% of applications submitted today are processed within 3 days",
+    "serviceFee": "Service fee",
+    "govFees": "Government fees billed separately",
+    "securedByStripe": "Secured by Stripe · 256-bit SSL",
+    "secureBtn": "Secure my application"
+  },
+  "successStep": {
+    "title": "Your visa process has started",
+    "subtitle": "We're now handling everything for you",
+    "ref": "Ref",
+    "applicationFor": "Application for",
+    "whatHappensNext": "What happens next",
+    "step1Title": "We verify your documents",
+    "step1Sub": "Our team reviews everything within minutes",
+    "step2Title": "Submit to UAE authorities",
+    "step2Sub": "We handle all paperwork on your behalf",
+    "step3Title": "You get updates on WhatsApp",
+    "step3Sub": "You'll hear from us at every stage",
+    "step4Title": "Visa issued",
+    "step4Sub": "Average processing time: 2–5 business days",
+    "chatSupport": "Chat with support anytime",
+    "trackApp": "Track my application"
+  },
+  "checks": {
+    "title": "Status Check",
+    "via": "via",
+    "authority": "Authority",
+    "back": "Back",
+    "continue": "Continue",
+    "files": "file(s)",
+    "remove": "Remove",
+    "processing": "Processing...",
+    "loginRequired": "Sign in to submit your check",
+    "loginDesc": "Create a free account to track your application status",
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "successTitle": "Check Submitted!",
+    "successDesc": "We'll notify you when results are ready",
+    "errorSubmit": "Failed to submit. Please try again.",
+    "step1": {
+      "title": "Enter Your Information",
+      "subtitle": "Required fields are marked with *"
+    },
+    "step2": {
+      "title": "Upload Documents",
+      "subtitle": "PDF, JPG, PNG, HEIC — max 10MB each",
+      "dragDrop": "Drop files here or click to upload",
+      "uploading": "Uploading...",
+      "uploaded": "uploaded"
+    },
+    "step3": {
+      "title": "Choose Delivery Speed",
+      "subtitle": "How quickly do you need results?",
+      "standard": "Standard",
+      "fastTrack": "Fast-Track",
+      "freeService": "Free Service",
+      "freeDesc": "This check is processed at no charge",
+      "bundleTitle": "Save 50% with Bundle",
+      "bundleDesc": "5 checks for AED 50 — mix any services"
+    },
+    "step4": {
+      "title": "Review Your Check",
+      "subtitle": "Verify details before submitting",
+      "documents": "Documents",
+      "total": "Total",
+      "free": "Free",
+      "submitFree": "Submit Free Check",
+      "submitPay": "Pay AED {{amount}} & Submit",
+      "submitting": "Submitting..."
+    },
+    "standard": {
+      "price": "AED 20",
+      "time": "Results within 24–48h"
+    },
+    "fastTrack": {
+      "price": "AED 50",
+      "time": "Guaranteed within 24h"
+    }
+  }
+}

@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 
-const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/api/v1/package-applications`;
+const API_BASE = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'}/api/v1/package-applications`;
 
 const authHeaders = () => {
   const token = localStorage.getItem('authToken');
@@ -23,13 +23,21 @@ export function usePackageApplication() {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Submission failed');
+
+      // ✅ Server returns: { status: 'success', data: { application, referenceId, _id } }
+      // On error: { status: 'fail', message: '...' }
+      if (!res.ok || data.status === 'fail' || data.status === 'error') {
+        throw new Error(data.message || 'Submission failed');
+      }
+
       const app = data.data.application;
-      // server also returns applicationId explicitly — prefer it
-      app._id = data.data.applicationId || app._id || app.id;
+      // Ensure _id is set
+      app._id = app._id || data.data._id;
       setApplication(app);
-      return app;
+      // Return the full data object (or just the app)
+      return data.data; // contains { application, referenceId, _id }
     } catch (err) {
+      console.error('❌ submitApplication error:', err);
       toast.error(err.message || 'Could not submit application');
       return null;
     } finally {
@@ -44,8 +52,6 @@ export function usePackageApplication() {
     setUploading(true);
     try {
       const form = new FormData();
-      // labels travel as one JSON field so multer never has to reconcile
-      // interleaved text/file parts. Each file uses its docKey as the field name.
       const labels = {};
       files.forEach(({ docKey, label, file }) => {
         form.append(docKey, file, file.name);
@@ -55,13 +61,16 @@ export function usePackageApplication() {
 
       const res = await fetch(`${API_BASE}/${applicationId}/documents`, {
         method: 'POST',
-        headers: { ...authHeaders() }, // DO NOT set Content-Type; browser sets multipart boundary
+        headers: { ...authHeaders() }, // DO NOT set Content-Type
         body: form,
       });
       const data = await res.json();
-      if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Upload failed');
+      if (!res.ok || data.status === 'fail' || data.status === 'error') {
+        throw new Error(data.message || 'Upload failed');
+      }
       return true;
     } catch (err) {
+      console.error('❌ uploadDocuments error:', err);
       toast.error(err.message || 'Could not upload documents');
       return false;
     } finally {

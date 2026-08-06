@@ -23,6 +23,7 @@ import {
   Info,
   CheckCircle,
   Star,
+  BadgeCheck,
   Zap,
   Lock,
   Users,
@@ -155,65 +156,48 @@ const GoldenGuaranteeCard = () => {
   const isArabic = language === 'ar';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.3 }}
-      className="mt-6 sm:mt-8 max-w-3xl mx-auto"
-    >
-      <div className="relative rounded-xl sm:rounded-2xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/40 p-3 sm:p-4 md:p-5">
-        <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 md:gap-4">
-          <div className="p-1.5 sm:p-2 md:p-3 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-500/20 flex-shrink-0">
-            <Award className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-amber-600 dark:text-amber-400" strokeWidth={1.75} />
-          </div>
-          <div className="flex-1">
-            <h4 className="font-normal text-black dark:text-white text-sm sm:text-base md:text-lg flex flex-wrap items-center gap-1.5 sm:gap-2">
-              {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-              <Badge className="bg-amber-500 text-white text-[7px] sm:text-[8px] md:text-[10px] px-1.5 sm:px-2 md:px-2.5 py-0.5 rounded-full font-light">✓ Trusted</Badge>
-            </h4>
-            <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-white/60 leading-relaxed mt-0.5 max-w-2xl font-light">
-              {isArabic 
-                ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
-                : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
-            </p>
-          </div>
-        </div>
+ <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.3 }}
+  className="mt-6 sm:mt-8 max-w-3xl mx-auto"
+>
+  <div className="relative rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/40 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5">
+    <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
+      {/* Icon */}
+      <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+        <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
       </div>
-    </motion.div>
+      
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
+          <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
+            ✓ Trusted
+          </Badge>
+        </h4>
+        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 leading-relaxed mt-0.5 max-w-2xl font-light">
+          {isArabic 
+            ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
+            : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
+        </p>
+        <a
+          href="/legal#guarantee"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-light transition-all duration-300 group/link hover:gap-1.5"
+        >
+          {isArabic ? 'اقرأ المزيد' : 'Read more'}
+          <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover/link:translate-x-0.5" />
+        </a>
+      </div>
+    </div>
+  </div>
+</motion.div>
   );
 };
 
-// ─── Section: Trust Icons ────────────────────────────────────────────────────
-const TrustSection = () => {
-  const { t, i18n } = useTranslation();
-  const language = i18n.language;
-  const isArabic = language === 'ar';
-
-  const trustItems = [
-    { icon: LockIcon, label: isArabic ? 'مدفوعات آمنة' : 'Secure Payments' },
-    { icon: Shield, label: isArabic ? 'بيانات محمية' : 'Protected User Data' },
-    { icon: Globe, label: isArabic ? 'رسوم حكومية شفافة' : 'Official Government Fees Only' },
-    { icon: CheckCircle, label: isArabic ? 'بدون رسوم خفية' : 'No Hidden Charges' },
-  ];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.35 }}
-      className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-5"
-    >
-      {trustItems.map((item, idx) => (
-        <div key={idx} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50">
-          <div className="p-1 sm:p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-            <item.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.75} />
-          </div>
-          <span className="font-light text-[8px] sm:text-[10px] md:text-xs">{item.label}</span>
-        </div>
-      ))}
-    </motion.div>
-  );
-};
 // ─── Section: How It Works ───────────────────────────────────────────────────
 const HowItWorksSection = () => {
   const { t, i18n } = useTranslation();
@@ -243,9 +227,9 @@ const HowItWorksSection = () => {
           </>
         ) : (
           <>
-            How It Works
+            How Works After
             <br />
-            <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal">After You Subscribe</span>
+            <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal">subscription</span>
           </>
         )}
       </h3>
@@ -292,6 +276,41 @@ const HowItWorksSection = () => {
     </motion.div>
   );
 };
+
+
+// ─── Section: Trust Icons ────────────────────────────────────────────────────
+const TrustSection = () => {
+  const { t, i18n } = useTranslation();
+  const language = i18n.language;
+  const isArabic = language === 'ar';
+
+  const trustItems = [
+    { icon: LockIcon, label: isArabic ? 'مدفوعات آمنة' : 'Secure Payments' },
+    { icon: Shield, label: isArabic ? 'بيانات محمية' : 'Protected User Data' },
+    { icon: Globe, label: isArabic ? 'رسوم حكومية شفافة' : 'Official Government Fees Only' },
+    { icon: CheckCircle, label: isArabic ? 'بدون رسوم خفية' : 'No Hidden Charges' },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.35 }}
+      className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-5"
+    >
+      {trustItems.map((item, idx) => (
+        <div key={idx} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50">
+          <div className="p-1 sm:p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+            <item.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.75} />
+          </div>
+          <span className="font-light text-[8px] sm:text-[10px] md:text-xs">{item.label}</span>
+        </div>
+      ))}
+    </motion.div>
+  );
+};
+
+
 // ═══════════════════════════════════════════════════════════════════════════
 // PLAN SELECTION BLOCK
 // ═══════════════════════════════════════════════════════════════════════════
@@ -312,7 +331,8 @@ export function PlanSelectionSection({
 }: any) {
   const { i18n } = useTranslation();
   const language = i18n.language;
-  
+    const isArabic = language === 'ar';
+
   const translatedPlans = getTranslatedPlans(language);
   const eidActive = isEidOfferActive();
 
@@ -326,7 +346,7 @@ export function PlanSelectionSection({
 
   return (
     <div
-      className="relative bg-white dark:bg-black transition-colors duration-300"
+      className="relative bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden"
       style={{ fontFamily: "'Inter', system-ui, sans-serif" }}
     >
       <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-8 sm:py-12 md:py-16 space-y-6 sm:space-y-8 max-w-6xl">
@@ -644,7 +664,6 @@ export function PlanSelectionSection({
             );
           })}
         </div>
-        <GoldenGuaranteeCard />
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -668,8 +687,157 @@ export function PlanSelectionSection({
             </div>
           </div>
         </motion.div>
-
+        <GoldenGuaranteeCard />
         <HowItWorksSection />
+
+        {/* ─── Founding Members Section - Redesigned ──────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.55, duration: 0.5 }}
+          className="mt-8 sm:mt-10 relative overflow-hidden rounded-2xl bg-white/70 dark:bg-black/40 backdrop-blur-sm p-6 sm:p-8 lg:p-10 border border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 transition-all duration-500 group"
+        >
+          {/* ─── Soft Background Decorations ────────────────────────────────────── */}
+          <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-amber-400/5 dark:bg-amber-500/3 blur-3xl group-hover:bg-amber-400/8 transition-all duration-700" />
+          <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-orange-400/5 dark:bg-orange-500/3 blur-3xl group-hover:bg-orange-400/8 transition-all duration-700" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-amber-400/3 dark:bg-amber-500/2 blur-3xl" />
+
+          <div className="relative">
+            {/* ─── Header Row ─────────────────────────────────────────────────────── */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="relative p-3 rounded-xl bg-amber-400/10 dark:bg-amber-500/10 border border-amber-200/20 dark:border-amber-400/10">
+                    <Crown className="w-6 h-6 sm:w-7 sm:h-7 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-xl sm:text-2xl font-light text-black dark:text-white">
+                    {isArabic ? 'الأعضاء المؤسسون' : 'Founding Members'}
+                  </h4>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-light tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 dark:bg-amber-400/10 px-2.5 py-0.5 rounded-full">
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500" />
+                      </span>
+                      {isArabic ? 'وقت محدود' : 'Limited Time'}
+                    </span>
+                    <span className="text-[10px] sm:text-xs font-light text-amber-500/60 dark:text-amber-400/50">
+                      {isArabic ? '• عرض حصري' : '• Exclusive Offer'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/subscription');
+                  setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }, 100);
+                }}
+                className="group/btn relative overflow-hidden bg-amber-500 hover:bg-amber-600 dark:bg-amber-500/80 dark:hover:bg-amber-600/80 text-white rounded-full px-6 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-light transition-all duration-300 hover:scale-[1.02]"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+                <span className="relative flex items-center gap-2">
+                  {isArabic ? 'اكتشف المزايا' : 'Discover the Benefits'}
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                </span>
+              </Button>
+            </div>
+            
+            {/* ─── Description ────────────────────────────────────────────────────── */}
+            <p className="text-sm sm:text-base text-black/60 dark:text-white/50 max-w-3xl leading-relaxed mt-3 sm:mt-4 font-light">
+              {isArabic 
+                ? 'انضم إلى النخبة الأولى من الأعضاء المؤسسين واستمتع بمزايا حصرية لا تتوفر للآخرين. كن جزءاً من تاريخ TMMT من البداية.'
+                : 'Join the elite group of founding members and enjoy exclusive benefits that others won\'t have. Be part of TMMT\'s history from the beginning.'
+              }
+            </p>
+            
+            {/* ─── Benefits Grid ────────────────────────────────────────────────── */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 sm:mt-6">
+              {[
+                { 
+                  icon: BadgeCheck, 
+                  title: isArabic ? 'شارة العضو المؤسس' : 'Founding Member Badge', 
+                  desc: isArabic ? 'شارة حصرية على حسابك تظهر وضعك كعضو مؤسس.' : 'Exclusive badge on your account showing your founding member status.'
+                },
+            { 
+                     icon: Gem, 
+                     title: isArabic ? 'امتياز المؤسس مدى الحياة' : 'Lifetime Founder Privilege', 
+                     desc: isArabic 
+                       ? 'كعضو مؤسس، ستحصل على هوية مؤسس دائمة ومزايا حصرية غير متاحة للأعضاء العاديين، بما في ذلك أسعار خاصة وخصومات حصرية على رسوم خدمات TMMT.'
+                       : 'As a Founding Member, you\'ll receive a permanent Founder identity and exclusive advantages unavailable to regular member.'
+                   },
+                { 
+                  icon: Sparkles, 
+                  title: isArabic ? 'مزايا حصرية' : 'Exclusive Benefits', 
+                  desc: isArabic ? 'الوصول إلى الميزات المميزة عند إضافتها إلى المنصة.' : 'Access to premium features as they are added to the platform.'
+                }
+              ].map((item, idx) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + idx * 0.1, duration: 0.4 }}
+                  className="group/item relative overflow-hidden rounded-xl bg-white/50 dark:bg-black/30 border border-black/5 dark:border-white/5 p-4 sm:p-5 hover:border-amber-200/30 dark:hover:border-amber-400/10 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
+                >
+                  <div className="absolute -top-10 -right-10 w-20 h-20 rounded-full bg-amber-400/5 blur-2xl group-hover/item:bg-amber-400/10 transition-all duration-500" />
+                  
+                  <div className="relative flex items-start gap-3">
+                    <div className="p-2 rounded-lg bg-amber-500/10 dark:bg-amber-400/10 group-hover/item:bg-amber-500/20 dark:group-hover/item:bg-amber-400/20 transition-colors duration-300">
+                      <item.icon className="w-5 h-5 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
+                    </div>
+                    <div>
+                      <h5 className="font-light text-black dark:text-white text-sm sm:text-base">
+                        {item.title}
+                      </h5>
+                      <p className="text-[11px] sm:text-xs text-black/50 dark:text-white/50 mt-1 leading-relaxed font-light">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* ─── Urgency Banner ────────────────────────────────────────────────── */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="mt-4 sm:mt-5 relative overflow-hidden rounded-xl bg-amber-500/5 dark:bg-amber-400/5 border border-amber-200/20 dark:border-amber-400/10 p-3.5 sm:p-4"
+            >
+              <div className="relative flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/10 dark:bg-amber-400/10">
+                    <span className="text-amber-500 dark:text-amber-400 text-lg font-light">⚡</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-amber-600 dark:text-amber-400/80 font-light text-center sm:text-left">
+                    {isArabic 
+                      ? 'عضوية المؤسسين متاحة لفترة محدودة — انضم الآن قبل إغلاق التسجيل.'
+                      : 'Founding Membership is available for a limited time — join now before enrollment closes.'
+                    }
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="w-px h-4 bg-black/10 dark:bg-white/10" />
+                  <span className="text-[10px] sm:text-xs font-light text-black/40 dark:text-white/40">
+                    {isArabic ? 'عرض حصري' : 'Exclusive Offer'}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -684,14 +852,12 @@ export function PlanSelectionSection({
   whileTap={{ scale: 0.97 }}
   className={cn(
     "group relative flex items-center justify-center gap-2 sm:gap-3",
-    "h-11 sm:h-14 w-auto sm:w-auto",
-    "min-w-[230px] sm:min-w-[340px] px-6 sm:px-10 rounded-full",
+    "h-11 sm:h-14",
+    "w-full sm:w-auto min-w-[230px] sm:min-w-[340px] px-4 sm:px-10 rounded-full", // ← changed px-6 to px-4 on mobile and w-full
     "text-[12px] sm:text-[15px] font-medium",
     "transition-all duration-300 cursor-pointer select-none",
-    // ✅ Light mode: #0A3269 with border, Dark mode: black with dark gray border
     "bg-[#0A3269] dark:bg-black",
     "border border-[#0A3269]/20 dark:border-[#4A4A4A]",
-    // ✅ Text always white
     "text-white",
     "hover:shadow-lg hover:shadow-[#0A3269]/25 dark:hover:shadow-black/50",
     "hover:border-[#0A3269]/40 dark:hover:border-[#6A6A6A]",
@@ -763,7 +929,7 @@ export function PlanSelectionSection({
         AED {effectivePlan.amount}
       </motion.span>
       
-      {/* ✅ Arrow with background: #0A3269 in light, white in dark, text: white in light, black in dark */}
+      {/* Arrow */}
       <motion.div
         className="flex items-center justify-center rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] w-6 h-6 sm:w-7 sm:h-7"
         animate={{ 
@@ -822,7 +988,7 @@ export function SubscriptionPage() {
   if (PAYMENT_MODE === 'elements') {
     return (
       <div
-        className="relative z-10 rounded-t-[2rem] bg-white dark:bg-black transition-colors duration-300"
+        className="relative z-10 rounded-t-[2rem] bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden"
         style={{ '--primary': '#0A3269' } as React.CSSProperties}
       >
         <Elements stripe={stripePromise}>
@@ -833,7 +999,7 @@ export function SubscriptionPage() {
   }
   return (
     <div
-      className="relative rounded-t-[2rem] bg-white dark:bg-black transition-colors duration-300"
+      className="relative rounded-t-[2rem] bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden"
       style={{ '--primary': '#0A3269' } as React.CSSProperties}
     >
       <SubscriptionPageInner />
@@ -1003,7 +1169,7 @@ export function SubscriptionPageInner() {
   }
 
   return (
-    <div className="mx-auto space-y-8 relative z-10">
+    <div className="mx-auto space-y-8 relative z-10 overflow-x-hidden">
       <div className="flex justify-center items-center">
         <PlanSelectionSection
           PLANS={PLANS}
@@ -1144,7 +1310,7 @@ function ElementsPaymentForm({
     cardComplete.number && cardComplete.expiry && cardComplete.cvc && cardholderName.trim().length > 0;
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6 bg-white dark:bg-black transition-colors duration-300">
+    <div className="max-w-xl mx-auto p-6 space-y-6 bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden">
       <button
         onClick={onBack}
         className="text-sm text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white flex items-center gap-1 transition-colors"
@@ -1294,7 +1460,7 @@ function ManageSubscriptionView({
       : subscription.interval;
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-6 bg-white dark:bg-black transition-colors duration-300">
+    <div className="max-w-2xl mx-auto p-6 space-y-6 bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden">
       <div>
         <h2 className="text-2xl font-light flex items-center gap-2 text-black dark:text-white">
           <Crown className="h-6 w-6 text-[#0A3269] dark:text-[#4A8ABF]" />

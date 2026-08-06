@@ -577,8 +577,10 @@
 //       setLinkUrl(d.data.url)
 //     } catch (e: any) {
 //       onErrorRef.current(e.message || 'Failed to generate payment link')
-//     } finally {
-//       setLinkLoading(false)
+//     } finally 
+
+
+//       setLinkLoading(false
 //     }
 //   }, [grandTotal, service?.name, applicationId])
 
@@ -700,29 +702,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * PaymentStep — two-column desktop layout
- *
- * Left  col (desktop): service summary, price breakdown by location, trust signals
- * Right col (desktop): Government Bank Transfer Details
- * Mobile: single column, summary on top, payment below
- *
- * Re-render fix: SummaryPanel and PaymentPanel are extracted as top-level
- * memo'd components so the 1-second countdown timer doesn't recreate them
- * and cause Stripe Elements to unmount/remount.
- */
 import { useState, useEffect, useRef, memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -731,14 +710,16 @@ import {
   CheckCircle2, ChevronDown, ChevronUp,
   Landmark, Copy, Check, Building2, Upload, Info,
   Banknote, Crown, Sparkles, ArrowRight,
-    DollarSign, Zap, Percent, FileText,
-
+  DollarSign, Zap, Percent, FileText, X, Image as ImageIcon,
+  Loader2, AlertCircle,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
 import type { FlowService } from '../ApplicationFlow'
+import { toast } from 'sonner'
 
 interface PaymentStepProps {
   amount:         number
@@ -752,7 +733,7 @@ interface PaymentStepProps {
 const apiBase = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:5001'
 const apiUrl  = `${apiBase}/api/v1`
 
-// ── Bank Transfer Info Component (Modern Premium) ─────────────────────────────
+// ── Bank Transfer Info Component ─────────────────────────────────────────────
 interface BankTransferInfoProps {
   bankDetails: {
     accountName: string
@@ -764,16 +745,27 @@ interface BankTransferInfoProps {
   onReceiptUploaded?: (file: File) => Promise<void>
   receiptUploaded?: boolean
   uploading?: boolean
+  uploadProgress?: number
+  uploadError?: string | null
+  onRemoveReceipt?: () => void
+  onContinue?: () => void
 }
 
 const BankTransferInfo = memo(function BankTransferInfo({ 
   bankDetails, 
   onReceiptUploaded, 
   receiptUploaded = false,
-  uploading = false 
+  uploading = false,
+  uploadProgress = 0,
+  uploadError = null,
+  onRemoveReceipt,
+  onContinue,
 }: BankTransferInfoProps) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState<string | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard?.writeText(text)
@@ -781,20 +773,68 @@ const BankTransferInfo = memo(function BankTransferInfo({
     setTimeout(() => setCopied(null), 2000)
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0] && onReceiptUploaded) {
-      onReceiptUploaded(e.target.files[0])
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf']
+    if (!validTypes.includes(file.type)) {
+      toast.error('Please upload a valid image or PDF file')
+      return
     }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File size must be less than 10MB')
+      return
+    }
+
+    setSelectedFile(file)
+    
+    // Create preview URL for images
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setPreviewUrl(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setPreviewUrl(null)
+    }
+
+    // Auto-upload when file is selected
+    if (onReceiptUploaded) {
+      onReceiptUploaded(file)
+    }
+  }
+
+  const handleRemoveFile = () => {
+    setSelectedFile(null)
+    setPreviewUrl(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+    if (onRemoveReceipt) {
+      onRemoveReceipt()
+    }
+  }
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
   return (
     <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#1A1A1F] border border-gray-200/80 dark:border-white/10 ">
-      {/* Premium Background Glow */}
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#0A3269]/5 dark:bg-[#0A3269]/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-[#0A3269]/3 dark:bg-[#0A3269]/8 rounded-full blur-3xl" />
       
       <div className="relative p-6 space-y-5">
-        {/* Premium Header */}
+        {/* Header */}
         <div className="flex items-center gap-3 pb-4 border-b border-gray-100 dark:border-white/5">
           <div className="p-2 rounded-xl bg-gradient-to-br from-[#0A3269]/10 to-[#1A4A8A]/10">
             <Landmark className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
@@ -809,7 +849,7 @@ const BankTransferInfo = memo(function BankTransferInfo({
           </div>
         </div>
 
-        {/* Premium Bank Details */}
+        {/* Bank Details */}
         <div className="space-y-3 bg-gray-50/50 dark:bg-white/5 rounded-xl p-4 border border-gray-100/50 dark:border-white/5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="group">
@@ -886,11 +926,11 @@ const BankTransferInfo = memo(function BankTransferInfo({
           </div>
         </div>
 
-        {/* Premium Receipt Upload */}
+        {/* Receipt Upload */}
         {onReceiptUploaded && (
           <div className="relative rounded-xl border-2 border-dashed border-[#0A3269]/20 dark:border-[#0A3269]/30 p-5 text-center hover:border-[#0A3269]/50 dark:hover:border-[#0A3269]/60 transition-all duration-300 bg-gray-50/30 dark:bg-white/5">
             {receiptUploaded ? (
-              <div className="flex items-center justify-center gap-3 py-3">
+              <div className="flex flex-col items-center gap-3 py-3">
                 <div className="p-2 rounded-full bg-emerald-500/10">
                   <CheckCircle2 className="w-6 h-6 text-emerald-500" />
                 </div>
@@ -901,16 +941,40 @@ const BankTransferInfo = memo(function BankTransferInfo({
                   <p className="text-[10px] text-gray-400 dark:text-white/40">
                     {t('payment.receiptVerified', 'Your receipt has been verified')}
                   </p>
+                  {selectedFile && (
+                    <div className="flex items-center gap-2 mt-1 justify-center">
+                      <span className="text-[10px] text-gray-500 dark:text-white/40">
+                        {selectedFile.name} ({formatFileSize(selectedFile.size)})
+                      </span>
+                      <button
+                        onClick={handleRemoveFile}
+                        className="p-0.5 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 hover:text-red-700 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
                 </div>
+                
+                {onContinue && (
+                  <Button
+                    onClick={onContinue}
+                    className="mt-2 bg-[#0A3269] hover:bg-[#1A4A8A] text-white rounded-xl px-6 h-10 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300"
+                  >
+                    Continue to Application
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                )}
               </div>
             ) : (
               <>
                 <input
                   type="file"
                   accept="image/*,.pdf"
-                  onChange={handleFileChange}
+                  onChange={handleFileSelect}
                   className="hidden"
                   id="receipt-upload-premium"
+                  ref={fileInputRef}
                   disabled={uploading}
                 />
                 <label
@@ -918,11 +982,19 @@ const BankTransferInfo = memo(function BankTransferInfo({
                   className="cursor-pointer flex flex-col items-center gap-2 py-4"
                 >
                   {uploading ? (
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 border-2 border-[#0A3269]/30 border-t-[#0A3269] rounded-full animate-spin" />
-                      <span className="text-sm text-gray-500 dark:text-white/60">
-                        {t('payment.uploading', 'Uploading...')}
-                      </span>
+                    <div className="flex flex-col items-center gap-3 w-full">
+                      <div className="flex items-center gap-3">
+                        <Loader2 className="w-5 h-5 text-[#0A3269] animate-spin" />
+                        <span className="text-sm text-gray-500 dark:text-white/60">
+                          {t('payment.uploading', 'Uploading...')}
+                        </span>
+                      </div>
+                      <div className="w-full max-w-xs">
+                        <Progress value={uploadProgress} className="h-1.5" />
+                        <span className="text-[10px] text-gray-400 dark:text-white/30 mt-1">
+                          {uploadProgress}%
+                        </span>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -933,29 +1005,86 @@ const BankTransferInfo = memo(function BankTransferInfo({
                         {t('payment.clickToUpload', 'Click to upload receipt')}
                       </span>
                       <span className="text-[10px] text-gray-400 dark:text-white/30">
-                        {t('payment.supportedFormats', 'JPG, PNG, PDF (max 5MB)')}
+                        {t('payment.supportedFormats', 'JPG, PNG, PDF (max 10MB)')}
                       </span>
                     </>
                   )}
                 </label>
+
+                {uploadError && (
+                  <div className="mt-2 p-2 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/30">
+                    <p className="text-xs text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {uploadError}
+                    </p>
+                  </div>
+                )}
+
+                {selectedFile && !uploading && !receiptUploaded && (
+                  <div className="mt-3 p-2 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10">
+                    <div className="flex items-center gap-3">
+                      {previewUrl ? (
+                        <img 
+                          src={previewUrl} 
+                          alt="Receipt preview" 
+                          className="w-12 h-12 rounded-lg object-cover border border-gray-200 dark:border-white/10"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-gray-400" />
+                        </div>
+                      )}
+                      <div className="flex-1 text-left">
+                        <p className="text-xs font-medium text-gray-700 dark:text-white/80 truncate">
+                          {selectedFile.name}
+                        </p>
+                        <p className="text-[10px] text-gray-400 dark:text-white/30">
+                          {formatFileSize(selectedFile.size)}
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleRemoveFile}
+                        className="p-1 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 hover:text-red-700 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
         )}
 
-        {/* Premium Info Note */}
         <div className="flex items-start gap-3 bg-[#F0F7FF] dark:bg-[#0A1628] rounded-xl px-4 py-3.5 border border-[#0A3269]/10 dark:border-[#0A3269]/20">
           <div className="p-1 rounded-full bg-[#0A3269]/10 dark:bg-[#0A3269]/20 shrink-0 mt-0.5">
             <Info className="w-3.5 h-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
           </div>
           <span className="text-[11px] text-[#0A3269] dark:text-[#7BB8E0] leading-relaxed">
-            {t('payment.bankTransferNote', 'After transferring the amount, you will receive a confirmation receipt. Please keep it for your records.')}
+            {t('payment.bankTransferNote', 'After transferring the amount, upload your payment receipt. We will verify it within 24 hours.')}
           </span>
         </div>
       </div>
     </div>
   )
 })
+
+// ── Summary Panel ──────────────────────────────────────────────────────────────
+interface SummaryPanelProps {
+  service?: FlowService
+  location: string
+  displayFee: number
+  otherFee: number
+  otherLabel: string
+  processingFee: number
+  vatAmount: number
+  grandTotal: number
+  timerStr: string
+  expired: boolean
+  showBreakdown: boolean
+  onToggleBreakdown: () => void
+}
+
 const SummaryPanel = memo(function SummaryPanel({
   service, location, displayFee, otherFee, otherLabel,
   processingFee, vatAmount, grandTotal,
@@ -965,9 +1094,7 @@ const SummaryPanel = memo(function SummaryPanel({
 
   return (
     <div className="flex flex-col gap-4 h-full">
-      {/* Main Card - Premium */}
       <div className="flex-1 rounded-2xl bg-white dark:bg-[#1A1A1F] border border-gray-200/80 dark:border-white/10 p-5 space-y-4">
-        {/* Header with larger icons */}
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -992,7 +1119,6 @@ const SummaryPanel = memo(function SummaryPanel({
 
         <Separator className="bg-gray-100 dark:bg-white/5" />
 
-        {/* Pricing - Clean & Modern */}
         <div className="space-y-2.5">
           <div className="flex items-center justify-between py-1">
             <span className="text-[13px] text-gray-500 dark:text-white/60 flex items-center gap-1.5">
@@ -1070,7 +1196,6 @@ const SummaryPanel = memo(function SummaryPanel({
         </div>
       </div>
 
-      {/* Timer - Premium */}
       <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-[13px] ${
         expired 
           ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400' 
@@ -1085,7 +1210,6 @@ const SummaryPanel = memo(function SummaryPanel({
         }
       </div>
 
-      {/* Trust Indicators - Premium */}
       <div className="rounded-2xl bg-white dark:bg-[#1A1A1F] border border-gray-200/80 dark:border-white/10 p-4 space-y-2.5">
         {[
           { icon: Shield, color: 'text-[#0A3269]', text: t('payment.pciDss', 'Powered by Stripe — PCI DSS Level 1') },
@@ -1103,6 +1227,7 @@ const SummaryPanel = memo(function SummaryPanel({
     </div>
   )
 })
+
 // ── Main PaymentStep ────────────────────────────────────────────────────────
 export default function PaymentStep({
   amount,
@@ -1117,6 +1242,9 @@ export default function PaymentStep({
   const [showBreakdown, setShowBreakdown] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [receiptUploaded, setReceiptUploaded] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [uploadSuccess, setUploadSuccess] = useState(false)
 
   // 10-minute slot countdown
   useEffect(() => {
@@ -1141,7 +1269,7 @@ export default function PaymentStep({
   const vatAmount  = Math.round(subtotal * 0.05)
   const grandTotal = subtotal + vatAmount
 
-  // Stable callback refs so memo'd children never get stale closures
+  // Stable callback refs
   const onSuccessRef = useRef(onSuccess)
   onSuccessRef.current = onSuccess
   const onErrorRef = useRef(onError)
@@ -1150,32 +1278,105 @@ export default function PaymentStep({
   const stableOnSuccess = useCallback((result: unknown) => onSuccessRef.current(result), [])
   const stableOnError   = useCallback((err: string) => onErrorRef.current(err), [])
 
+  // ─── UPLOAD RECEIPT ──────────────────────────────────────────────────────
   const handleReceiptUpload = useCallback(async (file: File) => {
     setUploading(true)
+    setUploadProgress(0)
+    setUploadError(null)
+    setUploadSuccess(false)
+    
     try {
+      // Validate applicationId
+      if (!applicationId) {
+        throw new Error('Application ID is missing. Please refresh and try again.')
+      }
+
       const formData = new FormData()
       formData.append('receipt', file)
-      formData.append('applicationId', applicationId || '')
       
       const token = localStorage.getItem('authToken') || ''
-      const res = await fetch(`${apiUrl}/applications/upload-receipt`, {
+      
+      // Progress simulation
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval)
+            return 90
+          }
+          return prev + 10
+        })
+      }, 300)
+
+      // ✅ Use the receipt endpoint
+      const endpoint = `${apiUrl}/visa/${applicationId}/receipt`
+      
+      console.log('📤 Uploading receipt to:', endpoint)
+      console.log('📄 File:', file.name, file.size, file.type)
+      console.log('📄 Application ID:', applicationId)
+      console.log('📄 Token exists:', !!token)
+      
+      const res = await fetch(endpoint, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { 
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       })
       
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}))
-        throw new Error(errorData?.message || 'Upload failed')
+      clearInterval(progressInterval)
+      
+      let data = {}
+      try {
+        data = await res.json()
+      } catch (e) {
+        console.warn('Could not parse JSON response:', e)
       }
       
+      console.log('📥 Upload response:', res.status, data)
+      
+      if (!res.ok) {
+        throw new Error(data?.message || data?.error || `Upload failed (${res.status})`)
+      }
+      
+      setUploadProgress(100)
       setReceiptUploaded(true)
-      onSuccessRef.current({ receiptUploaded: true })
+      setUploadSuccess(true)
+      
+      toast.success('Receipt uploaded successfully!', {
+        description: 'Your payment receipt has been verified.',
+      })
+      
     } catch (e: any) {
-      onErrorRef.current(e.message || 'Failed to upload receipt')
+      const errorMsg = e.message || 'Failed to upload receipt'
+      setUploadError(errorMsg)
+      console.error('❌ Upload error:', e)
+      
+      if (e.message.includes('fetch') || e.message.includes('network')) {
+        setUploadError('Network error - please check your connection and try again')
+      }
+      
+      toast.error('Upload failed', {
+        description: errorMsg,
+      })
+      onErrorRef.current(errorMsg)
     } finally {
       setUploading(false)
+      setUploadProgress(0)
     }
+  }, [applicationId])
+
+  const handleRemoveReceipt = useCallback(() => {
+    setReceiptUploaded(false)
+    setUploadError(null)
+    setUploadProgress(0)
+    setUploadSuccess(false)
+  }, [])
+
+  const handleContinue = useCallback(() => {
+    onSuccessRef.current({ 
+      receiptUploaded: true,
+      applicationId: applicationId,
+    })
   }, [applicationId])
 
   const toggleBreakdown = useCallback(() => setShowBreakdown(b => !b), [])
@@ -1235,14 +1436,12 @@ export default function PaymentStep({
           onReceiptUploaded={handleReceiptUpload}
           receiptUploaded={receiptUploaded}
           uploading={uploading}
+          uploadProgress={uploadProgress}
+          uploadError={uploadError}
+          onRemoveReceipt={handleRemoveReceipt}
+          onContinue={receiptUploaded ? handleContinue : undefined}
         />
       </div>
     </motion.div>
   )
 }
-
-
-
-
-
-

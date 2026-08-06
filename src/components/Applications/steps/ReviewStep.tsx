@@ -32,7 +32,14 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
 
   const TRUST_BADGES = [
     { icon: Star,   value: '4.9',   label: t('review.rating', 'Rating'),              sub: t('review.fromReviews', 'from 2,400+ reviews'), gradient: 'from-amber-400 to-amber-500' },
-    { icon: Users,  value: '10K+',  label: t('review.applicationsLabel', 'Applications'), sub: t('review.processedLabel', 'processed'), gradient: 'from-blue-400 to-blue-500' },
+{ 
+  icon: Shield, 
+  value: '100%', 
+  label: 'TMMT Golden', 
+  sub: 'Trusted service  Guarantee',
+  gradient: 'from-amber-400 to-yellow-500',
+  badge: '⭐ Guaranteed',
+},
     { icon: Zap,    value: '2.3d',  label: t('review.avgApproval', 'Avg approval'),    sub: t('review.businessDays', 'business days'), gradient: 'from-emerald-400 to-emerald-500' },
     { icon: Shield, value: '97%',   label: t('review.approvalRate', 'Approval rate'),  sub: t('review.withOurProcess', 'with our process'), gradient: 'from-purple-400 to-purple-500' },
   ]

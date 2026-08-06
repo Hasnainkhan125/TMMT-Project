@@ -69,10 +69,9 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
 
   const isFreeService = FREE_SERVICES.includes(service.id);
 
-  // Can the user actually submit this check?
-  // - Free service → always yes
-  // - Paid service → only if subscribed
-  const canSubmit = isFreeService || hasActiveSubscription || user?.trialUsed === false;
+  // ✅ FIXED: Only allow submission if free service OR has active subscription
+  // No trial access for paid services
+  const canSubmit = isFreeService || hasActiveSubscription;
 
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState(1);
@@ -260,8 +259,6 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                 {t('checks.step3.freeService')}
               </Badge>
             ) : null}
-
-    
           </div>
         </SheetHeader>
 
@@ -675,7 +672,7 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                           </div>
                         </div>
                       ) : !canSubmit ? (
-                        // Paid service + no subscription → show full upsell card
+                        // ✅ Paid service + no subscription → show full upsell card
                         <SubscriptionUpsellCard
                           currentCheckPrice={totalPrice}
                           serviceTitle={service.title}
@@ -744,7 +741,7 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                       {t('checks.step4.submitFree')}
                     </Button>
                   ) : !canSubmit ? (
-                    // Paid service + not subscribed → CTA goes to /subscribe
+                    // ✅ Paid service + not subscribed → CTA goes to /subscribe
                     <Button
                       onClick={() => navigate('/subscription')}
                       className="gap-2 min-w-[180px] bg-amber-500 text-white hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 transition-all duration-200"

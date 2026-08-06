@@ -98,6 +98,7 @@ import {
   Compass,
   Lightbulb,
   Grid2x2,
+  Maximize,
   MessagesSquare,
   BadgePlus,
   House,
@@ -120,7 +121,6 @@ import moiLogo from './images/MOI.jpg';
 import citizenshipLogo from './images/citizenship.png';
 import amerLogo from './images/amer.png';
 import { ThemeContext } from '@/contexts/ThemeContext.tsx';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Service } from '@/types/tammat.types';
 import { ServiceCard } from '@/components/Services/ServiceCard';
 import { SERVICES } from '@/lib/services';
@@ -158,6 +158,33 @@ export const useTheme = () => {
   return context;
 };
 
+// ─── Utility hook for scroll‑triggered reveals (no Framer Motion) ──────
+function useInView(options?: IntersectionObserverInit) {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsInView(true);
+        observer.disconnect();
+      }
+    }, options);
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [options]);
+
+  return { ref, isInView };
+}
+
 // Services Section inspired by Hims design
 const Services = () => {
   const [open, setOpen] = useState(false);
@@ -172,36 +199,9 @@ const Services = () => {
   const [showStartDialog, setShowStartDialog] = useState(false);
   const [queryParams, setQueryParams] = useState<string>('');
 
+  // ─── removed motion.dev container variants ───────────────────────────────
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.15,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: {
-    opacity: 0,
-    y: 35,
-    scale: 0.95,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.55,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
-
-
-const darkMode = useTheme()
+  const darkMode = useTheme()
   const isDarkMode = darkMode.currentTheme === 'dark'
   console.log(darkMode.currentTheme)
   // Voice Agent Context - for global voice control
@@ -299,10 +299,17 @@ useEffect(() => {
   return () => clearInterval(interval)
 }, [serviceTitles.length])
 
-// ✅ Video modal state
+// ✅ Video states
 const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+const [isPlaying, setIsPlaying] = useState(true);
+const [isMuted, setIsMuted] = useState(true);
+const [progress, setProgress] = useState(0);
+const [duration, setDuration] = useState(0);
+const [showControls, setShowControls] = useState(true);
 const videoRef = useRef<HTMLVideoElement>(null);
 const modalVideoRef = useRef<HTMLVideoElement>(null);
+const fullVideoRef = useRef<HTMLVideoElement>(null);
+const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 // ✅ Increase video playback speed for faster experience
 useEffect(() => {
@@ -310,6 +317,92 @@ useEffect(() => {
     videoRef.current.playbackRate = 1.2;
   }
 }, []);
+
+// ✅ Update progress
+useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  const updateProgress = () => {
+    if (video.duration) {
+      setProgress((video.currentTime / video.duration) * 100);
+      setDuration(video.duration);
+    }
+  };
+
+  video.addEventListener('timeupdate', updateProgress);
+  return () => video.removeEventListener('timeupdate', updateProgress);
+}, []);
+
+// ✅ Auto-hide controls
+useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  const handleMouseMove = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+    controlsTimeoutRef.current = setTimeout(() => {
+      if (isPlaying) {
+        setShowControls(false);
+      }
+    }, 3000);
+  };
+
+  const container = video.parentElement;
+  if (container) {
+    container.addEventListener('mousemove', handleMouseMove);
+  }
+
+  return () => {
+    if (container) {
+      container.removeEventListener('mousemove', handleMouseMove);
+    }
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+  };
+}, [isPlaying]);
+
+// ✅ Video controls functions
+const togglePlay = () => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  if (video.paused) {
+    video.play();
+    setIsPlaying(true);
+  } else {
+    video.pause();
+    setIsPlaying(false);
+  }
+};
+
+const toggleMute = () => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  video.muted = !video.muted;
+  setIsMuted(video.muted);
+};
+
+const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const video = videoRef.current;
+  if (!video || !video.duration) return;
+
+  const rect = e.currentTarget.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  video.currentTime = percent * video.duration;
+};
+
+const formatTime = (seconds: number) => {
+  if (!seconds || isNaN(seconds)) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
 
 // ✅ Handle modal open
 const openVideoModal = () => {
@@ -322,135 +415,130 @@ const openVideoModal = () => {
   }, 100);
 };
 
+// ✅ Handle modal close
+const closeVideoModal = () => {
+  setIsVideoModalOpen(false);
+  if (modalVideoRef.current) {
+    modalVideoRef.current.pause();
+  }
+};
+
 return (
   <section className="container mx-auto px-4 pb-16 sm:pb-24">
     <div className="max-w-7xl mx-auto">
       <div className="mb-12">
-        {/* ─── VIDEO COMPONENT WITH PLAY OVERLAY ────────────────────────────── */}
+        {/* ─── VIDEO COMPONENT WITH CONTROLS ────────────────────────────── */}
         <div className="w-full max-w-10xl mx-auto px-2 sm:px-0">
-          <div 
-            className="relative rounded-lg sm:rounded-xl overflow-hidden cursor-pointer group"
-            onClick={openVideoModal}
-          >
-            <div className="relative bg-black/95" style={{ aspectRatio: "21/9" }}>
+          <div className="relative rounded-lg sm:rounded-xl overflow-hidden group bg-black/95" style={{ aspectRatio: "21/9" }}>
+            {/* Video */}
             <video
-        className="w-full h-full object-cover"
-        src="/images/laptop/subscription-video.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-      />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-              
-              {/* ✅ Play Button Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-<motion.div 
-  className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-2xl relative"
-  whileHover={{ scale: 1.1 }}
-  whileTap={{ scale: 0.9 }}
-  transition={{ type: "spring", stiffness: 400 }}
->
-  {/* ✅ Pulsing ring animation */}
-  <motion.span 
-    className="absolute inset-0 rounded-full border-2 border-white/20"
-    animate={{ 
-      scale: [1, 1.3, 1],
-      opacity: [0.6, 0, 0.6]
-    }}
-    transition={{ 
-      duration: 2.5,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }}
-  />
-  
-  {/* ✅ Second delayed pulse ring */}
-  <motion.span 
-    className="absolute inset-0 rounded-full border-2 border-white/10"
-    animate={{ 
-      scale: [1, 1.5, 1],
-      opacity: [0.4, 0, 0.4]
-    }}
-    transition={{ 
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
-      delay: 1
-    }}
-  />
-  
-  {/* ✅ Icon with subtle animation */}
-  <motion.div
-    animate={{ 
-      scale: [1, 1.05, 1],
-      rotate: [0, 2, -2, 0]
-    }}
-    transition={{ 
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }}
-  >
-    <Play className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 md:h-9 md:w-9 text-white ml-0.5 xs:ml-1" strokeWidth={2.5} />
-  </motion.div>
-</motion.div>
+              ref={videoRef}
+              className="w-full h-full object-cover cursor-pointer"
+              src="/images/laptop/subscription-video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              onClick={togglePlay}
+            />
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+            
+            {/* ✅ Play/Pause Overlay Button */}
+            <div 
+              className="absolute inset-0 flex items-center justify-center cursor-pointer"
+              onClick={togglePlay}
+            >
+              {!isPlaying && (
+                <div className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-2xl relative">
+                  {/* Pulsing ring animation via CSS */}
+                  <span className="absolute inset-0 rounded-full border-2 border-white/20 animate-pulse-ring" />
+                  <span className="absolute inset-0 rounded-full border-2 border-white/10 animate-pulse-ring-delayed" />
+                  <Play className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 md:h-9 md:w-9 text-white ml-0.5 xs:ml-1" strokeWidth={2.5} />
+                </div>
+              )}
+            </div>
+
+            {/* ✅ Video Controls Bar */}
+            <div className={`absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 ${
+              showControls ? 'opacity-100' : 'opacity-0'
+            }`}>
+              {/* Progress Bar */}
+              <div
+                className="w-full h-1 bg-white/30 rounded-full cursor-pointer mb-2 hover:h-1.5 transition-all"
+                onClick={handleProgressClick}
+              >
+                <div
+                  className="h-full bg-white rounded-full transition-all"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
-              
-              {/* ✅ "Watch Video" Label */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
-              <span className="text-white/80 text-[10px] xs:text-xs sm:text-sm font-medium bg-black/50 backdrop-blur-sm px-3 py-1 xs:px-4 xs:py-1.5 sm:px-5 sm:py-2 rounded-full border border-white/15 flex items-center gap-1.5 xs:gap-2">
-  <span className="text-[10px] xs:text-xs sm:text-base">▶</span>
-  Watch the full journey
-</span>
+
+              {/* Controls Row */}
+              <div className="flex items-center justify-between text-white">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <button
+                    onClick={togglePlay}
+                    className="p-1 hover:bg-white/20 rounded transition-colors"
+                    aria-label={isPlaying ? 'Pause' : 'Play'}
+                  >
+                    {isPlaying ? (
+                      <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
+                    ) : (
+                      <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" />
+                    )}
+                  </button>
+
+                  <button
+                    onClick={toggleMute}
+                    className="p-1 hover:bg-white/20 rounded transition-colors"
+                    aria-label={isMuted ? 'Unmute' : 'Mute'}
+                  >
+                    {isMuted ? (
+                      <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" />
+                    ) : (
+                      <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                    )}
+                  </button>
+
+                  <span className="text-[10px] sm:text-xs opacity-80 ml-1">
+                    {formatTime(videoRef.current?.currentTime || 0)} / {formatTime(duration)}
+                  </span>
+                </div>
+
+                <button
+                  onClick={openVideoModal}
+                  className="p-1 hover:bg-white/20 rounded transition-colors"
+                  aria-label="Fullscreen"
+                >
+                  <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
               </div>
             </div>
           </div>
         </div>
-
-        <div className="space-y-1" style={{ fontFamily: "'Poppins', sans-serif" }}>
+        {/* ─── ANIMATED SERVICE TITLES (CSS) ──────────────────────────────────── */}
+        <div className="space-y-1 mt-8" style={{ fontFamily: "'Poppins', sans-serif" }}>
           <div
             className="relative h-[100px] sm:h-[120px] md:h-[140px] lg:h-[160px] overflow-hidden"
             style={{ perspective: '1200px' }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentServiceIndex}
-                initial={{
-                  y: 40,
-                  opacity: 0,
-                  rotateX: 15,
-                  scale: 0.95,
-                }}
-                animate={{
-                  y: 0,
-                  opacity: 1,
-                  rotateX: 0,
-                  scale: 1,
-                }}
-                exit={{
-                  y: -40,
-                  opacity: 0,
-                  rotateX: -15,
-                  scale: 0.95,
-                }}
-                transition={{
-                  duration: 0.7,
-                  ease: [0.22, 1, 0.36, 1],
-                  opacity: { duration: 0.3 },
-                }}
-                style={{
-                  color: serviceTitles[currentServiceIndex].titleColor,
-                  fontFamily: "'Poppins', sans-serif",
-                }}
-                className="absolute inset-0 font-medium flex items-center"
-              >
-                <span className="text-[1.7rem] sm:text-[3rem] md:text-[4.5rem] lg:text-[4.5rem] leading-[1.1] break-words max-w-full text-left">
-                  {serviceTitles[currentServiceIndex].title}
-                </span>
-              </motion.div>
-            </AnimatePresence>
+            {/* No Framer Motion – we use simple class toggling with a timer */}
+            <div
+              key={currentServiceIndex}
+              className="absolute inset-0 flex items-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{
+                transform: 'translateY(0) scale(1) rotateX(0)',
+                opacity: 1,
+                color: serviceTitles[currentServiceIndex].titleColor,
+                fontFamily: "'Poppins', sans-serif",
+              }}
+            >
+              <span className="text-[1.7rem] sm:text-[3rem] md:text-[4.5rem] lg:text-[4.5rem] leading-[1.1] break-words max-w-full text-left">
+                {serviceTitles[currentServiceIndex].title}
+              </span>
+            </div>
           </div>
 
           <div
@@ -473,48 +561,84 @@ return (
       </div>
     </div>
 
-    <motion.div>
-      <div className="relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      </div>
+    {/* ─── VIDEO MODAL ────────────────────────────────────────────────── */}
+    {isVideoModalOpen && (
+      <div
+        className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+        onClick={closeVideoModal}
+      >
+        <div
+          className="relative w-full max-w-6xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close Button */}
+          <button
+            onClick={closeVideoModal}
+            className="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors z-10"
+            aria-label="Close video"
+          >
+            <X className="w-8 h-8" />
+          </button>
 
-      {/* ================= Service Cards ================= */}
-      <section className="pb-10">
-        <div className="max-w-[1400px] mx-auto px-2 sm:px-5 lg:px-5">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-            {[
-              {
-                name: isArabic ? "المدققون" : "Checkers",
-                image: isDarkMode ? checkDark : checkWhite,
-                description: isArabic
-                  ? "تحقق من غرامات التجاوز، حظر السفر، الاختفاء، النواكاس، والمزيد."
-                  : "Check overstay fines, travel bans, absconding, nawakas, and more.",
-                cta: isArabic ? "تقديم" : "Apply",
-                link: "/customer-dashboard",
-                gradient: "from-blue-500/10 to-cyan-500/5",
-              },
-              {
-                name: isArabic ? "الخدمات" : "Services",
-                image: isDarkMode ? servicesImageDark : servicesImage3,
-                description: isArabic
-                  ? "تقديم طلبات تصاريح الدخول، تأشيرة الإقامة، الهوية الإماراتية، التجديدات، وغيرها."
-                  : "Apply for entry permits, residence visa, emiratesid, renewals, etc.",
-                cta: isArabic ? "تقديم" : "Apply",
-                link: "/apply",
-                gradient: "from-emerald-500/10 to-teal-500/5",
-              },
-              {
-                name: isArabic ? "الباقات" : "Packages",
-                image: isDarkMode ? packagesImageDark : servicesImage2,
-                description: isArabic
-                  ? "تتيح لك الباقات اختيار التطبيقات المجمعة لمعاملاتك الحكومية"
-                  : "Packages allow you to choose bundled applications for your govt transactions",
-                cta: isArabic ? "تقديم" : "Apply",
-                link: "/packages",
-                gradient: "from-purple-500/10 to-pink-500/5",
-              },
-            ].map((card, idx) => (
-              <motion.div
+          {/* Video in Modal */}
+          <div className="aspect-video w-full bg-black rounded-lg overflow-hidden">
+            <video
+              ref={modalVideoRef}
+              className="w-full h-full"
+              src="/images/laptop/subscription-video.mp4"
+              controls
+              playsInline
+              preload="auto"
+            />
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* ─── SERVICE CARDS ──────────────────────────────────────────────── */}
+    <div className="relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    </div>
+
+    <section className="pb-10">
+      <div className="max-w-[1400px] mx-auto px-2 sm:px-5 lg:px-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+          {[
+            {
+              name: isArabic ? "المدققون" : "Checkers",
+              image: isDarkMode ? checkDark : checkWhite,
+              description: isArabic
+                ? "تحقق من غرامات التجاوز، حظر السفر، الاختفاء، النواكاس، والمزيد."
+                : "Check overstay fines, travel bans, absconding, nawakas, and more.",
+              cta: isArabic ? "تقديم" : "Apply",
+              link: "/customer-dashboard",
+              gradient: "from-blue-500/10 to-cyan-500/5",
+            },
+            {
+              name: isArabic ? "الخدمات" : "Services",
+              image: isDarkMode ? servicesImageDark : servicesImage3,
+              description: isArabic
+                ? "تقديم طلبات تصاريح الدخول، تأشيرة الإقامة، الهوية الإماراتية، التجديدات، وغيرها."
+                : "Apply for entry permits, residence visa, emiratesid, renewals, etc.",
+              cta: isArabic ? "تقديم" : "Apply",
+              link: "/apply",
+              gradient: "from-emerald-500/10 to-teal-500/5",
+            },
+            {
+              name: isArabic ? "الباقات" : "Packages",
+              image: isDarkMode ? packagesImageDark : servicesImage2,
+              description: isArabic
+                ? "تتيح لك الباقات اختيار التطبيقات المجمعة لمعاملاتك الحكومية"
+                : "Packages allow you to choose bundled applications for your govt transactions",
+              cta: isArabic ? "تقديم" : "Apply",
+              link: "/packages",
+              gradient: "from-purple-500/10 to-pink-500/5",
+            },
+          ].map((card, idx) => {
+            const { ref, isInView } = useInView({ threshold: 0.1 });
+            return (
+              <div
                 key={idx}
+                ref={ref as any}
                 onClick={() => {
                   if (card.link === "/packages") {
                     setOpen(true);
@@ -522,10 +646,6 @@ return (
                     navigate(card.link);
                   }
                 }}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 className={`
                   group relative flex w-full flex-col 
                   rounded-2xl sm:rounded-3xl overflow-hidden 
@@ -534,7 +654,9 @@ return (
                   border border-slate-200/60 dark:border-slate-700/50 
                   transition-all duration-500 
                   backdrop-blur-sm
+                  ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
                 `}
+                style={{ transitionDelay: `${idx * 100}ms` }}
               >
                 {/* Gradient Overlay */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
@@ -567,10 +689,7 @@ return (
                     {card.description}
                   </p>
 
-                  <motion.button
-                    whileHover={{ y: -2, scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                  <button
                     className="
                       group/btn relative inline-flex items-center justify-start gap-4
                       overflow-hidden rounded-full
@@ -583,6 +702,7 @@ return (
                       border border-black/10 dark:border-white/10
                       transition-all duration-300
                       mt-2
+                      hover:-translate-y-0.5 hover:scale-105
                     "
                   >
                     <span className="relative z-10 whitespace-nowrap">
@@ -602,44 +722,35 @@ return (
                     >
                       <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white dark:text-black" />
                     </div>
-                  </motion.button>
+                  </button>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            );
+          })}
         </div>
-      </section>
-    </motion.div>
+      </div>
+    </section>
 
-  {/* ─── FULLSCREEN VIDEO MODAL ────────────────────────────────────── */}
-<AnimatePresence>
+  {/* ─── FULLSCREEN VIDEO MODAL (CSS only) ────────────────────────────────────── */}
   {isVideoModalOpen && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+    <div
       className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
       onClick={() => setIsVideoModalOpen(false)}
     >
-      <motion.div
-        ref={modalVideoRef}
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+      <div
         className="relative w-full h-full bg-black"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ✅ Fullscreen video with all controls */}
-       <video
-        className="w-full h-full object-cover"
-        src="/images/laptop/subscription-video.mp4"
-      controls
+        <video
+          ref={modalVideoRef}
+          className="w-full h-full object-cover"
+          src="/images/laptop/subscription-video.mp4"
+          controls
           autoPlay
           playsInline
           controlsList="nodownload"
           onClick={(e) => e.stopPropagation()}
-      />
+        />
 
         {/* Close Button */}
         <button
@@ -670,37 +781,31 @@ return (
         <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/30 text-[10px] sm:text-xs bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full border border-white/5 pointer-events-none">
           Press ESC or click ✕ to close
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )}
-</AnimatePresence>
-      {/* <ApplicationFlow
-        open={showStartDialog}
-        onOpenChange={handleDialogClose}
-        queryParams={queryParams}
-      /> */}
 
-        <TammatSupervisor
-        position="bottom-right"
-        size="md"
-        showTranscript={true}
-        
-        />
-
-      {/* Voice Agent - Floating Button (uses shared context) */}
-      <TammatVoiceAgent
-        position="bottom-right"
-        size="md"
-        showTranscript={true}
+      <TammatSupervisor
+      position="bottom-right"
+      size="md"
+      showTranscript={true}
+      
       />
+
+    {/* Voice Agent - Floating Button (uses shared context) */}
+    <TammatVoiceAgent
+      position="bottom-right"
+      size="md"
+      showTranscript={true}
+    />
 
 <PackageApplicationDialog
   open={open}
   onOpenChange={setOpen}
   // packages={packages}   // pass the array straight from your packages JSON
 />
-    </section>
-  );
+  </section>
+);
 };
 
 // Post-Hero Trust Builder Section - Life Upgraded (Mobile-First, Hims-inspired)
@@ -849,11 +954,8 @@ const LifeUpgraded = () => {
       {/* Main Content - Mobile First */}
       <div className="relative bg-background z-10 px-4 py-12 sm:py-16 md:py-20">
         {/* Header Text */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8 sm:mb-12"
+        <div
+          className={`text-center mb-8 sm:mb-12 transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
         >
           <p className="text-primary text-xs sm:text-sm font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase mb-2 sm:mb-3">
             {t('lifeUpgraded.microLabel')}
@@ -867,18 +969,17 @@ const LifeUpgraded = () => {
           <p className="mt-4 text-text-secondary text-sm sm:text-base max-w-xl mx-auto">
             {t('lifeUpgraded.trustReinforcement')}
           </p>
-        </motion.div>
+        </div>
 
         {/* Professional Person + iPhone Layout */}
         <div className="relative max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
 
             {/* Professional Person Image - Ultra Realistic */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[380px] order-2 lg:order-1"
+            <div
+              className={`relative w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[380px] order-2 lg:order-1 transition-all duration-700 delay-200 ${
+                isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+              }`}
             >
               <div className="relative aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border-2 border-[#e8e0d0]">
                 <img
@@ -887,36 +988,16 @@ const LifeUpgraded = () => {
                   className="w-full h-full object-cover object-top"
                   loading="lazy"
                 />
-                {/* Premium overlay - subtle gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2a2520]/40 via-transparent to-transparent" />
-
-                {/* Floating success badge - matching light yellow theme */}
-                {/* <motion.div
-                  initial={{ scale: 0, rotate: -10 }}
-                  animate={isInView ? { scale: 1, rotate: 0 } : {}}
-                  transition={{ delay: 1, type: 'spring', stiffness: 200 }}
-                  className="absolute bottom-4 left-4 right-4 bg-[#faf8f2]/95 backdrop-blur-sm rounded-2xl p-3 sm:p-4 shadow-xl border border-[#e8e0d0]"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#22c55e] flex items-center justify-center">
-                      <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs sm:text-sm font-medium text-[#1a1a1a]">{t("lifeUpgraded.phoneSlides.visa.approved")}</p>
-                      <p className="text-[10px] sm:text-xs text-[#6b6560]">{t("lifeUpgraded.phoneSlides.visa.welcome")}</p>
-                    </div>
-                  </div>
-                </motion.div> */}
               </div>
-            </motion.div>
+            </div>
 
             {/* iPhone Mockup with Scroll-changing content */}
-            <motion.div
+            <div
               ref={phoneRef}
-              initial={{ opacity: 0, x: 30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative w-full max-w-[220px] sm:max-w-[260px] order-1 lg:order-2"
+              className={`relative w-full max-w-[220px] sm:max-w-[260px] order-1 lg:order-2 transition-all duration-700 delay-300 ${
+                isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+              }`}
             >
               {/* iPhone Frame */}
               <div className="relative rounded-[2.5rem] sm:rounded-[3rem] bg-[#1a1a1a] p-2 sm:p-3 shadow-2xl">
@@ -925,110 +1006,90 @@ const LifeUpgraded = () => {
 
                 {/* Screen - Light yellow background matching section */}
                 <div className="rounded-[2rem] sm:rounded-[2.5rem] bg-[#faf8f2] aspect-[9/19] overflow-hidden relative">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activePhoneSlide}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.4 }}
-                      className="p-3 sm:p-4 pt-10 sm:pt-12 space-y-2 sm:space-y-3"
-                    >
-                      {/* Status bar hint */}
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-[8px] sm:text-[9px] text-text-muted">9:41</span>
-                        <div className="flex gap-1">
-                          <div className="w-3 sm:w-4 h-1.5 sm:h-2 bg-secondary/30 rounded-full" />
-                          <div className="w-3 sm:w-4 h-1.5 sm:h-2 bg-secondary/30 rounded-full" />
-                        </div>
+                  <div className="p-3 sm:p-4 pt-10 sm:pt-12 space-y-2 sm:space-y-3">
+                    {/* Status bar hint */}
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[8px] sm:text-[9px] text-text-muted">9:41</span>
+                      <div className="flex gap-1">
+                        <div className="w-3 sm:w-4 h-1.5 sm:h-2 bg-secondary/30 rounded-full" />
+                        <div className="w-3 sm:w-4 h-1.5 sm:h-2 bg-secondary/30 rounded-full" />
                       </div>
+                    </div>
 
-                      {/* App header - Milestone achievement */}
-                      <div className="bg-[#f5f0e6]/90 backdrop-blur rounded-xl sm:rounded-2xl p-2.5 sm:p-3 shadow-sm border border-[#e8e0d0]">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg sm:text-xl">{currentSlide.icon}</span>
-                            <div>
-                              <p className="text-[9px] sm:text-[10px] text-text-secondary font-medium">{currentSlide.title}</p>
-                              <p className={`text-xs sm:text-sm font-bold ${currentSlide.statusColor}`}>{currentSlide.status}</p>
-                            </div>
-                          </div>
-                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-success/20 flex items-center justify-center">
-                            <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-success" />
+                    {/* App header - Milestone achievement */}
+                    <div className="bg-[#f5f0e6]/90 backdrop-blur rounded-xl sm:rounded-2xl p-2.5 sm:p-3 shadow-sm border border-[#e8e0d0]">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg sm:text-xl">{currentSlide.icon}</span>
+                          <div>
+                            <p className="text-[9px] sm:text-[10px] text-text-secondary font-medium">{currentSlide.title}</p>
+                            <p className={`text-xs sm:text-sm font-bold ${currentSlide.statusColor}`}>{currentSlide.status}</p>
                           </div>
                         </div>
-                        {/* Progress bar */}
-                        <div className="mt-2 h-1.5 sm:h-2 bg-border rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${currentSlide.progress}%` }}
-                            transition={{ duration: 0.6, ease: 'easeOut' }}
-                            className="h-full bg-gradient-to-r from-primary to-success rounded-full"
-                          />
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-success/20 flex items-center justify-center">
+                          <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-success" />
                         </div>
                       </div>
-
-                      {/* Next step */}
-                      <div className="bg-[#f0ebe0] rounded-xl p-2.5 sm:p-3 border-l-3 sm:border-l-4 border-primary">
-                        <p className="text-[8px] sm:text-[9px] text-primary font-medium">{t('lifeUpgraded.phoneSlides.complete')}</p>
-                        <p className="text-[10px] sm:text-xs font-semibold text-background">{currentSlide.nextStep}</p>
+                      {/* Progress bar */}
+                      <div className="mt-2 h-1.5 sm:h-2 bg-border rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-primary to-success rounded-full transition-all duration-500"
+                          style={{ width: `${currentSlide.progress}%` }}
+                        />
                       </div>
+                    </div>
 
-                      {/* Checklist - All done for milestones */}
-                      <div className="space-y-1.5 sm:space-y-2 pt-1 sm:pt-2">
-                        {currentSlide.items.map((item, i) => (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 + i * 0.1 }}
-                            className="flex items-center gap-2"
-                          >
-                            <div className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${item.done ? 'bg-success' : 'border-2 border-primary'}`}>
-                              {item.done && <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-background" />}
-                            </div>
-                            <span className={`text-[9px] sm:text-[10px] ${item.done ? 'text-background' : 'text-text-secondary'}`}>{item.text}</span>
-                          </motion.div>
-                        ))}
-                      </div>
+                    {/* Next step */}
+                    <div className="bg-[#f0ebe0] rounded-xl p-2.5 sm:p-3 border-l-3 sm:border-l-4 border-primary">
+                      <p className="text-[8px] sm:text-[9px] text-primary font-medium">{t('lifeUpgraded.phoneSlides.complete')}</p>
+                      <p className="text-[10px] sm:text-xs font-semibold text-background">{currentSlide.nextStep}</p>
+                    </div>
 
-                      {/* Slide indicators */}
-                      <div className="flex justify-center gap-1.5 pt-2 sm:pt-3">
-                        {phoneSlides.map((_, i) => (
-                          <div
-                            key={i}
-                            className={`h-1 sm:h-1.5 rounded-full transition-all duration-300 ${i === activePhoneSlide ? 'w-4 sm:w-6 bg-primary' : 'w-1 sm:w-1.5 bg-border'}`}
-                          />
-                        ))}
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+                    {/* Checklist - All done for milestones */}
+                    <div className="space-y-1.5 sm:space-y-2 pt-1 sm:pt-2">
+                      {currentSlide.items.map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 transition-all duration-300"
+                          style={{ transitionDelay: `${0.1 + i * 0.1}s` }}
+                        >
+                          <div className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${item.done ? 'bg-success' : 'border-2 border-primary'}`}>
+                            {item.done && <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-background" />}
+                          </div>
+                          <span className={`text-[9px] sm:text-[10px] ${item.done ? 'text-background' : 'text-text-secondary'}`}>{item.text}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Slide indicators */}
+                    <div className="flex justify-center gap-1.5 pt-2 sm:pt-3">
+                      {phoneSlides.map((_, i) => (
+                        <div
+                          key={i}
+                          className={`h-1 sm:h-1.5 rounded-full transition-all duration-300 ${i === activePhoneSlide ? 'w-4 sm:w-6 bg-primary' : 'w-1 sm:w-1.5 bg-border'}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* Scroll hint for mobile */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2 }}
-                className="text-center text-[10px] sm:text-xs text-text-secondary mt-3 sm:mt-4 lg:hidden"
-              >
+              <p className="text-center text-[10px] sm:text-xs text-text-secondary mt-3 sm:mt-4 lg:hidden">
                 {t('lifeUpgraded.phoneSlides.scrollHint')}
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
           </div>
         </div>
 
         {/* CTA Buttons with micro-interactions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-10 sm:mt-12 md:mt-16"
+        <div
+          className={`flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-10 sm:mt-12 md:mt-16 transition-all duration-700 delay-500 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
-          <motion.div
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.03 }}
+          <div
+            className="transition-all duration-300 hover:scale-105 active:scale-95"
             onMouseDown={() => setButtonPressed('primary')}
             onMouseUp={() => setButtonPressed(null)}
             onMouseLeave={() => setButtonPressed(null)}
@@ -1046,52 +1107,22 @@ const LifeUpgraded = () => {
               <Link to="/auth">
                 <span className="relative z-10 flex items-center gap-2">
                   {t('lifeUpgraded.cta')}
-                  <motion.span
-                    animate={{ x: buttonPressed === 'primary' ? 5 : 0 }}
-                    transition={{ type: 'spring', stiffness: 400 }}
-                  >
-                    <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </motion.span>
+                  <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </span>
-                {/* Ripple effect */}
                 <span className="absolute inset-0 bg-surface/20 scale-0 group-active:scale-100 rounded-full transition-transform duration-300" />
               </Link>
             </Button>
-          </motion.div>
-
-          {/* <motion.div
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.03 }}
-            onMouseDown={() => setButtonPressed('secondary')}
-            onMouseUp={() => setButtonPressed(null)}
-            onMouseLeave={() => setButtonPressed(null)}
-          >
-            <Button
-              variant="outline"
-              className={`
-                w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 
-                bg-secondary text-white border-0 rounded-full 
-                font-medium text-sm sm:text-base
-                transition-all duration-300
-                ${buttonPressed === 'secondary' ? 'bg-secondary-hover' : 'hover:bg-secondary-hover'}
-              `}
-            >
-              <Link to="/services">Learn More</Link>
-            </Button>
-          </motion.div> */}
-        </motion.div>
+          </div>
+        </div>
       </div>
 
       {/* Feature Cards Section - Mobile First Grid */}
       <div className="relative z-10 px-4 pb-12 sm:pb-16 md:pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Main Feature Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6 }}
-            className="mb-4 sm:mb-6"
+          <div
+            className="mb-4 sm:mb-6 transition-all duration-700"
+            style={{ transitionDelay: '100ms' }}
           >
             <div className="relative overflow-hidden rounded-2xl sm:rounded-[2rem] bg-background mt-12 border border-[#e8dcc8] p-5 sm:p-8 md:p-12">
               <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
@@ -1103,29 +1134,24 @@ const LifeUpgraded = () => {
                   <p className="text-text-secondary text-sm sm:text-base md:text-lg max-w-md mx-auto md:mx-0">
                     {t('lifeUpgraded.description')}
                   </p>
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <div className="transition-all duration-300 hover:scale-105 active:scale-95">
                     <Button
                       asChild
                       className="mt-4 sm:mt-6 px-5 sm:px-6 py-2.5 sm:py-3 bg-secondary-hover hover:bg-secondary-hover/70 text-white rounded-full font-medium text-sm sm:text-base transition-all duration-300"
                     >
                       <Link to="/services">{t('lifeUpgradedCards.exploreServices')}</Link>
                     </Button>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Two Column Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Card 1 - Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              whileHover={{ y: -4 }}
-              className="group relative overflow-hidden rounded-2xl sm:rounded-[2rem] bg-[#fef9f0] border border-[#e8e0d0] p-5 sm:p-6 md:p-8 min-h-[280px] sm:min-h-[320px] cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+            <div
+              className="group relative overflow-hidden rounded-2xl sm:rounded-[2rem] bg-[#fef9f0] border border-[#e8e0d0] p-5 sm:p-6 md:p-8 min-h-[280px] sm:min-h-[320px] cursor-pointer shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
             >
               <div className="text-xl sm:text-2xl md:text-3xl font-medium text-[#1a1a1a] mb-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 {t('lifeUpgradedCards.trackProgress')}
@@ -1150,16 +1176,11 @@ const LifeUpgraded = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Card 2 - Services */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              whileHover={{ y: -4 }}
-              className="group relative overflow-hidden rounded-2xl sm:rounded-[2rem] bg-[#fef9f0] border border-[#e8e0d0] p-5 sm:p-6 md:p-8 min-h-[280px] sm:min-h-[320px] cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+            <div
+              className="group relative overflow-hidden rounded-2xl sm:rounded-[2rem] bg-[#fef9f0] border border-[#e8e0d0] p-5 sm:p-6 md:p-8 min-h-[280px] sm:min-h-[320px] cursor-pointer shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
             >
               <div className="text-xl sm:text-2xl md:text-3xl font-medium text-[#1a1a1a] mb-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 {t('lifeUpgradedCards.allServices')}
@@ -1175,30 +1196,24 @@ const LifeUpgraded = () => {
                   { label: t('lifeUpgraded.cards.goldenVisa'), highlight: true },
                   { label: t('lifeUpgraded.cards.bankAccount'), highlight: false },
                 ].map((tag, i) => (
-                  <motion.span
+                  <span
                     key={i}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 + i * 0.05 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                     onClick={() => {
                       setQueryParams(tag.label)
                       setShowStartDialog(true)
                     }}
                     className={`
                       px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium cursor-pointer
-                      transition-all duration-200
+                      transition-all duration-200 hover:scale-105 active:scale-95
                       ${tag.highlight ? 'bg-primary text-button-text' : 'bg-border text-foreground hover:bg-primary/20'}
                     `}
                   >
                     {tag.label}
-                  </motion.span>
+                  </span>
                 ))}
               </div>
 
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 md:left-8">
+              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 md:left-8 transition-all duration-300 hover:scale-105 active:scale-95">
                 <Button
                   asChild
                   variant="outline"
@@ -1206,8 +1221,8 @@ const LifeUpgraded = () => {
                 >
                   <span onClick={() => setShowStartDialog(true)}>{t(`features.browseServices`)}</span>
                 </Button>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1315,11 +1330,10 @@ const Testimonials = () => {
         
         {/* Headline - Consistent with Your visa journey step by step
 Services section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12 sm:mb-16 md:mb-20"
+        <div
+          className={`mb-12 sm:mb-16 md:mb-20 transition-all duration-700 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <div
             className="text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] font-medium text-white -tracking-[4px]"
@@ -1328,27 +1342,15 @@ Services section */}
             {t('testimonials.headline')}{' '}
             <span className="text-primary">{t('testimonials.headlineHighlight')}</span>
           </div>
-        </motion.div>
+        </div>
 
         {/* Stacking Cards - Scroll-triggered animations */}
         <div className="max-w-2xl space-y-4 sm:space-y-6">
           {reviews.map((review, index) => (
-            <motion.div
+            <div
               key={review.id}
-              initial={{ opacity: 0, x: -100, rotateY: -15 }}
-              whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-              viewport={{ once: false, margin: '-100px' }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.15,
-                ease: [0.22, 1, 0.36, 1]
-              }}
-              whileHover={{
-                scale: 1.03,
-                x: 20,
-                transition: { duration: 0.3 }
-              }}
-              className="group cursor-pointer"
+              className={`transition-all duration-700 hover:-translate-y-1 hover:scale-105`}
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
               <div className="bg-white/95 dark:bg-surface/95  p-10 backdrop-blur-xl rounded-2xl sm:rounded-3xl sm:p-6 md:p-20 shadow-2xl border border-white/20 transition-all duration-300 hover:shadow-primary/20 hover:shadow-3xl">
                 {/* Title */}
@@ -1366,19 +1368,18 @@ Services section */}
 
                 {/* Author */}
                 <div className="flex items-center gap-3">
-                  <motion.div
-                    className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full ${review.color} flex items-center justify-center shadow-lg`}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
+                  <div
+                    className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full ${review.color} flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:rotate-6`}
                   >
                     <span className="text-foreground font-bold text-base sm:text-lg">{review.initials}</span>
-                  </motion.div>
+                  </div>
                   <div>
                     <p className="font-semibold text-foreground text-base sm:text-lg" style={{ fontFamily: "'Poppins', sans-serif" }}>{review.name}</p>
                     <p className="text-text-muted text-sm sm:text-base">{review.role}</p>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
@@ -1481,11 +1482,10 @@ const TammatFeatures = () => {
     >
       <div className="container mx-auto px-4">
         {/* Headline */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          className="mb-12 sm:mb-16"
+        <div
+          className={`mb-12 sm:mb-16 transition-all duration-700 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-12">
             <div
@@ -1505,42 +1505,39 @@ const TammatFeatures = () => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Category Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-12 border-b border-border pb-4"
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`
-                px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300
-                ${activeCategory === cat.id
-                  ? 'bg-foreground text-background shadow-lg'
-                  : ' text-text-secondary hover:bg-background/10 hover:text-foreground border border-border'}
-              `}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </motion.div>
+     {/* Category Tabs – Staggered Reveal */}
+<div className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-12 border-b border-border pb-4">
+  {categories.map((cat, index) => (
+    <button
+      key={cat.id}
+      onClick={() => setActiveCategory(cat.id)}
+      className={`
+        px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300
+        ${activeCategory === cat.id
+          ? 'bg-foreground text-background shadow-lg'
+          : 'text-text-secondary hover:bg-background/10 hover:text-foreground border border-border'}
+      `}
+      style={{
+        transitionDelay: `${index * 80}ms`,
+        opacity: isInView ? 1 : 0,
+        transform: isInView ? 'translateY(0)' : 'translateY(8px)',
+        transition: 'opacity 0.5s ease, transform 0.5s ease',
+      }}
+    >
+      {cat.label}
+    </button>
+  ))}
+</div>
 
         {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredFeatures.map((feature, index) => (
-            <motion.div
+            <div
               key={feature.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-30px' }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -8 }}
-              className="group cursor-pointer"
+              className="group cursor-pointer transition-all duration-500 hover:-translate-y-2"
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
               <div className="relative h-full rounded-2xl sm:rounded-3xl overflow-hidden  border border-border shadow-sm hover:shadow-xl transition-all duration-300">
                 {/* Image */}
@@ -1586,17 +1583,15 @@ const TammatFeatures = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-center mt-12 sm:mt-16"
+        <div
+          className={`text-center mt-12 sm:mt-16 transition-all duration-500 delay-300 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <Button
             asChild
@@ -1606,7 +1601,7 @@ const TammatFeatures = () => {
               {t('tammatFeatures.cta')} →
             </span>
           </Button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -1759,45 +1754,9 @@ const ServiceJourney = () => {
     >
       {/* ================= Premium Hero Header ================= */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            scale: [1, 1.08, 1],
-            opacity: [0.45, 0.7, 0.45],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute left-1/2 top-[-18rem] h-[52rem] w-[52rem] -translate-x-1/2 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 blur-[180px]"
-        />
-
-        <motion.div
-          animate={{
-            x: [-30, 20, -30],
-            y: [0, 25, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute left-[-12rem] top-32 h-[34rem] w-[34rem] rounded-full bg-sky-500/10 dark:bg-sky-500/10 blur-[150px]"
-        />
-
-        <motion.div
-          animate={{
-            x: [20, -30, 20],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute right-[-10rem] bottom-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 blur-[150px]"
-        />
-
+        <div className="absolute left-1/2 top-[-18rem] h-[52rem] w-[52rem] -translate-x-1/2 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 blur-[180px] animate-pulse-slow" />
+        <div className="absolute left-[-12rem] top-32 h-[34rem] w-[34rem] rounded-full bg-sky-500/10 dark:bg-sky-500/10 blur-[150px] animate-float-slow" />
+        <div className="absolute right-[-10rem] bottom-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 blur-[150px] animate-float-slower" />
         <div
           className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07]"
           style={{
@@ -1806,16 +1765,14 @@ const ServiceJourney = () => {
             backgroundSize: "36px 36px",
           }}
         />
-
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/80 dark:to-black/80" />
       </div>
 
       <div className="container relative z-10 mx-auto max-w-[1500px] px-0 sm:px-5 lg:px-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-15"
+        <div
+          className={`mb-15 transition-all duration-700 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
@@ -1836,14 +1793,13 @@ const ServiceJourney = () => {
               </h2>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Premium Modern Segmented Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-8 sm:mb-12 flex justify-center px-2 sm:px-0"
+        <div
+          className={`mb-8 sm:mb-12 flex justify-center px-2 sm:px-0 transition-all duration-500 delay-100 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <div
             className="relative flex w-full max-w-fit overflow-x-auto scrollbar-hide rounded-2xl lg:rounded-3xl border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-2xl p-1.5 "
@@ -1864,26 +1820,9 @@ const ServiceJourney = () => {
                   `}
                 >
                   {active && (
-                    <motion.div
-                      layoutId="active-service-tab"
-                      transition={{
-                        type: "spring",
-                        stiffness: 420,
-                        damping: 34,
-                      }}
-                      className="absolute inset-0 overflow-hidden rounded-2xl bg-white dark:bg-black shadow-[0_12px_35px_rgba(0,0,0,.15)] dark:shadow-[0_10px_35px_rgba(255,255,255,.12)] -z-10"
-                    >
-                      <motion.span
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.35) 50%, transparent 80%)",
-                        }}
-                        initial={{ x: "-120%" }}
-                        animate={{ x: "120%" }}
-                        transition={{ duration: 1, ease: "easeInOut", delay: 0.1 }}
-                      />
-                    </motion.div>
+                    <div className="absolute inset-0 overflow-hidden rounded-2xl bg-white dark:bg-black shadow-[0_12px_35px_rgba(0,0,0,.15)] dark:shadow-[0_10px_35px_rgba(255,255,255,.12)] -z-10">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent -translate-x-full animate-shimmer" />
+                    </div>
                   )}
 
                   {!active && (
@@ -1906,34 +1845,19 @@ const ServiceJourney = () => {
               );
             })}
           </div>
-        </motion.div>
+        </div>
 
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-6 px-2 sm:px-0">
           {/* Main Timeline Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-7 bg-white/80 dark:bg-black/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 relative overflow-hidden"
+          <div
+            className="lg:col-span-7 bg-white/80 dark:bg-black/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 relative overflow-hidden transition-all duration-500"
+            style={{ transitionDelay: '200ms' }}
           >
             <div className="absolute -top-20 -right-20 w-64 h-64 opacity-10 hidden sm:block">
-              <motion.div
-                className="absolute inset-0 border-2 border-[#0A3269]/30 dark:border-[#4A8ABF]/30 rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              />
-              <motion.div
-                className="absolute inset-8 border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20 rounded-full"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-              />
-              <motion.div
-                className="absolute inset-16 border-2 border-[#0A3269]/10 dark:border-[#4A8ABF]/10 rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-              />
+              <div className="absolute inset-0 border-2 border-[#0A3269]/30 dark:border-[#4A8ABF]/30 rounded-full animate-spin-slow" />
+              <div className="absolute inset-8 border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20 rounded-full animate-spin-slower" />
+              <div className="absolute inset-16 border-2 border-[#0A3269]/10 dark:border-[#4A8ABF]/10 rounded-full animate-spin-slowest" />
             </div>
 
             <div className="mb-5 sm:mb-8">
@@ -1960,25 +1884,17 @@ const ServiceJourney = () => {
             <div className="relative">
               <div className="space-y-3 sm:space-y-5">
                 {currentSteps.map((step, index) => (
-                  <motion.div
+                  <div
                     key={`${activeTab}-step-${index}`}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      duration: 0.45,
-                      delay: index * 0.08,
-                      ease: "easeOut",
-                    }}
-                    whileHover={{ x: 4, y: -2 }}
                     onClick={() => setActiveStep(index)}
                     className={`
-                      group relative flex items-start gap-3 sm:gap-5 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 cursor-pointer overflow-hidden border backdrop-blur-xl transition-all duration-300
+                      group relative flex items-start gap-3 sm:gap-5 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 cursor-pointer overflow-hidden border backdrop-blur-xl transition-all duration-300 hover:translate-x-1 hover:-translate-y-0.5
                       ${activeStep === index ? "border-[#0A3269]/40 dark:border-[#4A8ABF]/40 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 shadow-md shadow-[#0A3269]/10 dark:shadow-[#4A8ABF]/10" : "border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-white/70 dark:bg-black/30 hover:bg-white/80 dark:hover:bg-black/40 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30 hover:shadow-md"}
                     `}
                   >
                     <div className="relative flex-shrink-0">
                       {activeStep === index && (
-                        <motion.div layoutId="activeRing" className="absolute -inset-1.5 sm:-inset-2 rounded-full border-2 border-[#0A3269]/40 dark:border-[#4A8ABF]/40" />
+                        <div className="absolute -inset-1.5 sm:-inset-2 rounded-full border-2 border-[#0A3269]/40 dark:border-[#4A8ABF]/40" />
                       )}
                       <div
                         className={`
@@ -2008,16 +1924,12 @@ const ServiceJourney = () => {
                         {step.description}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 25, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-                whileHover={{ y: -3 }}
-                className="group relative overflow-hidden mt-5 sm:mt-8 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-4 rounded-2xl sm:rounded-3xl border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-white/80 dark:bg-black/30 backdrop-blur-2xl p-4 sm:p-5 lg:p-6 ransition-all duration-500"
+              <div
+                className="group relative overflow-hidden mt-5 sm:mt-8 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-4 rounded-2xl sm:rounded-3xl border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-white/80 dark:bg-black/30 backdrop-blur-2xl p-4 sm:p-5 lg:p-6 transition-all duration-500 hover:-translate-y-1"
               >
                 <div className="absolute -right-10 -top-10 h-28 w-28 sm:h-40 sm:w-40 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
@@ -2037,59 +1949,34 @@ const ServiceJourney = () => {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Column - Bento Cards */}
           <div className="lg:col-span-5 grid grid-cols-2 gap-3 xs:gap-4 sm:gap-5">
             {/* Featured Image Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative col-span-2 w-full h-48 xs:h-56 sm:h-72 md:h-80 lg:h-[28rem] overflow-hidden rounded-xl xs:rounded-2xl sm:rounded-[28px] lg:rounded-[32px] bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-slate-900/20 transition-all duration-500 hover:shadow-2xl hover:shadow-slate-900/30 border border-white/5"
-            >
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={`${activeTab}-${activeStep}`}
-                  src={currentImages[activeStep]}
-                  alt={currentSteps[activeStep]?.title}
-                  className="absolute inset-0 w-full h-full object-conten transition-transform duration-1000 ease-out group-hover:scale-110"
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                />
-              </AnimatePresence>
-
+            <div className="group relative col-span-2 w-full h-48 xs:h-56 sm:h-72 md:h-80 lg:h-[28rem] overflow-hidden rounded-xl xs:rounded-2xl sm:rounded-[28px] lg:rounded-[32px] bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-slate-900/20 transition-all duration-500 hover:shadow-2xl hover:shadow-slate-900/30 border border-white/5">
+              <img
+                src={currentImages[activeStep]}
+                alt={currentSteps[activeStep]?.title}
+                className="absolute inset-0 w-full h-full object-conten transition-transform duration-1000 ease-out group-hover:scale-110"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
               <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/10 via-white/5 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0A3269]/10 dark:from-[#4A8ABF]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
               <div className="absolute left-3 top-3 xs:left-4 xs:top-4 sm:left-6 sm:top-6 z-10">
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="flex items-center gap-1 xs:gap-1.5 px-2 py-1 xs:px-2.5 xs:py-1.5 sm:px-3 sm:py-1.5 rounded-full backdrop-blur-xl border shadow-lg transition-all duration-300 hover:scale-105 bg-white/90 border-white/20 shadow-black/5 dark:bg-black/50 dark:border-white/10 dark:shadow-black/20"
-                >
+                <div className="flex items-center gap-1 xs:gap-1.5 px-2 py-1 xs:px-2.5 xs:py-1.5 sm:px-3 sm:py-1.5 rounded-full backdrop-blur-xl border shadow-lg transition-all duration-300 hover:scale-105 bg-white/90 border-white/20 shadow-black/5 dark:bg-black/50 dark:border-white/10 dark:shadow-black/20">
                   <span className="text-[8px] xs:text-[9px] sm:text-[12px] md:text-[13px] font-medium transition-colors duration-300 text-slate-700 dark:text-white/90 tracking-wide">
                     <span className="text-[#0A3269] dark:text-[#4A8ABF] font-semibold">0{activeStep + 1}</span>
                     <span className="mx-1 text-slate-300 dark:text-white/20">/</span>
                     <span className="text-slate-400 dark:text-white/40">{currentSteps.length}</span>
                   </span>
-                </motion.div>
+                </div>
               </div>
 
-              <motion.div
-                key={activeStep}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute bottom-0 left-0 right-0 p-3 xs:p-4 sm:p-6 lg:p-8 z-10"
-              >
+              <div className="absolute bottom-0 left-0 right-0 p-3 xs:p-4 sm:p-6 lg:p-8 z-10">
                 <h2 className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-[2rem] font-bold text-white tracking-tight leading-tight drop-shadow-lg line-clamp-2">
                   {currentSteps[activeStep]?.title}
                 </h2>
@@ -2110,22 +1997,11 @@ const ServiceJourney = () => {
                   </div>
 
                   <div className="relative h-2 xs:h-2 sm:h-2.5 rounded-full overflow-hidden bg-white/10 backdrop-blur-sm">
-                    <motion.div
-                      initial={false}
-                      animate={{ width: `${((activeStep + 1) / currentSteps.length) * 100}%` }}
-                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                      className="relative h-full rounded-full bg-gradient-to-r from-[#0A3269] to-[#4A8ABF] dark:from-[#4A8ABF] dark:to-[#4A8ABF]"
+                    <div className="relative h-full rounded-full bg-gradient-to-r from-[#0A3269] to-[#4A8ABF] dark:from-[#4A8ABF] dark:to-[#4A8ABF] transition-all duration-500"
+                      style={{ width: `${((activeStep + 1) / currentSteps.length) * 100}%` }}
                     >
-                      <motion.div
-                        animate={{ x: ['-100%', '100%'] }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
-                        className="absolute inset-0"
-                        style={{
-                          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)',
-                          width: '40%',
-                        }}
-                      />
-                    </motion.div>
+                      <div className="absolute inset-0 animate-shimmer-fast" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)', width: '40%' }} />
+                    </div>
 
                     <div className="absolute inset-0 flex items-center justify-between px-0.5">
                       {currentSteps.map((_, i) => {
@@ -2172,17 +2048,11 @@ const ServiceJourney = () => {
                     </span>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
             {/* Success Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative w-full col-span-2 md:col-span-1 rounded-3xl border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-white dark:bg-[#0A0A0F] p-5"
-            >
+            <div className="relative w-full col-span-2 md:col-span-1 rounded-3xl border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-white dark:bg-[#0A0A0F] p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 px-3 py-1">
@@ -2229,36 +2099,36 @@ const ServiceJourney = () => {
               <div className="my-4 h-px bg-gray-100 dark:bg-[#4A8ABF]/20" />
 
               <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300">
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
                   <TrendingUp className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                   <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">99.8%</p>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.approval')}</span>
                 </div>
 
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300">
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
                   <Activity className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                   <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">24/7</p>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.monitoring')}</span>
                 </div>
 
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300">
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
                   <Users className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                   <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">250+</h3>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.expertAdvisors')}</span>
                 </div>
 
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300">
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
                   <ShieldCheck className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                   <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">A+</p>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.rating')}</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* CTA Card */}
             <div
               onClick={() => navigate("/apply")}
-              className="hidden md:flex relative h-full flex-col cursor-pointer overflow-hidden rounded-3xl border border-white/10 p-8"
+              className="hidden md:flex relative h-full flex-col cursor-pointer overflow-hidden rounded-3xl border border-white/10 p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="absolute inset-0 -z-20 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1518684079-3c830dcef090?q=80&w=1600&auto=format&fit=crop')" }} />
               <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/95 via-black/80 to-transparent" />
@@ -2325,336 +2195,243 @@ const ServiceJourney = () => {
         open={showFlowDialog}
         onOpenChange={setShowFlowDialog}
       />
-      {/* <ApplicationFlow
-        open={showAppFlow}
-        onOpenChange={setShowAppFlow}
-        queryParams=""
-      /> */}
-
-
-     {/* ================= What Does TMMT Membership Include? ================= */}
-<section className="relative py-16 sm:py-20 lg:py-28 bg-white dark:bg-black overflow-hidden">
-  {/* Subtle ambient glow */}
-  <div className="absolute inset-0 pointer-events-none">
-    <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-[120px]" />
-    <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/8 rounded-full blur-[100px]" />
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-[150px]" />
-  </div>
-
-  {/* Grid pattern */}
-  <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" style={{
-    backgroundImage: `
-      linear-gradient(rgba(10,50,105,0.2) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(10,50,105,0.2) 1px, transparent 1px)
-    `,
-    backgroundSize: '60px 60px'
-  }} />
-
-  <div className="container mx-auto px-4 sm:px-6 relative z-10">
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="max-w-7xl mx-auto"
-    >
-      {/* Header */}
-      <div className="text-center mb-14 lg:mb-20">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.15, duration: 0.6 }}
-          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.05] tracking-[-0.02em] text-black dark:text-white"
-          style={{ fontFamily: "'Poppins', sans-serif" }}
-        >
-          <span className="font-bold text-[#1a1a1a] dark:text-white">
-            {isArabic ? 'ماذا تشمل عضوية' : 'What Does TMMT Membership'}
-          </span>
-          <br className="hidden sm:block" />
-          <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light">
-            {isArabic ? 'TMMT؟' : 'Include?'}
-          </span>
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.25, duration: 0.6 }}
-          className="mt-4 max-w-3xl mx-auto text-gray-500 dark:text-white/50 text-sm sm:text-base lg:text-[19px] leading-relaxed px-4 sm:px-0"
-        >
-          {isArabic 
-            ? 'تمنحك TMMT وصولاً مباشراً إلى خبراء لديهم سنوات من الخبرة في الإجراءات والخدمات الحكومية في الإمارات، مما يساعدك على اتخاذ القرارات الصحيحة قبل اتخاذ أي إجراء.'
-            : 'TMMT gives you direct access to specialists with years of experience in UAE government procedures and services, helping you make the right decisions before taking action.'
-          }
-        </motion.p>
-      </div>
-
-      {/* Service Cards - Premium Glassmorphism */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-7">
-        {[
-          {
-            icon: Shield,
-            title: isArabic ? 'الإقامة والتأشيرات' : 'Residency & Visas',
-            items: isArabic 
-              ? ['إصدار التأشيرات والتجديدات والإلغاءات', 'تأشيرات السياحة والزيارة', 'كفالة العائلة', 'تحويل الكفالة', 'تتبع الطلبات', 'الغرامات والقيود']
-              : ['Visa issuance, renewals & cancellations', 'Tourist & visit visas', 'Family sponsorship', 'Sponsorship transfers', 'Application tracking', 'Fines & restrictions'],
-            gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
-          },
-          {
-            icon: Landmark,
-            title: isArabic ? 'الهوية الإماراتية وجوازات السفر' : 'Emirates ID & Passports',
-            items: isArabic
-              ? ['إصدار الهوية الإماراتية وتجديدها', 'تتبع الطلبات', 'تحديثات التوصيل', 'تجديد جوازات السفر والإرشاد']
-              : ['Emirates ID issuance & renewals', 'Application tracking', 'Delivery updates', 'Passport renewals & guidance'],
-            gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
-          },
-          {
-            icon: Building2,
-            title: isArabic ? 'التراخيص التجارية والأعمال' : 'Business & Trade Licenses',
-            items: isArabic
-              ? ['اختيار النشاط التجاري المناسب', 'اختيار الترخيص التجاري المناسب', 'فهم تكاليف التأسيس', 'مراجعات السلطات والتصاريح', 'بطاقات المنشأة', 'تغييرات الشركاء والموافقات']
-              : ['Choosing the right business activity', 'Selecting the right trade license', 'Understanding setup costs', 'Authority & permission reviews', 'Establishment cards', 'Partner changes & approvals'],
-            gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
-          },
-          {
-            icon: Car,
-            title: isArabic ? 'المركبات والقيادة' : 'Vehicles & Driving',
-            items: isArabic
-              ? ['شراء وبيع المركبات', 'نقل الملكية', 'التسجيل والتأمين والفحص', 'رخص القيادة', 'الإجراءات المرورية والغرامات']
-              : ['Buying & selling vehicles', 'Ownership transfers', 'Registration, insurance & testing', 'Driving licenses', 'Traffic procedures & fines'],
-            gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
-          },
-          {
-            icon: Users2,
-            title: isArabic ? 'خدمات العائلة' : 'Family Services',
-            items: isArabic
-              ? ['إجراءات الزواج', 'توثيق المستندات', 'الترجمة القانونية', 'طلبات العائلة والدعم']
-              : ['Marriage procedures', 'Document attestation', 'Legal translation', 'Family applications & support'],
-            gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
-          },
-          {
-            icon: Briefcase,
-            title: isArabic ? 'التوظيف والقوى العاملة' : 'Employment & Workforce',
-            items: isArabic
-              ? ['تصاريح العمل', 'كفالة الموظفين', 'العمالة المنزلية', 'إجراءات التوظيف']
-              : ['Work permits', 'Employee sponsorship', 'Domestic workers', 'Employment procedures'],
-            gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
-          }
-        ].map((section, idx) => (
-          <motion.div
-            key={section.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 + (idx * 0.06), duration: 0.5 }}
-            className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-7 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.15)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden"
-          >
-            {/* Gradient Hover Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0A3269]/0 via-[#0A3269]/0 to-[#1A4A8A]/0 group-hover:from-[#0A3269]/5 group-hover:via-[#0A3269]/3 group-hover:to-[#1A4A8A]/5 transition-all duration-700" />
-            
-            {/* Top accent line */}
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0A3269] via-[#1A4A8A] to-[#0A3269] dark:from-[#4A8ABF] dark:via-[#4A8ABF] dark:to-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            {/* Glow effect on hover */}
-            <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            
-            <div className="relative">
-              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-100 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
-                  <section.icon className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
-                </div>
-                <h4 className="font-bold text-black dark:text-white text-sm sm:text-lg group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
-                  {section.title}
-                </h4>
-              </div>
-              <ul className="space-y-1.5 sm:space-y-2">
-                {section.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500 dark:text-white/50 group-hover:text-gray-600 dark:group-hover:text-white/70 transition-colors duration-300">
-                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF] shrink-0 mt-0.5" strokeWidth={2.5} />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Full Service + Smart Renewals - Premium Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8 sm:mt-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden"
-        >
-          <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          
-          <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-            <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
-              <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
-            </div>
-            <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
-              {isArabic ? 'معالجة الخدمة الكاملة' : 'Full Service Processing'}
-            </h4>
-          </div>
-          <p className="text-xs sm:text-base text-gray-500 dark:text-white/50 leading-relaxed">
-            {isArabic 
-              ? 'إذا كنت تفضل عدم التعامل مع العملية بنفسك، يمكن لـ TMMT إكمال العملية بأكملها نيابة عنك مقابل رسوم الخدمة بالإضافة إلى الرسوم الحكومية.'
-              : 'If you prefer not to handle the process yourself, TMMT can complete the entire process on your behalf for service fees plus government fees.'
-            }
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.45, duration: 0.5 }}
-          className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden"
-        >
-          <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          
-          <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-            <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
-              <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
-            </div>
-            <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
-              {isArabic ? 'تنبيهات التجديد الذكية' : 'Smart Renewal Alerts'}
-            </h4>
-          </div>
-          <p className="text-xs sm:text-base text-gray-500 dark:text-white/50 leading-relaxed mb-3">
-            {isArabic 
-              ? 'تلقي تذكيرات عبر واتساب أو البريد الإلكتروني قبل انتهاء صلاحية:'
-              : 'Receive reminders through WhatsApp or email before the expiry of:'
-            }
-          </p>
-          <div className="flex flex-wrap gap-1.5 sm:gap-2">
-            {isArabic 
-              ? ['جوازات السفر', 'التأشيرات', 'الهوية الإماراتية', 'الرخص التجارية', 'بطاقات المنشأة', 'تصاريح العمل', 'رخص القيادة', 'تسجيلات المركبات']
-              : ['Passports', 'Visas', 'Emirates IDs', 'Trade licenses', 'Establishment cards', 'Work permits', 'Driving licenses', 'Vehicle registrations']
-            .map((item) => (
-              <span 
-                key={item} 
-                className="text-[9px] sm:text-xs font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 dark:bg-[#4A8ABF]/10 text-black dark:text-white border border-gray-200 dark:border-[#4A8ABF]/20 group-hover:border-[#0A3269]/30 dark:group-hover:border-[#4A8ABF]/30 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 transition-all duration-300"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* How Can TMMT Help You? - Premium */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.5, duration: 0.5 }}
-        className="mt-8 sm:mt-10 relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-8 lg:p-10 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden"
-      >
-        <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl" />
-        <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-[#0A3269]/3 dark:bg-[#4A8ABF]/3 blur-3xl" />
-        
-        <div className="relative">
-          <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
-            <div className="p-2.5 sm:p-3 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 shadow-md shadow-[#0A3269]/10 dark:shadow-[#4A8ABF]/10">
-              <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.75} />
-            </div>
-            <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
-              {isArabic ? 'كيف يمكن لـ' : 'How Can'} <span className="text-[#0A3269] dark:text-[#4A8ABF]">TMMT</span> {isArabic ? 'مساعدتك؟' : 'Help You?'}
-            </h4>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-            {isArabic 
-              ? ['تجنب غرامات التجديد المتأخرة', 'تجنب اختيار تأسيس الأعمال الخاطئ', 'تجنب التكاليف والرسوم غير الضرورية', 'تجنب الأخطاء المكلفة في الإجراءات الحكومية', 'توفير الوقت والجهد', 'اتخاذ قرارات مستنيرة بثقة قبل اتخاذ أي إجراء']
-              : ['Avoid late renewal fines', 'Avoid choosing the wrong business setup', 'Avoid unnecessary costs and fees', 'Avoid costly mistakes in government procedures', 'Save time and effort', 'Make informed decisions with confidence before taking action']
-            .map((text) => (
-              <div key={text} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-white/60 p-2.5 sm:p-3 rounded-xl bg-gray-50/80 dark:bg-[#4A8ABF]/5 border border-gray-100 dark:border-[#4A8ABF]/10 hover:bg-[#0A3269]/5 dark:hover:bg-[#4A8ABF]/10 hover:border-[#0A3269]/20 dark:hover:border-[#4A8ABF]/20 transition-all duration-300 group">
-                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF] shrink-0 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
-                <span>{text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Founding Members Section - Premium */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.55, duration: 0.5 }}
-        className="mt-8 sm:mt-10 relative rounded-2xl border-2 border-amber-500/30 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/90 to-orange-50/60 dark:from-amber-950/30 dark:to-orange-950/15 p-5 sm:p-8 lg:p-10 hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all duration-500 overflow-hidden"
-      >
-        <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-amber-500/10 blur-3xl" />
-        <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-amber-500/5 blur-3xl" />
-        
-        <div className="relative">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-2.5 sm:p-3 rounded-xl bg-amber-500/20 shadow-md shadow-amber-500/20">
-                <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 dark:text-amber-400" strokeWidth={1.75} />
-              </div>
-              <div>
-                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
-                  {isArabic ? 'الأعضاء المؤسسون' : 'Founding Members'}
-                </h4>
-                <span className="inline-flex items-center gap-1.5 text-[9px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/20 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full mt-1">
-                  {isArabic ? 'وقت محدود' : 'Limited Time'}
-                </span>
-              </div>
-            </div>
-            <p className="text-xs sm:text-base text-gray-600 dark:text-white/60 max-w-md leading-relaxed">
-              {isArabic 
-                ? 'كن من بين أول 1,000 عضو واحصل على مزايا حصرية مدى الحياة.'
-                : 'Be among the first 1,000 members and get exclusive lifetime benefits.'
-              }
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-4 sm:mt-5">
-            {[
-              { icon: BadgeCheck, title: isArabic ? 'شارة العضو المؤسس' : 'Founding Member Badge', desc: isArabic ? 'شارة حصرية على حسابك تظهر وضعك كعضو مؤسس.' : 'Exclusive badge on your account showing your founding member status.' },
-              { icon: Gem, title: isArabic ? 'أسعار مدى الحياة' : 'Lifetime Pricing', desc: isArabic ? 'احتفظ بأسعار العضوية الحالية إلى الأبد — حتى مع زيادة الأسعار.' : 'Keep your current membership rates forever — even as prices increase.' },
-              { icon: Sparkles, title: isArabic ? 'مزايا حصرية' : 'Exclusive Benefits', desc: isArabic ? 'الوصول إلى الميزات المميزة عند إضافتها إلى المنصة.' : 'Access to premium features as they are added to the platform.' }
-            ].map((item) => (
-              <div key={item.title} className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/50 dark:bg-black/30 border border-amber-200/30 dark:border-amber-800/20 hover:border-amber-500/30 dark:hover:border-amber-500/20 transition-all duration-300 group">
-                <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/10 group-hover:bg-amber-500/20 transition-colors duration-300">
-                  <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400" strokeWidth={1.75} />
-                </div>
-                <div>
-                  <h5 className="font-semibold text-black dark:text-white text-xs sm:text-sm">{item.title}</h5>
-                  <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 mt-0.5">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-            <p className="text-[10px] sm:text-sm text-amber-700 dark:text-amber-300/80 text-center font-medium">
-              {isArabic 
-                ? 'مقتصرة على أول 1,000 عضو. قد تزيد الأسعار في المستقبل.'
-                : 'Limited to the first 1,000 members. Prices may increase in the future.'
-              }
-            </p>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  </div>
-</section>
+        <LaptopShowcase />
     </section>
   );
 };
 
 
 
-// FAQ Section - Smooth accordion animations
+// ============================================================================
+//  What Does TMMT Membership Include? – no Framer Motion
+// ============================================================================
+function MembershipSection() {
+  const { t } = useTranslation();
+  const [isArabic, setIsArabic] = useState(false);
+  useEffect(() => {
+    const checkLanguage = () => {
+      const lang = localStorage.getItem('i18nextLng');
+      const htmlLang = document.documentElement.lang;
+      setIsArabic(lang === 'ar' || lang === 'ar-AE' || htmlLang === 'ar' || htmlLang === 'ar-AE');
+    };
+    checkLanguage();
+    const handler = () => checkLanguage();
+    window.addEventListener('storage', handler);
+    window.addEventListener('languageChanged', handler);
+    return () => {
+      window.removeEventListener('storage', handler);
+      window.removeEventListener('languageChanged', handler);
+    };
+  }, []);
+
+  return (
+    <section className="relative py-16 sm:py-20 lg:py-28 bg-white dark:bg-black overflow-hidden">
+      {/* ambient glows */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/8 rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-[150px]" />
+      </div>
+
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" style={{
+        backgroundImage: `
+          linear-gradient(rgba(10,50,105,0.2) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10,50,105,0.2) 1px, transparent 1px)
+        `,
+        backgroundSize: '60px 60px'
+      }} />
+
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-14 lg:mb-20">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.05] tracking-[-0.02em] text-black dark:text-white" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <span className="font-bold text-[#1a1a1a] dark:text-white">
+                {isArabic ? 'ماذا تشمل عضوية' : 'What Does TMMT Membership'}
+              </span>
+              <br className="hidden sm:block" />
+              <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light">
+                {isArabic ? 'TMMT؟' : 'Include?'}
+              </span>
+            </h2>
+
+            <p className="mt-4 max-w-3xl mx-auto text-gray-500 dark:text-white/50 text-sm sm:text-base lg:text-[19px] leading-relaxed px-4 sm:px-0">
+              {isArabic 
+                ? 'تمنحك TMMT وصولاً مباشراً إلى خبراء لديهم سنوات من الخبرة في الإجراءات والخدمات الحكومية في الإمارات، مما يساعدك على اتخاذ القرارات الصحيحة قبل اتخاذ أي إجراء.'
+                : 'TMMT gives you direct access to specialists with years of experience in UAE government procedures and services, helping you make the right decisions before taking action.'
+              }
+            </p>
+          </div>
+
+          {/* Service Cards – pure CSS transitions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-7">
+            {[
+              {
+                icon: Shield,
+                title: isArabic ? 'الإقامة والتأشيرات' : 'Residency & Visas',
+                items: isArabic 
+                  ? ['إصدار التأشيرات والتجديدات والإلغاءات', 'تأشيرات السياحة والزيارة', 'كفالة العائلة', 'تحويل الكفالة', 'تتبع الطلبات', 'الغرامات والقيود']
+                  : ['Visa issuance, renewals & cancellations', 'Tourist & visit visas', 'Family sponsorship', 'Sponsorship transfers', 'Application tracking', 'Fines & restrictions'],
+                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+              },
+              {
+                icon: Landmark,
+                title: isArabic ? 'الهوية الإماراتية وجوازات السفر' : 'Emirates ID & Passports',
+                items: isArabic
+                  ? ['إصدار الهوية الإماراتية وتجديدها', 'تتبع الطلبات', 'تحديثات التوصيل', 'تجديد جوازات السفر والإرشاد']
+                  : ['Emirates ID issuance & renewals', 'Application tracking', 'Delivery updates', 'Passport renewals & guidance'],
+                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+              },
+              {
+                icon: Building2,
+                title: isArabic ? 'التراخيص التجارية والأعمال' : 'Business & Trade Licenses',
+                items: isArabic
+                  ? ['اختيار النشاط التجاري المناسب', 'اختيار الترخيص التجاري المناسب', 'فهم تكاليف التأسيس', 'مراجعات السلطات والتصاريح', 'بطاقات المنشأة', 'تغييرات الشركاء والموافقات']
+                  : ['Choosing the right business activity', 'Selecting the right trade license', 'Understanding setup costs', 'Authority & permission reviews', 'Establishment cards', 'Partner changes & approvals'],
+                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+              },
+              {
+                icon: Car,
+                title: isArabic ? 'المركبات والقيادة' : 'Vehicles & Driving',
+                items: isArabic
+                  ? ['شراء وبيع المركبات', 'نقل الملكية', 'التسجيل والتأمين والفحص', 'رخص القيادة', 'الإجراءات المرورية والغرامات']
+                  : ['Buying & selling vehicles', 'Ownership transfers', 'Registration, insurance & testing', 'Driving licenses', 'Traffic procedures & fines'],
+                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+              },
+              {
+                icon: Users2,
+                title: isArabic ? 'خدمات العائلة' : 'Family Services',
+                items: isArabic
+                  ? ['إجراءات الزواج', 'توثيق المستندات', 'الترجمة القانونية', 'طلبات العائلة والدعم']
+                  : ['Marriage procedures', 'Document attestation', 'Legal translation', 'Family applications & support'],
+                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+              },
+              {
+                icon: Briefcase,
+                title: isArabic ? 'التوظيف والقوى العاملة' : 'Employment & Workforce',
+                items: isArabic
+                  ? ['تصاريح العمل', 'كفالة الموظفين', 'العمالة المنزلية', 'إجراءات التوظيف']
+                  : ['Work permits', 'Employee sponsorship', 'Domestic workers', 'Employment procedures'],
+                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+              }
+            ].map((section, idx) => (
+              <div
+                key={section.title}
+                className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-7 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.15)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1"
+                style={{ transitionDelay: `${idx * 60}ms` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0A3269]/0 via-[#0A3269]/0 to-[#1A4A8A]/0 group-hover:from-[#0A3269]/5 group-hover:via-[#0A3269]/3 group-hover:to-[#1A4A8A]/5 transition-all duration-700" />
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0A3269] via-[#1A4A8A] to-[#0A3269] dark:from-[#4A8ABF] dark:via-[#4A8ABF] dark:to-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative">
+                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                    <div className="p-2.5 sm:p-3 rounded-xl bg-gray-100 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
+                    <section.icon className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
+                  </div>
+                  <h4 className="font-bold text-black dark:text-white text-sm sm:text-lg group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                    {section.title}
+                  </h4>
+                </div>
+                <ul className="space-y-1.5 sm:space-y-2">
+                  {section.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500 dark:text-white/50 group-hover:text-gray-600 dark:group-hover:text-white/70 transition-colors duration-300">
+                      <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF] shrink-0 mt-0.5" strokeWidth={2.5} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+          </div>
+
+          {/* Full Service + Smart Renewals - Premium Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8 sm:mt-10">
+            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
+              <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
+                  <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
+                </div>
+                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                  {isArabic ? 'معالجة الخدمة الكاملة' : 'Full Service Processing'}
+                </h4>
+              </div>
+              <p className="text-xs sm:text-base text-gray-500 dark:text-white/50 leading-relaxed">
+                {isArabic 
+                  ? 'إذا كنت تفضل عدم التعامل مع العملية بنفسك، يمكن لـ TMMT إكمال العملية بأكملها نيابة عنك مقابل رسوم الخدمة بالإضافة إلى الرسوم الحكومية.'
+                  : 'If you prefer not to handle the process yourself, TMMT can complete the entire process on your behalf for service fees plus government fees.'
+                }
+              </p>
+            </div>
+
+            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
+                  <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
+                </div>
+                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                  {isArabic ? 'تنبيهات التجديد الذكية' : 'Smart Renewal Alerts'}
+                </h4>
+              </div>
+              <p className="text-xs sm:text-base text-gray-500 dark:text-white/50 leading-relaxed mb-3">
+                {isArabic 
+                  ? 'تلقي تذكيرات عبر واتساب أو البريد الإلكتروني قبل انتهاء صلاحية:'
+                  : 'Receive reminders through WhatsApp or email before the expiry of:'
+                }
+              </p>
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                {isArabic 
+                  ? ['جوازات السفر', 'التأشيرات', 'الهوية الإماراتية', 'الرخص التجارية', 'بطاقات المنشأة', 'تصاريح العمل', 'رخص القيادة', 'تسجيلات المركبات']
+                  : ['Passports', 'Visas', 'Emirates IDs', 'Trade licenses', 'Establishment cards', 'Work permits', 'Driving licenses', 'Vehicle registrations']
+                .map((item) => (
+                  <span 
+                    key={item} 
+                    className="text-[9px] sm:text-xs font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 dark:bg-[#4A8ABF]/10 text-black dark:text-white border border-gray-200 dark:border-[#4A8ABF]/20 group-hover:border-[#0A3269]/30 dark:group-hover:border-[#4A8ABF]/30 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 transition-all duration-300"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* How Can TMMT Help You? - Premium */}
+          <div className="mt-8 sm:mt-10 relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-8 lg:p-10 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
+            <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl" />
+            <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-[#0A3269]/3 dark:bg-[#4A8ABF]/3 blur-3xl" />
+            <div className="relative">
+              <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 shadow-md shadow-[#0A3269]/10 dark:shadow-[#4A8ABF]/10">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.75} />
+                </div>
+                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
+                  {isArabic ? 'كيف يمكن لـ' : 'How Can'} <span className="text-[#0A3269] dark:text-[#4A8ABF]">TMMT</span> {isArabic ? 'مساعدتك؟' : 'Help You?'}
+                </h4>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+                {isArabic 
+                  ? ['تجنب غرامات التجديد المتأخرة', 'تجنب اختيار تأسيس الأعمال الخاطئ', 'تجنب التكاليف والرسوم غير الضرورية', 'تجنب الأخطاء المكلفة في الإجراءات الحكومية', 'توفير الوقت والجهد', 'اتخاذ قرارات مستنيرة بثقة قبل اتخاذ أي إجراء']
+                  : ['Avoid late renewal fines', 'Avoid choosing the wrong business setup', 'Avoid unnecessary costs and fees', 'Avoid costly mistakes in government procedures', 'Save time and effort', 'Make informed decisions with confidence before taking action']
+                .map((text) => (
+                  <div key={text} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-white/60 p-2.5 sm:p-3 rounded-xl bg-gray-50/80 dark:bg-[#4A8ABF]/5 border border-gray-100 dark:border-[#4A8ABF]/10 hover:bg-[#0A3269]/5 dark:hover:bg-[#4A8ABF]/10 hover:border-[#0A3269]/20 dark:hover:border-[#4A8ABF]/20 transition-all duration-300 group">
+                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF] shrink-0 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
+                    <span>{text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+
+// FAQ Section - Smooth accordion animations (pure CSS)
 const FAQSection = () => {
   const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -2685,11 +2462,10 @@ const FAQSection = () => {
     <section ref={containerRef} className="relative py-20 sm:py-28 md:py-32 bg-background border-t-2 border-x-2 border-primary/20 rounded-t-[2rem]">
       <div className="container mx-auto px-4">
         {/* Headline - Consistent styling */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12 sm:mb-16 md:mb-20"
+        <div
+          className={`mb-12 sm:mb-16 md:mb-20 transition-all duration-700 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
           <div
             className="text-[5rem] -mt-4 -tracking-[6px] sm:text-[5rem] md:text-[5rem] lg:text-[5rem] font-medium text-foreground leading-tight"
@@ -2698,18 +2474,15 @@ const FAQSection = () => {
             {t('faq.headline')}{' '}
             <span className="text-primary">{t('faq.headlineHighlight')}</span>
           </div>
-        </motion.div>
+        </div>
 
         {/* FAQ Items */}
         <div className="max-w-4xl mx-auto space-y-4">
           {faqItems.map((item, index) => (
-            <motion.div
+            <div
               key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="border-b border-border/50"
+              className="border-b border-border/50 transition-all duration-500"
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
@@ -2721,32 +2494,24 @@ const FAQSection = () => {
                 >
                   {item.question}
                 </div>
-                <motion.div
-                  animate={{ rotate: openIndex === index ? 45 : 0 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${openIndex === index ? 'bg-foreground text-background' : 'bg-border text-foreground'
+                <div
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${openIndex === index ? 'bg-foreground text-background rotate-45' : 'bg-border text-foreground'
                     }`}
                 >
                   <span className="text-xl sm:text-2xl font-light">+</span>
-                </motion.div>
+                </div>
               </button>
 
-              <AnimatePresence>
-                {openIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <p className="pb-6 sm:pb-8 text-text-secondary text-base sm:text-lg leading-relaxed max-w-3xl">
-                      {item.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+              <div
+                className={`overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  openIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <p className="pb-6 sm:pb-8 text-text-secondary text-base sm:text-lg leading-relaxed max-w-3xl">
+                  {item.answer}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -2754,7 +2519,7 @@ const FAQSection = () => {
   );
 };
 
-// Email Capture Section - Modern, Premium Design
+// Email Capture Section - Modern, Premium Design (no Framer Motion)
 const EmailCapture = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
@@ -2961,12 +2726,7 @@ return (
       }} />
 
       <div className="container mx-auto px-0 sm:px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
-        >
+        <div className="relative">
           {/* Main Card - Clean */}
           <div className="relative rounded-3xl sm:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-white dark:bg-[#0A0A0F] shadow-2xl shadow-[#0A3269]/5 dark:shadow-[#4A8ABF]/10">
             
@@ -2986,12 +2746,7 @@ return (
               
               {/* ─── Right - Video (Shows FIRST on mobile) ────────────── */}
               <div className="flex-1 w-full lg:w-auto order-1 lg:order-2">
-                <motion.div
-                  initial={{ opacity: 0, x: 50, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                  className="relative max-w-md mx-auto lg:ml-auto w-full"
-                >
+                <div className="relative max-w-md mx-auto lg:ml-auto w-full">
                   {/* Video Card - Clickable */}
                   <div 
                     className="relative rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-[#4A8ABF]/20 shadow-xl shadow-[#0A3269]/5 dark:shadow-[#4A8ABF]/10 bg-black w-full h-[200px] sm:h-[200px] md:h-[380px] lg:h-[550px] xl:h-[650px] cursor-pointer group"
@@ -3014,7 +2769,7 @@ return (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-2xl transition-transform duration-300 group-hover:scale-110">
                         <Play className="h-8 w-8 sm:h-10 sm:w-10 text-white ml-1" strokeWidth={2.5} />
-                      </div>
+                      </div>  
                     </div>
                     
                     {/* Sound Toggle Button - Shows on hover */}
@@ -3056,18 +2811,13 @@ return (
                       </span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
 
               {/* ─── Left - Content (Shows SECOND on mobile) ──────────── */}
               <div className="flex-1 max-w-3xl order-2 lg:order-1">
-         
-
                 {/* Heading - Clean */}
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
+                <h1
                   className="
                     font-black
                     leading-[1.05]
@@ -3088,13 +2838,10 @@ return (
                   <span className="block mt-1 sm:mt-2 text-[#0A3269] dark:text-[#4A8ABF] font-bold">
                     {lang.headingHighlight}
                   </span>
-                </motion.h1>
+                </h1>
 
                 {/* Description */}
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
+                <p
                   className="
                     mt-3 sm:mt-4
                     max-w-xl
@@ -3107,15 +2854,10 @@ return (
                   "
                 >
                   {lang.description}
-                </motion.p>
+                </p>
 
                 {/* Email Capture Form */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.6 }}
-                  className="mt-6 sm:mt-8 w-full max-w-lg"
-                >
+                <div className="mt-6 sm:mt-8 w-full max-w-lg">
                   <div className="flex flex-col sm:flex-row items-stretch gap-3">
 
                     {/* Modern Email Input - Clean */}
@@ -3165,9 +2907,7 @@ return (
                     </div>
 
                 {/* CTA Button - Clean */}
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
+                <button
                   className="
                     group
                     relative
@@ -3185,6 +2925,7 @@ return (
                     bg-[#0A3269] dark:bg-[#4A8ABF]
                     hover:bg-[#1A4A8A] dark:hover:bg-[#4A8ABF]/80
                     shadow-lg shadow-[#0A3269]/25 dark:shadow-[#4A8ABF]/25
+                    hover:scale-105 active:scale-95
                   "
                 >
                   {/* Shimmer Effect */}
@@ -3194,7 +2935,7 @@ return (
                     {lang.cta}
                     <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
-                </motion.button>
+                </button>
                   </div>
 
                   {/* Terms */}
@@ -3209,60 +2950,51 @@ return (
                     </a>
                     . {lang.unsubscribe}
                   </p>
-                </motion.div>
+                </div>
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
 
       {/* ─── FULLSCREEN VIDEO MODAL ────────────────────────────────────── */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
-            onClick={closeModal}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
+          onClick={closeModal}
+        >
+          <div
+            ref={modalContainerRef}
+            className="relative w-full h-full bg-black"
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              ref={modalContainerRef}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full h-full bg-black"
-              onClick={(e) => e.stopPropagation()}
+            {/* Video - Fullscreen */}
+            <video
+              ref={modalVideoRef}
+              className="w-full h-full object-contain"
+              src="/images/laptop/sufiyan.mp4"
+              controls
+              autoPlay
+              playsInline
+              controlsList="nodownload"
+            />
+
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all duration-300 hover:scale-110 z-20 border border-white/20"
             >
-              {/* Video - Fullscreen */}
-              <video
-                ref={modalVideoRef}
-                className="w-full h-full object-contain"
-                src="/images/laptop/sufiyan.mp4"
-                controls
-                autoPlay
-                playsInline
-                controlsList="nodownload"
-              />
+              <X className="h-6 w-6" />
+            </button>
 
-              {/* Close Button */}
-              <button
-                onClick={closeModal}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all duration-300 hover:scale-110 z-20 border border-white/20"
-              >
-                <X className="h-6 w-6" />
-              </button>
-
-              {/* Exit fullscreen hint */}
-              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/40 text-xs bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 pointer-events-none">
-                Press ESC or click ✕ to exit
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {/* Exit fullscreen hint */}
+            <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/40 text-xs bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 pointer-events-none">
+              Press ESC or click ✕ to exit
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
@@ -3332,18 +3064,56 @@ const TammatFooter = () => {
                   {t('footer.socialMedia.twitter')}
                 </a>
               </li>
-              <li>
-                <a 
-                  href="https://www.instagram.com/tmmt.ae?igsh=MWZtaHdwZjZwbjFhZg%3D%3D&utm_source=qr" 
-                  className="text-background/70 hover:text-primary transition-colors flex items-center gap-2.5 group"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Instagram className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  {t('footer.socialMedia.instagram')}
-                </a>
-              </li>
-         
+            <li>
+  <a 
+    href="https://www.instagram.com/tmmt.ae?igsh=MWZtaHdwZjZwbjFhZg%3D%3D&utm_source=qr" 
+    className="text-background/70 hover:text-primary transition-colors flex items-center gap-2.5 group"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Instagram className="w-4 h-4 group-hover:scale-110 transition-transform" />
+    {t('footer.socialMedia.instagram')}
+  </a>
+</li>
+{/* ✅ WhatsApp Channel */}
+<li>
+  <a 
+    href="https://whatsapp.com/channel/0029Vb8cSN6Fy72JAZVR0R0M" 
+    className="text-background/70 hover:text-primary transition-colors flex items-center gap-2.5 group"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <svg 
+      className="w-4 h-4 group-hover:scale-110 transition-transform" 
+      viewBox="0 0 24 24" 
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    WhatsApp 
+  </a>
+</li>
+
+{/* ✅ Facebook - New */}
+<li>
+  <a 
+    href="https://www.facebook.com/share/1L9cTPxZ88/?mibextid=wwXIfr" 
+    className="text-background/70 hover:text-primary transition-colors flex items-center gap-2.5 group"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <svg 
+      className="w-4 h-4 group-hover:scale-110 transition-transform" 
+      viewBox="0 0 24 24" 
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+    </svg>
+    Facebook
+  </a>
+</li>
               <li>
                 <a 
                   href="https://www.tiktok.com/@tmmt.ae" 
@@ -3362,16 +3132,7 @@ const TammatFooter = () => {
 
       {/* Animated TAMMAT Text - Clip with gradient */}
       <div className="relative overflow-hidden py-8 border-t border-background/10">
-        <motion.div
-          initial={{ x: '0%' }}
-          animate={{ x: '-50%' }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'linear'
-          }}
-          className="flex whitespace-nowrap"
-        >
+        <div className="flex whitespace-nowrap animate-scroll-text">
           {[...Array(4)].map((_, i) => (
             <span
               key={i}
@@ -3387,7 +3148,7 @@ const TammatFooter = () => {
               TMMT
             </span>
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Copyright */}
@@ -3759,7 +3520,7 @@ const LogoMarquee = () => {
       onMouseEnter={() => setPausedRow(rowId)}
       onMouseLeave={() => setPausedRow(null)}
     >
-      <div className="bg-background/5 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 backdrop-blur-xl sm:h-24 sm:w-24 lg:h-28 lg:w-28">
+      <div className="bg-background/5 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 backdrop-blur-xl sm:h-24 sm:w-24 lg:h-28 lg:w-28 transition-transform duration-300 hover:scale-110">
         {logo.image ? (
           <div className="relative flex h-16 w-16 items-center justify-center rounded-full sm:h-20 sm:w-20 lg:h-24 lg:w-24">
             <img
@@ -3811,7 +3572,7 @@ const LogoMarquee = () => {
           {/* First Row - Scrolling Right */}
           <div className="mb-6 flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
             <div
-              className={`animate-scroll-right flex whitespace-nowrap ${pausedRow === 'first' ? 'animation-play-state-paused' : ''}`}
+              className={`flex whitespace-nowrap animate-scroll-right ${pausedRow === 'first' ? 'animation-play-state-paused' : ''}`}
               style={{
                 animationPlayState:
                   pausedRow === 'first' ? 'paused' : 'running',
@@ -3868,10 +3629,10 @@ const serviceData = [
 ];
 
 
-// Modern Laptop Showcase - Clean Images Only with Pause/Play
+// Modern Laptop Showcase - Clean Images Only with Pause/Play (no Framer Motion)
 const LaptopShowcase = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const isInView = useInView({ threshold: 0.2 });
   const [activeScreen, setActiveScreen] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [showPauseIcon, setShowPauseIcon] = useState(false);
@@ -4024,45 +3785,10 @@ const LaptopShowcase = () => {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card/10" />
         
-        {/* Animated Orbs */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-1/4 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-2xl sm:blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-          className="absolute bottom-1/4 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-2xl sm:blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl"
-        />
+        {/* Animated Orbs - pure CSS */}
+        <div className="absolute top-1/4 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-2xl sm:blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-1/4 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-2xl sm:blur-3xl animate-pulse-slower" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl animate-pulse-slowest" />
         
         <div 
           className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
@@ -4079,14 +3805,11 @@ const LaptopShowcase = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Header with Smooth Reveal */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-12 sm:mb-16 md:mb-20"
+        <div
+          className={`text-center mb-12 sm:mb-16 md:mb-20 transition-all duration-700 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
-     
-
           <h2 
             className="font-bold text-black dark:text-white leading-[1.05] tracking-tight"
             style={{
@@ -4125,48 +3848,28 @@ const LaptopShowcase = () => {
               : 'Experience seamless visa processing with our intuitive platform'
             }
           </p>
-        </motion.div>
+        </div>
 
         {/* Modern Laptop Mockup with Smooth Animations */}
-        <motion.div
-          initial={{ opacity: 0, y: 60, scale: 0.95 }}
-          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="relative max-w-6xl mx-auto"
+        <div
+          className={`relative max-w-6xl mx-auto transition-all duration-900 delay-200 ${
+            isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
+          }`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           {/* Glow Effect Behind Laptop */}
-          <motion.div
-            animate={{
-              opacity: [0.4, 0.7, 0.4],
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute -inset-6 sm:-inset-10 bg-gradient-to-r from-primary/20 dark:from-primary/30 via-transparent to-purple-500/20 dark:to-purple-500/30 blur-2xl sm:blur-3xl opacity-50 dark:opacity-70"
-          />
+          <div className="absolute -inset-6 sm:-inset-10 bg-gradient-to-r from-primary/20 dark:from-primary/30 via-transparent to-purple-500/20 dark:to-purple-500/30 blur-2xl sm:blur-3xl opacity-50 dark:opacity-70 animate-pulse-slow" />
 
           {/* Laptop Frame */}
-          <motion.div
-            whileHover={{ y: -4 }}
-            transition={{ duration: 0.3 }}
-            className="relative"
-          >
+          <div className="relative transition-all duration-300 hover:-translate-y-1">
             {/* Premium Bezel */}
             <div className="relative bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-950 rounded-xl sm:rounded-2xl md:rounded-3xl p-1.5 sm:p-2 md:p-3 shadow-2xl shadow-black/50 dark:shadow-black/70">
               {/* Top Bar with Camera */}
               <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-10">
                 <div className="w-2 h-2 sm:w-2.5 md:w-3 bg-neutral-700 rounded-full border border-neutral-600/50 dark:border-neutral-600/30">
                   <div className="absolute inset-0 m-auto w-0.5 h-0.5 sm:w-1 sm:h-1 bg-neutral-500 rounded-full" />
-                  <motion.div
-                    animate={{ scale: [1, 1.5, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute -inset-1 bg-primary/30 rounded-full blur-sm"
-                  />
+                  <div className="absolute -inset-1 bg-primary/30 rounded-full blur-sm animate-pulse" />
                 </div>
                 <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-green-400 animate-pulse" />
               </div>
@@ -4176,87 +3879,43 @@ const LaptopShowcase = () => {
                 className="relative bg-black rounded-lg sm:rounded-xl md:rounded-3xl overflow-hidden aspect-[16/11] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/9] cursor-pointer group"
                 onClick={handleScreenClick}
               >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeScreen}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ 
-                      duration: 0.7, 
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className="absolute inset-0"
-                  >
-                    {/* Full Width Image with Smooth Zoom Effect */}
-                    <motion.div 
-                      className="w-full h-full flex items-center justify-center bg-black/5 p-0 sm:p-1 md:p-1.5 lg:p-2"
-                    >
-                      <div className="relative w-full h-full rounded-none sm:rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden">
-                        <img
-                          src={screens[activeScreen].image}
-                          alt={`Screenshot ${activeScreen + 1}`}
-                          className="w-full h-full object-center transition-transform duration-700 group-"
-                          loading="lazy"
-                        />
-                        {/* Subtle Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </AnimatePresence>
+                <div className="absolute inset-0 transition-opacity duration-700">
+                  <div className="w-full h-full flex items-center justify-center bg-black/5 p-0 sm:p-1 md:p-1.5 lg:p-2">
+                    <div className="relative w-full h-full rounded-none sm:rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden">
+                      <img
+                        src={screens[activeScreen].image}
+                        alt={`Screenshot ${activeScreen + 1}`}
+                        className="w-full h-full object-center transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+                  </div>
+                </div>
 
                 {/* Pause/Play Status */}
-                <AnimatePresence>
-                  {isPaused && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                      transition={{ duration: 0.3 }}
-                      className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
-                    >
-                      <span className="text-white text-[10px] sm:text-xs font-medium bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5 shadow-lg">
-                        <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={2} />
-                        Paused
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {isPaused && (
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
+                    <span className="text-white text-[10px] sm:text-xs font-medium bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5 shadow-lg">
+                      <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={2} />
+                      Paused
+                    </span>
+                  </div>
+                )}
 
                 {/* Tap/Click Hint */}
                 {!isPaused && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                    className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
-                  >
-                    <motion.span
-                      animate={{ opacity: [0.3, 0.7, 0.3] }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                      className="text-white/40 text-[8px] sm:text-[9px] font-medium bg-black/30 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/5 flex items-center gap-1.5"
-                    >
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                    <span className="text-white/40 text-[8px] sm:text-[9px] font-medium bg-black/30 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/5 flex items-center gap-1.5 animate-pulse">
                       Click to pause
-                    </motion.span>
-                  </motion.div>
+                    </span>
+                  </div>
                 )}
 
                 {/* Screen Glare Effect */}
-                <motion.div
-                  animate={{
-                    opacity: [0, 0.05, 0],
-                    rotate: [0, 5, 0],
-                  }}
-                  transition={{
-                    duration: 8,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute inset-0 pointer-events-none rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden"
-                >
+                <div className="absolute inset-0 pointer-events-none rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden animate-glare">
                   <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-white/5 via-transparent to-transparent rotate-12" />
-                </motion.div>
+                </div>
               </div>
 
               {/* Screen Reflection - Subtle */}
@@ -4272,8 +3931,8 @@ const LaptopShowcase = () => {
                 <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 -translate-x-1/2 w-10 sm:w-16 h-0.5 sm:h-1 bg-neutral-800/50 rounded-full blur-sm" />
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
       
       </div>
@@ -4282,11 +3941,12 @@ const LaptopShowcase = () => {
 };
 
 
-// 7 Emirates Section with smooth reveal animation like goodhand.ae
+
+// 7 Emirates Section with smooth reveal animation like goodhand.ae (pure CSS)
 const EmiratesSection = () => {
   const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
+  const isInView = useInView({ threshold: 0.15 });
   const [hoveredEmirate, setHoveredEmirate] = useState<string | null>(null);
 
   const emirates = [
@@ -4341,35 +4001,6 @@ const EmiratesSection = () => {
     }
   ];
 
-  // Stagger animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: 60,
-      scale: 0.9
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
   return (
     <section
       ref={sectionRef}
@@ -4377,67 +4008,45 @@ const EmiratesSection = () => {
     >
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={isInView ? { opacity: 0.5, scale: 1 } : {}}
-          transition={{ duration: 1.5 }}
-          className="absolute -top-32 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
-        />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={isInView ? { opacity: 0.5, scale: 1 } : {}}
-          transition={{ duration: 1.5, delay: 0.3 }}
-          className="absolute -bottom-32 -left-32 w-80 h-80 bg-accent/5 rounded-full blur-3xl"
-        />
+        <div className={`absolute -top-32 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl transition-all duration-1500 ${isInView ? 'opacity-50 scale-100' : 'opacity-0 scale-90'}`} />
+        <div className={`absolute -bottom-32 -left-32 w-80 h-80 bg-accent/5 rounded-full blur-3xl transition-all duration-1500 delay-300 ${isInView ? 'opacity-50 scale-100' : 'opacity-0 scale-90'}`} />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Header with smooth reveal */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-12 md:mb-20"
+        <div
+          className={`text-center mb-12 md:mb-20 transition-all duration-700 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
+          <span
             className="inline-block font-poppins text-sm md:text-base font-medium text-primary mb-4 px-4 py-1.5 bg-primary/10 rounded-full"
           >
             🇦🇪 {t('emirates.subheadline')}
-          </motion.span>
+          </span>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <div
             className="font-poppins tracking-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-foreground mb-4"
           >
             {t('emirates.headline')}
             <br />
             <span className="text-primary">{t('emirates.headlineHighlight')}</span>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Emirates Grid with staggered reveal */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6"
-        >
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {emirates.map((emirate, index) => (
-            <motion.div
+            <div
               key={emirate.id}
-              variants={itemVariants}
+              className={`group relative cursor-pointer transition-all duration-700 ${index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''} ${
+                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+              }`}
+              style={{ transitionDelay: `${index * 100}ms` }}
               onMouseEnter={() => setHoveredEmirate(emirate.id)}
               onMouseLeave={() => setHoveredEmirate(null)}
-              className={`relative group cursor-pointer ${index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''
-                }`}
             >
-              <div className={`relative overflow-hidden rounded-2xl md:rounded-3xl ${index === 0 ? 'aspect-square' : 'aspect-[4/3]'
-                } shadow-lg hover:shadow-2xl transition-all duration-500`}>
+              <div className={`relative overflow-hidden rounded-2xl md:rounded-3xl ${index === 0 ? 'aspect-square' : 'aspect-[4/3]'} shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1`}>
                 {/* Image */}
                 <img
                   src={emirate.image}
@@ -4454,55 +4063,39 @@ const EmiratesSection = () => {
 
                 {/* Content */}
                 <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
-                  <motion.div
-                    animate={{
-                      y: hoveredEmirate === emirate.id ? -8 : 0
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {/* <span className="text-2xl md:text-3xl mb-2 block">
-                      {emirate.icon}
-                    </span> */}
-                    <h3 className={`font-poppins font-semibold text-white ${index === 0 ? 'text-xl md:text-3xl' : 'text-base md:text-xl'
-                      }`}>
+                  <div className="transition-all duration-300" style={{ transform: hoveredEmirate === emirate.id ? 'translateY(-8px)' : 'translateY(0)' }}>
+                    <h3 className={`font-poppins font-semibold text-white ${index === 0 ? 'text-xl md:text-3xl' : 'text-base md:text-xl'}`}>
                       {emirate.name}
                     </h3>
-                  </motion.div>
+                  </div>
 
                   {/* Hover indicator */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{
-                      opacity: hoveredEmirate === emirate.id ? 1 : 0,
-                      y: hoveredEmirate === emirate.id ? 0 : 10
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-2 md:mt-3"
+                  <div
+                    className={`mt-2 md:mt-3 transition-all duration-300 ${
+                      hoveredEmirate === emirate.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                    }`}
                   >
                     <span className="font-tajawal text-sm text-white/90 flex items-center gap-1">
                       Explore services <ArrowRightIcon className="w-4 h-4" />
                     </span>
-                  </motion.div>
+                  </div>
                 </div>
 
                 {/* Shine effect on hover */}
-                <motion.div
-                  initial={{ x: '-100%', opacity: 0 }}
-                  animate={{
-                    x: hoveredEmirate === emirate.id ? '200%' : '-100%',
-                    opacity: hoveredEmirate === emirate.id ? 0.3 : 0
-                  }}
-                  transition={{ duration: 0.6 }}
-                  className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-white to-transparent skew-x-12"
+                <div
+                  className={`absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-white to-transparent skew-x-12 transition-all duration-600 ${
+                    hoveredEmirate === emirate.id ? 'translate-x-[200%] opacity-30' : '-translate-x-full opacity-0'
+                  }`}
                 />
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 };
+
 
 
 const Hero = () => {
@@ -4575,7 +4168,7 @@ const Hero = () => {
 };
 
   /**
-  header sectiion 
+  header section 
   */
   export function SiteHeader() {
     const { t } = useTranslation();
@@ -4622,453 +4215,425 @@ const Hero = () => {
   ];
 
     return (
-    <motion.header
-    initial={false}
-    animate={{ y: hidden ? '-110%' : '0%' }}
-    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-    className="sticky top-0 z-50 p-4"
-  >
-    <div className="container mx-auto max-w-6xl">
-      <motion.div
-        animate={{
-          boxShadow: scrolled
-            ? '0 8px 32px -12px rgba(0,0,0,0.25)'
-            : '0 2px 8px rgba(0,0,0,0.06)',
-        }}
-        transition={{ duration: 0.3 }}
-        className={`
-          relative flex h-14 items-center justify-between rounded-full px-5
-          border transition-all duration-300
-          backdrop-blur-2xl backdrop-saturate-150
-          bg-white/70 dark:bg-black/60
-          border-black/10 dark:border-white/10
-          ${scrolled ? 'bg-white/90 dark:bg-black/80' : ''}
-          shadow-sm shadow-black/5 dark:shadow-white/5
-        `}
-      >
-        {/* subtle top highlight for glass realism */}
-        <span className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/60 dark:via-white/10 to-transparent" />
+    <header className="sticky top-0 z-50 p-4 transition-transform duration-350 ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ transform: hidden ? 'translateY(-110%)' : 'translateY(0)' }}>
+      <div className="container mx-auto max-w-6xl">
+        <div
+          className={`
+            relative flex h-14 items-center justify-between rounded-full px-5
+            border transition-all duration-300
+            backdrop-blur-2xl backdrop-saturate-150
+            bg-white/70 dark:bg-black/60
+            border-black/10 dark:border-white/10
+            ${scrolled ? 'bg-white/90 dark:bg-black/80 shadow-lg shadow-black/10 dark:shadow-white/10' : 'shadow-sm shadow-black/5 dark:shadow-white/5'}
+          `}
+        >
+          {/* subtle top highlight for glass realism */}
+          <span className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/60 dark:via-white/10 to-transparent" />
 
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-  <img 
-    src={TammatLogoWhite} 
-    alt="Tammat logo" 
-    width={30} 
-    height={30} 
-    className="h-15 w-10 dark:brightness-0 dark:invert" 
-  />    
-      <span className="text-black dark:text-white font-semibold tracking-wide">TMMT</span>
+          {/* Brand Logo */}
+          <Link to="/" className="flex items-center gap-2 shrink-0">
+            <img 
+              src={TammatLogoWhite} 
+              alt="Tammat logo" 
+              width={30} 
+              height={30} 
+              className="h-15 w-10 dark:brightness-0 dark:invert" 
+            />    
+            <span className="text-black dark:text-white font-semibold tracking-wide">TMMT</span>
+          </Link>
+    {/* Desktop Nav — without Icons */}
+    <nav className="hidden items-center gap-1 text-sm md:flex">
+      {links.map((l) => (
+        <Link
+          key={l.href}
+          to={l.href}
+          className="
+            group relative px-4 py-2 rounded-full font-medium
+            text-gray-700 dark:text-gray-300
+            hover:text-black dark:hover:text-white
+            hover:bg-gray-100/50 dark:hover:bg-white/10
+            transition-all duration-200
+          "
+        >
+          {l.label}
         </Link>
-  {/* Desktop Nav — without Icons */}
-  <nav className="hidden items-center gap-1 text-sm md:flex">
-    {links.map((l) => (
-      <Link
-        key={l.href}
-        to={l.href}
-        className="
-          group relative px-4 py-2 rounded-full font-medium
-          text-gray-700 dark:text-gray-300
-          hover:text-black dark:hover:text-white
-          hover:bg-gray-100/50 dark:hover:bg-white/10
-          transition-all duration-200
-        "
-      >
-        {l.label}
-      </Link>
-    ))}
-    
-    {/* Dashboard Link in Desktop Nav */}
-    {user && (
-      <Link
-        to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
-        className="
-          group relative px-4 py-2 rounded-full font-medium
-          text-gray-700 dark:text-gray-300
-          hover:text-black dark:hover:text-white
-          hover:bg-gray-100/50 dark:hover:bg-white/10
-          transition-all duration-200
-        "
-      >
-        Dashboard
-      </Link>
-    )}
-  </nav>
-
-        {/* Desktop Actions */}
-        <div className="hidden items-center gap-2.5 md:flex">
-    {/* Apply CTA — Premium Dark Blue */}
-  <motion.button
-    whileHover={{ scale: 1.03, y: -1 }}
-    whileTap={{ scale: 0.97 }}
-    onClick={() => setShowStartApplication(true)}
-    className="
-      group relative overflow-hidden rounded-full
-      bg-[#0A3269] dark:bg-white
-      px-6 py-2.5 font-semibold text-sm
-      text-white dark:text-[#0A3269]
-      shadow-lg shadow-[#0A3269]/25 dark:shadow-white/10
-      transition-all duration-300
-      hover:shadow-xl hover:shadow-[#0A3269]/35 dark:hover:shadow-white/20
-      hover:bg-[#1a4a7a] dark:hover:bg-gray-100
-    "
-  >
-    <span className="relative z-10 flex items-center gap-1.5">
-      <Rocket className="h-3.5 w-3.5 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-      {t('hero.cta', 'Apply Now')}
-    </span>
-    <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
-  </motion.button>
-
-          {/* Dashboard icon */}
-          {user && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full hover:bg-gray-100/50 dark:hover:bg-white/10 text-black dark:text-white"
-              onClick={() => navigate(user.role === 'amer' ? '/amer-dashboard' : '/user/dashboard')}
-              aria-label={t('header.dashboard')}
-            >
-              <span className="sr-only">{t('header.profile')}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A9 9 0 1112 21a8.963 8.963 0 01-6.879-3.196z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </Button>
-          )}
-
-      {/* Theme toggle — Clean */}
-  <motion.button
-    onClick={toggleTheme}
-    whileTap={{ scale: 0.94 }}
-    className="
-      relative flex h-9 items-center gap-2 rounded-full border pr-2 pl-2
-      transition-all duration-300
-      bg-gray-100/50 dark:bg-white/5
-      border-gray-200 dark:border-white/10
-      hover:border-gray-300 dark:hover:border-white/20
-    "
-    aria-label="Toggle theme"
-  >
-    <motion.span
-      layout
-      transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-      className={`flex h-7 w-7 items-center justify-center rounded-full ${isLight ? 'bg-gray-200' : 'bg-white/10'}`}
-    >
-      {isLight ? (
-        <Sun className="h-4 w-4 text-black dark:text-white" />
-      ) : (
-        <Moon className="h-4 w-4 text-black dark:text-white" />
+      ))}
+      
+      {/* Dashboard Link in Desktop Nav */}
+      {user && (
+        <Link
+          to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
+          className="
+            group relative px-4 py-2 rounded-full font-medium
+            text-gray-700 dark:text-gray-300
+            hover:text-black dark:hover:text-white
+            hover:bg-gray-100/50 dark:hover:bg-white/10
+            transition-all duration-200
+          "
+        >
+          Dashboard
+        </Link>
       )}
-    </motion.span>
-  </motion.button>
+    </nav>
 
-          {/* Auth button — Clean */}
-          {user ? (
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => {
-                signOut();
-                navigate("/");
-              }}
-              className="
-                group
-                flex
-                items-center
-                gap-2
-                rounded-full
-                px-5
-                py-2.5
-                text-sm
-                font-semibold
-                border
-                transition-all
-                duration-300
-                bg-white dark:bg-black
-                text-black dark:text-white
-                border-gray-200 dark:border-white/10
-                hover:border-red-300 dark:hover:border-red-500/30
-                hover:bg-red-50 dark:hover:bg-red-900/20
+          {/* Desktop Actions */}
+          <div className="hidden items-center gap-2.5 md:flex">
+      {/* Apply CTA — Premium Dark Blue */}
+    <button
+      onClick={() => setShowStartApplication(true)}
+      className="
+        group relative overflow-hidden rounded-full
+        bg-[#0A3269] dark:bg-white
+        px-6 py-2.5 font-semibold text-sm
+        text-white dark:text-[#0A3269]
+        shadow-lg shadow-[#0A3269]/25 dark:shadow-white/10
+        transition-all duration-300
+        hover:shadow-xl hover:shadow-[#0A3269]/35 dark:hover:shadow-white/20
+        hover:bg-[#1a4a7a] dark:hover:bg-gray-100
+        hover:scale-105 active:scale-95
+      "
+    >
+      <span className="relative z-10 flex items-center gap-1.5">
+        <Rocket className="h-3.5 w-3.5 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        {t('hero.cta', 'Apply Now')}
+      </span>
+      <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
+    </button>
+
+            {/* Dashboard icon */}
+            {user && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full hover:bg-gray-100/50 dark:hover:bg-white/10 text-black dark:text-white"
+                onClick={() => navigate(user.role === 'amer' ? '/amer-dashboard' : '/user/dashboard')}
+                aria-label={t('header.dashboard')}
+              >
+                <span className="sr-only">{t('header.profile')}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A9 9 0 1112 21a8.963 8.963 0 01-6.879-3.196z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </Button>
+            )}
+
+        {/* Theme toggle — Clean */}
+        <button
+          onClick={toggleTheme}
+          className="
+            relative flex h-9 items-center gap-2 rounded-full border pr-2 pl-2
+            transition-all duration-300
+            bg-gray-100/50 dark:bg-white/5
+            border-gray-200 dark:border-white/10
+            hover:border-gray-300 dark:hover:border-white/20
+            hover:scale-105 active:scale-95
+          "
+          aria-label="Toggle theme"
+        >
+          <span className={`flex h-7 w-7 items-center justify-center rounded-full ${isLight ? 'bg-gray-200' : 'bg-white/10'}`}>
+            {isLight ? (
+              <Sun className="h-4 w-4 text-black dark:text-white" />
+            ) : (
+              <Moon className="h-4 w-4 text-black dark:text-white" />
+            )}
+          </span>
+        </button>
+
+            {/* Auth button — Clean */}
+            {user ? (
+              <button
+                onClick={() => {
+                  signOut();
+                  navigate("/");
+                }}
+                className="
+                  group
+                  flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  px-5
+                  py-2.5
+                  text-sm
+                  font-semibold
+                  border
+                  transition-all
+                  duration-300
+                  bg-white dark:bg-black
+                  text-black dark:text-white
+                  border-gray-200 dark:border-white/10
+                  hover:border-red-300 dark:hover:border-red-500/30
+                  hover:bg-red-50 dark:hover:bg-red-900/20
+                  hover:scale-105 active:scale-95
+                "
+              >
+                <LogOut className="h-4 w-4 text-black dark:text-white transition-transform duration-300 group-hover:translate-x-0.5" />
+                {t("header.signOut")}
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/auth")}
+                className="
+                  group
+                  flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  px-5
+                  py-2.5
+                  text-sm
+                  font-semibold
+                  border
+                  transition-all
+                  duration-300
+                bg-black dark:bg-white
+                text-white dark:text-black
+                border-gray-800 dark:border-white/20
+                hover:bg-gray-800 dark:hover:bg-gray-100
+                hover:border-gray-700 dark:hover:border-white/30
+                hover:scale-105 active:scale-95
               "
             >
-              <LogOut className="h-4 w-4 text-black dark:text-white transition-transform duration-300 group-hover:translate-x-0.5" />
-              {t("header.signOut")}
-            </motion.button>
+              <LogIn className="h-4 w-4 text-white dark:text-black transition-transform duration-300 group-hover:translate-x-0.5" />
+              {t("header.signIn")}
+            </button>
+          )}
+        </div>
+
+
+
+
+        
+
+        <div className="flex items-center gap-2 md:hidden">
+      {/* Modern pill-style theme toggle */}
+      <button
+        onClick={toggleTheme}
+        className="relative flex h-9 w-10 items-center rounded-full border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 px-1 transition-all duration-300 hover:border-gray-300 dark:hover:border-white/20 hover:shadow-md transition-all duration-300 active:scale-95"
+        aria-label="Toggle theme"
+      >
+        <span className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-100/20 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <span
+          className="flex h-7 w-7 items-center justify-center rounded-full bg-white dark:bg-black shadow-sm group-hover:shadow-md transition-all duration-300"
+          style={{ marginLeft: isLight ? 0 : "auto" }}
+        >
+          {isLight ? (
+            <Sun className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-45" />
           ) : (
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => navigate("/auth")}
+            <Moon className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-[-15deg]" />
+          )}
+        </span>
+      </button>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/50 dark:hover:bg-white/10"
+              >
+                <Menu className="h-4 w-4 text-black dark:text-white" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </SheetTrigger>
+
+            {/* Theme-aware mobile menu */}
+            <SheetContent
+              side="right"
               className="
-                group
-                flex
-                items-center
-                gap-2
-                rounded-full
-                px-5
-                py-2.5
-                text-sm
-                font-semibold
-                border
-                transition-all
-                duration-300
-              bg-black dark:bg-white
-              text-white dark:text-black
-              border-gray-800 dark:border-white/20
-              hover:bg-gray-800 dark:hover:bg-gray-100
-              hover:border-gray-700 dark:hover:border-white/30
-            "
-          >
-            <LogIn className="h-4 w-4 text-white dark:text-black transition-transform duration-300 group-hover:translate-x-0.5" />
-            {t("header.signIn")}
-          </motion.button>
-        )}
-      </div>
-
-
-
-
-      
-
-      <div className="flex items-center gap-2 md:hidden">
-{/* Modern pill-style theme toggle */}
-<motion.button
-  onClick={toggleTheme}
-  whileTap={{ scale: 0.92 }}
-  className="relative flex h-9 w-10 items-center rounded-full border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 px-1 transition-all duration-300 hover:border-gray-300 dark:hover:border-white/20 hover:shadow-md transition-all duration-300"
-  aria-label="Toggle theme"
->
-  <span className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-100/20 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-  
-  <motion.div
-    layout
-    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-    className="flex h-7 w-7 items-center justify-center rounded-full bg-white dark:bg-black shadow-sm group-hover:shadow-md transition-all duration-300"
-    style={{ marginLeft: isLight ? 0 : "auto" }}
-  >
-    {isLight ? (
-      <Sun className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-45" />
-    ) : (
-      <Moon className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-[-15deg]" />
-    )}
-  </motion.div>
-</motion.button>
-
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/50 dark:hover:bg-white/10"
+                flex w-72 flex-col p-0
+                bg-white/95 dark:bg-black/95
+                backdrop-blur-2xl
+                border-l border-gray-200 dark:border-white/10
+              "
             >
-              <Menu className="h-4 w-4 text-black dark:text-white" />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </SheetTrigger>
+              {/* Brand header — logo + title */}
+              <div className="flex items-center gap-2.5 border-b border-gray-200 dark:border-white/10 px-5 py-4">
+    <img 
+      src={TammatLogoWhite} 
+      alt="Tammat logo" 
+      width={30} 
+      height={30} 
+      className="h-15 w-10 dark:brightness-0 dark:invert" 
+    />   
+                <span className="text-base  tracking-tight text-black dark:text-white">
+                  TMMT
+                </span>
+              </div>
 
-          {/* Theme-aware mobile menu */}
-          <SheetContent
-            side="right"
-            className="
-              flex w-72 flex-col p-0
-              bg-white/95 dark:bg-black/95
-              backdrop-blur-2xl
-              border-l border-gray-200 dark:border-white/10
-            "
-          >
-            {/* Brand header — logo + title */}
-            <div className="flex items-center gap-2.5 border-b border-gray-200 dark:border-white/10 px-5 py-4">
-<img 
-  src={TammatLogoWhite} 
-  alt="Tammat logo" 
-  width={30} 
-  height={30} 
-  className="h-15 w-10 dark:brightness-0 dark:invert" 
-/>   
-              <span className="text-base  tracking-tight text-black dark:text-white">
-                TMMT
-              </span>
-            </div>
+              {/* Modern Premium Navigation */}
+              <nav className="mt-4 flex flex-col gap-2 px-3">
+                {links.map((l) => (
+                  <Link
+                    key={l.href}
+                    to={l.href}
+                    className="
+                      group relative overflow-hidden
+                      flex items-center gap-4
+                      rounded-2xl
+                      px-5 py-4
+                      border border-transparent
+                      bg-transparent
+                      transition-all duration-500
+                      hover:border-black/20 dark:hover:border-white/20
+                      hover:bg-gray-50 dark:hover:bg-white/5
+                      hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/5
+                      hover:-translate-y-0.5
+                    "
+                  >
+                    <span className="absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5" />
+                    
+                    <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 transition-all duration-500 group-hover:bg-black dark:group-hover:bg-white group-hover:border-black dark:group-hover:border-white group-hover:rotate-6 group-hover:scale-110">
+                      <l.icon className="h-5 w-5 text-black dark:text-white transition-all duration-300 group-hover:text-white dark:group-hover:text-black" />
+                    </div>
 
-            {/* Modern Premium Navigation */}
-            <nav className="mt-4 flex flex-col gap-2 px-3">
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  to={l.href}
-                  className="
-                    group relative overflow-hidden
-                    flex items-center gap-4
-                    rounded-2xl
-                    px-5 py-4
-                    border border-transparent
-                    bg-transparent
-                    transition-all duration-500
-                    hover:border-black/20 dark:hover:border-white/20
-                    hover:bg-gray-50 dark:hover:bg-white/5
-                    hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/5
-                    hover:-translate-y-0.5
-                  "
-                >
-                  <span className="absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5" />
-                  
-                  <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 transition-all duration-500 group-hover:bg-black dark:group-hover:bg-white group-hover:border-black dark:group-hover:border-white group-hover:rotate-6 group-hover:scale-110">
-                    <l.icon className="h-5 w-5 text-black dark:text-white transition-all duration-300 group-hover:text-white dark:group-hover:text-black" />
-                  </div>
+                    <div className="relative z-10 flex flex-col">
+                      <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-black dark:group-hover:text-white">
+                        {l.label}
+                      </span>
+                      <span className="text-xs text-black/45 dark:text-white/40">
+                        Quick access
+                      </span>
+                    </div>
 
-                  <div className="relative z-10 flex flex-col">
-                    <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-black dark:group-hover:text-white">
-                      {l.label}
-                    </span>
-                    <span className="text-xs text-black/45 dark:text-white/40">
-                      Quick access
-                    </span>
-                  </div>
+                    <div className="ml-auto relative z-10 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                      <ChevronRight className="h-5 w-5 text-black dark:text-white" />
+                    </div>
+                  </Link>
+                ))}
 
-                  <div className="ml-auto relative z-10 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
-                    <ChevronRight className="h-5 w-5 text-black dark:text-white" />
-                  </div>
-                </Link>
-              ))}
-
-{/* Dashboard Link - Mobile */}
-<Link
-  to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
-  className="
-    group relative overflow-hidden
-    flex items-center gap-4
-    rounded-2xl
-    px-5 py-4
-    border border-transparent
-    transition-all duration-500
-    hover:border-black/20 dark:hover:border-white/20
-    hover:bg-gray-50 dark:hover:bg-white/5
-    hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/5
-    hover:-translate-y-0.5
-  "
->
-  <span className="absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5" />
-
-  <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 transition-all duration-500 group-hover:bg-black dark:group-hover:bg-white group-hover:border-black dark:group-hover:border-white group-hover:rotate-6 group-hover:scale-110">
-    <LayoutDashboard className="h-5 w-5 text-black dark:text-white transition-all duration-300 group-hover:text-white dark:group-hover:text-black" strokeWidth={1.8} />
-  </div>
-
-  <div className="relative z-10 flex flex-col">
-    <span className="text-[15px] font-semibold text-black dark:text-white">
-      Dashboard
-    </span>
-    <span className="text-xs text-black/45 dark:text-white/40">
-      Manage your account
-    </span>
-  </div>
-
-  <ChevronRight className="ml-auto h-5 w-5 text-black dark:text-white opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
-</Link>
-            </nav>
-
-{/* CTA buttons — bottom of sheet */}
-<div className="mt-auto border-t border-gray-200 dark:border-white/10 p-4 space-y-2.5">
-{/* ─── Primary CTA Button ────────────────────────────────────────────── */}
-<motion.button
-  whileHover={{ scale: 1.03, y: -1 }}
-  whileTap={{ scale: 0.97 }}
-  onClick={() => setShowStartApplication(true)}
-  className="
-    group relative overflow-hidden rounded-full
-    w-full sm:w-auto
-    bg-[#0A3269] dark:bg-white
-    px-6 sm:px-8 py-3 sm:py-3.5 font-semibold text-sm sm:text-base
-    text-white dark:text-[#0A3269]
-    shadow-lg shadow-[#0A3269]/25 dark:shadow-white/10
-    transition-all duration-300
-    hover:shadow-xl hover:shadow-[#0A3269]/35 dark:hover:shadow-white/20
-    hover:bg-[#1a4a7a] dark:hover:bg-gray-100
-    flex items-center justify-center gap-2.5
-  "
->
-  {/* Shine Effect */}
-  <motion.span
-    className="absolute inset-0"
-    style={{
-      background: "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%)",
-    }}
-    initial={{ x: "-120%" }}
-    animate={{ x: "120%" }}
-    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
-  />
-  
-  {/* Hover Slide Effect */}
-  <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
-  
-  <span className="relative z-10 flex items-center gap-2.5">
-    <Rocket className="h-4 w-4 sm:h-5 sm:w-5 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-    <span>{t('hero.cta', 'Apply Now')}</span>
-  </span>
-</motion.button>
-  {/* ─── Secondary CTA Button ──────────────────────────────────── */}
-  {user ? (
-    <motion.button
-      whileTap={{ scale: 0.95 }}
-      whileHover={{ scale: 1.02 }}
-      onClick={() => signOut()}
+    {/* Dashboard Link - Mobile */}
+    <Link
+      to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
       className="
-        w-full rounded-full px-6 py-3 font-medium text-sm sm:text-base
-        border border-gray-200 dark:border-white/10
-        bg-white dark:bg-black
-        text-black dark:text-white
-        hover:bg-red-50 dark:hover:bg-red-900/20
-        hover:border-red-300 dark:hover:border-red-500/30
-        transition-all duration-300
-        active:scale-95
-      "
-    >
-      {t('header.signOut')}
-    </motion.button>
-  ) : (
-    <motion.button
-      whileTap={{ scale: 0.95 }}
-      whileHover={{ scale: 1.02 }}
-      onClick={() => navigate('/auth')}
-      className="
-        w-full rounded-full px-6 py-3 font-semibold text-sm sm:text-base
-        bg-white dark:bg-black
-        text-black dark:text-white
-        border border-gray-200 dark:border-white/10
-        flex items-center justify-center gap-2.5
-        transition-all duration-300
+        group relative overflow-hidden
+        flex items-center gap-4
+        rounded-2xl
+        px-5 py-4
+        border border-transparent
+        transition-all duration-500
+        hover:border-black/20 dark:hover:border-white/20
         hover:bg-gray-50 dark:hover:bg-white/5
-        hover:border-gray-300 dark:hover:border-white/20
-        active:scale-95
-        shadow-sm hover:shadow-md
+        hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/5
+        hover:-translate-y-0.5
       "
     >
-      <LogIn className="h-4 w-4 sm:h-5 sm:w-5 text-black dark:text-white" />
-      {t('header.signIn')}
-    </motion.button>
-  )}
-</div>
+      <span className="absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5" />
 
-
-
-          </SheetContent>
-        </Sheet>
+      <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 transition-all duration-500 group-hover:bg-black dark:group-hover:bg-white group-hover:border-black dark:group-hover:border-white group-hover:rotate-6 group-hover:scale-110">
+        <LayoutDashboard className="h-5 w-5 text-black dark:text-white transition-all duration-300 group-hover:text-white dark:group-hover:text-black" strokeWidth={1.8} />
       </div>
-    </motion.div>
-  </div>
 
-  {showStartApplication && (
-    <LegacyStartApplicationDialog
-      open={showStartApplication}
-      onOpenChange={setShowStartApplication}
-      queryParams={''}
+      <div className="relative z-10 flex flex-col">
+        <span className="text-[15px] font-semibold text-black dark:text-white">
+          Dashboard
+        </span>
+        <span className="text-xs text-black/45 dark:text-white/40">
+          Manage your account
+        </span>
+      </div>
+
+      <ChevronRight className="ml-auto h-5 w-5 text-black dark:text-white opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
+    </Link>
+              </nav>
+
+    {/* CTA buttons — bottom of sheet */}
+    <div className="mt-auto border-t border-gray-200 dark:border-white/10 p-4 space-y-2.5">
+    {/* ─── Primary CTA Button ────────────────────────────────────────────── */}
+    <button
+      onClick={() => setShowStartApplication(true)}
+      className="
+        group relative overflow-hidden rounded-full
+        w-full sm:w-auto
+        bg-[#0A3269] dark:bg-white
+        px-6 sm:px-8 py-3 sm:py-3.5 font-semibold text-sm sm:text-base
+        text-white dark:text-[#0A3269]
+        shadow-lg shadow-[#0A3269]/25 dark:shadow-white/10
+        transition-all duration-300
+        hover:shadow-xl hover:shadow-[#0A3269]/35 dark:hover:shadow-white/20
+        hover:bg-[#1a4a7a] dark:hover:bg-gray-100
+        flex items-center justify-center gap-2.5
+        hover:scale-105 active:scale-95
+      "
+    >
+      {/* Shine Effect */}
+      <span
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%)",
+        }}
+      />
+      
+      {/* Hover Slide Effect */}
+      <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
+      
+      <span className="relative z-10 flex items-center gap-2.5">
+        <Rocket className="h-4 w-4 sm:h-5 sm:w-5 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        <span>{t('hero.cta', 'Apply Now')}</span>
+      </span>
+    </button>
+      {/* ─── Secondary CTA Button ──────────────────────────────────── */}
+      {user ? (
+        <button
+          onClick={() => signOut()}
+          className="
+            w-full rounded-full px-6 py-3 font-medium text-sm sm:text-base
+            border border-gray-200 dark:border-white/10
+            bg-white dark:bg-black
+            text-black dark:text-white
+            hover:bg-red-50 dark:hover:bg-red-900/20
+            hover:border-red-300 dark:hover:border-red-500/30
+            transition-all duration-300
+            active:scale-95
+            hover:scale-105
+          "
+        >
+          {t('header.signOut')}
+        </button>
+      ) : (
+        <button
+          onClick={() => navigate('/auth')}
+          className="
+            w-full rounded-full px-6 py-3 font-semibold text-sm sm:text-base
+            bg-white dark:bg-black
+            text-black dark:text-white
+            border border-gray-200 dark:border-white/10
+            flex items-center justify-center gap-2.5
+            transition-all duration-300
+            hover:bg-gray-50 dark:hover:bg-white/5
+            hover:border-gray-300 dark:hover:border-white/20
+            active:scale-95
+            shadow-sm hover:shadow-md
+            hover:scale-105
+          "
+        >
+          <LogIn className="h-4 w-4 sm:h-5 sm:w-5 text-black dark:text-white" />
+          {t('header.signIn')}
+        </button>
+      )}
+    </div>
+
+
+
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </div>
+
+    {showStartApplication && (
+      <LegacyStartApplicationDialog
+        open={showStartApplication}
+        onOpenChange={setShowStartApplication}
+        queryParams={''}
+      />
+    )}
+    <AuthDrawer
+      isOpen={showAuthDrawer}
+      onClose={() => setShowAuthDrawer(false)}
     />
-  )}
-  <AuthDrawer
-    isOpen={showAuthDrawer}
-    onClose={() => setShowAuthDrawer(false)}
-  />
-</motion.header>
+  </header>
   );
 }
 
@@ -5098,12 +4663,11 @@ const TammatHomePage = () => {
 
         <Services />
 
-<WhyTMMTSection />
+        <WhyTMMTSection />
         <VideoSection /> 
 
         <SubscriptionPage />
         {/* <LifeUpgraded /> */}
-        <LaptopShowcase />
         {/* <EmiratesSection /> */}
         <ServiceJourney />
 

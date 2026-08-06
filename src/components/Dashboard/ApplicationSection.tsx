@@ -1017,7 +1017,7 @@ const GoldenGuaranteeCard = () => {
   const isArabic = language === 'ar';
 
   return (
-  <motion.div
+<motion.div
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.5, delay: 0.3 }}
@@ -1029,22 +1029,27 @@ const GoldenGuaranteeCard = () => {
     rel="noopener noreferrer"
     className="block"
   >
-    <div className="relative rounded-xl sm:rounded-2xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/40 p-3 sm:p-4 md:p-5  transition-all duration-300 group cursor-pointer">
-      <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 md:gap-4">
-        <div className="p-1.5 sm:p-2 md:p-3 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-500/20 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-          <Award className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-amber-600 dark:text-amber-400" strokeWidth={1.75} />
+    <div className="relative rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/40 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5 cursor-pointer">
+      <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
+        {/* Icon */}
+        <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+          <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
         </div>
-        <div className="flex-1">
-          <h4 className="font-normal text-black dark:text-white text-sm sm:text-base md:text-lg flex flex-wrap items-center gap-1.5 sm:gap-2">
+        
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
             {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-            <Badge className="bg-amber-500 text-white text-[7px] sm:text-[8px] md:text-[10px] px-1.5 sm:px-2 md:px-2.5 py-0.5 rounded-full font-light">✓ Trusted</Badge>
+            <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
+              ✓ Trusted
+            </Badge>
           </h4>
-          <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-white/60 leading-relaxed mt-0.5 max-w-2xl font-light">
+          <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 leading-relaxed mt-0.5 max-w-2xl font-light">
             {isArabic
               ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
               : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
           </p>
-          <span className="inline-flex items-center gap-1 mt-1.5 text-[10px] sm:text-xs text-amber-600 dark:text-amber-400 font-medium group-hover:gap-2 transition-all duration-300">
+          <span className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 dark:text-amber-400 font-light transition-all duration-300 group-hover:gap-1.5">
             <span>{isArabic ? 'اقرأ المزيد عن الضمان' : 'Read more about the guarantee'}</span>
             <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
           </span>

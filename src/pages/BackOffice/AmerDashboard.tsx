@@ -4,13 +4,14 @@ import {
   Users, FileText, Clock, CheckCircle, XCircle, AlertTriangle, Eye,
   UserCheck, FileCheck, Clock3, Shield, Bell, Lock, MoreHorizontal,
   BarChart3, Upload, AlertCircle, Key, Gavel, Send, Activity, Menu,
-  Filter as FilterIcon, ChevronDown, ChevronUp, Sparkles, TrendingUp,
+  Filter as FilterIcon, ChevronDown, ChevronUp, Sparkles, TrendingUp,ShieldCheck,
   Zap, Award, Crown, Star, Plus, MessageCircle, FolderOpen, Search, Package,
   X, LayoutDashboard, Settings, UserCog, ChevronRight, Home,RefreshCw,
   Phone, Mail, Calendar, User, MapPin, Briefcase, LogOut, DollarSign, CreditCard
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMemo } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -150,7 +151,7 @@ const MobileBottomNav: React.FC<{
   const tabs = [
     { id: 'applications', icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'packages', icon: Package, label: 'Packages' },
-    { id: 'chat', icon: MessageCircle, label: 'Chat', badge: badgeCount },
+    { id: 'checks', icon: CheckCircle, label: 'Status Checks' },
     { id: 'profile', icon: UserCog, label: 'Profile' },
   ];
 
@@ -183,11 +184,7 @@ const MobileBottomNav: React.FC<{
                     : 'text-gray-400 dark:text-white/50'
                 )} />
               </div>
-              {tab.badge !== undefined && tab.badge > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 shadow-lg shadow-red-500/30 animate-pulse">
-                  {tab.badge > 9 ? '9+' : tab.badge}
-                </span>
-              )}
+              {/* No badge for Cheker – removed */}
             </div>
             <span className={cn(
               'text-[10px] font-medium transition-colors duration-200',
@@ -230,9 +227,9 @@ const MobileHeader: React.FC<{
         
         <div className="flex items-center gap-2">
           <div className="relative">
-            <div className="w-8 h-8 rounded-xl bg-[#0A3269] dark:bg-white flex items-center justify-center shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20">
-              <Crown className="w-4 h-4 text-white dark:text-[#0A3269]" />
-            </div>
+         <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-black shadow-lg shadow-black/25 dark:bg-white dark:shadow-white/20">
+  <Crown className="h-4 w-4 text-white dark:text-black" />
+</div>
           </div>
           <div>
           <span className="bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent text-base font-medium">
@@ -257,18 +254,16 @@ const MobileHeader: React.FC<{
         </motion.button>
         
         <div className="relative">
-          <Avatar className="w-8 h-8 ring-2 ring-gray-200 dark:ring-white/20">
-            <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] text-xs font-medium">
-              {(user as any)?.firstName?.[0] || ''}{(user as any)?.lastName?.[0] || ''}
-            </AvatarFallback>
-          </Avatar>
-          <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white dark:border-[#0A3269] shadow-lg shadow-emerald-400/30" />
+       <Avatar className="w-8 h-8 ring-2 ring-gray-200 dark:ring-white/20">
+  <AvatarFallback className="bg-black dark:bg-white text-white dark:text-black text-xs font-medium">
+    {(user as any)?.firstName?.[0] || ''}{(user as any)?.lastName?.[0] || ''}
+  </AvatarFallback>
+</Avatar>
         </div>
       </div>
     </div>
   </div>
 );
-
 // Mobile Sidebar - Premium
 const MobileSidebar: React.FC<{
   isOpen: boolean;
@@ -280,7 +275,7 @@ const MobileSidebar: React.FC<{
 }> = ({ isOpen, onClose, user, onNavigate, activeTab = 'applications', onLogout }) => {
   const menuItems = [
     { id: 'applications', icon: LayoutDashboard, label: 'Dashboard' },
-    { id: 'package-applications', icon: Package, label: 'Package Applications' },
+    { id: 'packages', icon: Package, label: 'Package Applications' }, // ✅ changed from 'package-applications' to 'packages'
     { id: 'checks', icon: CheckCircle, label: 'Status Checks' },
     { id: 'fraud', icon: Shield, label: 'Fraud Detection' },
     { id: 'penalties', icon: Gavel, label: 'Penalties' },
@@ -308,18 +303,7 @@ const MobileSidebar: React.FC<{
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             className="fixed left-0 top-0 bottom-0 w-[280px] bg-white dark:bg-gray-900 z-50 shadow-2xl shadow-black/20"
           >
-            <div className="flex flex-col h-full  bg-white/95 dark:bg-[#000] ">
-              {/* Sidebar Header */}
-              <div className="flex items-center justify-between 5 to-transparent dark:from-[#0A3269]/10">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                  </div>
-                  <div>
-                  </div>
-                </div>
-            
-              </div>
-
+            <div className="flex flex-col h-full bg-white/95 dark:bg-[#000]">
               {/* User Info */}
               <div className="p-4 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3">
@@ -342,7 +326,7 @@ const MobileSidebar: React.FC<{
                 </div>
               </div>
 
-              {/* Menu Items - Scrollable */}
+              {/* Menu Items */}
               <div className="flex-1 overflow-y-auto p-3 space-y-1">
                 {menuItems.map((item) => {
                   const isActive = activeTab === item.id;
@@ -378,8 +362,6 @@ const MobileSidebar: React.FC<{
                   );
                 })}
               </div>
-
-      
             </div>
           </motion.div>
         </>
@@ -387,6 +369,10 @@ const MobileSidebar: React.FC<{
     </AnimatePresence>
   );
 };
+
+
+
+
 // Mobile Application Card - Premium Modern
 const MobileApplicationCard: React.FC<{
   application: AmerApplication;
@@ -496,7 +482,7 @@ const MobileApplicationCard: React.FC<{
     </motion.div>
   );
 };
-// Modern Table Row Component (Desktop) - Premium Big Cards
+
 const ApplicationRow: React.FC<{
   application: AmerApplication;
   isExpanded: boolean;
@@ -904,6 +890,48 @@ const AmerDashboard: React.FC = () => {
   const [chatInput, setChatInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const seenMessageIdsRef = useRef<Set<string>>(new Set());
+
+// ─── Stats filter state ─────────────────────────────────────────────
+const [statsFilter, setStatsFilter] = useState<'today' | 'week' | 'month' | 'year' | 'all'>('all');
+// ─── Compute filtered stats ─────────────────────────────────────────
+const filteredStats = useMemo(() => {
+  const now = new Date();
+  let startDate: Date | null = null;
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  switch (statsFilter) {
+    case 'today':
+      startDate = today;
+      break;
+    case 'week':
+      startDate = new Date(today);
+      startDate.setDate(today.getDate() - today.getDay()); // start of week (Sunday)
+      break;
+    case 'month':
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      break;
+    case 'year':
+      startDate = new Date(now.getFullYear(), 0, 1);
+      break;
+    case 'all':
+    default:
+      startDate = null;
+      break;
+  }
+
+  const filtered = startDate
+    ? applications.filter(app => new Date(app.createdAt) >= startDate!)
+    : applications;
+
+  const total = filtered.length;
+  const approved = filtered.filter(app => app.status === 'approved').length;
+  const pending = filtered.filter(app => app.status === 'pending' || app.status === 'submitted' || app.status === 'processing').length;
+  const rejected = filtered.filter(app => app.status === 'rejected').length;
+
+  return { total, approved, pending, rejected };
+}, [applications, statsFilter]);
+
+
 
   // Mobile specific state
   const [selectedMobileApp, setSelectedMobileApp] = useState<AmerApplication | null>(null);
@@ -1322,61 +1350,62 @@ const AmerDashboard: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Main Content */}
-        <div className="px-4 py-4 space-y-4">
-          {mobileTab === 'applications' && (
-            <>
-              {/* Search & Filter */}
-              <div className="flex gap-2">
-                <div className="flex-1 relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search className="w-4 h-4 text-gray-400" />
-                  </div>
-                  <Input
-                    placeholder="Search applications..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 pr-3 py-2 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20"
-                  />
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-2xl border-gray-200 dark:border-gray-800"
-                  onClick={() => setShowFilters(!showFilters)}
-                >
-                  <FilterIcon className="w-4 h-4" />
-                </Button>
-              </div>
+       {/* Main Content */}
+<div className="px-4 py-4 space-y-4">
+  {mobileTab === 'applications' && (
+    <>
+      {/* Search & Filter */}
+      <div className="flex gap-2">
+        <div className="flex-1 relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="w-4 h-4 text-gray-400" />
+          </div>
+          <Input
+            placeholder="Search applications..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 pr-3 py-2 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20"
+          />
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-2xl border-gray-200 dark:border-gray-800"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <FilterIcon className="w-4 h-4" />
+        </Button>
+      </div>
 
-              {/* Filters Expand */}
-              <AnimatePresence>
-                {showFilters && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 space-y-3">
-                      <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger className="rounded-xl border-gray-200 dark:border-gray-800">
-                          <SelectValue placeholder="Filter by status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Statuses</SelectItem>
-                          <SelectItem value="submitted">Submitted</SelectItem>
-                          <SelectItem value="under_review">Under Review</SelectItem>
-                          <SelectItem value="docs_required">Documents Required</SelectItem>
-                          <SelectItem value="approved">Approved</SelectItem>
-                          <SelectItem value="rejected">Rejected</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
- {/* Premium Stats Grid - Modern Design */}
+      {/* Filters Expand */}
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 space-y-3">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="rounded-xl border-gray-200 dark:border-gray-800">
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="submitted">Submitted</SelectItem>
+                  <SelectItem value="under_review">Under Review</SelectItem>
+                  <SelectItem value="docs_required">Documents Required</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+{/* Premium Stats Grid */}
 <motion.div
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
@@ -1425,33 +1454,22 @@ const AmerDashboard: React.FC = () => {
       className="group"
     >
       <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 p-4 shadow-sm hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-white/5 transition-all duration-300">
-        {/* Subtle Background Gradient */}
         <div 
           className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
-          style={{ 
-            background: `radial-gradient(circle at top right, ${stat.color}, transparent 70%)`
-          }}
+          style={{ background: `radial-gradient(circle at top right, ${stat.color}, transparent 70%)` }}
         />
-        
-        {/* Top Border Accent */}
         <div 
           className="absolute top-0 left-4 right-4 h-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{ backgroundColor: stat.color }}
         />
-
         <div className="relative flex items-start justify-between gap-2">
           <div className="space-y-1 min-w-0">
-            {/* Label */}
             <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-[0.08em]">
               {stat.label}
             </p>
-            
-            {/* Value */}
             <p className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
               {stat.value}
             </p>
-            
-            {/* Trend */}
             <div className="flex items-center gap-1.5">
               <TrendingUp className="w-3 h-3 text-emerald-500" />
               <span className="text-[10px] font-medium text-gray-600 dark:text-gray-400">
@@ -1462,8 +1480,6 @@ const AmerDashboard: React.FC = () => {
               </span>
             </div>
           </div>
-          
-          {/* Icon Container */}
           <div 
             className="p-2 rounded-xl flex-shrink-0 shadow-sm"
             style={{ backgroundColor: `${stat.color}15` }}
@@ -1471,8 +1487,6 @@ const AmerDashboard: React.FC = () => {
             <stat.icon className="w-4 h-4" style={{ color: stat.color }} />
           </div>
         </div>
-        
-        {/* Progress Bar */}
         <div className="mt-3 h-1 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
@@ -1487,308 +1501,374 @@ const AmerDashboard: React.FC = () => {
   ))}
 </motion.div>
 
+{/* ─── Modern Applications Heading ──────────────────────────────── */}
+<motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  className="flex items-center justify-between mb-4"
+>
+  <div className="flex items-center gap-3">
+    <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#0A3269] to-[#1A4A8A]" />
+    <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+      <FileText className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+      Applications
+    </h2>
+ 
+  </div>
+  <span className="text-xs text-gray-400 dark:text-gray-500">
+    {filteredApplications.length === 0 ? 'No items' : `${filteredApplications.length} items`}
+  </span>
+</motion.div>
 
-              {/* Applications List - Mobile Cards */}
-              <div className="space-y-3">
-                {filteredApplications.map((application) => (
-                  <MobileApplicationCard
-                    key={application._id}
-                    application={application}
-                    onPress={() => {
-                      setSelectedMobileApp(application);
-                      setShowMobileDetails(true);
-                    }}
-                    onAction={(action) => handleMobileAppAction(application, action)}
-                  />
-                ))}
+{/* Applications List - Mobile Cards */}
+<div className="space-y-3">
+  {filteredApplications.map((application) => (
+    <MobileApplicationCard
+      key={application._id}
+      application={application}
+      onPress={() => {
+        setSelectedMobileApp(application);
+        setShowMobileDetails(true);
+      }}
+      onAction={(action) => handleMobileAppAction(application, action)}
+    />
+  ))}
+  {filteredApplications.length === 0 && (
+    <div className="text-center py-12">
+      <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
+        <FileText className="w-8 h-8 text-gray-400" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No applications found</h3>
+      <p className="text-gray-500 dark:text-gray-400">Try adjusting your filters</p>
+    </div>
+  )}
+</div>
+    </>
+  )}
 
-                {filteredApplications.length === 0 && (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-                      <FileText className="w-8 h-8 text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No applications found</h3>
-                    <p className="text-gray-500 dark:text-gray-400">Try adjusting your filters</p>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
+  {mobileTab === 'packages' && (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+      <PackageApplicationsAdmin />
+    </div>
+  )}
 
-          {mobileTab === 'packages' && (
-            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
-              <PackageApplicationsAdmin />
+  {mobileTab === 'checks' && (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800">
+      <ChecksReviewPanel />
+    </div>
+  )}
+
+  {mobileTab === 'fraud' && (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+      <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+        Fraud Detection section
+      </div>
+    </div>
+  )}
+
+  {mobileTab === 'penalties' && (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+      <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+        Penalties section
+      </div>
+    </div>
+  )}
+
+  {mobileTab === 'otp' && (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+      <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+        OTP Management section
+      </div>
+    </div>
+  )}
+
+  {mobileTab === 'statistics' && (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+      <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+        Statistics dashboard
+      </div>
+    </div>
+  )}
+
+  {mobileTab === 'chat' && (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden h-[calc(100vh-200px)]">
+      <div className="flex flex-col h-full">
+        {/* Chat Header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+          <div>
+            <div className="text-sm font-semibold text-gray-900 dark:text-white">
+              {rooms.find(r => r.roomId === currentRoomId)?.userName || 'Chat'}
             </div>
-          )}
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              {rooms.find(r => r.roomId === currentRoomId)?.service || 'Select a room'}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {currentRoomId && (
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                onClick={() => {
+                  const socket = getSocket();
+                  const officerId = (user as any)?.id || (user as any)?._id;
+                  socket.emit('leave_chat_room', { roomId: currentRoomId, userId: officerId });
+                  setRooms(prev => prev.filter(r => r.roomId !== currentRoomId));
+                  setCurrentRoomId(null);
+                }}
+              >
+                Leave
+              </Button>
+            )}
+          </div>
+        </div>
 
-          {mobileTab === 'chat' && (
-            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden h-[calc(100vh-200px)]">
-              <div className="flex flex-col h-full">
-                {/* Chat Header */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-                  <div>
-                    <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                      {rooms.find(r => r.roomId === currentRoomId)?.userName || 'Chat'}
+        {/* Rooms List / Messages */}
+        {!currentRoomId ? (
+          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            <h4 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Active Rooms</h4>
+            {rooms.map((room) => (
+              <button
+                key={room.roomId}
+                onClick={() => {
+                  setCurrentRoomId(room.roomId);
+                  setRooms(prev => prev.map(r => r.roomId === room.roomId ? { ...r, unread: 0 } : r));
+                  const socket = getSocket();
+                  const officerId = (user as any)?.id || (user as any)?._id;
+                  socket.emit('join_chat_room', { roomId: room.roomId, userId: officerId, officerId });
+                }}
+                className="w-full text-left p-3 rounded-xl border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium">
+                      {room.userName?.[0] || 'U'}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {rooms.find(r => r.roomId === currentRoomId)?.service || 'Select a room'}
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">{room.userName || 'User'}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{room.service || 'General'}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {currentRoomId && (
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-                        onClick={() => {
-                          const socket = getSocket();
-                          const officerId = (user as any)?.id || (user as any)?._id;
-                          socket.emit('leave_chat_room', { roomId: currentRoomId, userId: officerId });
-                          setRooms(prev => prev.filter(r => r.roomId !== currentRoomId));
-                          setCurrentRoomId(null);
-                        }}
-                      >
-                        Leave
-                      </Button>
-                    )}
-                  </div>
+                  {room.unread > 0 && (
+                    <Badge className="bg-red-500 text-white rounded-full text-[10px] px-2 min-w-[20px] h-5 flex items-center justify-center">
+                      {room.unread}
+                    </Badge>
+                  )}
                 </div>
-
-                {/* Rooms List / Messages */}
-                {!currentRoomId ? (
-                  <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                    <h4 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Active Rooms</h4>
-                    {rooms.map((room) => (
-                      <button
-                        key={room.roomId}
-                        onClick={() => {
-                          setCurrentRoomId(room.roomId);
-                          setRooms(prev => prev.map(r => r.roomId === room.roomId ? { ...r, unread: 0 } : r));
-                          const socket = getSocket();
-                          const officerId = (user as any)?.id || (user as any)?._id;
-                          socket.emit('join_chat_room', { roomId: room.roomId, userId: officerId, officerId });
-                        }}
-                        className="w-full text-left p-3 rounded-xl border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium">
-                              {room.userName?.[0] || 'U'}
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">{room.userName || 'User'}</div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">{room.service || 'General'}</div>
-                            </div>
+              </button>
+            ))}
+            {rooms.length === 0 && (
+              <div className="text-center py-8 text-gray-400">
+                <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p className="text-sm">No active rooms</p>
+                <p className="text-xs">Accept an invite to start chatting</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50 dark:bg-gray-950/50">
+              {(messagesByRoom[currentRoomId || ''] || []).map((m, idx) => {
+                const mine = ((user as any)?.id || (user as any)?._id) === m.sender;
+                return (
+                  <div key={`${m.id || 'm'}-${idx}`} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[80%] ${mine ? 'order-2' : 'order-1'}`}>
+                      <div className={cn(
+                        'rounded-2xl px-4 py-2.5 text-sm',
+                        m.type === 'system' 
+                          ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
+                          : mine 
+                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/20' 
+                            : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white'
+                      )}>
+                        {m.type === 'file' ? (
+                          <div className="space-y-2">
+                            <img src={apiBase + m.metadata?.fileUrl} alt={m.metadata?.fileName || 'File'} className="max-w-[150px] rounded-lg" />
+                            <a href={apiBase + m.metadata?.fileUrl} target="_blank" className="text-xs underline block">
+                              {m.metadata?.fileName || 'File'}
+                            </a>
                           </div>
-                          {room.unread > 0 && (
-                            <Badge className="bg-red-500 text-white rounded-full text-[10px] px-2 min-w-[20px] h-5 flex items-center justify-center">
-                              {room.unread}
-                            </Badge>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                    {rooms.length === 0 && (
-                      <div className="text-center py-8 text-gray-400">
-                        <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                        <p className="text-sm">No active rooms</p>
-                        <p className="text-xs">Accept an invite to start chatting</p>
+                        ) : (
+                          <span>{m.content}</span>
+                        )}
                       </div>
-                    )}
+                      <div className="text-[10px] text-gray-400 mt-1">
+                        {new Date(m.timestamp).toLocaleTimeString()}
+                      </div>
+                    </div>
                   </div>
-                ) : (
-                  <>
-                    {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50 dark:bg-gray-950/50">
-                      {(messagesByRoom[currentRoomId || ''] || []).map((m, idx) => {
-                        const mine = ((user as any)?.id || (user as any)?._id) === m.sender;
-                        return (
-                          <div key={`${m.id || 'm'}-${idx}`} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-[80%] ${mine ? 'order-2' : 'order-1'}`}>
-                              <div className={cn(
-                                'rounded-2xl px-4 py-2.5 text-sm',
-                                m.type === 'system' 
-                                  ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
-                                  : mine 
-                                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/20' 
-                                    : 'bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white'
-                              )}>
-                                {m.type === 'file' ? (
-                                  <div className="space-y-2">
-                                    <img src={apiBase + m.metadata?.fileUrl} alt={m.metadata?.fileName || 'File'} className="max-w-[150px] rounded-lg" />
-                                    <a href={apiBase + m.metadata?.fileUrl} target="_blank" className="text-xs underline block">
-                                      {m.metadata?.fileName || 'File'}
-                                    </a>
-                                  </div>
-                                ) : (
-                                  <span>{m.content}</span>
-                                )}
-                              </div>
-                              <div className="text-[10px] text-gray-400 mt-1">
-                                {new Date(m.timestamp).toLocaleTimeString()}
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                      {typingByRoom[currentRoomId || ''] && (
-                        <div className="flex items-center gap-2 text-sm text-gray-400">
-                          <div className="flex gap-1">
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                          </div>
-                          <span>Typing...</span>
-                        </div>
-                      )}
-                      <div ref={chatEndRef} />
-                    </div>
+                );
+              })}
+              {typingByRoom[currentRoomId || ''] && (
+                <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                  <span>Typing...</span>
+                </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
 
-                    {/* Chat Input */}
-                    <div className="p-3 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 flex items-center gap-2 bg-gray-50 dark:bg-gray-800 rounded-2xl px-3 py-1.5">
-                          <button
-                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                            onClick={() => {
-                              const el = document.createElement('input');
-                              el.type = 'file';
-                              el.onchange = async (e: any) => {
-                                const file = e.target.files?.[0];
-                                if (!file || !currentRoomId) return;
-                                const token = localStorage.getItem('authToken') || '';
-                                const form = new FormData();
-                                form.append('file', file);
-                                form.append('roomId', currentRoomId);
-                                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/chat/upload?roomId=${currentRoomId}`, {
-                                  method: 'POST',
-                                  headers: { Authorization: `Bearer ${token}` },
-                                  body: form
-                                });
-                                if (!res.ok) return;
-                                const data = await res.json();
-                                const { fileUrl, fileName } = data.data || {};
-                                const socket = getSocket();
-                                const officerId = (user as any)?.id || (user as any)?._id;
-                                socket.emit('file_upload_start', { roomId: currentRoomId, userId: officerId, fileName: file.name, fileSize: file.size });
-                                socket.emit('file_upload_complete', { roomId: currentRoomId, userId: officerId, fileUrl, fileName: fileName || file.name, fileSize: file.size });
-                              };
-                              el.click();
-                            }}
-                          >
-                            <Upload className="w-4 h-4" />
-                          </button>
-                          <Input
-                            className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent text-sm"
-                            placeholder="Type a message..."
-                            value={chatInput}
-                            onChange={(e) => {
-                              setChatInput(e.target.value);
-                              if (currentRoomId) {
-                                const socket = getSocket();
-                                const officerId = (user as any)?.id || (user as any)?._id;
-                                socket.emit('typing_start', { roomId: currentRoomId, userId: officerId });
-                              }
-                            }}
-                            onBlur={() => {
-                              if (currentRoomId) {
-                                const socket = getSocket();
-                                const officerId = (user as any)?.id || (user as any)?._id;
-                                socket.emit('typing_stop', { roomId: currentRoomId, userId: officerId });
-                              }
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' && !e.shiftKey) {
-                                e.preventDefault();
-                                if (!chatInput.trim() || !currentRoomId) return;
-                                const socket = getSocket();
-                                const officerMessage = {
-                                  id: Date.now().toString(),
-                                  type: 'amer',
-                                  content: chatInput.trim(),
-                                  sender: 'amer',
-                                  timestamp: new Date().toISOString(),
-                                  metadata: { roomId: currentRoomId }
-                                };
-                                setMessagesByRoom(prev => ({
-                                  ...prev,
-                                  [currentRoomId]: [...(prev[currentRoomId] || []), officerMessage]
-                                }));
-                                socket.emit('chat_message', { 
-                                  message: chatInput.trim(), 
-                                  chatId: currentRoomId, 
-                                  type: 'text' 
-                                });
-                                setChatInput('');
-                                setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-                              }
-                            }}
-                          />
-                        </div>
-                        <Button
-                          size="icon"
-                          className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-500/25 border-0 w-10 h-10"
-                          onClick={() => {
-                            if (!chatInput.trim() || !currentRoomId) return;
-                            const socket = getSocket();
-                            const officerMessage = {
-                              id: Date.now().toString(),
-                              type: 'amer',
-                              content: chatInput.trim(),
-                              sender: 'amer',
-                              timestamp: new Date().toISOString(),
-                              metadata: { roomId: currentRoomId }
-                            };
-                            setMessagesByRoom(prev => ({
-                              ...prev,
-                              [currentRoomId]: [...(prev[currentRoomId] || []), officerMessage]
-                            }));
-                            socket.emit('chat_message', { 
-                              message: chatInput.trim(), 
-                              chatId: currentRoomId, 
-                              type: 'text' 
-                            });
-                            setChatInput('');
-                            setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-                          }}
-                        >
-                          <Send className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </>
-                )}
+            {/* Chat Input */}
+            <div className="p-3 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
+              <div className="flex items-center gap-2">
+                <div className="flex-1 flex items-center gap-2 bg-gray-50 dark:bg-gray-800 rounded-2xl px-3 py-1.5">
+                  <button
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    onClick={() => {
+                      const el = document.createElement('input');
+                      el.type = 'file';
+                      el.onchange = async (e: any) => {
+                        const file = e.target.files?.[0];
+                        if (!file || !currentRoomId) return;
+                        const token = localStorage.getItem('authToken') || '';
+                        const form = new FormData();
+                        form.append('file', file);
+                        form.append('roomId', currentRoomId);
+                        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/chat/upload?roomId=${currentRoomId}`, {
+                          method: 'POST',
+                          headers: { Authorization: `Bearer ${token}` },
+                          body: form
+                        });
+                        if (!res.ok) return;
+                        const data = await res.json();
+                        const { fileUrl, fileName } = data.data || {};
+                        const socket = getSocket();
+                        const officerId = (user as any)?.id || (user as any)?._id;
+                        socket.emit('file_upload_start', { roomId: currentRoomId, userId: officerId, fileName: file.name, fileSize: file.size });
+                        socket.emit('file_upload_complete', { roomId: currentRoomId, userId: officerId, fileUrl, fileName: fileName || file.name, fileSize: file.size });
+                      };
+                      el.click();
+                    }}
+                  >
+                    <Upload className="w-4 h-4" />
+                  </button>
+                  <Input
+                    className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent text-sm"
+                    placeholder="Type a message..."
+                    value={chatInput}
+                    onChange={(e) => {
+                      setChatInput(e.target.value);
+                      if (currentRoomId) {
+                        const socket = getSocket();
+                        const officerId = (user as any)?.id || (user as any)?._id;
+                        socket.emit('typing_start', { roomId: currentRoomId, userId: officerId });
+                      }
+                    }}
+                    onBlur={() => {
+                      if (currentRoomId) {
+                        const socket = getSocket();
+                        const officerId = (user as any)?.id || (user as any)?._id;
+                        socket.emit('typing_stop', { roomId: currentRoomId, userId: officerId });
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (!chatInput.trim() || !currentRoomId) return;
+                        const socket = getSocket();
+                        const officerMessage = {
+                          id: Date.now().toString(),
+                          type: 'amer',
+                          content: chatInput.trim(),
+                          sender: 'amer',
+                          timestamp: new Date().toISOString(),
+                          metadata: { roomId: currentRoomId }
+                        };
+                        setMessagesByRoom(prev => ({
+                          ...prev,
+                          [currentRoomId]: [...(prev[currentRoomId] || []), officerMessage]
+                        }));
+                        socket.emit('chat_message', { 
+                          message: chatInput.trim(), 
+                          chatId: currentRoomId, 
+                          type: 'text' 
+                        });
+                        setChatInput('');
+                        setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+                      }
+                    }}
+                  />
+                </div>
+                <Button
+                  size="icon"
+                  className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-500/25 border-0 w-10 h-10"
+                  onClick={() => {
+                    if (!chatInput.trim() || !currentRoomId) return;
+                    const socket = getSocket();
+                    const officerMessage = {
+                      id: Date.now().toString(),
+                      type: 'amer',
+                      content: chatInput.trim(),
+                      sender: 'amer',
+                      timestamp: new Date().toISOString(),
+                      metadata: { roomId: currentRoomId }
+                    };
+                    setMessagesByRoom(prev => ({
+                      ...prev,
+                      [currentRoomId]: [...(prev[currentRoomId] || []), officerMessage]
+                    }));
+                    socket.emit('chat_message', { 
+                      message: chatInput.trim(), 
+                      chatId: currentRoomId, 
+                      type: 'text' 
+                    });
+                    setChatInput('');
+                    setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+                  }}
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
               </div>
             </div>
-          )}
+          </>
+        )}
+      </div>
+    </div>
+  )}
 
-        {mobileTab === 'profile' && (
+ {mobileTab === 'profile' && (
   <div className="space-y-4">
-    {/* Profile Card */}
-    <Card className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
-      <CardContent className="p-6">
-        {/* Profile Header */}
-        <div className="flex flex-col items-center text-center">
-          <div className="relative">
-            <Avatar className="w-20 h-20 ring-4 ring-[#0A3269]/10 dark:ring-white/10">
-              <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] text-xl font-medium">
+    {/* ─── Modern Profile Card ──────────────────────────────────── */}
+    <Card className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl  overflow-hidden">
+      {/* Cover gradient */}
+      <div className="h-20 bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-[#0A1628] dark:to-[#0A3269] relative">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-20" />
+      </div>
+
+      <CardContent className="px-4 pb-6">
+        {/* Avatar – overlapping the cover */}
+        <div className="flex flex-col items-center text-center -mt-12">
+          <div className="relative group">
+            <Avatar className="w-24 h-24 ring-4 ring-white dark:ring-gray-800 shadow-xl">
+              <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] text-2xl font-medium">
                 {(user as any)?.firstName?.[0]}{(user as any)?.lastName?.[0]}
               </AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
+            {/* Status dot */}
+            <div className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
+            {/* Edit button (optional) – uncomment if you want it
+            <button className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-[#0A3269] dark:bg-white border-2 border-white dark:border-gray-900 shadow-lg hover:scale-110 transition-transform">
+              <Edit className="w-3.5 h-3.5 text-white dark:text-[#0A3269]" />
+            </button>
+            */}
           </div>
-          
-          <h3 className="mt-3 text-lg font-semibold text-gray-900 dark:text-white">
+
+          <h3 className="mt-3 text-xl font-bold text-gray-900 dark:text-white">
             {(user as any)?.firstName} {(user as any)?.lastName}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">{(user as any)?.email}</p>
-          <Badge className="mt-2 bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] border-0 px-3 py-1 shadow-sm">
+          <Badge className="mt-2 bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] border-0 px-3 py-1 shadow-sm rounded-full">
             Amer Officer
           </Badge>
         </div>
 
-        {/* Profile Details */}
-        <div className="mt-6 space-y-1">
+        {/* Profile Details – modern grid layout */}
+        <div className="mt-6 grid grid-cols-1 gap-1">
           {[
             { icon: Phone, label: 'Phone', value: (user as any)?.phone || 'Not set' },
             { icon: Mail, label: 'Email', value: (user as any)?.email || 'Not set' },
@@ -1798,14 +1878,14 @@ const AmerDashboard: React.FC = () => {
             <div 
               key={item.label} 
               className={cn(
-                'flex items-center justify-between py-2.5 px-2 rounded-xl transition-colors',
+                'flex items-center justify-between py-2.5 px-3 rounded-xl transition-colors',
                 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
                 index < 3 ? 'border-b border-gray-100 dark:border-gray-800' : ''
               )}
             >
               <div className="flex items-center gap-3">
                 <div className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800">
-                  <item.icon className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+                  <item.icon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                 </div>
                 <span className="text-sm text-gray-600 dark:text-gray-300">{item.label}</span>
               </div>
@@ -1815,42 +1895,103 @@ const AmerDashboard: React.FC = () => {
             </div>
           ))}
         </div>
-
-      
       </CardContent>
     </Card>
+{/* ─── Modern Stats Card ────────────────────────────────────── */}
+<Card className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl transition-all duration-300">
+  <CardContent className="p-5">
+    <div className="flex items-center justify-between mb-4">
+      <h4 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+        <TrendingUp className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+        Quick Stats
+      </h4>
 
-    {/* Quick Stats Card */}
-    <Card className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Quick Stats</h4>
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider">This Month</span>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-            <p className="text-2xl font-bold text-[#0A3269] dark:text-white">
-              {applications.length}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Apps</p>
-            <div className="mt-2 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <div className="h-full w-full bg-[#0A3269] dark:bg-white rounded-full" />
-            </div>
-          </div>
-          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-            <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-              {(stats as any)?.byStatus?.find?.((x: any) => x._id==='approved')?.count || 0}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Approved</p>
-            <div className="mt-2 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <div className="h-full w-3/4 bg-emerald-500 dark:bg-emerald-400 rounded-full" />
-            </div>
+      {/* ─── Filter Dropdown ───────────────────────────────────── */}
+      <Select value={statsFilter} onValueChange={setStatsFilter}>
+        <SelectTrigger className="h-7 w-auto min-w-[100px] border-0 bg-gray-100 dark:bg-gray-800 text-[10px] text-gray-700 dark:text-gray-300 rounded-full px-3 py-0 focus:ring-0 focus:ring-offset-0">
+          <SelectValue placeholder="This Month" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="today">Today</SelectItem>
+          <SelectItem value="week">This Week</SelectItem>
+          <SelectItem value="month">This Month</SelectItem>
+          <SelectItem value="year">This Year</SelectItem>
+          <SelectItem value="all">All Time</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+
+    <div className="grid grid-cols-2 gap-3">
+      {/* Total Applications */}
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
+        <div className="flex justify-center mb-1">
+          <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#0A3269]/20 group-hover:bg-[#0A3269] transition-colors">
+            <FileText className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF] group-hover:text-white" />
           </div>
         </div>
-      </CardContent>
-    </Card>
+        <p className="text-2xl font-bold text-[#0A3269] dark:text-white">
+          {filteredStats.total}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Apps</p>
+        <div className="mt-2 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-full w-full bg-[#0A3269] dark:bg-white rounded-full" />
+        </div>
+      </div>
+
+      {/* Approved */}
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
+        <div className="flex justify-center mb-1">
+          <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 group-hover:bg-emerald-500 transition-colors">
+            <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:text-white" />
+          </div>
+        </div>
+        <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+          {filteredStats.approved}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Approved</p>
+        <div className="mt-2 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-full w-3/4 bg-emerald-500 dark:bg-emerald-400 rounded-full" />
+        </div>
+      </div>
+
+      {/* Pending */}
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
+        <div className="flex justify-center mb-1">
+          <div className="p-2 rounded-lg bg-amber-500/10 dark:bg-amber-500/20 group-hover:bg-amber-500 transition-colors">
+            <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:text-white" />
+          </div>
+        </div>
+        <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+          {filteredStats.pending}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Pending</p>
+        <div className="mt-2 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-full w-1/2 bg-amber-500 dark:bg-amber-400 rounded-full" />
+        </div>
+      </div>
+
+      {/* Rejected */}
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
+        <div className="flex justify-center mb-1">
+          <div className="p-2 rounded-lg bg-red-500/10 dark:bg-red-500/20 group-hover:bg-red-500 transition-colors">
+            <XCircle className="w-4 h-4 text-red-600 dark:text-red-400 group-hover:text-white" />
+          </div>
+        </div>
+        <p className="text-2xl font-bold text-red-600 dark:text-red-400">
+          {filteredStats.rejected}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Rejected</p>
+        <div className="mt-2 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-full w-1/4 bg-red-500 dark:bg-red-400 rounded-full" />
+        </div>
+      </div>
+    </div>
+  </CardContent>
+</Card>
   </div>
-)}        </div>
+)}
+
+</div>
 
         {/* Mobile Bottom Navigation */}
         <MobileBottomNav 
@@ -2651,44 +2792,41 @@ const AmerDashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
-
-
-
-{/* Premium Stats Grid - Modern Design */}
+{/* ─── Modern Stats Grid ─────────────────────────────────────────────── */}
 <motion.div
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
-  className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8"
+  className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mb-8"
 >
   {[
-    { 
-      icon: Users, 
-      label: 'Total Applications', 
-      value: applications.length, 
+    {
+      icon: Users,
+      label: 'Total Applications',
+      value: applications.length,
       trend: '+12%',
       trendLabel: 'vs last month',
       color: '#0A3269',
     },
-    { 
-      icon: Clock, 
-      label: 'Submitted', 
-      value: (stats as any)?.byStatus?.find?.((x: any) => x._id==='submitted')?.count || 0,
+    {
+      icon: Clock,
+      label: 'Submitted',
+      value: (stats as any)?.byStatus?.find?.((x: any) => x._id === 'submitted')?.count || 0,
       trend: 'Pending Review',
       trendLabel: 'Awaiting',
       color: '#F59E0B',
     },
-    { 
-      icon: Clock3, 
-      label: 'Under Review', 
-      value: (stats as any)?.byStatus?.find?.((x: any) => x._id==='under_review')?.count || 0,
+    {
+      icon: Clock3,
+      label: 'Under Review',
+      value: (stats as any)?.byStatus?.find?.((x: any) => x._id === 'under_review')?.count || 0,
       trend: 'In Progress',
       trendLabel: 'Active',
       color: '#8B5CF6',
     },
-    { 
-      icon: CheckCircle, 
-      label: 'Approved', 
-      value: (stats as any)?.byStatus?.find?.((x: any) => x._id==='approved')?.count || 0,
+    {
+      icon: CheckCircle,
+      label: 'Approved',
+      value: (stats as any)?.byStatus?.find?.((x: any) => x._id === 'approved')?.count || 0,
       trend: 'Completed',
       trendLabel: 'Success',
       color: '#10B981',
@@ -2696,68 +2834,57 @@ const AmerDashboard: React.FC = () => {
   ].map((stat, index) => (
     <motion.div
       key={stat.label}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
-      whileHover={{ y: -4, scale: 1.01 }}
+      whileHover={{ y: -2 }}
       className="group"
     >
-      <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 p-4 sm:p-5 shadow-sm hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-white/5 transition-all duration-300">
-        {/* Subtle Background Gradient */}
-        <div 
-          className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
-          style={{ 
-            background: `radial-gradient(circle at top right, ${stat.color}, transparent 70%)`
-          }}
-        />
-        
-        {/* Top Border Accent */}
-        <div 
-          className="absolute top-0 left-4 right-4 h-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{ backgroundColor: stat.color }}
+      <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm p-3.5 sm:p-4 shadow-sm hover:shadow-md transition-shadow">
+        {/* Subtle Glow */}
+        <div
+          className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-10 blur-2xl"
+          style={{ background: `radial-gradient(circle at top right, ${stat.color}, transparent 70%)` }}
         />
 
         <div className="relative flex items-start justify-between gap-2">
-          <div className="space-y-1 min-w-0">
-            {/* Label */}
-            <p className="text-[10px] sm:text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-[0.08em]">
+          <div className="space-y-0.5 min-w-0 flex-1">
+            <p className="text-[9px] sm:text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
               {stat.label}
             </p>
-            
-            {/* Value */}
-            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
+            <p className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
               {stat.value}
             </p>
-            
-            {/* Trend */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <TrendingUp className="w-3 h-3 text-emerald-500" />
-              <span className="text-[10px] sm:text-xs font-medium text-gray-600 dark:text-gray-400">
+              <span className="text-[9px] sm:text-[10px] font-light text-muted-foreground">
                 {stat.trend}
               </span>
-              <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500">
+              <span className="text-[9px] sm:text-[10px] font-light text-muted-foreground/60">
                 {stat.trendLabel}
               </span>
             </div>
           </div>
-          
-          {/* Icon Container */}
-          <div 
-            className="p-2 sm:p-2.5 rounded-xl flex-shrink-0 shadow-sm"
-            style={{ backgroundColor: `${stat.color}15` }}
+
+          {/* Icon Container with Gradient */}
+          <div
+            className="rounded-xl p-2.5 shadow-lg flex-shrink-0"
+            style={{ background: `linear-gradient(135deg, ${stat.color}, ${stat.color}dd)` }}
           >
-            <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: stat.color }} />
+            <stat.icon className="w-4 h-4 text-white" strokeWidth={2} />
           </div>
         </div>
-        
+
         {/* Progress Bar */}
-        <div className="mt-3 h-1 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+        <div className="mt-3 h-1 w-full rounded-full bg-muted overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
-            animate={{ width: `${Math.min((stat.value / (applications.length || 1)) * 100, 100)}%` }}
-            transition={{ duration: 0.8, delay: 0.2 + (index * 0.05) }}
+            animate={{
+              width: `${Math.min((stat.value / (applications.length || 1)) * 100, 100)}%`,
+            }}
+            transition={{ duration: 0.6, delay: 0.2 + index * 0.05 }}
             className="h-full rounded-full"
-            style={{ backgroundColor: stat.color }}
+            style={{ background: `linear-gradient(to right, ${stat.color}, ${stat.color}cc)` }}
           />
         </div>
       </div>
@@ -2794,12 +2921,23 @@ const AmerDashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
+        
 
 
- {/* Premium Tablet/Desktop Tabs */}
+
+
+
+
+
+
+
+
+
+
+{/* ─── Tabs ────────────────────────────────────────────────────────── */}
 <Tabs defaultValue="applications" className="w-full">
-  <TabsList className={cn(
-  "relative bg-white dark:bg-black border border-gray-200 dark:border-gray-800 p-1.5 rounded-2xl shadow-sm",
+ <TabsList className={cn(
+  "relative bg-white dark:bg-black/40 border border-gray-200/60 dark:border-white/5 p-1 rounded-xl shadow-sm w-full",
   isTablet ? "flex-wrap gap-1" : ""
 )}>
   {[
@@ -2817,30 +2955,32 @@ const AmerDashboard: React.FC = () => {
       initial={{ opacity: 0, y: -5 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
+      className={cn("flex-1", isTablet ? "min-w-[60px]" : "")}
     >
       <TabsTrigger 
         value={tab.id}
         className={cn(
-          'relative rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300',
-          isTablet ? 'flex-1 min-w-[70px]' : 'px-8',
-          'data-[state=active]:bg-black dark:data-[state=active]:bg-white',
+          'relative rounded-lg px-3 py-1.5 text-xs font-light transition-all duration-300 w-full',
+          isTablet ? 'min-w-[60px]' : 'w-full',
+          'data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-white',
           'data-[state=active]:text-white dark:data-[state=active]:text-black',
-          'data-[state=active]:shadow-md',
-          'data-[state=inactive]:text-gray-600 dark:data-[state=inactive]:text-gray-400',
-          'data-[state=inactive]:hover:bg-gray-100 dark:data-[state=inactive]:hover:bg-gray-800',
-          'hover:scale-105 active:scale-95'
+          'data-[state=active]:shadow-sm',
+          'data-[state=inactive]:text-gray-500 dark:data-[state=inactive]:text-gray-400',
+          'data-[state=inactive]:hover:bg-gray-100/50 dark:data-[state=inactive]:hover:bg-white/5',
+          'hover:scale-[1.02] active:scale-[0.98]'
         )}
       >
-        <span className="relative flex items-center gap-2 z-10">
+        <span className="relative flex items-center justify-center gap-1.5 z-10">
           <tab.icon className={cn(
-            "w-4 h-4 transition-all duration-300",
+            "w-3.5 h-3.5 transition-all duration-300",
             "data-[state=active]:text-white dark:data-[state=active]:text-black",
-            "data-[state=inactive]:text-gray-500 dark:data-[state=inactive]:text-gray-500",
-            "data-[state=active]:scale-110"
+            "data-[state=inactive]:text-gray-400 dark:data-[state=inactive]:text-gray-500",
+            "data-[state=active]:scale-105"
           )} />
-          <span>{tab.label}</span>
+          <span className="hidden xs:inline">{tab.label}</span>
+          <span className="xs:hidden">{tab.label.substring(0,3)}</span>
           {tab.id === 'conversations' && (
-            <span className="ml-1 px-1.5 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full">
+            <span className="ml-1 px-1.5 py-0.5 bg-rose-500/90 text-white text-[9px] font-light rounded-full">
               {invites.length + rooms.reduce((acc, r) => acc + r.unread, 0)}
             </span>
           )}
@@ -2849,267 +2989,349 @@ const AmerDashboard: React.FC = () => {
     </motion.div>
   ))}
 </TabsList>
-
   <TabsContent value="applications" className="space-y-4">
-    {/* Premium Search & Filter */}
-  <div className="flex flex-wrap items-center gap-4 mb-10">
-  <div className="flex-1 min-w-[200px]">
-    <div className="relative group">
-      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <Search className="w-4 h-4 text-gray-400 dark:text-gray-500 group-focus-within:text-black dark:group-focus-within:text-white transition-colors" />
+    {/* ─── Search & Filter ────────────────────────────────────────────────── */}
+    <div className="flex flex-wrap items-center gap-3 mb-6">
+      <div className="flex-1 min-w-[180px]">
+        <div className="relative group">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <Search className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 group-focus-within:text-[#0A3269] dark:group-focus-within:text-white transition-colors" />
+          </div>
+          <Input
+            placeholder="Search applications..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 pr-3 py-2 bg-white dark:bg-black/40 border-gray-200/60 dark:border-white/10 rounded-lg focus:ring-1 focus:ring-[#0A3269]/30 dark:focus:ring-white/20 focus:border-[#0A3269] dark:focus:border-white transition-all text-sm font-light text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 h-9"
+          />
+        </div>
       </div>
-      <Input
-        placeholder="Search applications..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="pl-10 pr-4 py-3 bg-white dark:bg-black border-gray-200 dark:border-gray-800 rounded-2xl focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 focus:border-black dark:focus:border-white transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
-      />
-    </div>
-  </div>
-  
-  <div className="flex items-center gap-3">
-    <Select value={statusFilter} onValueChange={setStatusFilter}>
-      <SelectTrigger className="w-[180px] bg-white dark:bg-black border-gray-200 dark:border-gray-800 rounded-2xl text-gray-900 dark:text-white">
-        <SelectValue placeholder="Filter by status" />
-      </SelectTrigger>
-      <SelectContent className="rounded-2xl bg-white dark:bg-black border-gray-200 dark:border-gray-800">
-        <SelectItem value="all">
-          <span className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <FileText className="w-3.5 h-3.5" />
-            All Statuses
-          </span>
-        </SelectItem>
-        <SelectItem value="submitted">
-          <span className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <Clock className="w-3.5 h-3.5" />
-            Submitted
-          </span>
-        </SelectItem>
-        <SelectItem value="under_review">
-          <span className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <Clock3 className="w-3.5 h-3.5" />
-            Under Review
-          </span>
-        </SelectItem>
-        <SelectItem value="docs_required">
-          <span className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <AlertCircle className="w-3.5 h-3.5" />
-            Docs Required
-          </span>
-        </SelectItem>
-        <SelectItem value="approved">
-          <span className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <CheckCircle className="w-3.5 h-3.5" />
-            Approved
-          </span>
-        </SelectItem>
-        <SelectItem value="rejected">
-          <span className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <XCircle className="w-3.5 h-3.5" />
-            Rejected
-          </span>
-        </SelectItem>
-      </SelectContent>
-    </Select>
+      
+      <div className="flex items-center gap-2">
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[160px] bg-white dark:bg-black/40 border-gray-200/60 dark:border-white/10 rounded-lg text-sm font-light text-gray-900 dark:text-white h-9">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent className="rounded-lg bg-white dark:bg-black/95 border-gray-200/60 dark:border-white/10">
+            <SelectItem value="all">
+              <span className="flex items-center gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
+                <FileText className="w-3.5 h-3.5" />
+                All Statuses
+              </span>
+            </SelectItem>
+            <SelectItem value="submitted">
+              <span className="flex items-center gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
+                <Clock className="w-3.5 h-3.5" />
+                Submitted
+              </span>
+            </SelectItem>
+            <SelectItem value="under_review">
+              <span className="flex items-center gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
+                <Clock3 className="w-3.5 h-3.5" />
+                Under Review
+              </span>
+            </SelectItem>
+            <SelectItem value="docs_required">
+              <span className="flex items-center gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
+                <AlertCircle className="w-3.5 h-3.5" />
+                Docs Required
+              </span>
+            </SelectItem>
+            <SelectItem value="approved">
+              <span className="flex items-center gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
+                <CheckCircle className="w-3.5 h-3.5" />
+                Approved
+              </span>
+            </SelectItem>
+            <SelectItem value="rejected">
+              <span className="flex items-center gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
+                <XCircle className="w-3.5 h-3.5" />
+                Rejected
+              </span>
+            </SelectItem>
+          </SelectContent>
+        </Select>
 
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="p-2.5 rounded-2xl bg-white dark:bg-black border border-gray-200 dark:border-gray-800 hover:border-black/30 dark:hover:border-white/30 transition-all duration-300"
-      onClick={() => setShowFilters(!showFilters)}
-    >
-      <FilterIcon className={cn(
-        "w-4 h-4 transition-colors duration-300",
-        showFilters ? "text-black dark:text-white" : "text-gray-500 dark:text-gray-400"
-      )} />
-    </motion.button>
-  </div>
-</div>
-{/* Quick Stats Chips */}
-<div className="flex flex-wrap gap-2 mb-6">
-  {[
-    { label: 'All', count: applications.length },
-    { label: 'Submitted', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='submitted')?.count || 0 },
-    { label: 'Review', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='under_review')?.count || 0 },
-    { label: 'Approved', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='approved')?.count || 0 },
-    { label: 'Rejected', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='rejected')?.count || 0 },
-  ].map((chip) => {
-    const isActive = statusFilter === chip.label.toLowerCase() || (chip.label === 'All' && statusFilter === 'all');
-    return (
-      <motion.button
-        key={chip.label}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className={cn(
-          'px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300',
-          isActive
-            ? 'bg-[#0A3269] dark:bg-white text-white dark:text-black shadow-md shadow-[#0A3269]/25'
-            : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="p-2 rounded-lg bg-white dark:bg-black/40 border border-gray-200/60 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20 transition-all duration-300 h-9 w-9 flex items-center justify-center"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <FilterIcon className={cn(
+            "w-3.5 h-3.5 transition-colors duration-300",
+            showFilters ? "text-[#0A3269] dark:text-white" : "text-gray-400 dark:text-gray-500"
+          )} />
+        </motion.button>
+      </div>
+    </div>
+
+    {/* ─── Quick Stats Chips ────────────────────────────────────────────────── */}
+    <div className="flex flex-wrap gap-1.5 mb-4">
+      {[
+        { label: 'All', count: applications.length },
+        { label: 'Submitted', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='submitted')?.count || 0 },
+        { label: 'Review', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='under_review')?.count || 0 },
+        { label: 'Approved', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='approved')?.count || 0 },
+        { label: 'Rejected', count: (stats as any)?.byStatus?.find?.((x: any) => x._id==='rejected')?.count || 0 },
+      ].map((chip) => {
+        const isActive = statusFilter === chip.label.toLowerCase() || (chip.label === 'All' && statusFilter === 'all');
+        return (
+          <motion.button
+            key={chip.label}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className={cn(
+              'px-3 py-1 rounded-full text-[10px] font-light transition-all duration-300',
+              isActive
+                ? 'bg-[#0A3269] dark:bg-white text-white dark:text-black shadow-sm shadow-[#0A3269]/20'
+                : 'bg-gray-100/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200/60 dark:hover:bg-white/10'
+            )}
+            onClick={() => setStatusFilter(chip.label === 'All' ? 'all' : chip.label.toLowerCase())}
+          >
+            {chip.label} <span className="opacity-50">({chip.count})</span>
+          </motion.button>
+        );
+      })}
+    </div>
+
+    {/* ─── Applications List ────────────────────────────────────────────────── */}
+    {isTablet ? (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {filteredApplications.map((application) => (
+          <MobileApplicationCard
+            key={application._id}
+            application={application}
+            onPress={() => {
+              setSelectedApplication(application);
+              setShowApplicationDetails(true);
+            }}
+            onAction={(action) => {
+              const app = application;
+              switch (action) {
+                case 'view':
+                  setSelectedApplication(app);
+                  setShowApplicationDetails(true);
+                  break;
+                case 'upload':
+                  handleDocumentUpload(app._id);
+                  break;
+                case 'review':
+                  handleDocumentReview(app._id);
+                  break;
+                case 'otp':
+                  handleRequestOTP(app._id);
+                  break;
+                case 'fraud':
+                  handleFraudCheck(app._id);
+                  break;
+                case 'result':
+                  handleResultDocumentUpload(app._id);
+                  break;
+                default:
+                  break;
+              }
+            }}
+          />
+        ))}
+        {filteredApplications.length === 0 && (
+          <div className="col-span-2 text-center py-12">
+            <div className="w-14 h-14 rounded-xl bg-gray-100/60 dark:bg-white/5 flex items-center justify-center mx-auto mb-3">
+              <FileText className="w-7 h-7 text-gray-400 dark:text-gray-500" />
+            </div>
+            <h3 className="text-base font-light text-gray-900 dark:text-white mb-1">No applications found</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-light">Try adjusting your filters or search query</p>
+          </div>
         )}
-        onClick={() => setStatusFilter(chip.label === 'All' ? 'all' : chip.label.toLowerCase())}
-      >
-        {chip.label} <span className="opacity-60">({chip.count})</span>
-      </motion.button>
-    );
-  })}
-</div>
-{/* Applications List */}
-{isTablet ? (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
-    {filteredApplications.map((application) => (
-      <MobileApplicationCard
-        key={application._id}
-        application={application}
-        onPress={() => {
-          setSelectedApplication(application);
-          setShowApplicationDetails(true);
-        }}
-        onAction={(action) => {
-          const app = application;
-          switch (action) {
-            case 'view':
+      </div>
+    ) : (
+      <div className="space-y-2.5">
+        {filteredApplications.map((application) => (
+          <ApplicationRow
+            key={application._id}
+            application={application}
+            isExpanded={expandedRows.has(application._id)}
+            onToggle={() => toggleRowExpansion(application._id)}
+            onStatusUpdate={handleStatusUpdateClick}
+            onDocumentUpload={handleDocumentUpload}
+            onDocumentReview={handleDocumentReview}
+            onResultUpload={handleResultDocumentUpload}
+            onRequestOTP={handleRequestOTP}
+            onFraudCheck={handleFraudCheck}
+            onSetGovStage={handleSetGovStage}
+            onViewDetails={(app) => {
               setSelectedApplication(app);
               setShowApplicationDetails(true);
-              break;
-            case 'upload':
-              handleDocumentUpload(app._id);
-              break;
-            case 'review':
-              handleDocumentReview(app._id);
-              break;
-            case 'otp':
-              handleRequestOTP(app._id);
-              break;
-            case 'fraud':
-              handleFraudCheck(app._id);
-              break;
-            case 'result':
-              handleResultDocumentUpload(app._id);
-              break;
-            default:
-              break;
-          }
-        }}
-      />
-    ))}
-    {filteredApplications.length === 0 && (
-      <div className="col-span-2 text-center py-16">
-        <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-          <FileText className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-        </div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No applications found</h3>
-        <p className="text-gray-500 dark:text-gray-400">Try adjusting your filters or search query</p>
+            }}
+          />
+        ))}
+        {filteredApplications.length === 0 && (
+          <div className="text-center py-12">
+            <div className="w-14 h-14 rounded-xl bg-gray-100/60 dark:bg-white/5 flex items-center justify-center mx-auto mb-3">
+              <FileText className="w-7 h-7 text-gray-400 dark:text-gray-500" />
+            </div>
+            <h3 className="text-base font-light text-gray-900 dark:text-white mb-1">No applications found</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-light">Try adjusting your filters or search query</p>
+          </div>
+        )}
       </div>
     )}
-  </div>
-) : (
-  <div className="space-y-3 overflow-hidden">
-    {filteredApplications.map((application) => (
-      <ApplicationRow
-        key={application._id}
-        application={application}
-        isExpanded={expandedRows.has(application._id)}
-        onToggle={() => toggleRowExpansion(application._id)}
-        onStatusUpdate={handleStatusUpdateClick}
-        onDocumentUpload={handleDocumentUpload}
-        onDocumentReview={handleDocumentReview}
-        onResultUpload={handleResultDocumentUpload}
-        onRequestOTP={handleRequestOTP}
-        onFraudCheck={handleFraudCheck}
-        onSetGovStage={handleSetGovStage}
-        onViewDetails={(app) => {
-          setSelectedApplication(app);
-          setShowApplicationDetails(true);
-        }}
-      />
-    ))}
-    {filteredApplications.length === 0 && (
-      <div className="text-center py-16">
-        <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-          <FileText className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-        </div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No applications found</h3>
-        <p className="text-gray-500 dark:text-gray-400">Try adjusting your filters or search query</p>
-      </div>
-    )}
-  </div>
-)}
-</TabsContent>
+  </TabsContent>
 
-<TabsContent value="package-applications" className="space-y-6">
-  <PackageApplicationsAdmin />
-</TabsContent>
+  <TabsContent value="package-applications" className="space-y-4">
+    <PackageApplicationsAdmin />
+  </TabsContent>
 
-<TabsContent value="checks" className="space-y-6">
-  <ChecksReviewPanel />
-</TabsContent>
+  <TabsContent value="checks" className="space-y-4">
+    <ChecksReviewPanel />
+  </TabsContent>
 
+  {/* ─── Other Tabs (Fraud, Penalties, OTP, Stats, Chat) ──────────────────── */}
+  <TabsContent value="fraud" className="space-y-4">
+    <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+      Fraud alerts section
+    </div>
+  </TabsContent>
+
+  <TabsContent value="penalties" className="space-y-4">
+    <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+      Penalties section
+    </div>
+  </TabsContent>
+
+  <TabsContent value="otp" className="space-y-4">
+    <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+      OTP requests section
+    </div>
+  </TabsContent>
+
+  <TabsContent value="statistics" className="space-y-4">
+    <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+      Statistics dashboard
+    </div>
+  </TabsContent>
+
+  <TabsContent value="conversations" className="space-y-4">
+    <div className="text-center py-12 text-sm font-light text-gray-500 dark:text-gray-400">
+      Conversations (chat) section
+    </div>
+  </TabsContent>
 <TabsContent value="conversations" className="space-y-6">
   <div className="bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
     <div className={cn(
       "grid",
       isTablet ? "grid-cols-12 h-[500px]" : "grid-cols-12 h-[600px]"
     )}>
-      {/* Chat Rooms Sidebar */}
-      <div className="col-span-4 border-r border-gray-200 dark:border-gray-800 p-4 overflow-y-auto bg-gray-50/50 dark:bg-black/50">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <MessageCircle className="w-4 h-4 text-black dark:text-white" />
-            Active Rooms
-          </h3>
-          <Badge className="bg-black dark:bg-white text-white dark:text-black rounded-full px-3">
-            {rooms.length}
-          </Badge>
-        </div>
-        <div className="space-y-2">
-          {rooms.map((room) => (
-            <button
-              key={room.roomId}
-              onClick={() => {
-                setCurrentRoomId(room.roomId);
-                setRooms(prev => prev.map(r => r.roomId === room.roomId ? { ...r, unread: 0 } : r));
-                const socket = getSocket();
-                const officerId = (user as any)?.id || (user as any)?._id;
-                socket.emit('join_chat_room', { roomId: room.roomId, userId: officerId, officerId });
-              }}
-              className={cn(
-                'w-full text-left p-3 rounded-xl border transition-all duration-200',
-                currentRoomId === room.roomId 
-                  ? 'border-black dark:border-white bg-black/5 dark:bg-white/5 shadow-sm' 
-                  : 'border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50'
-              )}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black text-xs font-medium">
-                    {room.userName?.[0] || 'U'}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-[100px]">
-                      {room.userName || 'User'}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[100px]">
-                      {room.service || 'General'}
-                    </div>
-                  </div>
-                </div>
+    {/* ─── Chat Rooms Sidebar ────────────────────────────────────────── */}
+<div className="col-span-4 border-r border-gray-200/60 dark:border-gray-800/60 p-4 overflow-y-auto bg-gradient-to-b from-gray-50/80 to-white/80 dark:from-black/40 dark:to-black/60 backdrop-blur-sm">
+  {/* Header – with animated count */}
+  <div className="flex items-center justify-between mb-5">
+    <h3 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2.5">
+      <span className="relative">
+        <MessageCircle className="w-4 h-4 text-black dark:text-white" />
+        <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+      </span>
+      Active Rooms
+    </h3>
+    <Badge className="bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 text-white dark:text-black rounded-full px-3 py-0.5 text-xs font-medium shadow-md">
+      {rooms.length}
+    </Badge>
+  </div>
+
+  <div className="space-y-2">
+    {rooms.map((room) => (
+      <motion.button
+        key={room.roomId}
+        whileHover={{ scale: 1.02, x: 4 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => {
+          setCurrentRoomId(room.roomId);
+          setRooms(prev => prev.map(r => r.roomId === room.roomId ? { ...r, unread: 0 } : r));
+          const socket = getSocket();
+          const officerId = (user as any)?.id || (user as any)?._id;
+          socket.emit('join_chat_room', { roomId: room.roomId, userId: officerId, officerId });
+        }}
+        className={cn(
+          'w-full text-left p-3 rounded-xl border transition-all duration-300 relative overflow-hidden',
+          currentRoomId === room.roomId 
+            ? 'border-black dark:border-white bg-black/5 dark:bg-white/5 shadow-lg shadow-black/5 dark:shadow-white/5' 
+            : 'border-gray-200/60 dark:border-gray-800/60 bg-white/50 dark:bg-white/5 hover:bg-gray-100/70 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-gray-600'
+        )}
+      >
+        {/* Active indicator glow */}
+        {currentRoomId === room.roomId && (
+          <div className="absolute inset-0 bg-gradient-to-r from-black/5 to-transparent dark:from-white/5 dark:to-transparent pointer-events-none" />
+        )}
+        
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0">
+            {/* Avatar with status dot */}
+            <div className="relative flex-shrink-0">
+              <div className={cn(
+                'w-10 h-10 rounded-full flex items-center justify-center text-xs font-medium transition-all duration-300',
+                currentRoomId === room.roomId
+                  ? 'bg-black dark:bg-white text-white dark:text-black shadow-md'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+              )}>
+                {room.userName?.[0] || 'U'}
+              </div>
+              {/* Online status indicator */}
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
+            </div>
+            
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-[100px]">
+                  {room.userName || 'User'}
+                </span>
                 {room.unread > 0 && (
-                  <Badge className="bg-red-500 text-white rounded-full text-[10px] px-2 min-w-[20px] h-5 flex items-center justify-center">
-                    {room.unread}
-                  </Badge>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
                 )}
               </div>
-            </button>
-          ))}
-          {rooms.length === 0 && (
-            <div className="text-center py-8 text-gray-400 text-sm">
-              <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-30" />
-              No active rooms
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[80px]">
+                  {room.service || 'General'}
+                </span>
+                <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />
+                <span className="text-[10px] text-gray-400 dark:text-gray-500">Active</span>
+              </div>
             </div>
+          </div>
+          
+          {/* Unread badge – animated */}
+          {room.unread > 0 && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            >
+              <Badge className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full text-[10px] px-2.5 min-w-[24px] h-6 flex items-center justify-center shadow-lg shadow-red-500/30">
+                {room.unread > 9 ? '9+' : room.unread}
+              </Badge>
+            </motion.div>
           )}
         </div>
-      </div>
-      
+      </motion.button>
+    ))}
+    
+    {/* Empty state – with illustration */}
+    {rooms.length === 0 && (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex flex-col items-center justify-center py-12 text-center"
+      >
+        <div className="relative w-16 h-16 mb-4">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700" />
+          <MessageCircle className="absolute inset-0 m-auto w-6 h-6 text-gray-400 dark:text-gray-500" />
+        </div>
+        <h4 className="text-sm font-medium text-gray-600 dark:text-gray-300">No active rooms</h4>
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[150px]">
+          Accept an invite to start chatting
+        </p>
+      </motion.div>
+    )}
+  </div>
+</div>
       {/* Chat Content */}
       <div className="col-span-8 flex flex-col bg-white dark:bg-black">
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">

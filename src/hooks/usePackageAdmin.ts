@@ -13,31 +13,37 @@ export function usePackageAdmin({ mine = false } = {}) {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ status: 'all', q: '' });
+const fetchApplications = useCallback(async () => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    setLoading(false);
+    return;
+  }
+  setLoading(true);
+  try {
+    // 🟢 If it's the customer's own list, use /me/list; otherwise use the admin endpoint with filters.
+    const url = mine
+      ? `${API_BASE}/me/list`
+      : `${API_BASE}?status=${filters.status}&q=${encodeURIComponent(filters.q)}`;
 
-  const fetchApplications = useCallback(async () => {
-    const token = localStorage.getItem('authToken');
-    setLoading(true);
-    try {
-      const url =
-      //  mine
-        // ?
-         `${API_BASE}/me/list`
-        // : `${API_BASE}?status=${filters.status}&q=${encodeURIComponent(filters.q)}`;
-      const res = await fetch(url, {   headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      }, });
-      const data = await res.json();
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
 
-      if (data.status === 'success') setApplications(data.data.applications || []);
-    } catch {
-      toast.error('Failed to load applications');
-    } finally {
-      setLoading(false);
+    if (data.status === 'success') {
+      setApplications(data.data.applications || []);
+    } else {
+      toast.error(data.message || 'Failed to load applications');
     }
-  }, [mine, filters.status, filters.q]);
-
-  useEffect(() => { fetchApplications(); }, [fetchApplications]);
+  } catch (err) {
+    console.error('fetch error:', err);
+    toast.error('Could not fetch applications');
+  } finally {
+    setLoading(false);
+  }
+}, [mine, filters.status, filters.q]);
+ useEffect(() => { fetchApplications(); }, [fetchApplications]);
 
   const patch = async (id: string, path: string, body: any, okMsg: string) => {
     const token = localStorage.getItem('authToken');

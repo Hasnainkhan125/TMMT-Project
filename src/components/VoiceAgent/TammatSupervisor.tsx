@@ -339,7 +339,7 @@ const TammatSupervisor = ({
     if (!canUseAI(isSubscribed)) {
       setShowSubscribePrompt(true);
       addSystem(
-        'You have used all your free questions. Subscribe to Tammet for unlimited AI access and specialist support.',
+        'You have used all your free questions. Subscribe to TMMT for unlimited AI access and specialist support.',
         'ai'
       );
       return;
@@ -555,7 +555,7 @@ const TammatSupervisor = ({
     
     if (!isSubscribed && !canEscalate(isSubscribed)) {
       toast.error('You have used your free escalation', {
-        description: 'Subscribe to Tammet for unlimited access to specialists.',
+        description: 'Subscribe to TMMT for unlimited access to specialists.',
         action: { label: 'Subscribe', onClick: () => (window.location.href = '/subscription') },
       });
       return;
@@ -587,7 +587,7 @@ const TammatSupervisor = ({
   const handleEscalation = (question: string) => {
     if (!canEscalate(isSubscribed)) {
       toast.error('No escalations remaining', {
-        description: 'Subscribe to Tammet for unlimited specialist access.',
+        description: 'Subscribe to TMMT for unlimited specialist access.',
         action: { label: 'Subscribe', onClick: () => (window.location.href = '/subscription') },
       });
       return;
@@ -607,7 +607,7 @@ const TammatSupervisor = ({
 
     if (!isSubscribed) {
       toast.info('File sharing available with subscription', {
-        description: 'Subscribe to Tammet to share documents.',
+        description: 'Subscribe to TMMT to share documents.',
         action: { label: 'Subscribe', onClick: () => (window.location.href = '/subscription') },
       });
       return;
@@ -808,7 +808,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
               ) : (
                 <>
                   <MessageSquare className="w-3 h-3 text-white" />
-                  Tammet Assistant
+                  TMMT Assistant
                 </>
               )}
             </span>
@@ -853,7 +853,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
           if (m === 'specialist' && connectionStatus === 'idle') {
             if (!isSubscribed && !canEscalate(isSubscribed)) {
               toast.error('No escalations remaining', {
-                description: 'Subscribe to Tammet for unlimited specialist access.',
+                description: 'Subscribe to TMMT for unlimited specialist access.',
                 action: { label: 'Subscribe', onClick: () => (window.location.href = '/subscription') },
               });
               return;
@@ -934,9 +934,9 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
           ))}
 
           {isAIStreaming && currentChat[currentChat.length - 1]?.isStreaming !== true && (
-            <TypingIndicator sender="Tammet AI" />
+            <TypingIndicator sender="TMMT AI" />
           )}
-          {isSpecialistTyping && <TypingIndicator sender={specialistInfo?.name || 'Tammet Specialist'} />}
+          {isSpecialistTyping && <TypingIndicator sender={specialistInfo?.name || 'TMMT Specialist'} />}
           <div ref={messagesEndRef} />
         </div>
       </div>
@@ -976,7 +976,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
             ) : connectionStatus === 'connected' ? (
               <>
                 <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                <span className="font-medium">Live with {specialistInfo?.name || 'Tammet Specialist'}</span>
+                <span className="font-medium">Live with {specialistInfo?.name || 'TMMT Specialist'}</span>
               </>
             ) : (
               <>
@@ -1000,7 +1000,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
               }
               if (!isSubscribed) {
                 toast.info('File sharing available with subscription', {
-                  description: 'Subscribe to Tammet to share documents.',
+                  description: 'Subscribe to TMMT to share documents.',
                   action: { label: 'Subscribe', onClick: () => (window.location.href = '/subscription') },
                 });
                 return;
@@ -1210,7 +1210,7 @@ const ChatHeader = ({
         </div>
         <div>
           <p className="font-semibold text-sm leading-tight flex items-center gap-2">
-            <span>Tammet</span>
+            <span>TMMT</span>
             {!isSubscribed && (
               <span className="text-[9px] bg-white/20 px-1.5 py-0.5 rounded-full text-white/90 font-medium">
                 Free Trial
@@ -1347,7 +1347,7 @@ const ChatModeSwitcher = ({
               onClick={() => {
                 if (isLocked) {
                   toast.info('💡 Subscribe for specialist access', {
-                    description: 'Get unlimited specialist support with Tammet Pro.',
+                    description: 'Get unlimited specialist support with TMMT Pro.',
                     action: { label: 'Subscribe', onClick: () => (window.location.href = '/subscription') },
                   });
                   return;
@@ -1435,7 +1435,7 @@ const EmptyState = ({
         </div>
         <div>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-            {isSubscribed ? 'Tammet Pro' : 'Tammet — Free Trial'}
+            {isSubscribed ? 'TMMT Pro' : 'TMMT — Free Trial'}
           </h3>
           <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed max-w-[280px] mx-auto">
             {chatMode === 'ai'
@@ -1446,7 +1446,7 @@ const EmptyState = ({
                 ? 'Share your issue with a specialist — they\'ll reply within 2 minutes.'
                 : remainingEscalations > 0
                   ? `You have ${remainingEscalations} free escalation${remainingEscalations !== 1 ? 's' : ''} to a specialist. Subscribe for unlimited access.`
-                  : 'Subscribe to Tammet for unlimited specialist access.'}
+                  : 'Subscribe to TMMT for unlimited specialist access.'}
           </p>
           {!isSubscribed && !hasFreeTrials && (
             <button
@@ -1538,7 +1538,7 @@ const EscalationCard = ({
           This seems like a complex case that would benefit from a specialist's review.
           {canEscalate 
             ? ` You have ${remainingEscalations} free escalation${remainingEscalations !== 1 ? 's' : ''} remaining.`
-            : ' Subscribe to Tammet for unlimited specialist access.'}
+            : ' Subscribe to TmmT for unlimited specialist access.'}
         </p>
         {canEscalate ? (
           <button

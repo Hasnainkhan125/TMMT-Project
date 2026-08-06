@@ -773,15 +773,20 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             <div className="flex gap-2 justify-end">
               <Button variant="outline" onClick={() => setDocReqOpen(false)}>Cancel</Button>
-              <Button onClick={async ()=>{
-                const id = (application as any)?._id || (application as any)?.id
-                const requested = Object.entries(docReq).filter(([,v])=>v).map(([k])=>k)
-                if (requested.length === 0) return
-                await onRequestDocuments?.(id, requested, docReqNote)
-                setDocReqOpen(false)
-                setDocReq({})
-                setDocReqNote('')
-              }}>Send Request</Button>
+          <Button 
+  style={{ color: 'white' }}
+  onClick={async ()=>{
+    const id = (application as any)?._id || (application as any)?.id
+    const requested = Object.entries(docReq).filter(([,v])=>v).map(([k])=>k)
+    if (requested.length === 0) return
+    await onRequestDocuments?.(id, requested, docReqNote)
+    setDocReqOpen(false)
+    setDocReq({})
+    setDocReqNote('')
+  }}
+>
+  Send Request
+</Button>
             </div>
           </div>
         </div>

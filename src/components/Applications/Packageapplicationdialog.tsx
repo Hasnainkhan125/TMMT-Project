@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { PACKAGE_CONFIG } from '@/config/packageDocs';
 import { usePackageApplication } from '@/hooks/usePackageApplication';
+import { toast } from 'sonner';
 
 const STEP_COUNT = 4; // Package, Plan, Details, Documents
 const STEP_LABELS = ['Package', 'Plan', 'Details', 'Documents'];
@@ -50,8 +51,10 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
   const [files, setFiles] = useState({});
   const [refId, setRefId] = useState('');
   const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-  const { submitApplication, uploadDocuments, submitting, uploading } = usePackageApplication();
+  const { submitApplication, uploadDocuments } = usePackageApplication();
 
   const cards = useMemo(() => {
     const all = Object.entries(PACKAGE_CONFIG).map(([s, cfg]) => ({ slug: s, ...cfg }));
@@ -77,37 +80,80 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
   };
 
   const handleSubmit = async () => {
-    const stored = (() => { try { return JSON.parse(localStorage.getItem('userData') || 'null'); } catch { return null; } })();
-    const app = await submitApplication({
-      packageSlug: slug,
-      packageName: cfg.name,
-      applicantType,
-      contact,
-      pricing: { baseAmount: price, currency: 'AED', priceType: cfg.pricing[applicantType]?.label || 'Start From' },
-      user_id: stored?._id || undefined,
-    });
-    if (!app) return;
-    setRefId(app.referenceId);
+    if (!cfg) return;
 
-    const list = Object.entries(files).map(([docKey, file]) => ({
-      docKey,
-      label: cfg.docs.find((d) => d.docKey === docKey)?.label || docKey,
-      file,
-    }));
-    if (list.length) {
-      const ok = await uploadDocuments(app._id, list);
-      if (!ok) console.warn('Documents did not upload; lead saved without them');
+    setSubmitting(true);
+    try {
+      const stored = (() => {
+        try { return JSON.parse(localStorage.getItem('userData') || 'null'); } catch { return null; }
+      })();
+
+      const payload = {
+        packageSlug: slug,
+        packageName: cfg.name,
+        applicantType,
+        contact,
+        pricing: {
+          baseAmount: price,
+          currency: 'AED',
+          priceType: cfg.pricing[applicantType]?.label || 'Start From',
+        },
+        user_id: stored?._id || undefined,
+      };
+
+      const app = await submitApplication(payload);
+      if (!app) {
+        toast.error('Failed to submit application. Please try again.');
+        setSubmitting(false);
+        return;
+      }
+
+      setRefId(app.referenceId || app.refId || `PKG-${Date.now().toString(36).toUpperCase()}`);
+
+      // Upload documents if any
+      const list = Object.entries(files).map(([docKey, file]) => ({
+        docKey,
+        label: cfg.docs.find((d) => d.docKey === docKey)?.label || docKey,
+        file,
+      }));
+
+      if (list.length) {
+        setUploading(true);
+        const ok = await uploadDocuments(app._id, list);
+        if (!ok) {
+          toast.warning('Application submitted, but some documents failed to upload. You can send them later.');
+        } else {
+          toast.success('Documents uploaded successfully.');
+        }
+        setUploading(false);
+      }
+
+      toast.success('Application submitted successfully!');
+      setDone(true);
+    } catch (error) {
+      console.error('Submit error:', error);
+      toast.error(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+      setUploading(false);
     }
-    setDone(true);
   };
 
   const reset = () => {
-    setStep(0); setSlug(null); setFiles({}); setApplicantType('outside');
-    setRefId(''); setDone(false);
+    setStep(0);
+    setSlug(null);
+    setFiles({});
+    setApplicantType('outside');
+    setRefId('');
+    setDone(false);
     setContact({ fullName: '', email: '', phone: '', nationality: '', preferredLanguage: 'en' });
   };
 
-  const close = () => { reset(); onOpenChange(false); };
+  const close = () => {
+    reset();
+    onOpenChange(false);
+  };
+
   const busy = submitting || uploading;
 
   return (
@@ -130,12 +176,10 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
             <SuccessScreen refId={refId} onClose={close} accent={accent} />
           ) : (
             <div className="flex flex-col">
-              {/* Progress rail — numbered circles + connecting track */}
+              {/* Progress rail */}
               <div className="px-6 pt-7 pb-1">
                 <div className="relative flex items-center justify-between">
-                  {/* Base track */}
                   <div className="absolute left-4 right-4 top-4 h-[2px] bg-border rounded-full -z-0" />
-                  {/* Filled track */}
                   <motion.div
                     className="absolute left-4 top-4 h-[2px] rounded-full -z-0"
                     style={{ background: accent }}
@@ -182,12 +226,11 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                 </div>
               </div>
 
-              {/* Body - with increased min-height for bigger feel */}
+              {/* Body */}
               <div className="relative min-h-[480px] px-6 pt-6">
                 <AnimatePresence mode="wait" custom={dir}>
                   <motion.div key={step} custom={dir} variants={slide} initial="enter" animate="center" exit="exit"
                     transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}>
-
                     {step === 0 && <StepPackage cards={cards} onPick={pickPackage} selected={slug} />}
                     {step === 1 && cfg && (
                       <StepPlan cfg={cfg} slug={slug} applicantType={applicantType} setApplicantType={setApplicantType} />
@@ -225,7 +268,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                       disabled={busy} onClick={handleSubmit}
                       className="flex items-center gap-2 rounded-xl bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-[0_4px_16px_rgba(0,0,0,0.12)] disabled:opacity-60 transition-all">
                       {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
-                      {busy ? 'Submitting' : 'Submit'}
+                      {busy ? (uploading ? 'Uploading...' : 'Submitting...') : 'Submit'}
                     </motion.button>
                   )}
                 </div>
@@ -238,7 +281,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
   );
 }
 
-/* ----------------------------- Step 0: Package ---------------------------- */
+/* ----------------------------- Step components (unchanged) ---------------------------- */
 function StepPackage({ cards, onPick, selected }) {
   return (
     <>
@@ -263,7 +306,6 @@ function StepPackage({ cards, onPick, selected }) {
                   : '0 1px 3px rgba(0,0,0,0.05)',
               }}
             >
-              {/* selected check badge */}
               <AnimatePresence>
                 {isSel && (
                   <motion.span
@@ -310,7 +352,6 @@ function StepPackage({ cards, onPick, selected }) {
   );
 }
 
-/* ------------------------------ Step 1: Plan ------------------------------ */
 function StepPlan({ cfg, slug, applicantType, setApplicantType }) {
   const Icon = iconFor(slug);
   return (
@@ -389,7 +430,6 @@ function Meta({ label, value, border }) {
   );
 }
 
-/* ----------------------------- Step 2: Details ---------------------------- */
 function StepDetails({ cfg, contact, setContact, applicantType, price }) {
   const [focused, setFocused] = useState(null);
   const set = (k) => (v) => setContact({ ...contact, [k]: v });
@@ -450,7 +490,6 @@ function Field({ id, label, value, onChange, placeholder, type = 'text', require
   );
 }
 
-/* --------------------------- Step 3: Documents ---------------------------- */
 function StepDocuments({ cfg, files, setFiles }) {
   const uploaded = Object.keys(files).length;
   const total = cfg.docs.length;
@@ -555,6 +594,7 @@ function DocRow({ doc, accent, file, onSet, onClear }) {
     </div>
   );
 }
+
 /* ------------------------------ Success ----------------------------------- */
 function SuccessScreen({ refId, onClose, accent }) {
   return (

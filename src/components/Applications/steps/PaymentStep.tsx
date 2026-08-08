@@ -1,707 +1,3 @@
-// /**
-//  * PaymentStep — two-column desktop layout
-//  *
-//  * Left  col (desktop): service summary, price breakdown by location, trust signals
-//  * Right col (desktop): Pay Now (Stripe card) OR Pay Later (Stripe payment link)
-//  * Mobile: single column, summary on top, payment below
-//  *
-//  * Pay Now  → direct Stripe card payment via PaymentIntent
-//  * Pay Later → generates a Stripe Payment Link and opens it / copies URL
-//  *
-//  * Re-render fix: SummaryPanel and PaymentPanel are extracted as top-level
-//  * memo'd components so the 1-second countdown timer doesn't recreate them
-//  * and cause Stripe Elements to unmount/remount.
-//  */
-// import { useState, useEffect, useRef, memo, useCallback } from 'react'
-// import { useTranslation } from 'react-i18next'
-// import { motion, AnimatePresence } from 'framer-motion'
-// import {
-//   Shield, Lock, Clock, CreditCard, Link as LinkIcon,
-//   CheckCircle2, ArrowRight, ChevronDown, ChevronUp, Sparkles,
-//   Landmark, Copy, Check, Building2, Upload, Info,
-// } from 'lucide-react'
-// import { Button } from '@/components/ui/button'
-// import { Separator } from '@/components/ui/separator'
-// import { Badge } from '@/components/ui/badge'
-// import StripePaymentForm from '@/components/Payment/StripePaymentForm'
-// import type { FlowService } from '../ApplicationFlow'
-
-// interface PaymentStepProps {
-//   amount:         number
-//   applicationId?: string
-//   service?:       FlowService
-//   location?:      string
-//   onSuccess:      (result: unknown) => void
-//   onError:        (err: string) => void
-// }
-
-// const apiBase = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:5001'
-// const apiUrl  = `${apiBase}/api/v1`
-
-// type PayMode = 'now' | 'later'
-
-// // ── Bank Transfer Info Component (Small & Clean) ─────────────────────────────
-// interface BankTransferInfoProps {
-//   bankDetails: {
-//     accountName: string
-//     iban: string
-//     bic: string
-//     bankName: string
-//     bankAddress: string
-//   }
-//   onReceiptUploaded?: (file: File) => Promise<void>
-//   receiptUploaded?: boolean
-//   uploading?: boolean
-// }
-
-// const BankTransferInfo = memo(function BankTransferInfo({ 
-//   bankDetails, 
-//   onReceiptUploaded, 
-//   receiptUploaded = false,
-//   uploading = false 
-// }: BankTransferInfoProps) {
-//   const { t } = useTranslation()
-//   const [copied, setCopied] = useState<string | null>(null)
-
-//   const copyToClipboard = (text: string, label: string) => {
-//     navigator.clipboard?.writeText(text)
-//     setCopied(label)
-//     setTimeout(() => setCopied(null), 2000)
-//   }
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files?.[0] && onReceiptUploaded) {
-//       onReceiptUploaded(e.target.files[0])
-//     }
-//   }
-
-//   return (
-//     <div className="rounded-xl border border-[#E2E8F0] dark:border-white/10 bg-white dark:bg-[#1A1A1F] p-4 space-y-4">
-//       {/* Header */}
-//       <div className="flex items-center gap-2">
-//         <div className="h-5 w-1 rounded-full bg-[#0A3269]" />
-//         <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#0A3269] dark:text-[#4A8ABF]">
-//           {t('payment.govBankTransfer', 'Government Bank Transfer Details')}
-//         </p>
-//       </div>
-
-//       {/* Bank Details - Small Grid */}
-//       <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[12px]">
-//         <div>
-//           <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] dark:text-white/30 font-semibold">
-//             {t('payment.accountName', 'Account Name')}
-//           </p>
-//           <div className="flex items-center gap-1.5 mt-0.5">
-//             <span className="font-medium text-[#0A3269] dark:text-white/90 text-[11px]">
-//               {bankDetails.accountName}
-//             </span>
-//             <button
-//               onClick={() => copyToClipboard(bankDetails.accountName, 'name')}
-//               className="text-[#0A3269] dark:text-[#4A8ABF] hover:opacity-70"
-//             >
-//               {copied === 'name' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-//             </button>
-//           </div>
-//         </div>
-
-//         <div>
-//           <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] dark:text-white/30 font-semibold">
-//             IBAN
-//           </p>
-//           <div className="flex items-center gap-1.5 mt-0. 5">
-//             <span className="font-mono font-medium text-[#0A3269] dark:text-white/90 text-[11px]">
-//               {bankDetails.iban}
-//             </span>
-//             <button
-//               onClick={() => copyToClipboard(bankDetails.iban, 'iban')}
-//               className="text-[#0A3269] dark:text-[#4A8ABF] hover:opacity-70"
-//             >
-//               {copied === 'iban' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-//             </button>
-//           </div>
-//         </div>
-
-//         <div>
-//           <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] dark:text-white/30 font-semibold">
-//             BIC / Swift
-//           </p>
-//           <div className="flex items-center gap-1.5 mt-0.5">
-//             <span className="font-mono font-medium text-[#0A3269] dark:text-white/90 text-[11px]">
-//               {bankDetails.bic}
-//             </span>
-//             <button
-//               onClick={() => copyToClipboard(bankDetails.bic, 'bic')}
-//               className="text-[#0A3269] dark:text-[#4A8ABF] hover:opacity-70"
-//             >
-//               {copied === 'bic' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-//             </button>
-//           </div>
-//         </div>
-
-//         <div>
-//           <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] dark:text-white/30 font-semibold">
-//             {t('payment.bankName', 'Bank')}
-//           </p>
-//           <p className="font-medium text-[#0A3269] dark:text-white/90 text-[11px] mt-0.5">
-//             {bankDetails.bankName}
-//           </p>
-//         </div>
-
-//         <div className="col-span-2">
-//           <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] dark:text-white/30 font-semibold">
-//             {t('payment.bankAddress', 'Address')}
-//           </p>
-//           <p className="text-[11px] text-[#475569] dark:text-white/60 mt-0.5">
-//             {bankDetails.bankAddress}
-//           </p>
-//         </div>
-//       </div>
-
-//       <Separator className="bg-[#F1F5F9] dark:bg-white/10" />
-
-//       {/* Receipt Upload - Small */}
-//       {onReceiptUploaded && (
-//         <div className="rounded-lg border-2 border-dashed border-[#0A3269]/20 dark:border-[#0A3269]/30 p-3 text-center">
-//           <p className="text-[11px] font-medium text-[#0A3269] dark:text-white flex items-center justify-center gap-1.5">
-//             <Upload className="w-3.5 h-3.5" />
-//             {t('payment.uploadReceipt', 'Upload Proof of Payment')}
-//           </p>
-          
-//           {receiptUploaded ? (
-//             <div className="flex items-center justify-center gap-1.5 text-[#0A3269] dark:text-[#4A8ABF] py-1">
-//               <CheckCircle2 className="w-4 h-4" />
-//               <span className="text-[11px] font-medium">{t('payment.receiptUploaded', 'Receipt uploaded')}</span>
-//             </div>
-//           ) : (
-//             <>
-//               <input
-//                 type="file"
-//                 accept="image/*,.pdf"
-//                 onChange={handleFileChange}
-//                 className="hidden"
-//                 id="receipt-upload-small"
-//                 disabled={uploading}
-//               />
-//               <label
-//                 htmlFor="receipt-upload-small"
-//                 className="cursor-pointer flex flex-col items-center gap-0.5 py-1"
-//               >
-//                 {uploading ? (
-//                   <div className="flex items-center gap-1.5">
-//                     <div className="w-3 h-3 border-2 border-[#0A3269]/30 border-t-[#0A3269] rounded-full animate-spin" />
-//                     <span className="text-[10px] text-[#64748B] dark:text-white/60">
-//                       {t('payment.uploading', 'Uploading...')}
-//                     </span>
-//                   </div>
-//                 ) : (
-//                   <>
-//                     <span className="text-[10px] text-[#64748B] dark:text-white/60">
-//                       {t('payment.clickToUpload', 'Click to upload receipt')}
-//                     </span>
-//                     <span className="text-[8px] text-[#94A3B8] dark:text-white/30">
-//                       {t('payment.supportedFormats', 'JPG, PNG, PDF (max 5MB)')}
-//                     </span>
-//                   </>
-//                 )}
-//               </label>
-//             </>
-//           )}
-//         </div>
-//       )}
-
-//       {/* Info Note - Small */}
-//       <div className="flex items-start gap-1.5 text-[10px] text-[#64748B] dark:text-white/40">
-//         <Info className="w-3 h-3 shrink-0 mt-0.5 text-[#0A3269] dark:text-[#4A8ABF]" />
-//         <span>{t('payment.bankTransferNote', 'After transferring the amount, you will receive a confirmation receipt.')}</span>
-//       </div>
-//     </div>
-//   )
-// })
-
-// // ── SummaryPanel (top-level, memo'd — immune to timer re-renders) ───────────
-// interface SummaryPanelProps {
-//   service?:       FlowService
-//   location:       string
-//   displayFee:     number
-//   otherFee:       number
-//   otherLabel:     string
-//   processingFee:  number
-//   vatAmount:      number
-//   grandTotal:     number
-//   timerStr:       string
-//   expired:        boolean
-//   showBreakdown:  boolean
-//   onToggleBreakdown: () => void
-// }
-
-// const SummaryPanel = memo(function SummaryPanel({
-//   service, location, displayFee, otherFee, otherLabel,
-//   processingFee, vatAmount, grandTotal,
-//   timerStr, expired, showBreakdown, onToggleBreakdown,
-// }: SummaryPanelProps) {
-//   const { t } = useTranslation()
-
-//   return (
-//     <div className="flex flex-col gap-4">
-//       <div className="rounded-2xl border border-[#F1F5F9] dark:border-white/10 bg-white dark:bg-[#1A1A1F] p-5 space-y-3">
-//         <div className="flex items-start justify-between gap-3">
-//           <div>
-//             <p className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] dark:text-white/40 mb-0.5">
-//               {t('payment.applyingFor', 'Applying for')}
-//             </p>
-//             <p className="font-bold text-[#0F2A44] dark:text-white text-[17px] leading-snug">
-//               {service?.name || 'Visa Service'}
-//             </p>
-//           </div>
-//           {service?.processingTime && (
-//             <Badge className="shrink-0 flex items-center gap-1 bg-white dark:bg-[#2A2A2F] border border-[#F1F5F9] dark:border-white/10 text-[#64748B] dark:text-white/60 text-[11px] rounded-full px-2.5 py-1">
-//               <Clock className="w-3 h-3" />
-//               {service.processingTime}
-//             </Badge>
-//           )}
-//         </div>
-
-//         <Separator className="bg-[#F1F5F9] dark:bg-white/10" />
-
-//         <div className="space-y-2">
-//           <div className="flex items-center justify-between">
-//             <span className="text-[13px] text-[#475569] dark:text-white/70">
-//               {t('payment.serviceFee', 'Service fee')} <span className="text-[11px] text-[#94A3B8] dark:text-white/40">({location === 'inside' ? t('payment.insideUae', 'Inside UAE') : t('payment.outsideUae', 'Outside UAE')})</span>
-//             </span>
-//             <span className="font-bold text-[#0F2A44] dark:text-white tabular-nums text-[17px]">
-//               AED {displayFee.toLocaleString()}
-//             </span>
-//           </div>
-
-//           <button
-//             onClick={onToggleBreakdown}
-//             className="flex items-center gap-1 text-[11px] text-[#94A3B8] dark:text-white/40 hover:text-[#64748B] dark:hover:text-white/60 transition-colors"
-//           >
-//             {showBreakdown ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-//             {otherLabel} price: AED {otherFee.toLocaleString()}
-//           </button>
-
-//           <AnimatePresence>
-//             {showBreakdown && (
-//               <motion.div
-//                 initial={{ height: 0, opacity: 0 }}
-//                 animate={{ height: 'auto', opacity: 1 }}
-//                 exit={{ height: 0, opacity: 0 }}
-//                 className="overflow-hidden"
-//               >
-//                 <div className="rounded-xl bg-[#F0F9FF] dark:bg-[#0A1628] border border-[#BAE6FD] dark:border-[#1A3A5C] px-3 py-2.5 text-[12px] text-[#0C4A6E] dark:text-[#7BB8E0]">
-//                   Prices vary based on whether you are currently inside or outside the UAE when applying.
-//                   Your location was recorded as <strong>{location === 'inside' ? t('payment.insideUae', 'Inside UAE') : t('payment.outsideUae', 'Outside UAE')}</strong>.
-//                 </div>
-//               </motion.div>
-//             )}
-//           </AnimatePresence>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-[13px] text-[#475569] dark:text-white/70">{t('payment.processingFeeLabel', 'Processing fee')}</span>
-//             <span className="text-[13px] font-semibold text-[#0F2A44] dark:text-white tabular-nums">
-//               AED {processingFee.toLocaleString()}
-//             </span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-[13px] text-[#475569] dark:text-white/70">{t('payment.vatLabel', 'VAT (5%)')}</span>
-//             <span className="text-[13px] font-semibold text-[#0F2A44] dark:text-white tabular-nums">
-//               AED {vatAmount.toLocaleString()}
-//             </span>
-//           </div>
-
-//           <Separator className="bg-[#F1F5F9] dark:bg-white/10" />
-
-//           <div className="flex items-center justify-between pt-0.5">
-//             <span className="text-[13px] font-semibold text-[#0F2A44] dark:text-white">{t('payment.total', 'Total')}</span>
-//             <span className="text-2xl font-bold text-[#0F2A44] dark:text-white tabular-nums">AED {grandTotal.toLocaleString()}</span>
-//           </div>
-//           <p className="text-[10px] text-[#94A3B8] dark:text-white/30">{t('payment.govFeesNote', 'Government fees are billed separately after approval')}</p>
-//         </div>
-//       </div>
-
-//       <div className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border text-[13px] ${
-//         expired 
-//           ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400' 
-//           : 'bg-[#FFFBEB] dark:bg-[#1A1A0F] border-[#FDE68A] dark:border-[#3A3A1A] text-[#92400E] dark:text-[#E8C84A]'
-//       }`}>
-//         <Clock className="w-4 h-4 shrink-0" />
-//         {expired
-//           ? t('payment.slotExpired', 'Your slot has expired — please restart your application.')
-//           : <span>{t('payment.slotReserved', 'Slot reserved for')} <strong className="tabular-nums">{timerStr}</strong></span>
-//         }
-//       </div>
-
-//       <div className="rounded-2xl border border-[#F1F5F9] dark:border-white/10 bg-white dark:bg-[#1A1A1F] p-4 space-y-2">
-//         {[
-//           { icon: Shield, color: 'text-[#0A3269]', text: t('payment.pciDss', 'Powered by Stripe — PCI DSS Level 1') },
-//           { icon: Lock,   color: 'text-[#64748B] dark:text-white/40', text: t('payment.ssl256', '256-bit SSL encryption') },
-//           { icon: CheckCircle2, color: 'text-[#0A3269]', text: t('payment.approvalRate', '97% approval rate on applications') },
-//         ].map(({ icon: Icon, color, text }) => (
-//           <div key={text} className="flex items-center gap-2.5 text-[12px] text-[#64748B] dark:text-white/60">
-//             <Icon className={`w-4 h-4 shrink-0 ${color}`} />
-//             {text}
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   )
-// })
-
-// // ── PaymentPanel (top-level, memo'd — Stripe Elements stay mounted) ─────────
-// interface PaymentPanelProps {
-//   mode:            PayMode
-//   setMode:         (m: PayMode) => void
-//   grandTotal:      number
-//   applicationId?:  string
-//   serviceName:     string
-//   linkUrl:         string | null
-//   setLinkUrl:      (u: string | null) => void
-//   linkLoading:     boolean
-//   onGenerateLink:  () => void
-//   onSuccess:       (result: unknown) => void
-//   onError:         (err: string) => void
-// }
-
-// const PaymentPanel = memo(function PaymentPanel({
-//   mode, setMode, grandTotal, applicationId,
-//   linkUrl, setLinkUrl, linkLoading, onGenerateLink,
-//   onSuccess, onError,
-// }: PaymentPanelProps) {
-//   const { t } = useTranslation()
-
-//   return (
-//     <div className="flex flex-col gap-4">
-//       <div className="rounded-2xl border border-[#F1F5F9] dark:border-white/10 bg-white dark:bg-[#1A1A1F] p-1.5 grid grid-cols-2 gap-1">
-//         {(['now', 'later'] as PayMode[]).map(m => (
-//           <button
-//             key={m}
-//             onClick={() => { setMode(m); setLinkUrl(null) }}
-//             className={`
-//               flex items-center justify-center gap-2 h-11 rounded-xl text-[14px] font-semibold
-//               transition-all duration-150
-//               ${mode === m
-//                 ? 'bg-[#0F2A44] dark:bg-white text-white dark:text-[#0F2A44] shadow-sm'
-//                 : 'text-[#64748B] dark:text-white/60 hover:bg-[#F8FAFC] dark:hover:bg-white/5'
-//               }
-//             `}
-//           >
-//             {m === 'now'
-//               ? <><CreditCard className="w-4 h-4" /> {t('payment.payNow', 'Pay Now')}</>
-//               : <><LinkIcon className="w-4 h-4" /> {t('payment.payLater', 'Pay Later')}</>
-//             }
-//           </button>
-//         ))}
-//       </div>
-
-//       <AnimatePresence mode="wait">
-//         {mode === 'now' ? (
-//           <motion.div
-//             key="now"
-//             initial={{ opacity: 0, y: 8 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             exit={{ opacity: 0, y: -8 }}
-//             transition={{ duration: 0.2 }}
-//           >
-//             <StripePaymentForm
-//               amount={grandTotal}
-//               currency="aed"
-//               applicationId={applicationId}
-//               onSuccess={onSuccess}
-//               onError={onError}
-//             />
-//           </motion.div>
-//         ) : (
-//           <motion.div
-//             key="later"
-//             initial={{ opacity: 0, y: 8 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             exit={{ opacity: 0, y: -8 }}
-//             transition={{ duration: 0.2 }}
-//             className="flex flex-col gap-4"
-//           >
-//             <div className="rounded-2xl border border-[#F1F5F9] dark:border-white/10 bg-[#F8FAFC] dark:bg-[#1A1A1F] p-5 space-y-3">
-//               <div className="flex items-start gap-3">
-//                 <LinkIcon className="w-5 h-5 text-[#0A3269] shrink-0 mt-0.5" />
-//                 <div>
-//                   <p className="font-semibold text-[#0F2A44] dark:text-white text-[15px]">{t('payment.payViaLink', 'Pay via secure link')}</p>
-//                   <p className="text-[13px] text-[#64748B] dark:text-white/60 mt-0.5 leading-relaxed">
-//                     {t('payment.payViaLinkDesc', "We'll generate a Stripe payment link. Use it from any browser or device — Apple Pay, Google Pay, or card.")}
-//                   </p>
-//                 </div>
-//               </div>
-
-//               <ul className="space-y-1.5">
-//                 {[
-//                   t('payment.linkValid24h', 'Link valid for 24 hours'),
-//                   t('payment.supportsAppleGooglePay', 'Supports Apple Pay and Google Pay'),
-//                   t('payment.applicationSaved', 'Your application is already saved'),
-//                   t('payment.payFromAnyDevice', 'Pay from any device or share with someone else'),
-//                 ].map(txt => (
-//                   <li key={txt} className="flex items-center gap-2 text-[12px] text-[#475569] dark:text-white/60">
-//                     <CheckCircle2 className="w-3.5 h-3.5 text-[#0A3269] shrink-0" />
-//                     {txt}
-//                   </li>
-//                 ))}
-//               </ul>
-//             </div>
-
-//             {linkUrl ? (
-//               <div className="rounded-2xl border border-[#0A3269]/40 dark:border-[#0A3269]/20 bg-[#F0F7FF] dark:bg-[#0A1628] p-4 space-y-3">
-//                 <div className="flex items-center gap-2">
-//                   <Sparkles className="w-4 h-4 text-[#0A3269]" />
-//                   <p className="font-semibold text-[#0A3269] dark:text-[#4A8ABF] text-[14px]">{t('payment.linkReady', 'Your payment link is ready')}</p>
-//                 </div>
-//                 <div className="rounded-xl border border-[#0A3269]/30 dark:border-[#0A3269]/20 bg-white dark:bg-[#0A0A0F] px-3 py-2.5 flex items-center gap-2">
-//                   <span className="text-[12px] text-[#475569] dark:text-white/60 flex-1 truncate">{linkUrl}</span>
-//                   <button
-//                     onClick={() => navigator.clipboard?.writeText(linkUrl)}
-//                     className="text-[11px] font-semibold text-[#0A3269] hover:underline shrink-0"
-//                   >
-//                     {t('payment.copy', 'Copy')}
-//                   </button>
-//                 </div>
-//                 <div className="grid grid-cols-2 gap-2">
-//                   <a
-//                     href={linkUrl}
-//                     target="_blank"
-//                     rel="noopener noreferrer"
-//                     className="h-12 rounded-2xl bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-[#1A4A7A] dark:hover:bg-white/90 transition-colors"
-//                   >
-//                     <ArrowRight className="w-4 h-4" />
-//                     {t('payment.openLink', 'Open link')}
-//                   </a>
-//                   <button
-//                     onClick={() => { setLinkUrl(null) }}
-//                     className="h-12 rounded-2xl border border-[#F1F5F9] dark:border-white/10 text-[#64748B] dark:text-white/60 text-[14px] font-medium hover:bg-[#F8FAFC] dark:hover:bg-white/5 transition-colors"
-//                   >
-//                     {t('payment.generateNew', 'Generate new')}
-//                   </button>
-//                 </div>
-//               </div>
-//             ) : (
-//               <Button
-//                 onClick={onGenerateLink}
-//                 disabled={linkLoading}
-//                 className="w-full h-14 rounded-2xl font-semibold bg-[#0A3269] dark:bg-white hover:bg-[#1A4A7A] dark:hover:bg-white/90 text-white dark:text-[#0A3269] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
-//                 style={{ fontSize: '17px' }}
-//               >
-//                 {linkLoading
-//                   ? <><div className="w-4 h-4 border-2 border-white/30 dark:border-[#0A3269]/30 border-t-white dark:border-t-[#0A3269] rounded-full animate-spin" /> {t('payment.generating', 'Generating…')}</>
-//                   : <><LinkIcon className="w-4 h-4" /> {t('payment.generateLinkBtn', 'Generate payment link — AED {{amount}}', { amount: grandTotal.toLocaleString() })}</>
-//                 }
-//               </Button>
-//             )}
-
-//             <p className="text-center text-[11px] text-[#CBD5E1] dark:text-white/30">
-//               {t('payment.savedPayAnytime', 'Your application is saved. Pay anytime within 24 hours to keep your slot.')}
-//             </p>
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-
-//       <p className="text-center text-[11px] text-[#CBD5E1] dark:text-white/20">
-//         {t('payment.termsNote', 'By paying you agree to our Terms of Service. Government fees are billed separately.')}
-//       </p>
-//     </div>
-//   )
-// })
-
-// // ── Main PaymentStep ────────────────────────────────────────────────────────
-// export default function PaymentStep({
-//   amount,
-//   applicationId,
-//   service,
-//   location = 'inside',
-//   onSuccess,
-//   onError,
-// }: PaymentStepProps) {
-//   const { t } = useTranslation()
-//   const [mode,        setMode]        = useState<PayMode>('now')
-//   const [secondsLeft, setSecondsLeft] = useState(600)
-//   const [linkUrl,     setLinkUrl]     = useState<string | null>(null)
-//   const [linkLoading, setLinkLoading] = useState(false)
-//   const [showBreakdown, setShowBreakdown] = useState(false)
-//   const [uploading, setUploading] = useState(false)
-//   const [receiptUploaded, setReceiptUploaded] = useState(false)
-
-//   // 10-minute slot countdown
-//   useEffect(() => {
-//     if (secondsLeft <= 0) return
-//     const id = setTimeout(() => setSecondsLeft(s => s - 1), 1000)
-//     return () => clearTimeout(id)
-//   }, [secondsLeft])
-
-//   const minutes  = Math.floor(secondsLeft / 60)
-//   const seconds  = secondsLeft % 60
-//   const timerStr = `${minutes}:${String(seconds).padStart(2, '0')}`
-//   const expired  = secondsLeft <= 0
-
-//   const insidePrice  = service?.prices?.find(p => p.priceType?.toLowerCase() === 'inside')?.priceAmount  ?? amount
-//   const outsidePrice = service?.prices?.find(p => p.priceType?.toLowerCase() === 'outside')?.priceAmount ?? amount
-//   const displayFee   = location === 'inside' ? insidePrice : outsidePrice
-//   const otherFee     = location === 'inside' ? outsidePrice : insidePrice
-//   const otherLabel   = location === 'inside' ? 'Outside UAE' : 'Inside UAE'
-
-//   const PROCESSING_FEE = 70
-//   const subtotal   = displayFee + PROCESSING_FEE
-//   const vatAmount  = Math.round(subtotal * 0.05)
-//   const grandTotal = subtotal + vatAmount
-
-//   // Stable callback refs so memo'd children never get stale closures
-//   const onSuccessRef = useRef(onSuccess)
-//   onSuccessRef.current = onSuccess
-//   const onErrorRef = useRef(onError)
-//   onErrorRef.current = onError
-
-//   const stableOnSuccess = useCallback((result: unknown) => onSuccessRef.current(result), [])
-//   const stableOnError   = useCallback((err: string) => onErrorRef.current(err), [])
-
-//   const handleGenerateLink = useCallback(async () => {
-//     setLinkLoading(true)
-//     try {
-//       const token = localStorage.getItem('authToken') || ''
-//       const res   = await fetch(`${apiUrl}/services/payments/create-link`, {
-//         method:  'POST',
-//         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-//         body: JSON.stringify({
-//           amount:         grandTotal,
-//           currency:       'aed',
-//           service_name:   service?.name || 'TAMMAT Visa Service',
-//           application_id: applicationId || '',
-//         }),
-//       })
-//       const d = await res.json()
-//       if (!res.ok || !d?.data?.url) throw new Error(d?.message || 'Could not generate payment link')
-//       setLinkUrl(d.data.url)
-//     } catch (e: any) {
-//       onErrorRef.current(e.message || 'Failed to generate payment link')
-//     } finally 
-
-
-//       setLinkLoading(false
-//     }
-//   }, [grandTotal, service?.name, applicationId])
-
-//   const handleReceiptUpload = useCallback(async (file: File) => {
-//     setUploading(true)
-//     try {
-//       const formData = new FormData()
-//       formData.append('receipt', file)
-//       formData.append('applicationId', applicationId || '')
-      
-//       const token = localStorage.getItem('authToken') || ''
-//       const res = await fetch(`${apiUrl}/applications/upload-receipt`, {
-//         method: 'POST',
-//         headers: { Authorization: `Bearer ${token}` },
-//         body: formData,
-//       })
-      
-//       if (!res.ok) {
-//         const errorData = await res.json().catch(() => ({}))
-//         throw new Error(errorData?.message || 'Upload failed')
-//       }
-      
-//       setReceiptUploaded(true)
-//       onSuccessRef.current({ receiptUploaded: true })
-//     } catch (e: any) {
-//       onErrorRef.current(e.message || 'Failed to upload receipt')
-//     } finally {
-//       setUploading(false)
-//     }
-//   }, [applicationId])
-
-//   const toggleBreakdown = useCallback(() => setShowBreakdown(b => !b), [])
-
-//   const bankDetails = {
-//     accountName: 'E.A.O FOR MARKETING SERVICES VIA SOCIAL MEDIA',
-//     iban: 'AE240860000009389202326',
-//     bic: 'WIOBAEADXXX',
-//     bankName: 'Etihad Airways Centre 5th Floor',
-//     bankAddress: 'Abu Dhabi, UAE'
-//   }
-
-//   return (
-//     <motion.div
-//       initial={{ opacity: 0, x: 32 }}
-//       animate={{ opacity: 1, x: 0 }}
-//       exit={{ opacity: 0, x: -32 }}
-//       transition={{ duration: 0.26 }}
-//       className="w-full"
-//     >
-//       <div className="space-y-1.5 mb-6">
-//         <div className="flex items-center gap-2">
-//           <div className="h-5 w-1 rounded-full bg-gradient-to-b from-[#0A3269] to-[#1A4A8A]" />
-//           <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#64748B] dark:text-white/40">
-//             {t('flow.group.payment', 'Payment')}
-//           </p>
-//         </div>
-//         <h2
-//           className="font-bold leading-tight text-[#0F2A44] dark:text-white"
-//           style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}
-//         >
-//           {t('payment.completeApplication', 'Complete your application')}
-//         </h2>
-//         <p className="text-[#64748B] dark:text-white/60 text-[14px]">
-//           {t('payment.securePayment', 'Secure payment — protected by Stripe')}
-//         </p>
-//       </div>
-
-//       <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6 items-start">
-//         <div className="flex flex-col gap-4">
-//           <SummaryPanel
-//             service={service}
-//             location={location}
-//             displayFee={displayFee}
-//             otherFee={otherFee}
-//             otherLabel={otherLabel}
-//             processingFee={PROCESSING_FEE}
-//             vatAmount={vatAmount}
-//             grandTotal={grandTotal}
-//             timerStr={timerStr}
-//             expired={expired}
-//             showBreakdown={showBreakdown}
-//             onToggleBreakdown={toggleBreakdown}
-//           />
-          
-//           {/* Bank Transfer Information - Small & Clean */}
-//           <BankTransferInfo 
-//             bankDetails={bankDetails}
-//             onReceiptUploaded={handleReceiptUpload}
-//             receiptUploaded={receiptUploaded}
-//             uploading={uploading}
-//           />
-//         </div>
-        
-//         <PaymentPanel
-//           mode={mode}
-//           setMode={setMode}
-//           grandTotal={grandTotal}
-//           applicationId={applicationId}
-//           serviceName={service?.name || 'Visa Service'}
-//           linkUrl={linkUrl}
-//           setLinkUrl={setLinkUrl}
-//           linkLoading={linkLoading}
-//           onGenerateLink={handleGenerateLink}
-//           onSuccess={stableOnSuccess}
-//           onError={stableOnError}
-//         />
-//       </div>
-//     </motion.div>
-//   )
-// }
-
-
-
-
-
-
-
-
-
-
-
 import { useState, useEffect, useRef, memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -709,9 +5,8 @@ import {
   Shield, Lock, Clock, CreditCard,
   CheckCircle2, ChevronDown, ChevronUp,
   Landmark, Copy, Check, Building2, Upload, Info,
-  Banknote, Crown, Sparkles, ArrowRight,
-  DollarSign, Zap, Percent, FileText, X, Image as ImageIcon,
-  Loader2, AlertCircle,
+  DollarSign, Zap, Percent, FileText, X,
+  Loader2, AlertCircle, Eye, RefreshCw, ArrowRight,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -722,16 +17,23 @@ import type { FlowService } from '../ApplicationFlow'
 import { toast } from 'sonner'
 
 interface PaymentStepProps {
-  amount:         number
+  amount: number
   applicationId?: string
-  service?:       FlowService
-  location?:      string
-  onSuccess:      (result: unknown) => void
-  onError:        (err: string) => void
+  service?: FlowService
+  location?: string
+  onSuccess: (result: unknown) => void
+  onError: (err: string) => void
+  receipt?: {
+    url: string
+    status: 'pending' | 'approved' | 'rejected' | null
+    uploadedAt: string
+    fileName: string
+  }
+  onReceiptStatusChange?: (status: string) => void
 }
 
 const apiBase = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:5001'
-const apiUrl  = `${apiBase}/api/v1`
+const apiUrl = `${apiBase}/api/v1`
 
 // ── Bank Transfer Info Component ─────────────────────────────────────────────
 interface BankTransferInfoProps {
@@ -749,17 +51,25 @@ interface BankTransferInfoProps {
   uploadError?: string | null
   onRemoveReceipt?: () => void
   onContinue?: () => void
+  receiptUrl?: string | null
+  receiptStatus?: 'pending' | 'approved' | 'rejected' | null
+  onViewReceipt?: () => void
+  onRetryUpload?: () => void
 }
 
-const BankTransferInfo = memo(function BankTransferInfo({ 
-  bankDetails, 
-  onReceiptUploaded, 
+const BankTransferInfo = memo(function BankTransferInfo({
+  bankDetails,
+  onReceiptUploaded,
   receiptUploaded = false,
   uploading = false,
   uploadProgress = 0,
   uploadError = null,
   onRemoveReceipt,
   onContinue,
+  receiptUrl = null,
+  receiptStatus = null,
+  onViewReceipt,
+  onRetryUpload,
 }: BankTransferInfoProps) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState<string | null>(null)
@@ -777,33 +87,25 @@ const BankTransferInfo = memo(function BankTransferInfo({
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Validate file type
     const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf']
     if (!validTypes.includes(file.type)) {
       toast.error('Please upload a valid image or PDF file')
       return
     }
-
-    // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error('File size must be less than 10MB')
       return
     }
 
     setSelectedFile(file)
-    
-    // Create preview URL for images
     if (file.type.startsWith('image/')) {
       const reader = new FileReader()
-      reader.onload = (e) => {
-        setPreviewUrl(e.target?.result as string)
-      }
+      reader.onload = (e) => setPreviewUrl(e.target?.result as string)
       reader.readAsDataURL(file)
     } else {
       setPreviewUrl(null)
     }
 
-    // Auto-upload when file is selected
     if (onReceiptUploaded) {
       onReceiptUploaded(file)
     }
@@ -812,12 +114,8 @@ const BankTransferInfo = memo(function BankTransferInfo({
   const handleRemoveFile = () => {
     setSelectedFile(null)
     setPreviewUrl(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-    if (onRemoveReceipt) {
-      onRemoveReceipt()
-    }
+    if (fileInputRef.current) fileInputRef.current.value = ''
+    if (onRemoveReceipt) onRemoveReceipt()
   }
 
   const formatFileSize = (bytes: number) => {
@@ -828,11 +126,17 @@ const BankTransferInfo = memo(function BankTransferInfo({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
+  const statusConfig = {
+    pending: { label: 'Pending', color: 'bg-yellow-500/10 text-yellow-600 border-yellow-300' },
+    approved: { label: 'Approved', color: 'bg-green-500/10 text-green-600 border-green-300' },
+    rejected: { label: 'Rejected', color: 'bg-red-500/10 text-red-600 border-red-300' },
+  }
+
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#1A1A1F] border border-gray-200/80 dark:border-white/10 ">
+    <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#1A1A1F] border border-gray-200/80 dark:border-white/10">
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#0A3269]/5 dark:bg-[#0A3269]/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-[#0A3269]/3 dark:bg-[#0A3269]/8 rounded-full blur-3xl" />
-      
+
       <div className="relative p-6 space-y-5">
         {/* Header */}
         <div className="flex items-center gap-3 pb-4 border-b border-gray-100 dark:border-white/5">
@@ -847,6 +151,11 @@ const BankTransferInfo = memo(function BankTransferInfo({
               {t('payment.transferDetails', 'Transfer the government fee to the account below')}
             </p>
           </div>
+          {receiptStatus && (
+            <Badge className={`ml-auto ${statusConfig[receiptStatus]?.color || 'bg-gray-100 text-gray-600'}`}>
+              {receiptStatus?.charAt(0).toUpperCase() + receiptStatus?.slice(1)}
+            </Badge>
+          )}
         </div>
 
         {/* Bank Details */}
@@ -939,7 +248,7 @@ const BankTransferInfo = memo(function BankTransferInfo({
                     {t('payment.receiptUploaded', 'Receipt uploaded successfully')}
                   </p>
                   <p className="text-[10px] text-gray-400 dark:text-white/40">
-                    {t('payment.receiptVerified', 'Your receipt has been verified')}
+                    {t('payment.receiptVerified', 'Your receipt has been submitted for verification')}
                   </p>
                   {selectedFile && (
                     <div className="flex items-center gap-2 mt-1 justify-center">
@@ -954,8 +263,21 @@ const BankTransferInfo = memo(function BankTransferInfo({
                       </button>
                     </div>
                   )}
+                  {receiptUrl ? (
+                    <button
+                      onClick={onViewReceipt}
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#0A3269] dark:text-[#4A8ABF] hover:underline"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      View Receipt
+                    </button>
+                  ) : (
+                    <div className="mt-2 flex items-center justify-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      <span>Receipt URL not available — please contact support</span>
+                    </div>
+                  )}
                 </div>
-                
                 {onContinue && (
                   <Button
                     onClick={onContinue}
@@ -1011,12 +333,24 @@ const BankTransferInfo = memo(function BankTransferInfo({
                   )}
                 </label>
 
+                {/* ─── Upload Error Display ────────────────────────────────── */}
                 {uploadError && (
-                  <div className="mt-2 p-2 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/30">
-                    <p className="text-xs text-red-600 dark:text-red-400 flex items-center gap-1.5">
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      {uploadError}
+                  <div className="mt-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/30 space-y-2">
+                    <p className="text-xs text-red-600 dark:text-red-400 flex items-start gap-1.5">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                      <span className="break-words">{uploadError}</span>
                     </p>
+                    {onRetryUpload && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={onRetryUpload}
+                        className="border-red-300 text-red-600 hover:bg-red-100 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/30 text-xs rounded-lg px-3 py-1 h-auto"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
+                        Retry Upload
+                      </Button>
+                    )}
                   </div>
                 )}
 
@@ -1024,9 +358,9 @@ const BankTransferInfo = memo(function BankTransferInfo({
                   <div className="mt-3 p-2 rounded-lg bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10">
                     <div className="flex items-center gap-3">
                       {previewUrl ? (
-                        <img 
-                          src={previewUrl} 
-                          alt="Receipt preview" 
+                        <img
+                          src={previewUrl}
+                          alt="Receipt preview"
                           className="w-12 h-12 rounded-lg object-cover border border-gray-200 dark:border-white/10"
                         />
                       ) : (
@@ -1197,8 +531,8 @@ const SummaryPanel = memo(function SummaryPanel({
       </div>
 
       <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-[13px] ${
-        expired 
-          ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400' 
+        expired
+          ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400'
           : 'bg-[#FFFBEB] dark:bg-[#1A1A0F] border-[#FDE68A] dark:border-[#3A3A1A] text-[#92400E] dark:text-[#E8C84A]'
       }`}>
         <div className="p-1.5 rounded-lg bg-current/10">
@@ -1236,6 +570,8 @@ export default function PaymentStep({
   location = 'inside',
   onSuccess,
   onError,
+  receipt,
+  onReceiptStatusChange,
 }: PaymentStepProps) {
   const { t } = useTranslation()
   const [secondsLeft, setSecondsLeft] = useState(600)
@@ -1245,58 +581,64 @@ export default function PaymentStep({
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [receiptUrl, setReceiptUrl] = useState<string | null>(receipt?.url || null)
+  
+  // ─── Store the file for retry ──────────────────────────────────────────
+  const selectedFileRef = useRef<File | null>(null)
 
-  // 10-minute slot countdown
+  // 10-minute countdown
   useEffect(() => {
     if (secondsLeft <= 0) return
     const id = setTimeout(() => setSecondsLeft(s => s - 1), 1000)
     return () => clearTimeout(id)
   }, [secondsLeft])
 
-  const minutes  = Math.floor(secondsLeft / 60)
-  const seconds  = secondsLeft % 60
+  const minutes = Math.floor(secondsLeft / 60)
+  const seconds = secondsLeft % 60
   const timerStr = `${minutes}:${String(seconds).padStart(2, '0')}`
-  const expired  = secondsLeft <= 0
+  const expired = secondsLeft <= 0
 
-  const insidePrice  = service?.prices?.find(p => p.priceType?.toLowerCase() === 'inside')?.priceAmount  ?? amount
+  const insidePrice = service?.prices?.find(p => p.priceType?.toLowerCase() === 'inside')?.priceAmount ?? amount
   const outsidePrice = service?.prices?.find(p => p.priceType?.toLowerCase() === 'outside')?.priceAmount ?? amount
-  const displayFee   = location === 'inside' ? insidePrice : outsidePrice
-  const otherFee     = location === 'inside' ? outsidePrice : insidePrice
-  const otherLabel   = location === 'inside' ? 'Outside UAE' : 'Inside UAE'
+  const displayFee = location === 'inside' ? insidePrice : outsidePrice
+  const otherFee = location === 'inside' ? outsidePrice : insidePrice
+  const otherLabel = location === 'inside' ? 'Outside UAE' : 'Inside UAE'
 
   const PROCESSING_FEE = 70
-  const subtotal   = displayFee + PROCESSING_FEE
-  const vatAmount  = Math.round(subtotal * 0.05)
+  const subtotal = displayFee + PROCESSING_FEE
+  const vatAmount = Math.round(subtotal * 0.05)
   const grandTotal = subtotal + vatAmount
 
-  // Stable callback refs
   const onSuccessRef = useRef(onSuccess)
   onSuccessRef.current = onSuccess
   const onErrorRef = useRef(onError)
   onErrorRef.current = onError
 
   const stableOnSuccess = useCallback((result: unknown) => onSuccessRef.current(result), [])
-  const stableOnError   = useCallback((err: string) => onErrorRef.current(err), [])
+  const stableOnError = useCallback((err: string) => onErrorRef.current(err), [])
 
   // ─── UPLOAD RECEIPT ──────────────────────────────────────────────────────
-  const handleReceiptUpload = useCallback(async (file: File) => {
+  const uploadReceipt = useCallback(async (file: File) => {
+    // Store the file for retry
+    selectedFileRef.current = file
+
+    if (!applicationId) {
+      const errMsg = 'Application ID is missing. Please refresh and try again.'
+      setUploadError(errMsg)
+      toast.error(errMsg)
+      return
+    }
+
     setUploading(true)
     setUploadProgress(0)
     setUploadError(null)
     setUploadSuccess(false)
-    
-    try {
-      // Validate applicationId
-      if (!applicationId) {
-        throw new Error('Application ID is missing. Please refresh and try again.')
-      }
 
+    try {
       const formData = new FormData()
       formData.append('receipt', file)
-      
+
       const token = localStorage.getItem('authToken') || ''
-      
-      // Progress simulation
       const progressInterval = setInterval(() => {
         setUploadProgress(prev => {
           if (prev >= 90) {
@@ -1307,77 +649,138 @@ export default function PaymentStep({
         })
       }, 300)
 
-      // ✅ Use the receipt endpoint
       const endpoint = `${apiUrl}/visa/${applicationId}/receipt`
-      
       console.log('📤 Uploading receipt to:', endpoint)
-      console.log('📄 File:', file.name, file.size, file.type)
-      console.log('📄 Application ID:', applicationId)
-      console.log('📄 Token exists:', !!token)
-      
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      })
-      
-      clearInterval(progressInterval)
-      
-      let data = {}
+
+      // ─── Fetch with timeout to catch network errors ──────────────────
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30s timeout
+
+      let res
       try {
-        data = await res.json()
-      } catch (e) {
-        console.warn('Could not parse JSON response:', e)
+        res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+          signal: controller.signal,
+        })
+        clearTimeout(timeoutId)
+      } catch (fetchError: any) {
+        // This catches network errors, DNS failures, timeouts
+        if (fetchError.name === 'AbortError') {
+          throw new Error('Request timed out – please try again.')
+        }
+        throw new Error(`Network error: ${fetchError.message || 'Unable to reach the server. Check your internet connection.'}`)
       }
-      
-      console.log('📥 Upload response:', res.status, data)
-      
+
+      clearInterval(progressInterval)
+
+      // ─── Read response body (even on error) ──────────────────────────
+      let responseData
+      const contentType = res.headers.get('content-type')
+      try {
+        if (contentType && contentType.includes('application/json')) {
+          responseData = await res.json()
+        } else {
+          responseData = await res.text()
+        }
+      } catch (parseError) {
+        // If we can't parse the body, we'll just use the status text
+        responseData = { message: res.statusText || `HTTP ${res.status}` }
+      }
+
+      console.log('📥 Upload response:', res.status, responseData)
+
       if (!res.ok) {
-        throw new Error(data?.message || data?.error || `Upload failed (${res.status})`)
+        // ─── Extract the most meaningful error message ────────────────
+        let errorMsg = `Server error (${res.status})`
+        if (typeof responseData === 'object' && responseData !== null) {
+          errorMsg = responseData.message || responseData.error || responseData.detail || errorMsg
+        } else if (typeof responseData === 'string' && responseData.length > 0) {
+          errorMsg = responseData
+        }
+        // If it's a 404 and we still don't have a specific message, give a hint.
+        if (res.status === 404 && errorMsg === `Server error (${res.status})`) {
+          errorMsg = 'The upload endpoint was not found. Please contact support.'
+        }
+        // Do NOT override for 500 – we want to show the actual server message
+        throw new Error(errorMsg)
       }
-      
+
+      // ✅ Success – extract receipt URL
+      const uploadedReceiptUrl = responseData?.data?.receiptUrl || responseData?.receiptUrl || null
+      if (!uploadedReceiptUrl) {
+        console.warn('⚠️ No receiptUrl returned from server:', responseData)
+        // Still consider it a success, but warn the user
+        toast.warning('Receipt uploaded, but no URL was returned. Please contact support if you don\'t see it in your dashboard.')
+      } else {
+        setReceiptUrl(uploadedReceiptUrl)
+      }
+
       setUploadProgress(100)
       setReceiptUploaded(true)
       setUploadSuccess(true)
-      
+
       toast.success('Receipt uploaded successfully!', {
-        description: 'Your payment receipt has been verified.',
+        description: 'Your payment receipt has been submitted for verification.',
       })
-      
+
+      stableOnSuccess({ receiptUploaded: true, receiptUrl: uploadedReceiptUrl })
+
     } catch (e: any) {
-      const errorMsg = e.message || 'Failed to upload receipt'
+      // ─── Handle errors ────────────────────────────────────────────────
+      let errorMsg = e.message || 'Failed to upload receipt'
+      // If the error is a TypeError or contains 'fetch', it's likely a network issue
+      if (e.name === 'TypeError' || errorMsg.includes('fetch') || errorMsg.includes('network')) {
+        errorMsg = 'Network error – please check your internet connection and try again.'
+      }
       setUploadError(errorMsg)
       console.error('❌ Upload error:', e)
-      
-      if (e.message.includes('fetch') || e.message.includes('network')) {
-        setUploadError('Network error - please check your connection and try again')
-      }
-      
-      toast.error('Upload failed', {
-        description: errorMsg,
-      })
-      onErrorRef.current(errorMsg)
+      toast.error('Upload failed', { description: errorMsg })
+      stableOnError(errorMsg)
     } finally {
       setUploading(false)
       setUploadProgress(0)
     }
-  }, [applicationId])
+  }, [applicationId, stableOnSuccess, stableOnError])
 
+  // ─── Retry upload ──────────────────────────────────────────────────────
+  const handleRetryUpload = useCallback(() => {
+    if (selectedFileRef.current) {
+      uploadReceipt(selectedFileRef.current)
+    } else {
+      toast.info('Please select a receipt file first.')
+    }
+  }, [uploadReceipt])
+
+  // ─── Remove receipt ─────────────────────────────────────────────────────
   const handleRemoveReceipt = useCallback(() => {
     setReceiptUploaded(false)
     setUploadError(null)
     setUploadProgress(0)
     setUploadSuccess(false)
+    setReceiptUrl(null)
+    selectedFileRef.current = null
   }, [])
 
+  // ─── Continue after success ────────────────────────────────────────────
   const handleContinue = useCallback(() => {
-    onSuccessRef.current({ 
+    stableOnSuccess({
       receiptUploaded: true,
-      applicationId: applicationId,
+      applicationId,
+      receiptUrl,
     })
-  }, [applicationId])
+  }, [applicationId, receiptUrl, stableOnSuccess])
+
+  const handleViewReceipt = useCallback(() => {
+    if (receiptUrl) {
+      window.open(receiptUrl, '_blank')
+    } else if (receipt?.url) {
+      window.open(receipt.url, '_blank')
+    } else {
+      toast.error('Receipt URL is not available. Please contact support.')
+    }
+  }, [receiptUrl, receipt])
 
   const toggleBreakdown = useCallback(() => setShowBreakdown(b => !b), [])
 
@@ -1386,7 +789,7 @@ export default function PaymentStep({
     iban: 'AE240860000009389202326',
     bic: 'WIOBAEADXXX',
     bankName: 'Etihad Airways Centre 5th Floor',
-    bankAddress: 'Abu Dhabi, UAE'
+    bankAddress: 'Abu Dhabi, UAE',
   }
 
   return (
@@ -1430,16 +833,20 @@ export default function PaymentStep({
           showBreakdown={showBreakdown}
           onToggleBreakdown={toggleBreakdown}
         />
-        
-        <BankTransferInfo 
+
+        <BankTransferInfo
           bankDetails={bankDetails}
-          onReceiptUploaded={handleReceiptUpload}
-          receiptUploaded={receiptUploaded}
+          onReceiptUploaded={uploadReceipt}
+          receiptUploaded={receiptUploaded || !!receipt?.url}
           uploading={uploading}
           uploadProgress={uploadProgress}
           uploadError={uploadError}
           onRemoveReceipt={handleRemoveReceipt}
           onContinue={receiptUploaded ? handleContinue : undefined}
+          receiptUrl={receiptUrl || receipt?.url || null}
+          receiptStatus={receipt?.status || null}
+          onViewReceipt={handleViewReceipt}
+          onRetryUpload={handleRetryUpload}
         />
       </div>
     </motion.div>

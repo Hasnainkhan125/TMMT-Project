@@ -1,16 +1,4 @@
-/**
- * ApplicationFlow — High-conversion linear funnel
- *
- * Key behaviours:
- *  - Persists form data in localStorage (survives reload)
- *  - Login gate: prompts unauthenticated users before review/payment submission
- *  - AI chat: floating assistant panel (non-intrusive, opens on demand)
- *  - No re-render blink: stable references, memo-wrapped children
- *  - Full i18n via react-i18next
- *  - Dark mode via ThemeContext
- *
- * Steps: service → sponsorType → location → userInfo → upload → review → payment → success
- */
+
 import { useState, useEffect, useCallback, useRef, memo, useContext } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router'

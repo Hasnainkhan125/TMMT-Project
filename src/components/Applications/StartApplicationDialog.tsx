@@ -2869,40 +2869,39 @@ export function LegacyStartApplicationDialog({ open, onOpenChange,queryParams=""
     ))}
   </div>
 </div>
-
-{/* ✅ TMMT Golden Guarantee Card - Added after Final Checks */}
+{/* ✅ TMMT Golden Guarantee Card - Compact & Responsive */}
 <motion.div
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.5, delay: 0.2 }}
-  className="mt-2 sm:mt-3"
+  className="mt-2"
 >
-  <div className="relative rounded-xl sm:rounded-2xl border border-amber-500/30 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/80 to-yellow-50/50 dark:from-amber-950/20 dark:to-yellow-950/10 p-3 sm:p-4 md:p-5 shadow-[0_4px_16px_-8px_rgba(245,158,11,0.08)]">
-    <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 md:gap-4">
+  <div className="relative rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/80 to-yellow-50/50 dark:from-amber-950/20 dark:to-yellow-950/10 p-2 sm:p-3 md:p-4 shadow-[0_4px_16px_-8px_rgba(245,158,11,0.08)]">
+    <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-2 md:gap-3">
       {/* Icon */}
-      <div className="p-1.5 sm:p-2 md:p-3 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-500/20 flex-shrink-0">
-        <Award className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-amber-600 dark:text-amber-400" strokeWidth={1.75} />
+      <div className="p-1 sm:p-1.5 md:p-2 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-500/20 flex-shrink-0">
+        <Award className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.75} />
       </div>
       
       {/* Content */}
-      <div className="flex-1">
-        <h4 className="font-semibold text-black dark:text-white text-sm sm:text-base md:text-lg flex flex-wrap items-center gap-1.5 sm:gap-2">
+      <div className="flex-1 min-w-0">
+        <h4 className="font-semibold text-black dark:text-white text-xs sm:text-sm md:text-base flex flex-wrap items-center gap-1 sm:gap-1.5">
           {isRTL ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-          <Badge className="bg-amber-500 text-white text-[7px] sm:text-[8px] md:text-[9px] px-1.5 sm:px-2 md:px-2.5 py-0.5 rounded-full font-light border-0">
+          <Badge className="bg-amber-500 text-white text-[6px] sm:text-[7px] md:text-[8px] px-1 sm:px-1.5 md:px-2 py-0.5 rounded-full font-light border-0">
             ✓ Trusted
           </Badge>
         </h4>
-        <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-white/60 leading-relaxed mt-0.5 max-w-2xl font-light">
+        <p className="text-[9px] sm:text-xs md:text-sm text-gray-600 dark:text-white/60 leading-relaxed mt-0.5 max-w-2xl font-light">
           {isRTL 
             ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
             : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
         </p>
         <button 
-          className="text-[9px] sm:text-[10px] md:text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 underline-offset-2 hover:underline transition-colors mt-1 font-medium inline-flex items-center gap-1"
+          className="text-[8px] sm:text-[9px] md:text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 underline-offset-2 hover:underline transition-colors mt-0.5 font-medium inline-flex items-center gap-1"
           onClick={() => window.open('/legal#guarantee', '_blank')}
         >
           {isRTL ? 'اقرأ المزيد عن الضمان →' : 'Read more about the guarantee →'}
-          <ArrowRight className="w-3 h-3" />
+          <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
         </button>
       </div>
     </div>

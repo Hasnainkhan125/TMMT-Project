@@ -22,7 +22,8 @@ import {
   ThumbsUp,
   ThumbsDown,
   MessageSquare,
-  RefreshCw
+  RefreshCw,
+  Receipt, // <-- added
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -123,6 +124,9 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
   });
 
   if (!application) return null;
+
+  // ─── Receipts ──────────────────────────────────────────────────────────
+  const receipts = (application as any)?.receipts || [];
 
   // API functions for Amer officer actions
   const handleDocumentDownload = async (attachment: any) => {
@@ -487,96 +491,175 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
               Upload Additional Documents
             </Button>
             <div className="pt-2">
-       <Button 
-    variant="default" 
-    className="w-full bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300"
-    onClick={() => setDocReqOpen(true)}
-  >
-    <Send className="w-4 h-4 mr-2" />
-    Request More Documents
-  </Button>
+              <Button 
+                variant="default" 
+                className="w-full bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300"
+                onClick={() => setDocReqOpen(true)}
+              >
+                <Send className="w-4 h-4 mr-2" />
+                Request More Documents
+              </Button>
             </div>
           </div>
         </CollapsibleSection>
 
- {/* Application History */}
-<CollapsibleSection title="Application History" defaultOpen={false}>
-  <div className="space-y-2">
-    {application.history.length === 0 ? (
-      <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-sm">
-        No history entries yet
-      </div>
-    ) : (
-      application.history.map((entry, index) => (
-        <div 
-          key={index} 
-          className="flex items-start gap-3 p-3 rounded-xl bg-white/50 dark:bg-gray-900/50 border border-gray-200/50 dark:border-gray-800/50 hover:bg-gray-50/80 dark:hover:bg-gray-800/50 transition-all duration-200"
-        >
-          <div className="w-2 h-2 rounded-full bg-[#0A3269] mt-2 flex-shrink-0" />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              {entry.action?.replace(/_/g, ' ').toUpperCase() || 'Action'}
-            </p>
-            {entry.note && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{entry.note}</p>
-            )}
-            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
-              {new Date(entry.at).toLocaleString()}
-            </p>
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-</CollapsibleSection>
-{/* Risk Assessment — Modern UI */}
-<CollapsibleSection title="Risk Assessment" defaultOpen={false}>
-  <div className="space-y-4 pt-5 rounded-xl bg-gray-50/80 dark:bg-white/5 p-4 backdrop-blur-sm border border-gray-200/50 dark:border-white/10">
-    {/* Fraud Risk */}
-    <div className="flex items-center justify-between">
-      <span className="text-sm font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-rose-400/60" />
-        Fraud Risk
-      </span>
-      <Badge
-        variant="outline"
-        className={`
-          px-3 py-0.5 text-xs font-semibold uppercase tracking-wider rounded-full border-0
-          ${application.metadata.fraudRisk === 'high' 
-            ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 ring-1 ring-rose-500/30' 
-            : application.metadata.fraudRisk === 'medium' 
-            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/30' 
-            : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/30'
-          }
-        `}
-      >
-        {application.metadata.fraudRisk?.toUpperCase() || 'N/A'}
-      </Badge>
-    </div>
+        {/* ─── ✅ Payment Receipts ─────────────────────────────────────────── */}
+        <CollapsibleSection title="Payment Receipts" defaultOpen={true}>
+          <div className="space-y-3">
+            {receipts.length > 0 ? (
+              receipts.map((receipt: any, idx: number) => {
+                const statusColor = receipt.status === 'verified' || receipt.status === 'approved'
+                  ? 'bg-emerald-500/20 text-emerald-600'
+                  : receipt.status === 'pending_verification'
+                  ? 'bg-yellow-500/20 text-yellow-600'
+                  : 'bg-red-500/20 text-red-600';
 
-    {/* Blacklist Status */}
-    <div className="flex items-center justify-between">
-      <span className="text-sm font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-indigo-400/60" />
-        Blacklist Status
-      </span>
-      <Badge
-        variant="outline"
-        className={`
-          px-3 py-0.5 text-xs font-semibold uppercase tracking-wider rounded-full border-0
-          ${application.metadata.blacklistStatus === 'blacklisted' 
-            ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 ring-1 ring-rose-500/30' 
-            : application.metadata.blacklistStatus === 'flagged' 
-            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/30' 
-            : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/30'
-          }
-        `}
-      >
-        {application.metadata.blacklistStatus?.toUpperCase() || 'N/A'}
-      </Badge>
-    </div>
-  </div>
-</CollapsibleSection>
+                const receiptUrl = receipt.path?.startsWith('http')
+                  ? receipt.path
+                  : `${apiBase}${receipt.path}`;
+
+                return (
+                  <div
+                    key={idx}
+                    className="flex flex-col md:flex-row items-start md:items-center justify-between p-3 bg-surface-light rounded-lg hover:bg-surface-light/80 transition-colors"
+                  >
+                    <div className="flex items-center space-x-3 min-w-0 flex-1">
+                      <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 shrink-0">
+                        <FileText className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-foreground truncate">
+                          {receipt.originalName || receipt.filename}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2 mt-1">
+                          <span className="text-xs text-text-secondary">
+                            {new Date(receipt.uploadedAt).toLocaleDateString()}
+                          </span>
+                          {receipt.status && (
+                            <Badge className={cn("text-[10px] font-normal border-0", statusColor)}>
+                              {receipt.status.replace('_', ' ')}
+                            </Badge>
+                          )}
+                          {receipt.uploadedByRole && (
+                            <span className="text-xs text-text-muted">
+                              by {receipt.uploadedByRole}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 mt-2 md:mt-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedDocument(receipt);
+                          setDocumentPreviewOpen(true);
+                        }}
+                        title="View receipt"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => window.open(receiptUrl, '_blank')}
+                        title="Download receipt"
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-6 text-text-muted">
+                <Receipt className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                <p>No payment receipts uploaded yet</p>
+              </div>
+            )}
+          </div>
+        </CollapsibleSection>
+
+        {/* Application History */}
+        <CollapsibleSection title="Application History" defaultOpen={false}>
+          <div className="space-y-2">
+            {application.history.length === 0 ? (
+              <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-sm">
+                No history entries yet
+              </div>
+            ) : (
+              application.history.map((entry, index) => (
+                <div 
+                  key={index} 
+                  className="flex items-start gap-3 p-3 rounded-xl bg-white/50 dark:bg-gray-900/50 border border-gray-200/50 dark:border-gray-800/50 hover:bg-gray-50/80 dark:hover:bg-gray-800/50 transition-all duration-200"
+                >
+                  <div className="w-2 h-2 rounded-full bg-[#0A3269] mt-2 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {entry.action?.replace(/_/g, ' ').toUpperCase() || 'Action'}
+                    </p>
+                    {entry.note && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{entry.note}</p>
+                    )}
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+                      {new Date(entry.at).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </CollapsibleSection>
+
+        {/* Risk Assessment — Modern UI */}
+        <CollapsibleSection title="Risk Assessment" defaultOpen={false}>
+          <div className="space-y-4 pt-5 rounded-xl bg-gray-50/80 dark:bg-white/5 p-4 backdrop-blur-sm border border-gray-200/50 dark:border-white/10">
+            {/* Fraud Risk */}
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-rose-400/60" />
+                Fraud Risk
+              </span>
+              <Badge
+                variant="outline"
+                className={`
+                  px-3 py-0.5 text-xs font-semibold uppercase tracking-wider rounded-full border-0
+                  ${application.metadata.fraudRisk === 'high' 
+                    ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 ring-1 ring-rose-500/30' 
+                    : application.metadata.fraudRisk === 'medium' 
+                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/30' 
+                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/30'
+                  }
+                `}
+              >
+                {application.metadata.fraudRisk?.toUpperCase() || 'N/A'}
+              </Badge>
+            </div>
+
+            {/* Blacklist Status */}
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400/60" />
+                Blacklist Status
+              </span>
+              <Badge
+                variant="outline"
+                className={`
+                  px-3 py-0.5 text-xs font-semibold uppercase tracking-wider rounded-full border-0
+                  ${application.metadata.blacklistStatus === 'blacklisted' 
+                    ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 ring-1 ring-rose-500/30' 
+                    : application.metadata.blacklistStatus === 'flagged' 
+                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/30' 
+                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/30'
+                  }
+                `}
+              >
+                {application.metadata.blacklistStatus?.toUpperCase() || 'N/A'}
+              </Badge>
+            </div>
+          </div>
+        </CollapsibleSection>
 
         {/* Quick Actions */}
         <CollapsibleSection title="Quick Actions" defaultOpen={false}>
@@ -623,73 +706,72 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
           </div>
         </CollapsibleSection>
 
-    {/* Status Update */}
-<CollapsibleSection title="Update Status" defaultOpen={false}>
-  <div className="space-y-4">
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-foreground">New Status</label>
-      <Select value={newStatus} onValueChange={setNewStatus}>
-        <SelectTrigger className="bg-white dark:bg-gray-800/90 border-gray-200 dark:border-gray-700 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 transition-colors">
-          <SelectValue placeholder="Select status" />
-        </SelectTrigger>
-        <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-lg">
-          {statusOptions.map(option => (
-            <SelectItem 
-              key={option.value} 
-              value={option.value}
-              className="hover:bg-gray-50 dark:hover:bg-gray-700/50 focus:bg-gray-50 dark:focus:bg-gray-700/50 transition-colors"
+        {/* Status Update */}
+        <CollapsibleSection title="Update Status" defaultOpen={false}>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">New Status</label>
+              <Select value={newStatus} onValueChange={setNewStatus}>
+                <SelectTrigger className="bg-white dark:bg-gray-800/90 border-gray-200 dark:border-gray-700 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 transition-colors">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-lg">
+                  {statusOptions.map(option => (
+                    <SelectItem 
+                      key={option.value} 
+                      value={option.value}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 focus:bg-gray-50 dark:focus:bg-gray-700/50 transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className={cn(
+                          "w-2 h-2 rounded-full",
+                          option.value === 'approved' ? "bg-green-500" :
+                          option.value === 'rejected' ? "bg-red-500" :
+                          option.value === 'submitted' ? "bg-blue-500" :
+                          option.value === 'under_review' ? "bg-yellow-500" :
+                          option.value === 'docs_required' ? "bg-orange-500" :
+                          option.value === 'fraud_detected' ? "bg-red-600" :
+                          option.value === 'penalty_issued' ? "bg-orange-600" :
+                          "bg-gray-400"
+                        )} />
+                        {option.label}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Note (Optional)</label>
+              <Textarea
+                value={statusNote}
+                onChange={(e) => setStatusNote(e.target.value)}
+                placeholder="Add a note about this status change..."
+                rows={3}
+                className="bg-white dark:bg-gray-800/90 border-gray-200 dark:border-gray-700 resize-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition-colors"
+              />
+            </div>
+            
+            <Button 
+              onClick={handleStatusUpdate}
+              disabled={!newStatus || newStatus === application.status || isUpdating}
+              className="w-full bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span className="flex items-center gap-2">
-                <span className={cn(
-                  "w-2 h-2 rounded-full",
-                  option.value === 'approved' ? "bg-green-500" :
-                  option.value === 'rejected' ? "bg-red-500" :
-                  option.value === 'submitted' ? "bg-blue-500" :
-                  option.value === 'under_review' ? "bg-yellow-500" :
-                  option.value === 'docs_required' ? "bg-orange-500" :
-                  option.value === 'fraud_detected' ? "bg-red-600" :
-                  option.value === 'penalty_issued' ? "bg-orange-600" :
-                  "bg-gray-400"
-                )} />
-                {option.label}
-              </span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-foreground">Note (Optional)</label>
-      <Textarea
-        value={statusNote}
-        onChange={(e) => setStatusNote(e.target.value)}
-        placeholder="Add a note about this status change..."
-        rows={3}
-        className="bg-white dark:bg-gray-800/90 border-gray-200 dark:border-gray-700 resize-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition-colors"
-      />
-    </div>
-    
-    <Button 
-      onClick={handleStatusUpdate}
-      disabled={!newStatus || newStatus === application.status || isUpdating}
-      className="w-full bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {isUpdating ? (
-        <>
-          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-          Updating...
-        </>
-      ) : (
-        'Update Status'
-      )}
-    </Button>
-  </div>
-</CollapsibleSection>
+              {isUpdating ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                'Update Status'
+              )}
+            </Button>
+          </div>
+        </CollapsibleSection>
+      </div>
 
-
-     </div>
-      {/* Edit Details Modal */}
+      {/* ─── Edit Details Modal ──────────────────────────────────────────── */}
       {editOpen && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-end md:items-center justify-center">
           <div className="bg-background w-full md:w-[720px] rounded-t-2xl md:rounded-2xl p-4 md:p-6 space-y-4">
@@ -749,6 +831,8 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
           </div>
         </div>
       )}
+
+      {/* ─── Request Documents Modal ────────────────────────────────────── */}
       {docReqOpen && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-end md:items-center justify-center">
           <div className="bg-background w-full md:w-[520px] rounded-t-2xl md:rounded-2xl p-4 md:p-6 space-y-3">
@@ -773,26 +857,26 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             <div className="flex gap-2 justify-end">
               <Button variant="outline" onClick={() => setDocReqOpen(false)}>Cancel</Button>
-          <Button 
-  style={{ color: 'white' }}
-  onClick={async ()=>{
-    const id = (application as any)?._id || (application as any)?.id
-    const requested = Object.entries(docReq).filter(([,v])=>v).map(([k])=>k)
-    if (requested.length === 0) return
-    await onRequestDocuments?.(id, requested, docReqNote)
-    setDocReqOpen(false)
-    setDocReq({})
-    setDocReqNote('')
-  }}
->
-  Send Request
-</Button>
+              <Button 
+                style={{ color: 'white' }}
+                onClick={async ()=>{
+                  const id = (application as any)?._id || (application as any)?.id
+                  const requested = Object.entries(docReq).filter(([,v])=>v).map(([k])=>k)
+                  if (requested.length === 0) return
+                  await onRequestDocuments?.(id, requested, docReqNote)
+                  setDocReqOpen(false)
+                  setDocReq({})
+                  setDocReqNote('')
+                }}
+              >
+                Send Request
+              </Button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Document Preview Modal */}
+      {/* ─── Document Preview Modal ────────────────────────────────────── */}
       <Dialog open={documentPreviewOpen} onOpenChange={setDocumentPreviewOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
@@ -842,13 +926,13 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
                 <div className="hidden text-center text-text-muted">
                   <FileText className="w-16 h-16 mx-auto mb-4" />
                   <p>Unable to load preview</p>
-             <Button 
-  onClick={() => handleDocumentDownload(selectedDocument)}
-  className="mt-4 bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300"
->
-  <Download className="w-4 h-4 mr-2" />
-  Download file
-</Button>
+                  <Button 
+                    onClick={() => handleDocumentDownload(selectedDocument)}
+                    className="mt-4 bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download file
+                  </Button>
                 </div>
               </div>
             )}
@@ -856,7 +940,7 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
         </DialogContent>
       </Dialog>
 
-      {/* Document Review Modal */}
+      {/* ─── Document Review Modal ────────────────────────────────────── */}
       <Dialog open={documentReviewOpen} onOpenChange={setDocumentReviewOpen}>
         <DialogContent className="max-w-md ">
           <DialogHeader>
@@ -906,32 +990,32 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
               <Button variant="outline" onClick={() => setDocumentReviewOpen(false)}>
                 Cancel
               </Button>
-          <Button 
-  onClick={handleDocumentReview}
-  disabled={isReviewing || (reviewStatus === 'rejected' && !reviewComment.trim())}
-  className={cn(
-    "text-white font-medium",
-    reviewStatus === 'approved' 
-      ? "bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/25 hover:shadow-xl hover:shadow-emerald-600/30" 
-      : "bg-red-600 hover:bg-red-700 shadow-lg shadow-red-600/25 hover:shadow-xl hover:shadow-red-600/30",
-    "transition-all duration-300 active:scale-95"
-  )}
->
-  {isReviewing ? (
-    <>
-      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-      Processing...
-    </>
-  ) : (
-    `${reviewStatus === 'approved' ? 'Approve' : 'Reject'} Document`
-  )}
-</Button>
+              <Button 
+                onClick={handleDocumentReview}
+                disabled={isReviewing || (reviewStatus === 'rejected' && !reviewComment.trim())}
+                className={cn(
+                  "text-white font-medium",
+                  reviewStatus === 'approved' 
+                    ? "bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/25 hover:shadow-xl hover:shadow-emerald-600/30" 
+                    : "bg-red-600 hover:bg-red-700 shadow-lg shadow-red-600/25 hover:shadow-xl hover:shadow-red-600/30",
+                  "transition-all duration-300 active:scale-95"
+                )}
+              >
+                {isReviewing ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  `${reviewStatus === 'approved' ? 'Approve' : 'Reject'} Document`
+                )}
+              </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Fraud Alert Modal */}
+      {/* ─── Fraud Alert Modal ────────────────────────────────────────── */}
       <Dialog open={fraudAlertOpen} onOpenChange={setFraudAlertOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -996,7 +1080,7 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
         </DialogContent>
       </Dialog>
 
-      {/* Penalty Modal */}
+      {/* ─── Penalty Modal ────────────────────────────────────────────── */}
       <Dialog open={penaltyOpen} onOpenChange={setPenaltyOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -1060,7 +1144,7 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
         </DialogContent>
       </Dialog>
 
-      {/* OTP Request Modal */}
+      {/* ─── OTP Request Modal ────────────────────────────────────────── */}
       <Dialog open={otpOpen} onOpenChange={setOtpOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>

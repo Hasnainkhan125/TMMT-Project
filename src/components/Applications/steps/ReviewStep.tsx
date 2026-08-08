@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { CheckCircle2, Clock, Shield, Star, Users, Zap, ArrowRight, Lock, Sparkles, Award, TrendingUp, Crown, Mail, Phone, MapPin, CreditCard } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import {
+  CheckCircle2, Clock, Shield, Star, Users, Zap,
+  ArrowRight, Lock, Sparkles, Award, TrendingUp, Crown,
+  Mail, Phone, MapPin, CreditCard
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import type { FlowData } from '../ApplicationFlow'
@@ -21,6 +26,8 @@ const fadeUp = {
 
 export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepProps) {
   const { t } = useTranslation()
+  const { resolvedTheme } = useTheme()   // 👈 use resolvedTheme to get actual theme (system, dark, light)
+  const isDark = resolvedTheme === 'dark'
 
   const BENEFITS = [
     { text: t('review.benefit1', 'Expert document verification by licensed professionals'), icon: Shield },
@@ -31,17 +38,17 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
   ]
 
   const TRUST_BADGES = [
-    { icon: Star,   value: '4.9',   label: t('review.rating', 'Rating'),              sub: t('review.fromReviews', 'from 2,400+ reviews'), gradient: 'from-amber-400 to-amber-500' },
-{ 
-  icon: Shield, 
-  value: '100%', 
-  label: 'TMMT Golden', 
-  sub: 'Trusted service  Guarantee',
-  gradient: 'from-amber-400 to-yellow-500',
-  badge: '⭐ Guaranteed',
-},
-    { icon: Zap,    value: '2.3d',  label: t('review.avgApproval', 'Avg approval'),    sub: t('review.businessDays', 'business days'), gradient: 'from-emerald-400 to-emerald-500' },
-    { icon: Shield, value: '97%',   label: t('review.approvalRate', 'Approval rate'),  sub: t('review.withOurProcess', 'with our process'), gradient: 'from-purple-400 to-purple-500' },
+    { icon: Star, value: '4.9', label: t('review.rating', 'Rating'), sub: t('review.fromReviews', 'from 2,400+ reviews'), gradient: 'from-amber-400 to-amber-500' },
+    {
+      icon: Shield,
+      value: '100%',
+      label: 'TMMT Golden',
+      sub: 'Trusted service Guarantee',
+      gradient: 'from-amber-400 to-yellow-500',
+      badge: '⭐ Guaranteed',
+    },
+    { icon: Zap, value: '2.3d', label: t('review.avgApproval', 'Avg approval'), sub: t('review.businessDays', 'business days'), gradient: 'from-emerald-400 to-emerald-500' },
+    { icon: Shield, value: '97%', label: t('review.approvalRate', 'Approval rate'), sub: t('review.withOurProcess', 'with our process'), gradient: 'from-purple-400 to-purple-500' },
   ]
 
   return (
@@ -50,7 +57,8 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -32 }}
       transition={{ duration: 0.26 }}
-      className="w-full flex flex-col gap-4 sm:gap-5 md:gap-6"
+      // 👇 conditionally add "dark" class to enable all dark: variants
+      className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 ${isDark ? 'dark' : ''}`}
     >
       {/* Header with gradient accent */}
       <div className="space-y-1.5 sm:space-y-2 relative">
@@ -59,7 +67,6 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
           <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-[#64748B] dark:text-white/40">
             {t('review.step', 'Review your application')}
           </p>
-   
         </div>
         <h2
           className="font-bold leading-tight text-[#0F2A44] dark:text-white"

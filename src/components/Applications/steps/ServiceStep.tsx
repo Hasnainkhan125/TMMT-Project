@@ -35,6 +35,8 @@ import {
   Sparkles,
   LayoutGrid,
   FileSearch,
+  WifiOff,
+  AlertTriangle,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
@@ -52,7 +54,132 @@ interface ServiceStepProps {
   services: FlowService[]
   loading: boolean
   onSelect: (service: FlowService) => void
+  onRetry?: () => void
 }
+
+// ─── Mock Data ──────────────────────────────────────────────────────────────
+const MOCK_SERVICES: FlowService[] = [
+  {
+    id: '1',
+    name: 'Spouce Residence Visa',
+    description: 'Apply for UAE residence visa',
+    category: 'family',
+    processingTime: '3-5 days',
+    requiredDocuments: ['Passport Copy', 'Photo', 'Medical Report'],
+    fee: 1089,
+    prices: [{ priceType: 'inside', priceAmount: 1089 }],
+  },
+  {
+    id: '2',
+    name: 'Golden Visa',
+    description: '10-year residency for investors & talent',
+    category: 'golden',
+    processingTime: '5-7 days',
+    requiredDocuments: ['Passport', 'Photo', 'Bank Statement', 'Investment Proof'],
+    fee: 5000,
+    prices: [{ priceType: 'inside', priceAmount: 2710 }],
+  },
+  {
+    id: '3',
+    name: 'Employment Visa',
+    description: 'Work visa for employees',
+    category: 'employ',
+    processingTime: '2-4 days',
+    requiredDocuments: ['Passport', 'Photo', 'Job Offer', 'Contract'],
+    fee: 1200,
+    prices: [{ priceType: 'inside', priceAmount: 548 }],
+  },
+  {
+    id: '4',
+    name: 'Family Sponsorship',
+    description: 'Sponsor your spouse, children, or parents',
+    category: 'family',
+    processingTime: '4-6 days',
+    requiredDocuments: ['Passport', 'Photo', 'Marriage Certificate', 'Birth Certificates'],
+    fee: 2000,
+    prices: [{ priceType: 'inside', priceAmount: 189 }],
+  },
+  {
+    id: '5',
+    name: 'Visa Renewal',
+    description: 'Renew your existing residence visa',
+    category: 'renew',
+    processingTime: '2-3 days',
+    requiredDocuments: ['Passport', 'Photo', 'Old Visa Copy'],
+    fee: 800,
+    prices: [{ priceType: 'inside', priceAmount: 576 }],
+  },
+  {
+    id: '6',
+    name: 'Visa Cancellation',
+    description: 'Cancel your current visa properly',
+    category: 'cancel',
+    processingTime: '1-2 days',
+    requiredDocuments: ['Passport', 'Old Visa', 'Labour Card'],
+    fee: 600,
+    prices: [{ priceType: 'inside', priceAmount: 639 }],
+  },
+  {
+    id: '7',
+    name: 'Change Status Employee',
+    description: 'Change your visa status without leaving the UAE',
+    category: 'change',
+    processingTime: '2-3 days',
+    requiredDocuments: ['Passport', 'Photo', 'Current Visa'],
+    fee: 900,
+    prices: [{ priceType: 'inside', priceAmount: 676 }],
+  },
+  {
+    id: '8',
+    name: 'Travel Visa',
+    description: 'Tourist or visit visa for the UAE',
+    category: 'travel',
+    processingTime: '1-2 days',
+    requiredDocuments: ['Passport', 'Photo', 'Flight Booking'],
+    fee: 500,
+    prices: [{ priceType: 'inside', priceAmount: 275 }],
+  },
+  {
+    id: '9',
+    name: 'Establishment Card',
+    description: 'Manage company immigration cards',
+    category: 'establish',
+    processingTime: '3-5 days',
+    requiredDocuments: ['Trade License', 'Passport', 'Photo'],
+    fee: 1000,
+    prices: [{ priceType: 'inside', priceAmount: 2736 }],
+  },
+  {
+    id: '10',
+    name: 'Investor Visa',
+    description: 'Visa for investors in the UAE',
+    category: 'investor',
+    processingTime: '5-7 days',
+    requiredDocuments: ['Passport', 'Photo', 'Investment Certificate'],
+    fee: 3000,
+    prices: [{ priceType: 'inside', priceAmount: 5479 }],
+  },
+  {
+    id: '11',
+    name: 'Partner Visa',
+    description: 'Visa for business partners',
+    category: 'partner',
+    processingTime: '3-5 days',
+    requiredDocuments: ['Passport', 'Photo', 'Partnership Agreement'],
+    fee: 2500,
+    prices: [{ priceType: 'inside', priceAmount: 1126 }],
+  },
+  {
+    id: '12',
+    name: 'Parent Visa',
+    description: 'Sponsor your parents',
+    category: 'parent',
+    processingTime: '5-7 days',
+    requiredDocuments: ['Passport', 'Photo', 'Birth Certificate', 'Sponsor Letter'],
+    fee: 1800,
+    prices: [{ priceType: 'inside', priceAmount: 510 }],
+  },
+]
 
 // ─── Service meta ──────────────────────────────────────────────────────────
 const SERVICE_META: [string, string, typeof Users, string, string][] = [
@@ -180,7 +307,7 @@ const GoldenGuaranteeCard = () => {
   )
 }
 
-export default function ServiceStep({ services, loading, onSelect }: ServiceStepProps) {
+export default function ServiceStep({ services, loading, onSelect, onRetry }: ServiceStepProps) {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const [tapped, setTapped] = useState<string | null>(null)
@@ -195,8 +322,18 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
     return () => clearTimeout(t)
   }, [])
 
+  // ─── Use mock data as fallback ───────────────────────────────────────
+  const effectiveServices = useMemo(() => {
+    // If we have real services (and they are not just empty objects), use them.
+    // Otherwise fallback to mock.
+    if (services && services.length > 0 && services.some(s => s.name)) {
+      return services
+    }
+    return MOCK_SERVICES
+  }, [services])
+
   const filtered = useMemo(() => {
-    let list = services || []
+    let list = effectiveServices || []
     if (catFilter) {
       list = list?.filter(s => s?.name?.toLowerCase()?.includes(catFilter))
     }
@@ -209,7 +346,7 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
       )
     }
     return list
-  }, [services, query, catFilter])
+  }, [effectiveServices, query, catFilter])
 
   const handleSelect = (svc: FlowService) => {
     setTapped(svc.id)
@@ -250,6 +387,17 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
     tap: { scale: 0.95 },
   }
 
+  // ─── Determine if we have any data ──────────────────────────────────
+  const hasNoServices = !loading && (!effectiveServices || effectiveServices.length === 0)
+
+  const handleRetry = () => {
+    if (onRetry) {
+      onRetry()
+    } else {
+      window.location.reload()
+    }
+  }
+
   return (
     <div className="w-full flex flex-col gap-5 sm:gap-7 transition-colors duration-300 relative">
       {/* ─── Background Glows ────────────────────────────────────────────── */}
@@ -271,10 +419,12 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
             {t('upload.step', 'Choose your service')}
           </p>
-          <Badge className="bg-[var(--primary)]/15 text-[var(--primary)] border-[var(--primary)]/25 text-[8px] sm:text-[9px] font-semibold rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 backdrop-blur-sm">
-            <Sparkles className="w-2.5 sm:w-3 h-2.5 sm:h-3 mr-1" />
-            {filtered.length} services
-          </Badge>
+          {!hasNoServices && !loading && (
+            <Badge className="bg-[var(--primary)]/15 text-[var(--primary)] border-[var(--primary)]/25 text-[8px] sm:text-[9px] font-semibold rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 backdrop-blur-sm">
+              <Sparkles className="w-2.5 sm:w-3 h-2.5 sm:h-3 mr-1" />
+              {filtered.length} services
+            </Badge>
+          )}
         </div>
         <h1
           className="w-full max-w-4xl font-bold leading-[1.05] tracking-tight break-words whitespace-normal text-[2rem] sm:text-[3.2rem] md:text-[4rem] lg:text-[4.5rem]"
@@ -284,125 +434,134 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
             letterSpacing: '-0.02em',
           }}
         >
-          {t('service.title', 'What do you want to get done today?')}
+          {hasNoServices
+            ? t('service.noDataTitle', 'We’re having trouble loading services')
+            : t('service.title', 'What do you want to get done today?')}
         </h1>
         <p className="text-sm sm:text-base leading-relaxed max-w-[95%] sm:max-w-none font-light" style={{ color: isDark ? '#94a3b8' : '#64748b' }}>
-          {t('service.subtitle', 'Choose a service — we handle everything for you')}
+          {hasNoServices
+            ? t('service.noDataSubtitle', 'Please check your connection or try again later.')
+            : t('service.subtitle', 'Choose a service — we handle everything for you')}
         </p>
       </motion.div>
 
       {/* ─── Search Bar ──────────────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.05 }}
-        className="relative"
-      >
-        <div
-          className={`
-            relative flex items-center gap-2 sm:gap-3 h-12 sm:h-14 rounded-2xl sm:rounded-3xl px-4 sm:px-6
-            backdrop-blur-xl border-2 transition-all duration-300
-            ${inputFocused
-              ? 'border-[var(--primary)]'
-              : 'border-slate-200/60 dark:border-slate-700/50 hover:border-slate-300/80 dark:hover:border-slate-600/80'
-            }
-          `}
-          style={{
-            backgroundColor: inputFocused
-              ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.95)')
-              : (isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.85)'),
-          }}
+      {!hasNoServices && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          className="relative"
         >
-          <Search
-            className={`w-4 sm:w-5 h-4 sm:h-5 shrink-0 transition-colors duration-200 ${inputFocused ? 'text-[var(--primary)]' : 'text-slate-400 dark:text-slate-500'}`}
-          />
-          <input
-            ref={searchRef}
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onFocus={() => setInputFocused(true)}
-            onBlur={() => setInputFocused(false)}
-            placeholder={t('service.search', 'Search services...')}
-            className="flex-1 min-w-0 bg-transparent border-0 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 text-sm sm:text-base"
+          <div
+            className={`
+              relative flex items-center gap-2 sm:gap-3 h-12 sm:h-14 rounded-2xl sm:rounded-3xl px-4 sm:px-6
+              backdrop-blur-xl border-2 transition-all duration-300
+              ${inputFocused
+                ? 'border-[var(--primary)]'
+                : 'border-slate-200/60 dark:border-slate-700/50 hover:border-slate-300/80 dark:hover:border-slate-600/80'
+              }
+            `}
             style={{
-              fontSize: '16px',
-              outline: 'none',
-              boxShadow: 'none',
-              color: isDark ? '#ffffff' : '#0a0a0a',
-              backgroundColor: 'transparent',
+              backgroundColor: inputFocused
+                ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.95)')
+                : (isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.85)'),
             }}
-          />
-          <AnimatePresence>
-            {query && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onClick={() => setQuery('')}
-                className="shrink-0 text-slate-400 hover:text-[var(--primary)] transition-colors p-1 rounded-full hover:bg-[var(--primary)]/10"
-              >
-                <XIcon className="w-4 h-4" />
-              </motion.button>
+          >
+            <Search
+              className={`w-4 sm:w-5 h-4 sm:h-5 shrink-0 transition-colors duration-200 ${inputFocused ? 'text-[var(--primary)]' : 'text-slate-400 dark:text-slate-500'}`}
+            />
+            <input
+              ref={searchRef}
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
+              placeholder={t('service.search', 'Search services...')}
+              className="flex-1 min-w-0 bg-transparent border-0 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 text-sm sm:text-base"
+              style={{
+                fontSize: '16px',
+                outline: 'none',
+                boxShadow: 'none',
+                color: isDark ? '#ffffff' : '#0a0a0a',
+                backgroundColor: 'transparent',
+              }}
+            />
+            <AnimatePresence>
+              {query && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  onClick={() => setQuery('')}
+                  className="shrink-0 text-slate-400 hover:text-[var(--primary)] transition-colors p-1 rounded-full hover:bg-[var(--primary)]/10"
+                >
+                  <XIcon className="w-4 h-4" />
+                </motion.button>
+              )}
+            </AnimatePresence>
+            {!query && (
+              <div className="shrink-0 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-[9px] sm:text-[10px] font-medium border border-[var(--primary)]/20 hidden sm:flex items-center gap-1">
+                <Command className="w-3 h-3" /> K
+              </div>
             )}
-          </AnimatePresence>
-          {!query && (
-            <div className="shrink-0 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-[9px] sm:text-[10px] font-medium border border-[var(--primary)]/20 hidden sm:flex items-center gap-1">
-              <Command className="w-3 h-3" /> K
-            </div>
-          )}
-        </div>
-      </motion.div>
+          </div>
+        </motion.div>
+      )}
 
       {/* ─── Category Chips ──────────────────────────────────────────────── */}
-      <div
-        ref={scrollContainerRef}
-        className="w-full overflow-x-auto overflow-y-hidden pb-1 scrollbar-hide -mx-3 sm:-mx-4 px-1 sm:px-1"
-        style={{ WebkitOverflowScrolling: 'touch' }}
-      >
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.12 }}
-          className="flex gap-2 sm:gap-2.5" style={{ minWidth: 'max-content' }}
+      {!hasNoServices && (
+        <div
+          ref={scrollContainerRef}
+          className="w-full overflow-x-auto overflow-y-hidden pb-1 scrollbar-hide -mx-3 sm:-mx-4 px-1 sm:px-1"
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
-          {(() => {
-            const isMobile = window.innerWidth < 640
-            const categories = isMobile ? MOBILE_CATEGORIES : ALL_CATEGORIES
-            return categories.map(cat => {
-              const Icon = cat.icon
-              const isActive = catFilter === cat.key
-              return (
-                <motion.button
-                  key={cat.key}
-                  onClick={() => setCatFilter(cat.key)}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.94 }}
-                  className={`
-                    shrink-0 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs font-medium 
-                    border-2 transition-all duration-300 whitespace-nowrap flex items-center gap-1.5 sm:gap-2
-                    ${isActive ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-transparent hover:border-slate-200 dark:hover:border-slate-700'}
-                  `}
-                  style={{
-                    backgroundColor: isActive
-                      ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)')
-                      : 'transparent',
-                    color: isActive
-                      ? (isDark ? '#ffffff' : 'var(--primary)')
-                      : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)'),
-                  }}
-                >
-                  <Icon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
-                  <span>{t(`service.cat.${cat.key || 'all'}`, cat.label)}</span>
-                  {isActive && <CheckCircle className="w-3 sm:w-3.5 h-3 sm:h-3.5" />}
-                </motion.button>
-              )
-            })
-          })()}
-        </motion.div>
-      </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.12 }}
+            className="flex gap-2 sm:gap-2.5" style={{ minWidth: 'max-content' }}
+          >
+            {(() => {
+              const isMobile = window.innerWidth < 640
+              const categories = isMobile ? MOBILE_CATEGORIES : ALL_CATEGORIES
+              return categories.map(cat => {
+                const Icon = cat.icon
+                const isActive = catFilter === cat.key
+                return (
+                  <motion.button
+                    key={cat.key}
+                    onClick={() => setCatFilter(cat.key)}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.94 }}
+                    className={`
+                      shrink-0 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs font-medium 
+                      border-2 transition-all duration-300 whitespace-nowrap flex items-center gap-1.5 sm:gap-2
+                      ${isActive ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-transparent hover:border-slate-200 dark:hover:border-slate-700'}
+                    `}
+                    style={{
+                      backgroundColor: isActive
+                        ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)')
+                        : 'transparent',
+                      color: isActive
+                        ? (isDark ? '#ffffff' : 'var(--primary)')
+                        : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)'),
+                    }}
+                  >
+                    <Icon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+                    <span>{t(`service.cat.${cat.key || 'all'}`, cat.label)}</span>
+                    {isActive && <CheckCircle className="w-3 sm:w-3.5 h-3 sm:h-3.5" />}
+                  </motion.button>
+                )
+              })
+            })()}
+          </motion.div>
+        </div>
+      )}
 
-      {/* ─── Services Grid ────────────────────────────────────────────────── */}
+      {/* ─── Content Area ────────────────────────────────────────────────── */}
       {loading ? (
+        // ─── Loading Skeletons ─────────────────────────────────────────────
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div
@@ -415,7 +574,42 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
             />
           ))}
         </div>
+      ) : hasNoServices ? (
+        // ─── No Data State (Backend Issue) ───────────────────────────────
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="text-center py-12 sm:py-16"
+        >
+          <div className="mx-auto w-20 h-20 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-5 border border-amber-200/50 dark:border-amber-800/30">
+            <WifiOff className="w-10 h-10 text-amber-500 dark:text-amber-400" strokeWidth={1.5} />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-light text-black dark:text-white mb-2">
+            {t('service.noDataTitle', 'No services available at the moment')}
+          </h3>
+          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 font-light max-w-md mx-auto">
+            {t('service.noDataDesc', 'We’re having trouble connecting to our service catalog. Please check your internet connection or try again later.')}
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={handleRetry}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--primary)] text-white text-sm font-medium hover:bg-[var(--primary)]/80 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              {t('service.retry', 'Retry')}
+            </button>
+            <button
+              onClick={() => window.open('mailto:support@tammat.ae?subject=Service%20Catalog%20Issue')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <AlertTriangle className="w-4 h-4" />
+              {t('service.contactSupport', 'Contact Support')}
+            </button>
+          </div>
+        </motion.div>
       ) : filtered.length === 0 ? (
+        // ─── No Search Results ────────────────────────────────────────────
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -425,15 +619,14 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
             <Search className="w-8 h-8 text-slate-400 dark:text-slate-600" strokeWidth={1.2} />
           </div>
           <h3 className="text-lg font-light text-black dark:text-white mb-1">
-            {services?.length === 0 ? 'No services available' : 'No results found'}
+            {t('service.noResults', 'No results found')}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 font-light">
-            {services?.length === 0
-              ? 'Please check back later or contact support.'
-              : 'Try adjusting your search or filter.'}
+            {t('service.tryAdjusting', 'Try adjusting your search or filter.')}
           </p>
         </motion.div>
       ) : (
+        // ─── Services Grid ──────────────────────────────────────────────────
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {filtered.map((svc, index) => {
             const { sub, Icon, gradient } = getMeta(svc?.name || '')
@@ -567,28 +760,28 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
                       )}
                     </div>
 
-{/* ─── START BUTTON ─────────────────────────────────── */}
-<motion.div
-  variants={buttonVariants}
-  whileHover="hover"
-  whileTap="tap"
-  className={cn(
-    "flex items-center gap-2 px-5 py-2.5 rounded-full font-light text-xs sm:text-sm tracking-wide",
-    "transition-all duration-300 ease-out",
-    "bg-[#0A3269] dark:bg-white",
-    "text-white dark:text-[#000]",
-    "border border-[#0A3269]/20 dark:border-white/20",
-    "hover:bg-[#1A4A8A] dark:hover:bg-gray-100",
-    "hover:scale-[1.02]",
-    "active:scale-[0.98]",
-    "shadow-[0_4px_16px_-4px_rgba(10,50,105,0.2)] dark:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.1)]",
-    "hover:shadow-[0_8px_24px_-6px_rgba(10,50,105,0.3)] dark:hover:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.2)]",
-    active ? "bg-[#1A4A8A] dark:bg-gray-200" : ""
-  )}
->
-  <span className="font-light tracking-wide">{active ? 'Selected' : 'Get Start'}</span>
-  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.5} />
-</motion.div>
+                    {/* ─── START BUTTON ─────────────────────────────────── */}
+                    <motion.div
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className={cn(
+                        "flex items-center gap-2 px-5 py-2.5 rounded-full font-light text-xs sm:text-sm tracking-wide",
+                        "transition-all duration-300 ease-out",
+                        "bg-[#0A3269] dark:bg-white",
+                        "text-white dark:text-[#000]",
+                        "border border-[#0A3269]/20 dark:border-white/20",
+                        "hover:bg-[#1A4A8A] dark:hover:bg-gray-100",
+                        "hover:scale-[1.02]",
+                        "active:scale-[0.98]",
+                        "shadow-[0_4px_16px_-4px_rgba(10,50,105,0.2)] dark:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.1)]",
+                        "hover:shadow-[0_8px_24px_-6px_rgba(10,50,105,0.3)] dark:hover:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.2)]",
+                        active ? "bg-[#1A4A8A] dark:bg-gray-200" : ""
+                      )}
+                    >
+                      <span className="font-light tracking-wide">{active ? 'Selected' : 'Get Start'}</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.5} />
+                    </motion.div>
                   </div>
                 </div>
 
@@ -606,12 +799,12 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
         </div>
       )}
 
-      {/* ✅ Golden Guarantee Card */}
+      {/* ✅ Golden Guarantee Card - always shown */}
       <GoldenGuaranteeCard />
 
-      {/* Trust Footer */}
-      <AnimatePresence>
-        {!loading && filtered.length > 0 && (
+      {/* Trust Footer - only if data exists */}
+      {!hasNoServices && !loading && filtered.length > 0 && (
+        <AnimatePresence>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -639,8 +832,8 @@ export default function ServiceStep({ services, loading, onSelect }: ServiceStep
               Licensed
             </span>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+      )}
     </div>
   )
 }

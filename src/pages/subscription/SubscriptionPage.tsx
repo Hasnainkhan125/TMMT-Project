@@ -689,155 +689,129 @@ export function PlanSelectionSection({
         </motion.div>
         <GoldenGuaranteeCard />
         <HowItWorksSection />
+{/* ─── Founding Members Section - Compact & Responsive ──────────────────── */}
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ delay: 0.55, duration: 0.5 }}
+  className="mt-6 sm:mt-8 relative overflow-hidden rounded-xl bg-white/70 dark:bg-black/40 backdrop-blur-sm p-4 sm:p-6 lg:p-8 border border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 transition-all duration-500 group"
+>
+  {/* ─── Subtle Background Decorations (reduced size) ────────────────── */}
+  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-amber-400/5 dark:bg-amber-500/3 blur-2xl group-hover:bg-amber-400/8 transition-all duration-700" />
+  <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-orange-400/5 dark:bg-orange-500/3 blur-2xl group-hover:bg-orange-400/8 transition-all duration-700" />
 
-        {/* ─── Founding Members Section - Redesigned ──────────────────────────── */}
+  <div className="relative">
+    {/* ─── Header Row ───────────────────────────────────────────────────── */}
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
+      <div className="flex items-center gap-3">
+        <div className="relative p-2 rounded-lg bg-amber-400/10 dark:bg-amber-500/10 border border-amber-200/20 dark:border-amber-400/10">
+          <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
+        </div>
+        <div>
+          <h4 className="text-base sm:text-xl font-light text-black dark:text-white">
+            {isArabic ? 'الأعضاء المؤسسون' : 'Founding Members'}
+          </h4>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] font-light tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-full">
+              <span className="relative flex h-1 w-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60" />
+                <span className="relative inline-flex rounded-full h-1 w-1 bg-amber-500" />
+              </span>
+              {isArabic ? 'وقت محدود' : 'Limited Time'}
+            </span>
+            <span className="text-[8px] sm:text-[10px] font-light text-amber-500/60 dark:text-amber-400/50">
+              {isArabic ? '• عرض حصري' : '• Exclusive'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate('/subscription');
+          setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+        }}
+        className="group/btn relative overflow-hidden bg-amber-500 hover:bg-amber-600 dark:bg-amber-500/80 dark:hover:bg-amber-600/80 text-white rounded-full px-4 sm:px-6 py-1.5 sm:py-2.5 text-[10px] sm:text-sm font-light transition-all duration-300 hover:scale-[1.02]"
+      >
+        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+        <span className="relative flex items-center gap-1.5">
+          {isArabic ? 'اكتشف المزايا' : 'Discover Benefits'}
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+        </span>
+      </Button>
+    </div>
+
+    {/* ─── Description ──────────────────────────────────────────────────── */}
+    <p className="text-[11px] sm:text-sm text-black/60 dark:text-white/50 max-w-3xl leading-relaxed mt-2 sm:mt-3 font-light">
+      {isArabic 
+        ? 'انضم إلى النخبة الأولى من الأعضاء المؤسسين واستمتع بمزايا حصرية لا تتوفر للآخرين. كن جزءاً من تاريخ TMMT من البداية.'
+        : 'Join the founding members and enjoy exclusive benefits. Be part of TMMT\'s history from the start.'
+      }
+    </p>
+
+    {/* ─── Benefits Grid ────────────────────────────────────────────────── */}
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-4 sm:mt-5">
+      {[
+        { icon: BadgeCheck, title: isArabic ? 'شارة العضو المؤسس' : 'Founding Badge', desc: isArabic ? 'شارة حصرية على حسابك تظهر وضعك كعضو مؤسس.' : 'Exclusive badge on your account showing your founding status.' },
+        { icon: Gem, title: isArabic ? 'امتياز المؤسس مدى الحياة' : 'Lifetime Privilege', desc: isArabic ? 'هوية مؤسس دائمة ومزايا حصرية بما في ذلك أسعار خاصة وخصومات على رسوم الخدمات.' : 'Permanent Founder identity with exclusive advantages and special pricing.' },
+        { icon: Sparkles, title: isArabic ? 'مزايا حصرية' : 'Exclusive Benefits', desc: isArabic ? 'الوصول إلى الميزات المميزة عند إضافتها إلى المنصة.' : 'Access to premium features as they are added.' }
+      ].map((item, idx) => (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          key={item.title}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.55, duration: 0.5 }}
-          className="mt-8 sm:mt-10 relative overflow-hidden rounded-2xl bg-white/70 dark:bg-black/40 backdrop-blur-sm p-6 sm:p-8 lg:p-10 border border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 transition-all duration-500 group"
+          transition={{ delay: 0.1 + idx * 0.1, duration: 0.4 }}
+          className="group/item relative overflow-hidden rounded-lg bg-white/50 dark:bg-black/30 border border-black/5 dark:border-white/5 p-3 sm:p-4 hover:border-amber-200/30 dark:hover:border-amber-400/10 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
         >
-          {/* ─── Soft Background Decorations ────────────────────────────────────── */}
-          <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-amber-400/5 dark:bg-amber-500/3 blur-3xl group-hover:bg-amber-400/8 transition-all duration-700" />
-          <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-orange-400/5 dark:bg-orange-500/3 blur-3xl group-hover:bg-orange-400/8 transition-all duration-700" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-amber-400/3 dark:bg-amber-500/2 blur-3xl" />
-
-          <div className="relative">
-            {/* ─── Header Row ─────────────────────────────────────────────────────── */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="relative p-3 rounded-xl bg-amber-400/10 dark:bg-amber-500/10 border border-amber-200/20 dark:border-amber-400/10">
-                    <Crown className="w-6 h-6 sm:w-7 sm:h-7 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-xl sm:text-2xl font-light text-black dark:text-white">
-                    {isArabic ? 'الأعضاء المؤسسون' : 'Founding Members'}
-                  </h4>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-light tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 dark:bg-amber-400/10 px-2.5 py-0.5 rounded-full">
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60" />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500" />
-                      </span>
-                      {isArabic ? 'وقت محدود' : 'Limited Time'}
-                    </span>
-                    <span className="text-[10px] sm:text-xs font-light text-amber-500/60 dark:text-amber-400/50">
-                      {isArabic ? '• عرض حصري' : '• Exclusive Offer'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate('/subscription');
-                  setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }, 100);
-                }}
-                className="group/btn relative overflow-hidden bg-amber-500 hover:bg-amber-600 dark:bg-amber-500/80 dark:hover:bg-amber-600/80 text-white rounded-full px-6 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-light transition-all duration-300 hover:scale-[1.02]"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-                <span className="relative flex items-center gap-2">
-                  {isArabic ? 'اكتشف المزايا' : 'Discover the Benefits'}
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                </span>
-              </Button>
+          <div className="absolute -top-10 -right-10 w-16 h-16 rounded-full bg-amber-400/5 blur-xl group-hover/item:bg-amber-400/10 transition-all duration-500" />
+          <div className="relative flex items-start gap-2.5">
+            <div className="p-1.5 rounded-lg bg-amber-500/10 dark:bg-amber-400/10 group-hover/item:bg-amber-500/20 dark:group-hover/item:bg-amber-400/20 transition-colors duration-300">
+              <item.icon className="w-4 h-4 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
             </div>
-            
-            {/* ─── Description ────────────────────────────────────────────────────── */}
-            <p className="text-sm sm:text-base text-black/60 dark:text-white/50 max-w-3xl leading-relaxed mt-3 sm:mt-4 font-light">
-              {isArabic 
-                ? 'انضم إلى النخبة الأولى من الأعضاء المؤسسين واستمتع بمزايا حصرية لا تتوفر للآخرين. كن جزءاً من تاريخ TMMT من البداية.'
-                : 'Join the elite group of founding members and enjoy exclusive benefits that others won\'t have. Be part of TMMT\'s history from the beginning.'
-              }
-            </p>
-            
-            {/* ─── Benefits Grid ────────────────────────────────────────────────── */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 sm:mt-6">
-              {[
-                { 
-                  icon: BadgeCheck, 
-                  title: isArabic ? 'شارة العضو المؤسس' : 'Founding Member Badge', 
-                  desc: isArabic ? 'شارة حصرية على حسابك تظهر وضعك كعضو مؤسس.' : 'Exclusive badge on your account showing your founding member status.'
-                },
-            { 
-                     icon: Gem, 
-                     title: isArabic ? 'امتياز المؤسس مدى الحياة' : 'Lifetime Founder Privilege', 
-                     desc: isArabic 
-                       ? 'كعضو مؤسس، ستحصل على هوية مؤسس دائمة ومزايا حصرية غير متاحة للأعضاء العاديين، بما في ذلك أسعار خاصة وخصومات حصرية على رسوم خدمات TMMT.'
-                       : 'As a Founding Member, you\'ll receive a permanent Founder identity and exclusive advantages unavailable to regular member.'
-                   },
-                { 
-                  icon: Sparkles, 
-                  title: isArabic ? 'مزايا حصرية' : 'Exclusive Benefits', 
-                  desc: isArabic ? 'الوصول إلى الميزات المميزة عند إضافتها إلى المنصة.' : 'Access to premium features as they are added to the platform.'
-                }
-              ].map((item, idx) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 + idx * 0.1, duration: 0.4 }}
-                  className="group/item relative overflow-hidden rounded-xl bg-white/50 dark:bg-black/30 border border-black/5 dark:border-white/5 p-4 sm:p-5 hover:border-amber-200/30 dark:hover:border-amber-400/10 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
-                >
-                  <div className="absolute -top-10 -right-10 w-20 h-20 rounded-full bg-amber-400/5 blur-2xl group-hover/item:bg-amber-400/10 transition-all duration-500" />
-                  
-                  <div className="relative flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-amber-500/10 dark:bg-amber-400/10 group-hover/item:bg-amber-500/20 dark:group-hover/item:bg-amber-400/20 transition-colors duration-300">
-                      <item.icon className="w-5 h-5 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
-                    </div>
-                    <div>
-                      <h5 className="font-light text-black dark:text-white text-sm sm:text-base">
-                        {item.title}
-                      </h5>
-                      <p className="text-[11px] sm:text-xs text-black/50 dark:text-white/50 mt-1 leading-relaxed font-light">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+            <div>
+              <h5 className="font-light text-black dark:text-white text-xs sm:text-sm">
+                {item.title}
+              </h5>
+              <p className="text-[10px] sm:text-xs text-black/50 dark:text-white/50 mt-0.5 leading-relaxed font-light">
+                {item.desc}
+              </p>
             </div>
-            
-            {/* ─── Urgency Banner ────────────────────────────────────────────────── */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="mt-4 sm:mt-5 relative overflow-hidden rounded-xl bg-amber-500/5 dark:bg-amber-400/5 border border-amber-200/20 dark:border-amber-400/10 p-3.5 sm:p-4"
-            >
-              <div className="relative flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/10 dark:bg-amber-400/10">
-                    <span className="text-amber-500 dark:text-amber-400 text-lg font-light">⚡</span>
-                  </div>
-                  <p className="text-xs sm:text-sm text-amber-600 dark:text-amber-400/80 font-light text-center sm:text-left">
-                    {isArabic 
-                      ? 'عضوية المؤسسين متاحة لفترة محدودة — انضم الآن قبل إغلاق التسجيل.'
-                      : 'Founding Membership is available for a limited time — join now before enrollment closes.'
-                    }
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="w-px h-4 bg-black/10 dark:bg-white/10" />
-                  <span className="text-[10px] sm:text-xs font-light text-black/40 dark:text-white/40">
-                    {isArabic ? 'عرض حصري' : 'Exclusive Offer'}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </motion.div>
+      ))}
+    </div>
 
-
+    {/* ─── Urgency Banner ────────────────────────────────────────────────── */}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.4, duration: 0.5 }}
+      className="mt-3 sm:mt-4 relative overflow-hidden rounded-lg bg-amber-500/5 dark:bg-amber-400/5 border border-amber-200/20 dark:border-amber-400/10 p-2 sm:p-3"
+    >
+      <div className="relative flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="text-amber-500 dark:text-amber-400 text-sm font-light">⚡</span>
+          <p className="text-[10px] sm:text-xs text-amber-600 dark:text-amber-400/80 font-light text-center sm:text-left">
+            {isArabic 
+              ? 'عضوية المؤسسين محدودة — انضم الآن قبل إغلاق التسجيل.'
+              : 'Founding membership is limited — join now before enrollment closes.'
+            }
+          </p>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <div className="w-px h-3 bg-black/10 dark:bg-white/10" />
+          <span className="text-[8px] sm:text-[10px] font-light text-black/40 dark:text-white/40">
+            {isArabic ? 'عرض حصري' : 'Exclusive'}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  </div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}

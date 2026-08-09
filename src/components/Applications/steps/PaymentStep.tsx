@@ -616,134 +616,135 @@ export default function PaymentStep({
 
   const stableOnSuccess = useCallback((result: unknown) => onSuccessRef.current(result), [])
   const stableOnError = useCallback((err: string) => onErrorRef.current(err), [])
+// ─── UPLOAD RECEIPT ──────────────────────────────────────────────────────
+const uploadReceipt = useCallback(async (file: File) => {
+  // Store the file for retry
+  selectedFileRef.current = file
 
-  // ─── UPLOAD RECEIPT ──────────────────────────────────────────────────────
-  const uploadReceipt = useCallback(async (file: File) => {
-    // Store the file for retry
-    selectedFileRef.current = file
+  if (!applicationId) {
+    const errMsg = 'Application ID is missing. Please refresh and try again.'
+    setUploadError(errMsg)
+    toast.error(errMsg)
+    return
+  }
 
-    if (!applicationId) {
-      const errMsg = 'Application ID is missing. Please refresh and try again.'
-      setUploadError(errMsg)
-      toast.error(errMsg)
-      return
-    }
+  setUploading(true)
+  setUploadProgress(0)
+  setUploadError(null)
+  setUploadSuccess(false)
 
-    setUploading(true)
-    setUploadProgress(0)
-    setUploadError(null)
-    setUploadSuccess(false)
+  try {
+    const formData = new FormData()
+    formData.append('receipt', file)
 
-    try {
-      const formData = new FormData()
-      formData.append('receipt', file)
-
-      const token = localStorage.getItem('authToken') || ''
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval)
-            return 90
-          }
-          return prev + 10
-        })
-      }, 300)
-
-      const endpoint = `${apiUrl}/visa/${applicationId}/receipt`
-      console.log('📤 Uploading receipt to:', endpoint)
-
-      // ─── Fetch with timeout to catch network errors ──────────────────
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30s timeout
-
-      let res
-      try {
-        res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-          signal: controller.signal,
-        })
-        clearTimeout(timeoutId)
-      } catch (fetchError: any) {
-        // This catches network errors, DNS failures, timeouts
-        if (fetchError.name === 'AbortError') {
-          throw new Error('Request timed out – please try again.')
+    const token = localStorage.getItem('authToken') || ''
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(progressInterval)
+          return 90
         }
-        throw new Error(`Network error: ${fetchError.message || 'Unable to reach the server. Check your internet connection.'}`)
-      }
-
-      clearInterval(progressInterval)
-
-      // ─── Read response body (even on error) ──────────────────────────
-      let responseData
-      const contentType = res.headers.get('content-type')
-      try {
-        if (contentType && contentType.includes('application/json')) {
-          responseData = await res.json()
-        } else {
-          responseData = await res.text()
-        }
-      } catch (parseError) {
-        // If we can't parse the body, we'll just use the status text
-        responseData = { message: res.statusText || `HTTP ${res.status}` }
-      }
-
-      console.log('📥 Upload response:', res.status, responseData)
-
-      if (!res.ok) {
-        // ─── Extract the most meaningful error message ────────────────
-        let errorMsg = `Server error (${res.status})`
-        if (typeof responseData === 'object' && responseData !== null) {
-          errorMsg = responseData.message || responseData.error || responseData.detail || errorMsg
-        } else if (typeof responseData === 'string' && responseData.length > 0) {
-          errorMsg = responseData
-        }
-        // If it's a 404 and we still don't have a specific message, give a hint.
-        if (res.status === 404 && errorMsg === `Server error (${res.status})`) {
-          errorMsg = 'The upload endpoint was not found. Please contact support.'
-        }
-        // Do NOT override for 500 – we want to show the actual server message
-        throw new Error(errorMsg)
-      }
-
-      // ✅ Success – extract receipt URL
-      const uploadedReceiptUrl = responseData?.data?.receiptUrl || responseData?.receiptUrl || null
-      if (!uploadedReceiptUrl) {
-        console.warn('⚠️ No receiptUrl returned from server:', responseData)
-        // Still consider it a success, but warn the user
-        toast.warning('Receipt uploaded, but no URL was returned. Please contact support if you don\'t see it in your dashboard.')
-      } else {
-        setReceiptUrl(uploadedReceiptUrl)
-      }
-
-      setUploadProgress(100)
-      setReceiptUploaded(true)
-      setUploadSuccess(true)
-
-      toast.success('Receipt uploaded successfully!', {
-        description: 'Your payment receipt has been submitted for verification.',
+        return prev + 10
       })
+    }, 300)
 
-      stableOnSuccess({ receiptUploaded: true, receiptUrl: uploadedReceiptUrl })
+    const endpoint = `${apiUrl}/visa/${applicationId}/receipt`
+    console.log('📤 Uploading receipt to:', endpoint)
 
-    } catch (e: any) {
-      // ─── Handle errors ────────────────────────────────────────────────
-      let errorMsg = e.message || 'Failed to upload receipt'
-      // If the error is a TypeError or contains 'fetch', it's likely a network issue
-      if (e.name === 'TypeError' || errorMsg.includes('fetch') || errorMsg.includes('network')) {
-        errorMsg = 'Network error – please check your internet connection and try again.'
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 30000)
+
+    let res
+    try {
+      res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
+    } catch (fetchError: any) {
+      if (fetchError.name === 'AbortError') {
+        throw new Error('Request timed out – please try again.')
       }
-      setUploadError(errorMsg)
-      console.error('❌ Upload error:', e)
-      toast.error('Upload failed', { description: errorMsg })
-      stableOnError(errorMsg)
-    } finally {
-      setUploading(false)
-      setUploadProgress(0)
+      throw new Error(`Network error: ${fetchError.message || 'Unable to reach the server. Check your internet connection.'}`)
     }
-  }, [applicationId, stableOnSuccess, stableOnError])
 
+    clearInterval(progressInterval)
+
+    // ─── Read response body ──────────────────────────────────────────
+    let responseData
+    const contentType = res.headers.get('content-type')
+    try {
+      if (contentType && contentType.includes('application/json')) {
+        responseData = await res.json()
+      } else {
+        responseData = await res.text()
+      }
+    } catch (parseError) {
+      responseData = { message: res.statusText || `HTTP ${res.status}` }
+    }
+
+    console.log('📥 Upload response:', res.status, responseData)
+
+    if (!res.ok) {
+      let errorMsg = `Server error (${res.status})`
+      if (typeof responseData === 'object' && responseData !== null) {
+        errorMsg = responseData.message || responseData.error || responseData.detail || errorMsg
+      } else if (typeof responseData === 'string' && responseData.length > 0) {
+        errorMsg = responseData
+      }
+      throw new Error(errorMsg)
+    }
+
+    // ─── Extract receipt URL from response ──────────────────────────
+    const uploadedReceiptUrl = responseData?.data?.receiptUrl || 
+                              responseData?.receiptUrl || 
+                              responseData?.data?.receipt?.path ||
+                              responseData?.data?.receipt?.url ||
+                              null
+
+    // ─── Extract receipt data ────────────────────────────────────────
+    const receiptData = responseData?.data?.receipt || responseData?.data || {}
+
+    console.log('📄 Receipt data:', receiptData)
+    console.log('📄 Receipt URL:', uploadedReceiptUrl)
+
+    if (!uploadedReceiptUrl) {
+      console.warn('⚠️ No receiptUrl returned from server:', responseData)
+      toast.warning('Receipt uploaded, but no URL was returned. Please contact support if you don\'t see it in your dashboard.')
+    } else {
+      setReceiptUrl(uploadedReceiptUrl)
+    }
+
+    setUploadProgress(100)
+    setReceiptUploaded(true)
+    setUploadSuccess(true)
+
+    toast.success('Receipt uploaded successfully!', {
+      description: 'Your payment receipt has been submitted for verification.',
+    })
+
+    stableOnSuccess({ 
+      receiptUploaded: true, 
+      receiptUrl: uploadedReceiptUrl,
+      receipt: receiptData 
+    })
+
+  } catch (e: any) {
+    let errorMsg = e.message || 'Failed to upload receipt'
+    if (e.name === 'TypeError' || errorMsg.includes('fetch') || errorMsg.includes('network')) {
+      errorMsg = 'Network error – please check your internet connection and try again.'
+    }
+    setUploadError(errorMsg)
+    console.error('❌ Upload error:', e)
+    toast.error('Upload failed', { description: errorMsg })
+    stableOnError(errorMsg)
+  } finally {
+    setUploading(false)
+    setUploadProgress(0)
+  }
+}, [applicationId, stableOnSuccess, stableOnError])
   // ─── Retry upload ──────────────────────────────────────────────────────
   const handleRetryUpload = useCallback(() => {
     if (selectedFileRef.current) {

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef, memo, useContext } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router'
@@ -493,26 +492,26 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
   const infoItems = [
     { 
       icon: User, 
-      label: 'Full Name', 
-      value: userData.name || 'Not provided',
+      label: t('userInfo.fullName', 'Full Name'), 
+      value: userData.name || t('userInfo.notProvided', 'Not provided'),
       key: 'name'
     },
     { 
       icon: Mail, 
-      label: 'Email Address', 
-      value: userData.email || 'Not provided',
+      label: t('userInfo.email', 'Email Address'), 
+      value: userData.email || t('userInfo.notProvided', 'Not provided'),
       key: 'email'
     },
     { 
       icon: Phone, 
-      label: 'Phone Number', 
-      value: phoneValue || 'Not provided',
+      label: t('userInfo.phone', 'Phone Number'), 
+      value: phoneValue || t('userInfo.notProvided', 'Not provided'),
       key: 'phone'
     },
   ]
 
-  const hasAllInfo = infoItems.every(item => item.value !== 'Not provided')
-  const missingFields = infoItems.filter(item => item.value === 'Not provided')
+  const hasAllInfo = infoItems.every(item => item.value !== t('userInfo.notProvided', 'Not provided'))
+  const missingFields = infoItems.filter(item => item.value === t('userInfo.notProvided', 'Not provided'))
 
   const fetchUserProfile = async () => {
     setIsFetching(true)
@@ -540,7 +539,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
       }
     } catch (error) {
       console.error('Failed to fetch user profile:', error)
-      setFetchError('Could not fetch phone number')
+      setFetchError(t('userInfo.fetchError', 'Could not fetch phone number'))
     } finally {
       setIsFetching(false)
     }
@@ -582,7 +581,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
         {/* Info Cards */}
         <div className="space-y-2.5 sm:space-y-3">
           {infoItems.map((item, index) => {
-            const hasValue = item.value !== 'Not provided'
+            const hasValue = item.value !== t('userInfo.notProvided', 'Not provided')
             return (
               <motion.div
                 key={item.key}
@@ -656,7 +655,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
                     </motion.div>
                   ) : (
                     <span className="text-[9px] sm:text-[10px] font-medium text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">
-                      Missing
+                      {t('userInfo.missing', 'Missing')}
                     </span>
                   )}
                 </div>
@@ -686,11 +685,11 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium" style={{ color: theme.text }}>
-                  Missing Information
+                  {t('userInfo.missingInfoTitle', 'Missing Information')}
                 </p>
                 <p className="text-xs mt-0.5 leading-relaxed" style={{ color: theme.textSecondary }}>
-                  {missingFields.map(f => f.label).join(', ')} {missingFields.length === 1 ? 'is' : 'are'} missing from your profile.
-                  {phoneValue ? '' : ' Please add your phone number to continue.'}
+                  {missingFields.map(f => f.label).join(', ')} {missingFields.length === 1 ? t('userInfo.isMissing', 'is') : t('userInfo.areMissing', 'are')} {t('userInfo.missingFromProfile', 'missing from your profile.')}
+                  {phoneValue ? '' : t('userInfo.phoneRequired', ' Please add your phone number to continue.')}
                 </p>
               </div>
             </div>
@@ -707,7 +706,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
                 }}
               >
                 <User className="w-4 h-4 mr-2" />
-                Update Profile
+                {t('userInfo.updateProfile', 'Update Profile')}
               </Button>
               {!phoneValue && (
                 <Button
@@ -720,7 +719,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
                   ) : (
                     <RefreshCw className="w-4 h-4 mr-2" />
                   )}
-                  {isFetching ? 'Fetching...' : 'Refresh'}
+                  {isFetching ? t('userInfo.fetching', 'Fetching...') : t('userInfo.refresh', 'Refresh')}
                 </Button>
               )}
             </div>
@@ -762,21 +761,21 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
           <div className="flex items-center gap-1.5">
             <Shield className="w-3.5 h-3.5" style={{ color: theme.textSecondary }} />
             <span className="text-[9px] sm:text-[10px]" style={{ color: theme.textSecondary }}>
-              Secure & Encrypted
+              {t('userInfo.secure', 'Secure & Encrypted')}
             </span>
           </div>
           <span className="w-px h-4" style={{ backgroundColor: theme.border }} />
           <div className="flex items-center gap-1.5">
             <Lock className="w-3.5 h-3.5" style={{ color: theme.textSecondary }} />
             <span className="text-[9px] sm:text-[10px]" style={{ color: theme.textSecondary }}>
-              Privacy Protected
+              {t('userInfo.privacy', 'Privacy Protected')}
             </span>
           </div>
           <span className="w-px h-4" style={{ backgroundColor: theme.border }} />
           <div className="flex items-center gap-1.5">
             <Check className="w-3.5 h-3.5" style={{ color: theme.textSecondary }} />
             <span className="text-[9px] sm:text-[10px]" style={{ color: theme.textSecondary }}>
-              Verified Account
+              {t('userInfo.verified', 'Verified Account')}
             </span>
           </div>
         </motion.div>
@@ -911,6 +910,22 @@ export default function ApplicationFlow({
     localStorage.removeItem(LS_KEY)
     isModal ? onOpenChange?.(false) : navigate('/')
   }, [isModal, navigate, onOpenChange])
+
+  // ── 🔄 Reset flow (refresh index) ──
+  const resetFlow = useCallback(() => {
+    // Reset to first step (service selection)
+    setStepIndex(0)
+    setDirection(1)
+    // Clear all form data
+    setData({})
+    // Remove persisted data from localStorage
+    localStorage.removeItem(LS_KEY)
+    // Close any open overlays
+    setChatOpen(false)
+    setShowLogin(false)
+    // Optional: show a toast notification
+    toast.info(t('flow.reset', 'Flow reset successfully'))
+  }, [t])
 
   // ── Create application ───────────────────
   const createApplication = useCallback(async (merged: FlowData): Promise<string | undefined> => {
@@ -1114,6 +1129,9 @@ export default function ApplicationFlow({
     }
   }
 
+  // ── Debug: log current step ─────────────
+  console.log('📍 Current step:', step, 'index:', stepIndex)
+
   // ── Shell ────────────────────────────────
   return (
     <div 
@@ -1158,18 +1176,32 @@ export default function ApplicationFlow({
           />
         </div>
 
-        {!isDone && (
+        {/* 🔄 Refresh & Close buttons */}
+        <div className="flex items-center gap-1 shrink-0">
           <Button
             variant="ghost"
             size="icon"
-            onClick={close}
-            aria-label={t('flow.close')}
+            onClick={resetFlow}
+            aria-label={t('flow.reset', 'Reset flow')}
             className="w-9 h-9 rounded-full shrink-0"
             style={{ color: theme.textSecondary }}
           >
-            <X className="w-4 h-4" />
+            <RefreshCw className="w-4 h-4" />
           </Button>
-        )}
+
+          {!isDone && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={close}
+              aria-label={t('flow.close')}
+              className="w-9 h-9 rounded-full shrink-0"
+              style={{ color: theme.textSecondary }}
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* ── Step content ── */}

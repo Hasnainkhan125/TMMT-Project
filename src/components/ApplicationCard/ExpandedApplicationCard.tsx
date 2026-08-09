@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import {
   FileText,
+  Save,
   Download,
   Eye,
   CheckCircle,
@@ -48,6 +49,9 @@ import {
   Check,
   Trash2,
   Receipt,
+  User,
+  UserCog,
+  Info,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getSocket } from '@/lib/socket';
@@ -115,25 +119,60 @@ const formatBytes = (bytes: number): string => {
 };
 
 // ─── Helper: Build receipt URL ─────────────────────────────────────────────
-const getReceiptUrl = (receipt: any, apiBase: string): string | null => {
+const getReceiptUrl = (receipt: any, apiBase: string, appId: string): string | null => {
   if (!receipt) return null;
 
   if (receipt.fullUrl) return receipt.fullUrl;
   if (receipt.url) return receipt.url;
+  if (receipt.fileUrl) return receipt.fileUrl;
+  if (receipt.downloadUrl) return receipt.downloadUrl;
 
   if (receipt.path) {
-    const cleanPath = receipt.path.startsWith('/') ? receipt.path : `/${receipt.path}`;
-    return `${apiBase}${cleanPath}`;
+    if (receipt.path.startsWith('http://') || receipt.path.startsWith('https://')) {
+      return receipt.path;
+    }
+    if (receipt.path.startsWith('/')) {
+      return `${apiBase}${receipt.path}`;
+    }
+    if (receipt.path.includes('uploads/applications')) {
+      const cleanPath = receipt.path.startsWith('/') ? receipt.path : `/${receipt.path}`;
+      return `${apiBase}${cleanPath}`;
+    }
+    const pathParts = receipt.path.split('/');
+    const fileName = pathParts[pathParts.length - 1];
+    if (appId && fileName) {
+      return `${apiBase}/uploads/applications/${appId}/receipts/${fileName}`;
+    }
+    return `${apiBase}/uploads/applications/${appId}/receipts/${receipt.path}`;
   }
 
   if (receipt.filename || receipt.originalName) {
     const fileName = receipt.filename || receipt.originalName;
-    if (receipt._id) {
-      return `${apiBase}/api/v1/receipts/${receipt._id}/file`;
+    if (appId && fileName) {
+      return `${apiBase}/uploads/applications/${appId}/receipts/${fileName}`;
     }
   }
 
+  if (receipt._id) {
+    return `${apiBase}/api/v1/receipts/${receipt._id}/file`;
+  }
+
   return null;
+};
+
+// ─── Helper: Check if document is an image ─────────────────────────────────
+const isDocumentImage = (doc: any, fileUrl: string): boolean => {
+  const mimeType = doc.mimeType || '';
+  if (mimeType.startsWith('image/')) return true;
+  const ext = doc.originalName?.split('.').pop()?.toLowerCase() || '';
+  return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'heic', 'heif'].includes(ext);
+};
+
+const isDocumentPdf = (doc: any, fileUrl: string): boolean => {
+  const mimeType = doc.mimeType || '';
+  if (mimeType === 'application/pdf') return true;
+  const ext = doc.originalName?.split('.').pop()?.toLowerCase() || '';
+  return ext === 'pdf';
 };
 
 interface ExpandedApplicationCardProps {
@@ -144,6 +183,8 @@ interface ExpandedApplicationCardProps {
   onDocumentDownload: (doc: any) => void;
   onDelete?: (appId: string) => void;
   onReceiptUploaded?: (appId: string) => void;
+  onDocumentUploaded?: (appId: string) => void;
+  refetchApplications?: () => void;
 }
 
 const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
@@ -154,10 +195,11 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
   onDocumentDownload,
   onDelete,
   onReceiptUploaded,
+  onDocumentUploaded,
+  refetchApplications,
 }) => {
   const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
 
-  // ─── ✅ GUARD: prevent rendering when application data is missing ────
   if (!application || !application.metadata) {
     return (
       <div className="w-full p-6 text-center text-gray-500 dark:text-gray-400">
@@ -182,22 +224,24 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
   const [copied, setCopied] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // ─── Receipt upload state ──────────────────────────────────────────────
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [uploadingReceipt, setUploadingReceipt] = useState(false);
 
-  // ─── Receipt preview state ──────────────────────────────────────────────
   const [selectedReceipt, setSelectedReceipt] = useState<any | null>(null);
   const [showReceiptPreview, setShowReceiptPreview] = useState(false);
+
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle');
+
+  // ─── New state for inline image preview ────────────────────────────────
+  const [previewImage, setPreviewImage] = useState<{ doc: any; url: string } | null>(null);
 
   const statusConfig = STATUS_CONFIG[application.status] || STATUS_CONFIG.pending;
   const StatusIcon = statusConfig.icon;
   const hasResultDocs = application.resultDocuments && application.resultDocuments.length > 0;
 
-  // ─── Receipts from application ────────────────────────────────────────
   const receipts = application.receipts || [];
 
-  // ─── Document download (existing) ──────────────────────────────────────
   const handleDocumentDownload = async (attachment: any) => {
     try {
       const token = localStorage.getItem('authToken') || '';
@@ -235,7 +279,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // ─── Receipt Preview Handlers ────────────────────────────────────────────
   const handleOpenReceiptPreview = (receipt: any) => {
     setSelectedReceipt(receipt);
     setShowReceiptPreview(true);
@@ -246,7 +289,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     setSelectedReceipt(null);
   };
 
-  // ─── Upload Receipt ──────────────────────────────────────────────────────
   const handleReceiptUpload = async () => {
     if (!receiptFile) {
       toast.error('Please select a receipt file to upload');
@@ -285,9 +327,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
         description: 'Your payment receipt is now under verification.',
       });
 
-      // Reset file input
       setReceiptFile(null);
-      // Notify parent to refresh the application data
       if (onReceiptUploaded) {
         onReceiptUploaded(appId);
       }
@@ -301,7 +341,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     }
   };
 
-  // ─── DELETE HANDLER ─────────────────────────────────────────────────────
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
@@ -335,7 +374,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     }
   };
 
-  // ─── WebSocket listeners ──────────────────────────────────────────────────
   useEffect(() => {
     if (!application) return;
 
@@ -397,45 +435,120 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     };
   }, [application]);
 
-  // ─── File Upload for additional documents ──────────────────────────────
+  // ─── Document Upload Handler (with progress) ────────────────────────────
   const handleFileUpload = async () => {
     if (!uploadFile) {
-      toast.error('Please select a file to upload');
+      toast.error('Please select a file first');
+      return;
+    }
+
+    if (!application?._id) {
+      toast.error('Application ID not found');
       return;
     }
 
     setUploading(true);
+    setUploadStatus('uploading');
+    setUploadProgress(0);
+
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('authToken') || '';
+      if (!token) {
+        toast.error('Please login first');
+        setUploading(false);
+        setUploadStatus('error');
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', uploadFile);
-      formData.append('type', 'additional_document');
+      formData.append('documentName', uploadFile.name);
+      formData.append('documentType', 'additional_document');
+      formData.append('uploadedByRole', 'amer');
 
-      const response = await fetch(
-        `${apiBase}/api/v1/visa/${application._id || application.id}/attachments/upload`,
-        {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        }
-      );
+      const endpoint = `${apiBase}/api/v1/visa/${application._id}/documents`;
 
-      if (response.ok) {
-        toast.success('Document uploaded successfully');
-        setUploadFile(null);
-        window.location.reload();
-      } else {
-        toast.error('Failed to upload document');
+      // ─── Simulate progress ─────────────────────────────────────────────
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 300);
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      clearInterval(progressInterval);
+
+      let responseData;
+      const responseText = await response.text();
+      try {
+        responseData = JSON.parse(responseText);
+      } catch {
+        responseData = { message: responseText };
       }
-    } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('Failed to upload document');
+
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          toast.error('Authentication failed. Please login again.');
+          setTimeout(() => {
+            window.location.href = '/auth';
+          }, 1500);
+          setUploading(false);
+          setUploadStatus('error');
+          return;
+        }
+        throw new Error(responseData.message || responseData.error || 'Upload failed');
+      }
+
+      setUploadProgress(100);
+      setUploadStatus('done');
+
+      toast.success('Document uploaded successfully!');
+      setUploadFile(null);
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+
+      if (onDocumentUploaded) {
+        onDocumentUploaded(application._id);
+      }
+      if (refetchApplications) {
+        await refetchApplications();
+      }
+
+      // Reset status after a short delay
+      setTimeout(() => {
+        setUploadStatus('idle');
+        setUploadProgress(0);
+      }, 2000);
+
+    } catch (error: any) {
+      console.error('❌ Upload error:', error);
+      toast.error(error.message || 'Failed to upload document');
+      setUploadStatus('error');
     } finally {
       setUploading(false);
     }
   };
 
-  // ─── Priority Boost ──────────────────────────────────────────────────────
+  // ─── Clear selected file ──────────────────────────────────────────────────
+  const clearSelectedFile = () => {
+    setUploadFile(null);
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+    setUploadStatus('idle');
+    setUploadProgress(0);
+  };
+
   const handlePriorityBoost = async () => {
     try {
       const token = localStorage.getItem('authToken');
@@ -515,7 +628,237 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
   const appId = application._id || application.id;
 
-  // ─── RENDER ──────────────────────────────────────────────────────────────────
+  // ─── Split documents by uploader role ─────────────────────────────────
+  const userDocuments = (application.attachments || []).filter(
+    (doc: any) => doc.uploadedByRole === 'user' || doc.uploadedByRole === 'sponsor' || !doc.uploadedByRole
+  );
+  
+  const amerDocuments = (application.attachments || []).filter(
+    (doc: any) => doc.uploadedByRole === 'amer' || doc.uploadedByRole === 'admin'
+  );
+
+  // ─── Receipts ──────────────────────────────────────────────────────────
+  const receiptDocuments = (application.receipts || []).map((receipt: any) => ({
+    ...receipt,
+    __type: 'receipt',
+    originalName: receipt.originalName || receipt.filename || 'Receipt',
+    size: receipt.size || receipt.fileSize,
+    mimeType: receipt.mimeType || receipt.type || '',
+    status: receipt.status || 'pending',
+    uploadedByRole: receipt.uploadedByRole || 'user',
+  }));
+
+  // ─── Document render helper (modified to show inline image preview) ──
+  const renderDocumentItem = (doc: any, idx: number, isReceipt: boolean = false) => {
+    let fileUrl = '';
+    if (isReceipt) {
+      fileUrl = getReceiptUrl(doc, apiBase, appId) || '';
+      if (!fileUrl && doc.path) {
+        const cleanPath = doc.path.startsWith('/') ? doc.path : `/${doc.path}`;
+        fileUrl = `${apiBase}${cleanPath}`;
+      }
+      if (!fileUrl && doc.filename) {
+        fileUrl = `${apiBase}/uploads/applications/${appId}/receipts/${doc.filename}`;
+      }
+      if (!fileUrl && doc.originalName) {
+        fileUrl = `${apiBase}/uploads/applications/${appId}/receipts/${doc.originalName}`;
+      }
+    } else {
+      fileUrl = doc.url || doc.fileUrl || doc.path || '';
+    }
+
+    const isImage = isDocumentImage(doc, fileUrl);
+    const isPdf = isDocumentPdf(doc, fileUrl);
+    const isAmer = doc.uploadedByRole === 'amer' || doc.uploadedByRole === 'admin';
+
+    // ─── Handle image click: show inline preview ──────────────────────
+    const handleImageClick = () => {
+      if (isImage && fileUrl) {
+        setPreviewImage({ doc, url: fileUrl });
+      } else if (isReceipt) {
+        handleOpenReceiptPreview(doc);
+      } else {
+        onDocumentView(doc);
+      }
+    };
+
+    return (
+      <motion.div
+        key={idx}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: idx * 0.05 }}
+        className={cn(
+          "flex items-center gap-3 p-3 rounded-xl bg-white/60 dark:bg-white/5 border transition-all duration-300 group/doc",
+          isReceipt 
+            ? "border-emerald-200/50 dark:border-emerald-800/30 hover:border-emerald-400/50 dark:hover:border-emerald-700/50" 
+            : isAmer
+              ? "border-blue-200/50 dark:border-blue-800/30 hover:border-blue-400/50 dark:hover:border-blue-700/50 hover:shadow-md hover:shadow-blue-500/10 dark:hover:shadow-blue-500/5"
+              : "border-gray-200/50 dark:border-white/5 hover:border-primary/30 dark:hover:border-primary/30"
+        )}
+      >
+        <div className="relative flex-shrink-0 w-14 h-14 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          {fileUrl && isImage ? (
+            <img
+              src={fileUrl}
+              alt={doc.originalName || 'Document'}
+              className="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-300"
+              onClick={handleImageClick}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                const parent = e.currentTarget.parentElement;
+                if (parent) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800';
+                  fallback.innerHTML = `<svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+                  parent.appendChild(fallback);
+                }
+              }}
+            />
+          ) : fileUrl && isPdf ? (
+            <div className="w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20">
+              <FileText className="w-6 h-6 text-red-500" />
+            </div>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-primary/10 dark:bg-primary/20">
+              {isReceipt ? (
+                <Receipt className="w-6 h-6 text-emerald-500" />
+              ) : isAmer ? (
+                <UserCog className="w-6 h-6 text-blue-500" />
+              ) : (
+                <FileText className="w-6 h-6 text-primary" />
+              )}
+            </div>
+          )}
+          {doc.status && (
+            <div className="absolute -top-1 -right-1">
+              <Badge className={cn(
+                "text-[7px] rounded-full px-1.5 py-0.5 border-0 shadow-sm",
+                doc.status === 'approved' && "bg-emerald-500 text-white",
+                doc.status === 'verified' && "bg-emerald-500 text-white",
+                doc.status === 'pending_verification' && "bg-amber-500 text-white",
+                doc.status === 'pending' && "bg-amber-500 text-white",
+                doc.status === 'rejected' && "bg-red-500 text-white",
+                doc.status === 'under_review' && "bg-blue-500 text-white"
+              )}>
+                {doc.status === 'approved' || doc.status === 'verified' ? '✓' :
+                 doc.status === 'pending_verification' || doc.status === 'pending' ? '⏳' :
+                 doc.status === 'rejected' ? '✕' :
+                 doc.status === 'under_review' ? '⟳' :
+                 doc.status?.slice(0, 1).toUpperCase()}
+              </Badge>
+            </div>
+          )}
+          {isReceipt && (
+            <div className="absolute -bottom-1 -left-1">
+              <Badge className="text-[7px] bg-emerald-500/20 text-emerald-600 border-emerald-500/30">
+                Receipt
+              </Badge>
+            </div>
+          )}
+          {isAmer && (
+            <div className="absolute -bottom-1 -left-1">
+              <Badge className="text-[7px] bg-blue-500/20 text-blue-600 border-blue-500/30">
+                Amer
+              </Badge>
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
+            {doc.originalName || doc.filename || (isReceipt ? 'Receipt' : 'Document')}
+          </p>
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
+            {doc.size && (
+              <span className="text-[10px] text-gray-400 dark:text-gray-500">
+                {formatBytes(doc.size)}
+              </span>
+            )}
+            {doc.uploadedByRole && (
+              <Badge className={cn(
+                "text-[8px] border-0",
+                doc.uploadedByRole === 'amer' || doc.uploadedByRole === 'admin' 
+                  ? "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400" 
+                  : "bg-gray-500/10 text-gray-600 dark:bg-gray-500/20 dark:text-gray-400"
+              )}>
+                {doc.uploadedByRole === 'amer' || doc.uploadedByRole === 'admin' ? 'Amer' : 'User'}
+              </Badge>
+            )}
+            {isReceipt && doc.status && (
+              <Badge className={cn(
+                "text-[8px] font-normal border-0",
+                doc.status === 'approved' && "bg-emerald-500/20 text-emerald-600",
+                doc.status === 'verified' && "bg-emerald-500/20 text-emerald-600",
+                doc.status === 'pending_verification' && "bg-yellow-500/20 text-yellow-600",
+                doc.status === 'pending' && "bg-yellow-500/20 text-yellow-600",
+                doc.status === 'rejected' && "bg-red-500/20 text-red-600"
+              )}>
+                {doc.status.replace('_', ' ')}
+              </Badge>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-1 opacity-0 group-hover/doc:opacity-100 transition-all duration-300">
+          {fileUrl && !isImage && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
+              onClick={() => {
+                if (isReceipt) {
+                  handleOpenReceiptPreview(doc);
+                } else {
+                  onDocumentView(doc);
+                }
+              }}
+              title="View document"
+            >
+              <Eye className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
+            onClick={() => {
+              if (isReceipt) {
+                const url = getReceiptUrl(doc, apiBase, appId);
+                if (url) {
+                  fetch(url)
+                    .then(response => {
+                      if (!response.ok) throw new Error('Download failed');
+                      return response.blob();
+                    })
+                    .then(blob => {
+                      const link = document.createElement('a');
+                      link.href = URL.createObjectURL(blob);
+                      link.download = doc.originalName || doc.filename || 'receipt';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(link.href);
+                      toast.success('Download started!');
+                    })
+                    .catch(() => {
+                      window.open(url, '_blank');
+                    });
+                } else {
+                  toast.error('Receipt URL not available');
+                }
+              } else {
+                onDocumentDownload(doc);
+              }
+            }}
+            title="Download document"
+          >
+            <Download className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
+          </Button>
+        </div>
+      </motion.div>
+    );
+  };
+
   return (
     <>
       <motion.div
@@ -535,7 +878,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             "backdrop-blur-sm"
           )}
         >
-          {/* ─── Header ────────────────────────────────────────────────────────── */}
           <CardHeader
             className="cursor-pointer p-4 hover:bg-white/50 dark:hover:bg-white/5 transition-all duration-300 rounded-t-xl"
             onClick={onToggle}
@@ -638,7 +980,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             </div>
           </CardHeader>
 
-          {/* ─── Expanded Content ────────────────────────────────────────────── */}
           <AnimatePresence>
             {isExpanded && (
               <motion.div
@@ -734,60 +1075,47 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       </div>
                     </div>
 
-                    {/* ─── Submitted Documents ────────────────────────────── */}
-                    {application.attachments && application.attachments.length > 0 && (
+                    {/* ─── User Uploaded Documents ────────────────────────── */}
+                    {userDocuments.length > 0 && (
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                            <FileText className="h-3 w-3" />
-                            Submitted Documents ({application.attachments.length})
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                          <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Documents ({userDocuments.length})
                           </p>
-                          <Badge variant="outline" className="text-[9px] text-gray-500 dark:text-gray-400">
-                            {application.attachments.filter((d: any) => d.size > 0).length} files
-                          </Badge>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
-                          {application.attachments.map((doc: any, idx: number) => (
-                            <motion.div
-                              key={idx}
-                              initial={{ opacity: 0, scale: 0.95 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: idx * 0.05 }}
-                              className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/60 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 hover:border-primary/30 dark:hover:border-primary/30 transition-all duration-300 group/doc"
-                            >
-                              <div className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20 shrink-0">
-                                <FileText className="h-3.5 w-3.5 text-primary" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-xs truncate font-medium text-gray-700 dark:text-gray-300">
-                                  {doc.originalName || doc.filename || 'Document'}
-                                </p>
-                                {doc.size && (
-                                  <p className="text-[10px] text-gray-400 dark:text-gray-500">{formatBytes(doc.size)}</p>
-                                )}
-                              </div>
-                              <div className="flex gap-0.5 opacity-0 group-hover/doc:opacity-100 transition-all duration-300">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-7 w-7 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
-                                  onClick={() => onDocumentView(doc)}
-                                  title="View document"
-                                >
-                                  <Eye className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-7 w-7 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
-                                  onClick={() => onDocumentDownload(doc)}
-                                  title="Download document"
-                                >
-                                  <Download className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
-                                </Button>
-                              </div>
-                            </motion.div>
-                          ))}
+                          {userDocuments.map((doc: any, idx: number) => renderDocumentItem(doc, idx, false))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ─── Amer Uploaded Documents ────────────────────────── */}
+                    {amerDocuments.length > 0 && (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <UserCog className="w-4 h-4 text-blue-500 dark:text-blue-400" />
+                          <p className="text-[10px] font-semibold text-blue-500 dark:text-blue-400 uppercase tracking-wider">
+                            Amer Uploaded Documents ({amerDocuments.length})
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2">
+                          {amerDocuments.map((doc: any, idx: number) => renderDocumentItem(doc, idx, false))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ─── Payment Receipts ────────────────────────────────── */}
+                    {receiptDocuments.length > 0 && (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Receipt className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                          <p className="text-[10px] font-semibold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider">
+                            Payment Receipts ({receiptDocuments.length})
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2">
+                          {receiptDocuments.map((doc: any, idx: number) => renderDocumentItem(doc, idx, true))}
                         </div>
                       </div>
                     )}
@@ -816,222 +1144,173 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                         </div>
 
                         <div className="grid grid-cols-1 gap-2">
-                          {application.resultDocuments.map((doc: any, idx: number) => (
-                            <div
-                              key={idx}
-                              className="flex items-center justify-between p-2.5 rounded-lg bg-white/50 dark:bg-black/20 border border-emerald-200/50 dark:border-emerald-800/30"
-                            >
-                              <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                                <div className="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 shrink-0">
-                                  <Zap className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-xs font-medium text-emerald-900 dark:text-emerald-300 truncate">
-                                    {doc.label || doc.originalName || 'Result'}
-                                  </p>
-                                  {doc.uploadedByRole && (
-                                    <Badge className="bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30 text-[9px] mt-0.5 border-0 rounded-full">
-                                      by {doc.uploadedByRole}
-                                    </Badge>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex gap-0.5 ml-2 shrink-0">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-7 w-7 p-0 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
-                                  onClick={() => onDocumentView(doc)}
-                                  title="View document"
-                                >
-                                  <Eye className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-7 w-7 p-0 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
-                                  onClick={() => onDocumentDownload(doc)}
-                                  title="Download document"
-                                >
-                                  <Download className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                                </Button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-
-                    {/* ─── Payment Receipts ───────────────────────────────────── */}
-                    {receipts.length > 0 && (
-                      <div className="space-y-3">
-                        <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                          <Receipt className="h-3 w-3" />
-                          Payment Receipts ({receipts.length})
-                        </p>
-                        <div className="space-y-2">
-                          {receipts.map((receipt: any, idx: number) => {
-                            const receiptUrl = getReceiptUrl(receipt, apiBase);
-                            const statusColor = receipt.status === 'verified' || receipt.status === 'approved'
-                              ? 'bg-emerald-500/20 text-emerald-600'
-                              : receipt.status === 'pending_verification'
-                              ? 'bg-yellow-500/20 text-yellow-600'
-                              : 'bg-red-500/20 text-red-600';
-
+                          {application.resultDocuments.map((doc: any, idx: number) => {
+                            const fileUrl = doc.url || doc.fileUrl || doc.path || '';
+                            const isImage = isDocumentImage(doc, fileUrl);
+                            const isPdf = isDocumentPdf(doc, fileUrl);
+                            
                             return (
                               <div
                                 key={idx}
-                                className="flex items-center justify-between p-3 rounded-xl bg-white/60 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 hover:border-primary/30 dark:hover:border-primary/30 transition-all duration-300 group"
+                                className="flex items-center justify-between p-2.5 rounded-lg bg-white/50 dark:bg-black/20 border border-emerald-200/50 dark:border-emerald-800/30"
                               >
-                                <div className="flex items-center gap-3 min-w-0 flex-1">
-                                  <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 shrink-0">
-                                    <FileText className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                                <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                                  <div className="relative flex-shrink-0 w-10 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                                    {fileUrl && isImage ? (
+                                      <img
+                                        src={fileUrl}
+                                        alt={doc.originalName || 'Result'}
+                                        className="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-300"
+                                        onClick={() => onDocumentView(doc)}
+                                        onError={(e) => {
+                                          e.currentTarget.style.display = 'none';
+                                          const parent = e.currentTarget.parentElement;
+                                          if (parent) {
+                                            const fallback = document.createElement('div');
+                                            fallback.className = 'w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800';
+                                            fallback.innerHTML = `<svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+                                            parent.appendChild(fallback);
+                                          }
+                                        }}
+                                      />
+                                    ) : fileUrl && isPdf ? (
+                                      <div className="w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20">
+                                        <FileText className="w-5 h-5 text-red-500" />
+                                      </div>
+                                    ) : (
+                                      <div className="w-full h-full flex items-center justify-center bg-emerald-500/10">
+                                        <Zap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                      </div>
+                                    )}
                                   </div>
-                                  <div className="min-w-0 flex-1">
-                                    <p className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
-                                      {receipt.originalName || receipt.filename}
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-medium text-emerald-900 dark:text-emerald-300 truncate">
+                                      {doc.label || doc.originalName || 'Result'}
                                     </p>
-                                    <div className="flex items-center gap-2 flex-wrap mt-0.5">
-                                      <span className="text-[10px] text-gray-400 dark:text-gray-500">
-                                        {new Date(receipt.uploadedAt).toLocaleDateString()}
-                                      </span>
-                                      {receipt.status && (
-                                        <Badge className={cn("text-[8px] font-normal border-0", statusColor)}>
-                                          {receipt.status.replace('_', ' ')}
-                                        </Badge>
-                                      )}
-                                      {receipt.uploadedByRole && (
-                                        <span className="text-[9px] text-gray-400 dark:text-gray-500">
-                                          by {receipt.uploadedByRole}
-                                        </span>
-                                      )}
-                                    </div>
+                                    {doc.uploadedByRole && (
+                                      <Badge className="bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30 text-[9px] mt-0.5 border-0 rounded-full">
+                                        by {doc.uploadedByRole}
+                                      </Badge>
+                                    )}
                                   </div>
                                 </div>
-                                {receiptUrl ? (
-                                  <div className="flex items-center gap-1">
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      className="h-8 w-8 p-0 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10"
-                                      onClick={() => handleOpenReceiptPreview(receipt)}
-                                      title="View receipt"
-                                    >
-                                      <Eye className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
-                                    </Button>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      className="h-8 w-8 p-0 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10"
-                                      onClick={() => window.open(receiptUrl, '_blank')}
-                                      title="Download receipt"
-                                    >
-                                      <Download className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
-                                    </Button>
-                                  </div>
-                                ) : (
-                                  <span className="text-[10px] text-red-500">No file</span>
-                                )}
+                                <div className="flex gap-0.5 ml-2 shrink-0">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-7 w-7 p-0 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
+                                    onClick={() => onDocumentView(doc)}
+                                    title="View document"
+                                  >
+                                    <Eye className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-7 w-7 p-0 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
+                                    onClick={() => onDocumentDownload(doc)}
+                                    title="Download document"
+                                  >
+                                    <Download className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                                  </Button>
+                                </div>
                               </div>
                             );
                           })}
                         </div>
-                      </div>
+                      </motion.div>
                     )}
 
-                    {/* ─── Upload Receipt ──────────────────────────────────── */}
-                    <div className="space-y-2">
+                    {/* ─── Document Upload (with clear button and progress) ── */}
+                    <div className="space-y-3">
                       <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
                         <Upload className="h-3 w-3" />
-                        Upload Payment Receipt
+                        Upload Document
                       </p>
-                      <div className="flex flex-col sm:flex-row gap-2">
-                        <div className="flex-1">
-                          <Input
-                            type="file"
-                            onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
-                            className="h-10 text-xs rounded-xl bg-white/50 dark:bg-white/5 border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white file:text-gray-700 dark:file:text-gray-300 file:bg-gray-100/50 dark:file:bg-white/10 file:border-0 file:rounded-lg file:text-xs file:font-medium hover:file:bg-gray-200/50 dark:hover:file:bg-white/20 transition-all duration-300"
-                            accept=".pdf,.jpg,.jpeg,.png"
-                          />
-                        </div>
-                        <Button
-                          onClick={handleReceiptUpload}
-                          disabled={!receiptFile || uploadingReceipt}
-                          className={cn(
-                            "h-10 text-xs font-semibold rounded-xl transition-all duration-300 gap-2 shrink-0",
-                            !receiptFile || uploadingReceipt
-                              ? "bg-gray-200/50 dark:bg-white/10 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                              : "bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl active:scale-95"
-                          )}
-                        >
-                          {uploadingReceipt ? (
-                            <div className="flex items-center gap-2">
-                              <div className="h-3 w-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                              <span>Uploading...</span>
-                            </div>
-                          ) : (
-                            <div className="flex items-center gap-2">
-                              <Receipt className="h-3.5 w-3.5" />
-                              <span>Upload Receipt</span>
-                              {receiptFile && (
-                                <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </Button>
-                      </div>
-                      <p className="text-[9px] text-gray-400 dark:text-gray-500">
-                        Upload your bank transfer receipt or payment proof (JPG, PNG, PDF, max 10MB)
-                      </p>
-                    </div>
 
-                    {/* ─── Document Upload (additional docs) ────────────────── */}
-                    <div className="space-y-2">
-                      <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                        <Upload className="h-3 w-3" />
-                        Upload Additional Document
-                      </p>
+                      {uploadFile && (
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 dark:bg-white/5 border border-gray-200/50 dark:border-white/10">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
+                              {uploadFile.name}
+                            </p>
+                            <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                              {formatBytes(uploadFile.size)}
+                            </p>
+                          </div>
+                          <button
+                            onClick={clearSelectedFile}
+                            className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 hover:text-red-700 transition-colors"
+                            title="Remove file"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
+
                       <div className="flex flex-col sm:flex-row gap-2">
                         <div className="flex-1">
                           <Input
                             type="file"
-                            onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0] || null;
+                              setUploadFile(file);
+                              setUploadStatus('idle');
+                              setUploadProgress(0);
+                            }}
                             className="h-10 text-xs rounded-xl bg-white/50 dark:bg-white/5 border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white file:text-gray-700 dark:file:text-gray-300 file:bg-gray-100/50 dark:file:bg-white/10 file:border-0 file:rounded-lg file:text-xs file:font-medium hover:file:bg-gray-200/50 dark:hover:file:bg-white/20 transition-all duration-300"
                             accept=".pdf,.jpg,.jpeg,.png"
                           />
                         </div>
                         <Button
                           onClick={handleFileUpload}
-                          disabled={!uploadFile || uploading}
+                          disabled={!uploadFile || uploading || uploadStatus === 'uploading'}
                           className={cn(
-                            "h-10 text-xs font-semibold rounded-xl transition-all duration-300 gap-2 shrink-0",
-                            !uploadFile || uploading
-                              ? "bg-gray-200/50 dark:bg-white/10 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                              : "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 shadow-lg hover:shadow-xl active:scale-95"
+                            "h-10 text-xs font-semibold rounded-xl transition-all duration-300 gap-2 shrink-0 relative overflow-hidden",
+                            !uploadFile || uploading || uploadStatus === 'uploading'
+                              ? "bg-gray-100/70 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-200 dark:border-white/5"
+                              : "bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] hover:shadow-lg hover:shadow-[#0A3269]/25 dark:hover:shadow-white/20 hover:scale-[1.02] active:scale-95 shadow-md"
                           )}
                         >
-                          {uploading ? (
-                            <div className="flex items-center gap-2">
-                              <div className="h-3 w-3 border-2 border-white dark:border-black border-t-transparent rounded-full animate-spin" />
-                              <span>Processing...</span>
+                          {uploading || uploadStatus === 'uploading' ? (
+                            <div className="flex items-center gap-2.5">
+                              <div className="h-3.5 w-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                              <span className="font-medium">Uploading {uploadProgress}%</span>
                             </div>
                           ) : (
-                            <div className="flex items-center gap-2">
-                              <Upload className="h-3.5 w-3.5" />
-                              <span>Upload</span>
-                              {uploadFile && (
-                                <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                                </span>
-                              )}
+                            <div className="flex items-center gap-2.5 relative z-10">
+                              <Upload className="h-3.5 w-3.5 transition-transform duration-300 group-hover:scale-110" />
+                              <span className="font-medium">
+                                {uploadFile ? 'Upload Document' : 'Select a file'}
+                              </span>
                             </div>
                           )}
                         </Button>
                       </div>
+
+                      {/* Progress bar for upload */}
+                      {uploadStatus === 'uploading' && (
+                        <div className="w-full">
+                          <Progress value={uploadProgress} className="h-1.5" />
+                          <p className="text-[10px] text-gray-400 dark:text-white/30 mt-1 text-right">
+                            {uploadProgress}%
+                          </p>
+                        </div>
+                      )}
+
+                      {uploadStatus === 'done' && (
+                        <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs">
+                          <CheckCircle className="w-3.5 h-3.5" />
+                          <span>Upload complete!</span>
+                        </div>
+                      )}
+
+                      {uploadStatus === 'error' && (
+                        <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-xs">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          <span>Upload failed. Please try again.</span>
+                        </div>
+                      )}
                     </div>
 
                     <Separator className="bg-gray-200/50 dark:bg-white/10" />
@@ -1148,8 +1427,12 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const url = getReceiptUrl(selectedReceipt, apiBase);
-                  if (url) window.open(url, '_blank');
+                  const url = getReceiptUrl(selectedReceipt, apiBase, appId);
+                  if (url) {
+                    window.open(url, '_blank');
+                  } else {
+                    toast.error('Receipt URL not available');
+                  }
                 }}
                 className="h-8 gap-1.5 text-xs rounded-lg"
               >
@@ -1169,7 +1452,8 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
           <div className="p-4 overflow-auto max-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-100/50 dark:bg-black/30">
             {selectedReceipt && (() => {
-              const url = getReceiptUrl(selectedReceipt, apiBase);
+              const url = getReceiptUrl(selectedReceipt, apiBase, appId);
+              
               if (!url) {
                 return (
                   <div className="text-center text-red-500">
@@ -1221,6 +1505,26 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 );
               }
             })()}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ─── Inline Image Preview Dialog ────────────────────────────────── */}
+      <Dialog open={!!previewImage} onOpenChange={() => setPreviewImage(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] w-[50vw]  border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl shadow-2xl">
+          <div className="relative flex items-center justify-center w-full h-full min-h-[300px] p-4">
+            {previewImage && (
+              <img
+                src={previewImage.url}
+                alt={previewImage.doc.originalName || 'Preview'}
+                className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                onError={(e) => {
+                  toast.error('Failed to load image');
+                  setPreviewImage(null);
+                }}
+              />
+            )}
+          
           </div>
         </DialogContent>
       </Dialog>
@@ -1298,40 +1602,169 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
       </Dialog>
 
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-md bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 rounded-2xl p-6">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-lg">
-              <Edit className="h-5 w-5 text-blue-500" />
-              Edit Application
-            </DialogTitle>
-            <DialogDescription>
-              Update your application details.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="editName">Full Name</Label>
-              <Input id="editName" defaultValue={`${application.sponsor?.firstName || ''} ${application.sponsor?.lastName || ''}`} className="rounded-xl" />
+        <DialogContent className="max-w-lg bg-white/95 dark:bg-black/95 backdrop-blur-sm border border-gray-200/50 dark:border-white/10 rounded-3xl p-0 shadow-2xl overflow-hidden">
+          {/* ─── Header ────────────────────────────────────── */}
+          <div className="px-6 pt-6 pb-4 border-b border-gray-200/50 dark:border-white/10">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-white">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25">
+                  <Edit className="h-5 w-5 text-white" strokeWidth={1.8} />
+                </div>
+                <span>Edit Application</span>
+              </DialogTitle>
+              <DialogDescription className="text-sm text-gray-500 dark:text-white/60 mt-1">
+                Update the sponsor and applicant details below.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+
+          {/* ─── Body ──────────────────────────────────────── */}
+          <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+            {/* Sponsor Information */}
+            <div className="space-y-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40 flex items-center gap-2">
+                <User className="h-3.5 w-3.5" />
+                Sponsor Details
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="editFirstName" className="text-xs font-medium text-gray-700 dark:text-white/80">First Name</Label>
+                  <Input
+                    id="editFirstName"
+                    defaultValue={application.sponsor?.firstName || ''}
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                    placeholder="John"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="editLastName" className="text-xs font-medium text-gray-700 dark:text-white/80">Last Name</Label>
+                  <Input
+                    id="editLastName"
+                    defaultValue={application.sponsor?.lastName || ''}
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                    placeholder="Doe"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="editEmail" className="text-xs font-medium text-gray-700 dark:text-white/80">Email Address</Label>
+                  <Input
+                    id="editEmail"
+                    type="email"
+                    defaultValue={application.sponsor?.email || ''}
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                    placeholder="john@example.com"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="editPhone" className="text-xs font-medium text-gray-700 dark:text-white/80">Phone Number</Label>
+                  <Input
+                    id="editPhone"
+                    type="tel"
+                    defaultValue={application.sponsor?.phone || ''}
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                    placeholder="+971 50 123 4567"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="editEmiratesId" className="text-xs font-medium text-gray-700 dark:text-white/80">Emirates ID</Label>
+                  <Input
+                    id="editEmiratesId"
+                    defaultValue={application.sponsor?.emiratesId || ''}
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                    placeholder="784-1234-5678900-1"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="editPassport" className="text-xs font-medium text-gray-700 dark:text-white/80">Passport Number</Label>
+                  <Input
+                    id="editPassport"
+                    defaultValue={application.sponsor?.passportNumber || ''}
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                    placeholder="A1234567"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="editEmail">Email</Label>
-              <Input id="editEmail" defaultValue={application.sponsor?.email || ''} className="rounded-xl" />
-            </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => { toast.success('Application updated'); setShowEditDialog(false); }}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl h-11"
-              >
-                Save Changes
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setShowEditDialog(false)}
-                className="flex-1 border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 rounded-xl h-11"
-              >
-                Cancel
-              </Button>
-            </div>
+
+            {application.sponsored && (
+              <>
+                <Separator className="bg-gray-200/50 dark:bg-white/10" />
+                <div className="space-y-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40 flex items-center gap-2">
+                    <UserCheck className="h-3.5 w-3.5" />
+                    Sponsored Person Details
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="editSponsoredFirstName" className="text-xs font-medium text-gray-700 dark:text-white/80">First Name</Label>
+                      <Input
+                        id="editSponsoredFirstName"
+                        defaultValue={application.sponsored?.firstName || ''}
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                        placeholder="Jane"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="editSponsoredLastName" className="text-xs font-medium text-gray-700 dark:text-white/80">Last Name</Label>
+                      <Input
+                        id="editSponsoredLastName"
+                        defaultValue={application.sponsored?.lastName || ''}
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                        placeholder="Smith"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="editSponsoredNationality" className="text-xs font-medium text-gray-700 dark:text-white/80">Nationality</Label>
+                      <Input
+                        id="editSponsoredNationality"
+                        defaultValue={application.sponsored?.nationality || ''}
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                        placeholder="British"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="editSponsoredPassport" className="text-xs font-medium text-gray-700 dark:text-white/80">Passport Number</Label>
+                      <Input
+                        id="editSponsoredPassport"
+                        defaultValue={application.sponsored?.passportNumber || ''}
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
+                        placeholder="B7654321"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* ─── Footer ──────────────────────────────────────── */}
+          <div className="px-6 py-4 border-t border-gray-200/50 dark:border-white/10 bg-gray-50/50 dark:bg-white/5 flex flex-col sm:flex-row gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setShowEditDialog(false)}
+              className="rounded-xl border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white transition-all duration-200 order-2 sm:order-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                // Here you would collect the values and call an API to update
+                toast.success('Application updated successfully');
+                setShowEditDialog(false);
+              }}
+              className="rounded-xl bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] font-semibold shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 order-1 sm:order-2"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Save Changes
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

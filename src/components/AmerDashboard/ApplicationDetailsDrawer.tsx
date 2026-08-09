@@ -4,8 +4,6 @@ import {
   FileText, 
   Clock, 
   CheckCircle, 
-  XCircle, 
-  AlertTriangle, 
   Eye, 
   Download,
   Phone,
@@ -15,15 +13,19 @@ import {
   Key,
   Upload,
   Edit,
+  AlertCircle,
+  Lock,
   Send,
   Ban,
   Image,
   File,
   ThumbsUp,
   ThumbsDown,
-  MessageSquare,
   RefreshCw,
-  Receipt, // <-- added
+  X,
+  Crown,
+  Calendar,
+  UserCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,6 +39,7 @@ import type { AmerApplication } from '@/hooks/useAmerDashboard';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type ApplicationUnion = VisaApplication | AmerApplication;
 
@@ -52,15 +55,15 @@ interface ApplicationDetailsDrawerProps {
 }
 
 const statusOptions = [
-  { value: 'draft', label: 'Draft', color: 'bg-surface text-foreground' },
-  { value: 'submitted', label: 'Submitted', color: 'bg-blue-100 text-blue-800' },
-  { value: 'under_review', label: 'Under Review', color: 'bg-yellow-100 text-yellow-800' },
-  { value: 'docs_required', label: 'Documents Required', color: 'bg-orange-100 text-orange-800' },
-  { value: 'approved', label: 'Approved', color: 'bg-green-100 text-green-800' },
-  { value: 'rejected', label: 'Rejected', color: 'bg-red-100 text-red-800' },
-  { value: 'closed', label: 'Closed', color: 'bg-surface text-foreground' },
-  { value: 'fraud_detected', label: 'Fraud Detected', color: 'bg-red-100 text-red-800' },
-  { value: 'penalty_issued', label: 'Penalty Issued', color: 'bg-orange-100 text-orange-800' },
+  { value: 'draft', label: 'Draft', color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' },
+  { value: 'submitted', label: 'Submitted', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
+  { value: 'under_review', label: 'Under Review', color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300' },
+  { value: 'docs_required', label: 'Documents Required', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' },
+  { value: 'approved', label: 'Approved', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
+  { value: 'rejected', label: 'Rejected', color: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
+  { value: 'closed', label: 'Closed', color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' },
+  { value: 'fraud_detected', label: 'Fraud Detected', color: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
+  { value: 'penalty_issued', label: 'Penalty Issued', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' },
 ];
 
 export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> = ({
@@ -96,7 +99,6 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
     relationship: (application as any)?.sponsored?.relationship || ''
   });
 
-  // Document viewing and review states
   const [selectedDocument, setSelectedDocument] = useState<any>(null);
   const [documentPreviewOpen, setDocumentPreviewOpen] = useState(false);
   const [documentReviewOpen, setDocumentReviewOpen] = useState(false);
@@ -104,7 +106,6 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
   const [reviewStatus, setReviewStatus] = useState<'approved' | 'rejected'>('approved');
   const [isReviewing, setIsReviewing] = useState(false);
 
-  // Amer officer action states
   const [fraudAlertOpen, setFraudAlertOpen] = useState(false);
   const [fraudAlertData, setFraudAlertData] = useState({
     type: 'document_verification',
@@ -125,10 +126,8 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
 
   if (!application) return null;
 
-  // ─── Receipts ──────────────────────────────────────────────────────────
   const receipts = (application as any)?.receipts || [];
 
-  // API functions for Amer officer actions
   const handleDocumentDownload = async (attachment: any) => {
     try {
       const token = localStorage.getItem('authToken') || '';
@@ -276,32 +275,19 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
     if (!config) return null;
 
     return (
-      <Badge className={cn(config.color, 'border-0')}>
+      <Badge className={cn(config.color, 'border-0 font-medium')}>
         {config.label}
       </Badge>
     );
   };
 
-  const getDocumentStatusIcon = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'rejected':
-        return <XCircle className="w-4 h-4 text-error" />;
-      case 'requested':
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      default:
-        return <Clock className="w-4 h-4 text-text-muted" />;
-    }
-  };
-
   const getDocumentIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) {
-      return <Image className="w-5 h-5 text-primary" />;
+    if (mimeType?.startsWith('image/')) {
+      return <Image className="w-4 h-4 sm:w-5 sm:h-5 text-[#0A3269]" />;
     } else if (mimeType === 'application/pdf') {
-      return <FileText className="w-5 h-5 text-error" />;
+      return <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />;
     } else {
-      return <File className="w-5 h-5 text-text-muted" />;
+      return <File className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />;
     }
   };
 
@@ -312,86 +298,133 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
       title={t('amerDashboard.viewDetails')}
       size="xl"
       position="right"
-      className="h-full overflow-y-auto"
+      className="h-full overflow-y-auto bg-gray-50 dark:bg-gray-950"
     >
-      <div className="p-4 space-y-6 ">
-        {/* Application Header */}
-        <div className="bg-surface-light rounded-lg p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-semibold text-foreground">
-              {application.applicationType.replace('_', ' ').toUpperCase()}
-            </h3>
-            {getStatusBadge(application.status)}
-          </div>
-          <p className="text-sm text-text-secondary">
-            ID: {(application as any)?.id || (application as any)?._id} • Created: {new Date((application as any).createdAt).toLocaleDateString()}
-          </p>
+      <div className="p-4 space-y-6">
+      {/* ─── Premium Header Card ──────────────────────────────────── */}
+<motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  className="relative overflow-hidden rounded-2xl bg-white dark:bg-gray-900 p-5  border border-gray-200/60 dark:border-white/10"
+>
+  {/* ─── Background Accents ──────────────────────────────────── */}
+  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-white/5 blur-2xl" />
+  <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-white/5 blur-2xl" />
+  
+  <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-2">
+      <div className="flex items-center gap-2.5">
+        <div className="p-2 rounded-xl bg-gradient-to-br from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 shadow-lg shadow-[#0A3269]/20 dark:shadow-white/10">
+          <Crown className="w-4 h-4 text-white dark:text-gray-900" />
         </div>
+        <h3 className="text-base sm:text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+          {application.applicationType.replace('_', ' ').toUpperCase()}
+        </h3>
+      </div>
+      
+      <div className="flex flex-wrap items-center gap-2">
+        {getStatusBadge(application.status)}
+        <span className="text-[10px] text-gray-400 dark:text-white/30 font-mono bg-gray-100 dark:bg-white/5 px-2 py-0.5 rounded-full">
+          #{String((application as any)?.id || (application as any)?._id).slice(-8)}
+        </span>
+      </div>
+      
+      <div className="flex items-center gap-3 text-[10px] text-gray-400 dark:text-white/30">
+        <span className="flex items-center gap-1">
+          <Calendar className="w-3 h-3" />
+          {new Date((application as any).createdAt).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          })}
+        </span>
+        <span className="w-px h-3 bg-gray-200 dark:bg-white/10" />
+        <span className="flex items-center gap-1">
+          <Clock className="w-3 h-3" />
+          {new Date((application as any).createdAt).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </span>
+      </div>
+    </div>
+    
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => setEditOpen(true)}
+      className="rounded-xl border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/30 px-4 h-9 text-xs font-medium transition-all duration-300"
+    >
+      <Edit className="w-3.5 h-3.5 mr-1.5" />
+      Edit Details
+    </Button>
+  </div>
+</motion.div>
 
-        {/* Sponsor Information */}
-        <CollapsibleSection title={t('documents.sponsorDocuments')} defaultOpen={true}>
+        {/* ─── Sponsor Information ──────────────────────────────────── */}
+        <CollapsibleSection title="Sponsor Information" defaultOpen={true}>
           <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-blue-600" />
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 shadow-sm">
+              <div className="p-3 rounded-xl bg-[#0A3269]/10 dark:bg-white/10">
+                <User className="w-6 h-6 text-[#0A3269] dark:text-white" />
               </div>
-              <div className="flex-1">
-                <p className="font-medium text-foreground">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
                   {application.sponsor.firstName} {application.sponsor.lastName}
                 </p>
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
-                  <span className="flex items-center">
-                    <Mail className="w-4 h-4 mr-1" />
+                <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-white/60">
+                  <span className="flex items-center gap-1">
+                    <Mail className="w-3 h-3" />
                     {application.sponsor.email}
                   </span>
-                  <span className="flex items-center">
-                    <Phone className="w-4 h-4 mr-1" />
+                  <span className="w-px h-3 bg-gray-300 dark:bg-white/10" />
+                  <span className="flex items-center gap-1">
+                    <Phone className="w-3 h-3" />
                     {application.sponsor.phoneNumber}
                   </span>
                 </div>
               </div>
             </div>
             
-            {application.sponsor.emiratesId && (
-              <div className="flex items-center space-x-2 text-sm text-text-secondary">
-                <Shield className="w-4 h-4" />
-                <span>Emirates ID: {application.sponsor.emiratesId}</span>
+            {(application.sponsor.emiratesId || (application.sponsor as any).passportNumber) && (
+              <div className="grid grid-cols-2 gap-2">
+                {application.sponsor.emiratesId && (
+                  <div className="p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
+                    <p className="text-[8px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Emirates ID</p>
+                    <p className="text-xs font-medium text-gray-900 dark:text-white mt-0.5">{application.sponsor.emiratesId}</p>
+                  </div>
+                )}
+                {(application.sponsor as any).passportNumber && (
+                  <div className="p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
+                    <p className="text-[8px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Passport</p>
+                    <p className="text-xs font-medium text-gray-900 dark:text-white mt-0.5">{(application.sponsor as any).passportNumber}</p>
+                  </div>
+                )}
               </div>
             )}
-            
-            {(application.sponsor as any).passportNumber && (
-              <div className="flex items-center space-x-2 text-sm text-text-secondary">
-                <FileText className="w-4 h-4" />
-                <span>Passport: {(application.sponsor as any).passportNumber}</span>
-              </div>
-            )}
-          </div>
-          <div className="pt-2">
-            <Button variant="outline" size="sm" onClick={()=> setEditOpen(true)}>
-              <Edit className="w-4 h-4 mr-2" /> Edit Details
-            </Button>
           </div>
         </CollapsibleSection>
 
-        {/* Sponsored Person */}
+        {/* ─── Sponsored Person ──────────────────────────────────────── */}
         {application.sponsored && (
           <CollapsibleSection title="Sponsored Person" defaultOpen={true}>
             <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 tesxt-green-600" />
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 shadow-sm">
+                <div className="p-3 rounded-xl bg-emerald-500/10">
+                  <UserCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
-                <div className="flex-1">
-                  <p className="font-medium text-foreground">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
                     {application.sponsored.firstName} {application.sponsored.lastName}
                   </p>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span className="flex items-center">
-                      <Mail className="w-4 h-4 mr-1" />
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-white/60">
+                    <span className="flex items-center gap-1">
+                      <Mail className="w-3 h-3" />
                       {application.sponsored.email}
                     </span>
-                    <span className="flex items-center">
-                      <Phone className="w-4 h-4 mr-1" />
+                    <span className="w-px h-3 bg-gray-300 dark:bg-white/10" />
+                    <span className="flex items-center gap-1">
+                      <Phone className="w-3 h-3" />
                       {application.sponsored.phoneNumber}
                     </span>
                   </div>
@@ -399,277 +432,206 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
               </div>
               
               {(application.sponsored as any).emiratesId && (
-                <div className="flex items-center space-x-2 text-sm text-text-secondary">
-                  <Shield className="w-4 h-4" />
-                  <span>Emirates ID: {(application.sponsored as any).emiratesId}</span>
-                </div>
-              )}
-              
-              {(application.sponsored as any).passportNumber && (
-                <div className="flex items-center space-x-2 text-sm text-text-secondary">
-                  <FileText className="w-4 h-4" />
-                  <span>Passport: {(application.sponsored as any).passportNumber}</span>
+                <div className="p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
+                  <p className="text-[8px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Emirates ID</p>
+                  <p className="text-xs font-medium text-gray-900 dark:text-white mt-0.5">{(application.sponsored as any).emiratesId}</p>
                 </div>
               )}
             </div>
           </CollapsibleSection>
         )}
 
-        {/* Documents */}
+        {/* ─── Documents ────────────────────────────────────────────── */}
         <CollapsibleSection title="Documents" defaultOpen={true}>
           <div className="space-y-3">
             {application.attachments && application.attachments.length > 0 ? (
-              application.attachments.map((doc, index) => (
-                <div key={index} className="flex flex-col md:flex-row items-start md:items-center justify-between p-3 bg-surface-light rounded-lg">
-                  <div className="flex flex-col md:flex-row items-start md:items-center space-x-3">
-                    {getDocumentIcon((doc as any).mimeType || 'application/octet-stream')}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">
-                        {(doc as any).originalName.slice(0, 20) + '...' || doc.path}
-                      </p>
-                      <p className="text-xs text-text-secondary capitalize">
-                        {doc.type?.replace(/[_-]/g, ' ')} • {((doc as any).fileSize ? (doc as any).fileSize / 1024 / 1024 : 0).toFixed(1)}MB
-                      </p>
-                      {(doc as any).uploadedAt && (
-                        <p className="text-xs text-text-muted">
-                          {new Date((doc as any).uploadedAt).toLocaleDateString()}
+              application.attachments.map((doc, index) => {
+                const fileUrl = (doc as any).url || (doc as any).fileUrl || (doc as any).path || '';
+                const fileName = (doc as any).originalName || (doc as any).filename || 'Document';
+                const mimeType = (doc as any).mimeType || (doc as any).type || '';
+                const isImage = fileUrl?.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i) ||
+                                mimeType?.startsWith('image/') ||
+                                fileName?.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i);
+                const docStatus = (doc as any).status || (doc as any).verificationStatus || 'pending';
+                
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.04 }}
+                    className="group flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/30 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                      <div className="relative flex-shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-gray-100 dark:bg-white/5">
+                        {fileUrl && isImage ? (
+                          <img 
+                            src={fileUrl} 
+                            alt={fileName}
+                            className="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-300"
+                            onClick={() => handleDocumentView(doc)}
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            {getDocumentIcon(mimeType || 'application/octet-stream')}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
+                          {fileName.length > 25 ? fileName.slice(0, 25) + '...' : fileName}
                         </p>
-                      )}
+                        <p className="text-[10px] text-gray-500 dark:text-white/60 capitalize">
+                          {doc.type?.replace(/[_-]/g, ' ')} • {((doc as any).fileSize ? (doc as any).fileSize / 1024 / 1024 : 0).toFixed(1)}MB
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    {getDocumentStatusIcon((doc as any).status || doc.verificationStatus || 'pending')}
-                    <Badge 
-                      variant={(doc as any).status === 'approved' ? 'default' : (doc as any).status === 'rejected' ? 'destructive' : 'secondary'}
-                      className="text-xs"
-                    >
-                      {(doc as any).status || doc.verificationStatus || 'pending'}
-                    </Badge>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => handleDocumentView(doc)}
-                      title="View document"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => handleDocumentDownload(doc)}
-                      title="Download document"
-                    >
-                      <Download className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => {
-                        setSelectedDocument(doc);
-                        setDocumentReviewOpen(true);
-                      }}
-                      title="Review document"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))
+                    
+                    <div className="flex items-center gap-1 mt-2 sm:mt-0 ml-0 sm:ml-2">
+                      {fileUrl && (
+                        <>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleDocumentView(doc)}
+                            className="h-7 w-7 p-0 rounded-lg hover:bg-[#0A3269]/10 dark:hover:bg-white/10"
+                          >
+                            <Eye className="w-3.5 h-3.5 text-gray-500 dark:text-white/60" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleDocumentDownload(doc)}
+                            className="h-7 w-7 p-0 rounded-lg hover:bg-[#0A3269]/10 dark:hover:bg-white/10"
+                          >
+                            <Download className="w-3.5 h-3.5 text-gray-500 dark:text-white/60" />
+                          </Button>
+                        </>
+                      )}
+                      <Badge className={cn(
+                        'text-[8px] font-medium rounded-full px-2 py-0.5 border-0',
+                        docStatus === 'approved' && 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+                        docStatus === 'rejected' && 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                        docStatus === 'under_review' && 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                        docStatus === 'pending' && 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                      )}>
+                        {docStatus}
+                      </Badge>
+                    </div>
+                  </motion.div>
+                );
+              })
             ) : (
-              <div className="text-center py-8 text-text-muted">
-                <FileText className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>No documents uploaded yet</p>
+              <div className="text-center py-8 text-gray-400 dark:text-white/40">
+                <FileText className="w-12 h-12 mx-auto mb-2 opacity-30" />
+                <p className="text-sm">No documents uploaded yet</p>
               </div>
             )}
             
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => onDocumentUpload((application as any)?._id || (application as any)?.id)}
-            >
-              <Upload className="w-4 h-4 mr-2" />
-              Upload Additional Documents
-            </Button>
-            <div className="pt-2">
+            <div className="grid grid-cols-2 gap-2">
               <Button 
-                variant="default" 
-                className="w-full bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300"
+                variant="outline" 
+                className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-[#0A3269]/30 dark:hover:border-white/30 hover:text-[#0A3269] dark:hover:text-white"
+                onClick={() => onDocumentUpload((application as any)?._id || (application as any)?.id)}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload
+              </Button>
+              <Button 
+                className="rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl transition-all duration-300"
                 onClick={() => setDocReqOpen(true)}
               >
                 <Send className="w-4 h-4 mr-2" />
-                Request More Documents
+                Request
               </Button>
             </div>
           </div>
         </CollapsibleSection>
 
-        {/* ─── ✅ Payment Receipts ─────────────────────────────────────────── */}
-        <CollapsibleSection title="Payment Receipts" defaultOpen={true}>
-          <div className="space-y-3">
-            {receipts.length > 0 ? (
-              receipts.map((receipt: any, idx: number) => {
-                const statusColor = receipt.status === 'verified' || receipt.status === 'approved'
-                  ? 'bg-emerald-500/20 text-emerald-600'
-                  : receipt.status === 'pending_verification'
-                  ? 'bg-yellow-500/20 text-yellow-600'
-                  : 'bg-red-500/20 text-red-600';
-
-                const receiptUrl = receipt.path?.startsWith('http')
-                  ? receipt.path
-                  : `${apiBase}${receipt.path}`;
-
-                return (
-                  <div
-                    key={idx}
-                    className="flex flex-col md:flex-row items-start md:items-center justify-between p-3 bg-surface-light rounded-lg hover:bg-surface-light/80 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3 min-w-0 flex-1">
-                      <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 shrink-0">
-                        <FileText className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-foreground truncate">
-                          {receipt.originalName || receipt.filename}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-2 mt-1">
-                          <span className="text-xs text-text-secondary">
-                            {new Date(receipt.uploadedAt).toLocaleDateString()}
-                          </span>
-                          {receipt.status && (
-                            <Badge className={cn("text-[10px] font-normal border-0", statusColor)}>
-                              {receipt.status.replace('_', ' ')}
-                            </Badge>
-                          )}
-                          {receipt.uploadedByRole && (
-                            <span className="text-xs text-text-muted">
-                              by {receipt.uploadedByRole}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2 mt-2 md:mt-0">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedDocument(receipt);
-                          setDocumentPreviewOpen(true);
-                        }}
-                        title="View receipt"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => window.open(receiptUrl, '_blank')}
-                        title="Download receipt"
-                      >
-                        <Download className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="text-center py-6 text-text-muted">
-                <Receipt className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>No payment receipts uploaded yet</p>
-              </div>
-            )}
-          </div>
-        </CollapsibleSection>
-
-        {/* Application History */}
+        {/* ─── Application History ──────────────────────────────────── */}
         <CollapsibleSection title="Application History" defaultOpen={false}>
           <div className="space-y-2">
             {application.history.length === 0 ? (
-              <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-sm">
+              <div className="text-center py-6 text-gray-400 dark:text-white/40 text-sm">
                 No history entries yet
               </div>
             ) : (
               application.history.map((entry, index) => (
-                <div 
-                  key={index} 
-                  className="flex items-start gap-3 p-3 rounded-xl bg-white/50 dark:bg-gray-900/50 border border-gray-200/50 dark:border-gray-800/50 hover:bg-gray-50/80 dark:hover:bg-gray-800/50 transition-all duration-200"
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.04 }}
+                  className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-200"
                 >
-                  <div className="w-2 h-2 rounded-full bg-[#0A3269] mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-[#0A3269] dark:bg-white mt-2 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <p className="text-xs font-medium text-gray-900 dark:text-white">
                       {entry.action?.replace(/_/g, ' ').toUpperCase() || 'Action'}
                     </p>
                     {entry.note && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{entry.note}</p>
+                      <p className="text-[10px] text-gray-500 dark:text-white/60 mt-0.5">{entry.note}</p>
                     )}
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+                    <p className="text-[9px] text-gray-400 dark:text-white/40 mt-1">
                       {new Date(entry.at).toLocaleString()}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))
             )}
           </div>
         </CollapsibleSection>
 
-        {/* Risk Assessment — Modern UI */}
+        {/* ─── Risk Assessment ────────────────────────────────────────── */}
         <CollapsibleSection title="Risk Assessment" defaultOpen={false}>
-          <div className="space-y-4 pt-5 rounded-xl bg-gray-50/80 dark:bg-white/5 p-4 backdrop-blur-sm border border-gray-200/50 dark:border-white/10">
-            {/* Fraud Risk */}
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-rose-400/60" />
+          <div className="space-y-4 p-4 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
+              <span className="text-xs font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-rose-400" />
                 Fraud Risk
               </span>
-              <Badge
-                variant="outline"
-                className={`
-                  px-3 py-0.5 text-xs font-semibold uppercase tracking-wider rounded-full border-0
-                  ${application.metadata.fraudRisk === 'high' 
-                    ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 ring-1 ring-rose-500/30' 
-                    : application.metadata.fraudRisk === 'medium' 
-                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/30' 
-                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/30'
-                  }
-                `}
-              >
+              <Badge className={cn(
+                'px-3 py-0.5 text-[10px] font-semibold uppercase rounded-full border-0',
+                application.metadata.fraudRisk === 'high' 
+                  ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300' 
+                  : application.metadata.fraudRisk === 'medium' 
+                  ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' 
+                  : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
+              )}>
                 {application.metadata.fraudRisk?.toUpperCase() || 'N/A'}
               </Badge>
             </div>
 
-            {/* Blacklist Status */}
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400/60" />
+            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
+              <span className="text-xs font-medium text-gray-700 dark:text-white/70 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
                 Blacklist Status
               </span>
-              <Badge
-                variant="outline"
-                className={`
-                  px-3 py-0.5 text-xs font-semibold uppercase tracking-wider rounded-full border-0
-                  ${application.metadata.blacklistStatus === 'blacklisted' 
-                    ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 ring-1 ring-rose-500/30' 
-                    : application.metadata.blacklistStatus === 'flagged' 
-                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/30' 
-                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/30'
-                  }
-                `}
-              >
+              <Badge className={cn(
+                'px-3 py-0.5 text-[10px] font-semibold uppercase rounded-full border-0',
+                application.metadata.blacklistStatus === 'blacklisted' 
+                  ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300' 
+                  : application.metadata.blacklistStatus === 'flagged' 
+                  ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' 
+                  : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
+              )}>
                 {application.metadata.blacklistStatus?.toUpperCase() || 'N/A'}
               </Badge>
             </div>
           </div>
         </CollapsibleSection>
 
-        {/* Quick Actions */}
+        {/* ─── Quick Actions ──────────────────────────────────────────── */}
         <CollapsibleSection title="Quick Actions" defaultOpen={false}>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             <Button 
               variant="outline" 
               size="sm"
               onClick={() => setFraudAlertOpen(true)}
+              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-all"
             >
-              <Shield className="w-4 h-4 mr-2" />
+              <Shield className="w-3.5 h-3.5 mr-1.5 text-red-500" />
               Fraud Alert
             </Button>
             
@@ -677,18 +639,20 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
               variant="outline" 
               size="sm"
               onClick={() => setPenaltyOpen(true)}
+              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-600 transition-all"
             >
-              <Gavel className="w-4 h-4 mr-2" />
-              Issue Penalty
+              <Gavel className="w-3.5 h-3.5 mr-1.5 text-orange-500" />
+              Penalty
             </Button>
             
             <Button 
               variant="outline" 
               size="sm"
               onClick={() => setOtpOpen(true)}
+              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 transition-all"
             >
-              <Key className="w-4 h-4 mr-2" />
-              Request OTP
+              <Key className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
+              OTP
             </Button>
             
             <Button 
@@ -698,40 +662,38 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
                 setNewStatus(application.status === 'closed' ? 'draft' : 'closed');
                 handleStatusUpdate();
               }}
-              className="text-error hover:text-error"
+              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-all"
             >
-              <Ban className="w-4 h-4 mr-2" />
+              <Ban className="w-3.5 h-3.5 mr-1.5 text-red-500" />
               {application.status === 'closed' ? 'Reopen' : 'Close'}
             </Button>
           </div>
         </CollapsibleSection>
 
-        {/* Status Update */}
+        {/* ─── Status Update ────────────────────────────────────────── */}
         <CollapsibleSection title="Update Status" defaultOpen={false}>
-          <div className="space-y-4">
+          <div className="space-y-4 p-4 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">New Status</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">New Status</label>
               <Select value={newStatus} onValueChange={setNewStatus}>
-                <SelectTrigger className="bg-white dark:bg-gray-800/90 border-gray-200 dark:border-gray-700 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 transition-colors">
+                <SelectTrigger className="rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-black text-gray-900 dark:text-white hover:border-[#0A3269]/40 dark:hover:border-white/40 transition-colors">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-lg">
+                <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10 shadow-lg">
                   {statusOptions.map(option => (
                     <SelectItem 
                       key={option.value} 
                       value={option.value}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 focus:bg-gray-50 dark:focus:bg-gray-700/50 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors text-gray-900 dark:text-white"
                     >
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center gap-2 text-xs">
                         <span className={cn(
-                          "w-2 h-2 rounded-full",
-                          option.value === 'approved' ? "bg-green-500" :
+                          "w-1.5 h-1.5 rounded-full",
+                          option.value === 'approved' ? "bg-emerald-500" :
                           option.value === 'rejected' ? "bg-red-500" :
                           option.value === 'submitted' ? "bg-blue-500" :
                           option.value === 'under_review' ? "bg-yellow-500" :
                           option.value === 'docs_required' ? "bg-orange-500" :
-                          option.value === 'fraud_detected' ? "bg-red-600" :
-                          option.value === 'penalty_issued' ? "bg-orange-600" :
                           "bg-gray-400"
                         )} />
                         {option.label}
@@ -743,24 +705,24 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Note (Optional)</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Note (Optional)</label>
               <Textarea
                 value={statusNote}
                 onChange={(e) => setStatusNote(e.target.value)}
                 placeholder="Add a note about this status change..."
-                rows={3}
-                className="bg-white dark:bg-gray-800/90 border-gray-200 dark:border-gray-700 resize-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition-colors"
+                rows={2}
+                className="text-xs rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-black text-gray-900 dark:text-white resize-none focus:border-[#0A3269]/40 dark:focus:border-white/40 transition-colors"
               />
             </div>
             
             <Button 
               onClick={handleStatusUpdate}
               disabled={!newStatus || newStatus === application.status || isUpdating}
-              className="w-full bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl transition-all duration-300 disabled:opacity-50"
             >
               {isUpdating ? (
                 <>
-                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  <RefreshCw className="w-3.5 h-3.5 mr-2 animate-spin" />
                   Updating...
                 </>
               ) : (
@@ -773,32 +735,53 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
 
       {/* ─── Edit Details Modal ──────────────────────────────────────────── */}
       {editOpen && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-end md:items-center justify-center">
-          <div className="bg-background w-full md:w-[720px] rounded-t-2xl md:rounded-2xl p-4 md:p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="text-lg font-semibold">Edit Application Details</div>
-              <button onClick={() => setEditOpen(false)} className="text-gray-500 hover:text-foreground">Close</button>
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-end md:items-center justify-center animate-in fade-in duration-200">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="bg-white dark:bg-black w-full md:w-[720px] rounded-t-2xl md:rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 p-4 md:p-6 space-y-4 max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between sticky top-0 bg-white dark:bg-black pb-3 border-b border-gray-200 dark:border-white/10">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
+                  <Edit className="w-4 h-4 text-[#0A3269] dark:text-white" />
+                </div>
+                <span className="text-base font-bold text-gray-900 dark:text-white">Edit Application Details</span>
+              </div>
+              <button 
+                onClick={() => setEditOpen(false)} 
+                className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-500 dark:text-white/60" />
+              </button>
             </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="col-span-2 text-sm text-foreground font-medium">Sponsor</div>
-              <Input placeholder="First name" value={editSponsor.firstName} onChange={(e)=> setEditSponsor((p:any)=>({...p, firstName: e.target.value}))} />
-              <Input placeholder="Last name" value={editSponsor.lastName} onChange={(e)=> setEditSponsor((p:any)=>({...p, lastName: e.target.value}))} />
-              <Input placeholder="Email" value={editSponsor.email} onChange={(e)=> setEditSponsor((p:any)=>({...p, email: e.target.value}))} />
-              <Input placeholder="Phone" value={editSponsor.phone} onChange={(e)=> setEditSponsor((p:any)=>({...p, phone: e.target.value}))} />
-              <Input placeholder="Emirates ID" value={editSponsor.emiratesId} onChange={(e)=> setEditSponsor((p:any)=>({...p, emiratesId: e.target.value}))} />
-              <Input placeholder="Passport Number" value={editSponsor.passportNumber} onChange={(e)=> setEditSponsor((p:any)=>({...p, passportNumber: e.target.value}))} />
+              <div className="col-span-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-white/60 flex items-center gap-2">
+                <User className="w-3.5 h-3.5" />
+                Sponsor Details
+              </div>
+              <Input placeholder="First name" value={editSponsor.firstName} onChange={(e)=> setEditSponsor((p:any)=>({...p, firstName: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Last name" value={editSponsor.lastName} onChange={(e)=> setEditSponsor((p:any)=>({...p, lastName: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Email" value={editSponsor.email} onChange={(e)=> setEditSponsor((p:any)=>({...p, email: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Phone" value={editSponsor.phone} onChange={(e)=> setEditSponsor((p:any)=>({...p, phone: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Emirates ID" value={editSponsor.emiratesId} onChange={(e)=> setEditSponsor((p:any)=>({...p, emiratesId: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Passport Number" value={editSponsor.passportNumber} onChange={(e)=> setEditSponsor((p:any)=>({...p, passportNumber: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
 
-              <div className="col-span-2 text-sm text-foreground font-medium mt-2">Sponsored (optional)</div>
-              <Input placeholder="First name" value={editSponsored.firstName} onChange={(e)=> setEditSponsored((p:any)=>({...p, firstName: e.target.value}))} />
-              <Input placeholder="Last name" value={editSponsored.lastName} onChange={(e)=> setEditSponsored((p:any)=>({...p, lastName: e.target.value}))} />
-              <Input type="date" placeholder="Date of birth" value={editSponsored.dateOfBirth} onChange={(e)=> setEditSponsored((p:any)=>({...p, dateOfBirth: e.target.value}))} />
-              <Input placeholder="Nationality" value={editSponsored.nationality} onChange={(e)=> setEditSponsored((p:any)=>({...p, nationality: e.target.value}))} />
-              <Input placeholder="Passport Number" value={editSponsored.passportNumber} onChange={(e)=> setEditSponsored((p:any)=>({...p, passportNumber: e.target.value}))} />
+              <div className="col-span-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-white/60 flex items-center gap-2 mt-2">
+                <UserCheck className="w-3.5 h-3.5" />
+                Sponsored Details (optional)
+              </div>
+              <Input placeholder="First name" value={editSponsored.firstName} onChange={(e)=> setEditSponsored((p:any)=>({...p, firstName: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Last name" value={editSponsored.lastName} onChange={(e)=> setEditSponsored((p:any)=>({...p, lastName: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input type="date" placeholder="Date of birth" value={editSponsored.dateOfBirth} onChange={(e)=> setEditSponsored((p:any)=>({...p, dateOfBirth: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Nationality" value={editSponsored.nationality} onChange={(e)=> setEditSponsored((p:any)=>({...p, nationality: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
+              <Input placeholder="Passport Number" value={editSponsored.passportNumber} onChange={(e)=> setEditSponsored((p:any)=>({...p, passportNumber: e.target.value}))} className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white" />
               <Select value={editSponsored.relationship} onValueChange={(v)=> setEditSponsored((p:any)=>({...p, relationship: v}))}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
                   <SelectValue placeholder="Relationship" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10">
                   <SelectItem value="spouse">Spouse</SelectItem>
                   <SelectItem value="child">Child</SelectItem>
                   <SelectItem value="parent">Parent</SelectItem>
@@ -807,58 +790,75 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
               </Select>
             </div>
 
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={()=> setEditOpen(false)}>Cancel</Button>
+            <div className="flex gap-2 justify-end pt-3 border-t border-gray-200 dark:border-white/10">
+              <Button variant="outline" onClick={()=> setEditOpen(false)} className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80">Cancel</Button>
               <Button onClick={async ()=>{
                 try {
                   const token = localStorage.getItem('authToken') || ''
                   const id = (application as any)?._id || (application as any)?.id
                   const payload: any = { sponsor: editSponsor, sponsored: editSponsored }
-                  // Remove empty sponsored fields
                   Object.keys(payload.sponsored).forEach(k=> {
                     if (payload.sponsored[k] === '' || payload.sponsored[k] === undefined) delete payload.sponsored[k]
                   })
                   if (Object.keys(payload.sponsored).length === 0) delete payload.sponsored
-                  await fetch(`${location.origin.replace(/:\\d+$/, '') || import.meta.env.VITE_API_BASE_URL}/api/v1/visa/${id}/details`, {
+                  await fetch(`${apiBase}/api/v1/visa/${id}/details`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                     body: JSON.stringify(payload)
                   })
+                  toast.success('Details updated successfully')
                   setEditOpen(false)
-                } catch {}
-              }}>Save Changes</Button>
+                } catch {
+                  toast.error('Failed to update details')
+                }
+              }} className="rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20">Save Changes</Button>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
 
       {/* ─── Request Documents Modal ────────────────────────────────────── */}
       {docReqOpen && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-end md:items-center justify-center">
-          <div className="bg-background w-full md:w-[520px] rounded-t-2xl md:rounded-2xl p-4 md:p-6 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="text-lg font-semibold">Request Documents</div>
-              <button onClick={() => setDocReqOpen(false)} className="text-gray-500 hover:text-foreground">Close</button>
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-end md:items-center justify-center animate-in fade-in duration-200">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="bg-white dark:bg-black w-full md:w-[520px] rounded-t-2xl md:rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 p-4 md:p-6 space-y-4 max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between sticky top-0 bg-white dark:bg-black pb-3 border-b border-gray-200 dark:border-white/10">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
+                  <Send className="w-4 h-4 text-[#0A3269] dark:text-white" />
+                </div>
+                <span className="text-base font-bold text-gray-900 dark:text-white">Request Documents</span>
+              </div>
+              <button onClick={() => setDocReqOpen(false)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                <X className="w-4 h-4 text-gray-500 dark:text-white/60" />
+              </button>
             </div>
-            <div className="text-sm text-text-secondary">Select documents to request from the applicant. A message will be sent and the application will move to "Documents Required".</div>
+            
+            <p className="text-xs text-gray-500 dark:text-white/60">Select documents to request from the applicant.</p>
+            
             <div className="grid grid-cols-2 gap-2">
               {Array.from(new Set(application.attachments.map(a => a.type).concat([
                 'sponsor_emirates_id','sponsor_passport','sponsor_visa','sponsor_salary_certificate','sponsor_trade_license','sponsor_establishment_card','sponsored_passport_front','sponsored_photo','marriage_certificate','birth_certificate'
               ]))).map((id) => (
-                <label key={id} className="flex items-center gap-2 text-sm bg-surface-light px-2 py-1.5 rounded-md">
-                  <input type="checkbox" checked={!!docReq[id]} onChange={(e) => setDocReq(prev => ({ ...prev, [id]: e.target.checked }))} />
-                  <span className="capitalize">{id.replace(/[_-]/g,' ')}</span>
+                <label key={id} className="flex items-center gap-2 text-xs bg-gray-50 dark:bg-white/5 px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                  <input type="checkbox" checked={!!docReq[id]} onChange={(e) => setDocReq(prev => ({ ...prev, [id]: e.target.checked }))} className="rounded border-gray-300 dark:border-white/20" />
+                  <span className="capitalize text-gray-700 dark:text-white/80">{id.replace(/[_-]/g,' ')}</span>
                 </label>
               ))}
             </div>
+            
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Note (optional)</label>
-              <Textarea value={docReqNote} onChange={(e)=> setDocReqNote(e.target.value)} rows={3} placeholder="Add details or instructions" />
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Note (optional)</label>
+              <Textarea value={docReqNote} onChange={(e)=> setDocReqNote(e.target.value)} rows={2} placeholder="Add details or instructions..." className="text-xs rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-black text-gray-900 dark:text-white" />
             </div>
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setDocReqOpen(false)}>Cancel</Button>
+            
+            <div className="flex gap-2 justify-end pt-3 border-t border-gray-200 dark:border-white/10">
+              <Button variant="outline" onClick={() => setDocReqOpen(false)} className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80">Cancel</Button>
               <Button 
-                style={{ color: 'white' }}
+                className="rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20"
                 onClick={async ()=>{
                   const id = (application as any)?._id || (application as any)?.id
                   const requested = Object.entries(docReq).filter(([,v])=>v).map(([k])=>k)
@@ -872,100 +872,185 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
                 Send Request
               </Button>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
 
-      {/* ─── Document Preview Modal ────────────────────────────────────── */}
-      <Dialog open={documentPreviewOpen} onOpenChange={setDocumentPreviewOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {selectedDocument && getDocumentIcon(selectedDocument.mimeType)}
-              {selectedDocument?.originalName || selectedDocument?.path}
-            </DialogTitle>
-            <DialogDescription>
-              {selectedDocument?.type?.replace(/[_-]/g, ' ')} • {(selectedDocument?.fileSize / 1024 / 1024).toFixed(1)}MB
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex-1 overflow-auto">
-            {selectedDocument && (
-              <div className="w-full h-full flex items-center justify-center bg-surface-light rounded-lg">
-                {selectedDocument.mimeType.startsWith('image/') ? (
-                  <img 
-                    src={`${apiBase}/uploads/applications/${(application as any)?._id || (application as any)?.id}/${selectedDocument.path}`}
-                    alt={selectedDocument.originalName}
-                    className="max-w-full max-h-[60vh] object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (nextElement) {
-                        nextElement.style.display = 'block';
-                      }
-                    }}
-                  />
-                ) : selectedDocument.mimeType === 'application/pdf' ? (
-                  <iframe 
-                    src={`${apiBase}/uploads/applications/${(application as any)?._id || (application as any)?.id}/${selectedDocument.path}`}
-                    className="w-full h-[60vh] border-0"
-                    title={selectedDocument.originalName}
-                  />
-                ) : (
-                  <div className="text-center text-text-muted">
-                    <FileText className="w-16 h-16 mx-auto mb-4" />
-                    <p>Preview not available for this file type</p>
-                    <Button 
-                      onClick={() => handleDocumentDownload(selectedDocument)}
-                      className="mt-4"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download to view
-                    </Button>
-                  </div>
-                )}
-                <div className="hidden text-center text-text-muted">
-                  <FileText className="w-16 h-16 mx-auto mb-4" />
-                  <p>Unable to load preview</p>
-                  <Button 
-                    onClick={() => handleDocumentDownload(selectedDocument)}
-                    className="mt-4 bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download file
-                  </Button>
-                </div>
-              </div>
+    {/* ─── Document Preview Modal ────────────────────────────────────── */}
+<Dialog open={documentPreviewOpen} onOpenChange={setDocumentPreviewOpen}>
+  <DialogContent className="max-w-[95vw] sm:max-w-5xl max-h-[95vh] overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl bg-white dark:bg-gray-900 p-0">
+    {/* ─── Header ───────────────────────────────────────────────────── */}
+    <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-white/10 bg-gray-50/80 dark:bg-gray-900/80">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="p-1.5 sm:p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
+          {selectedDocument && getDocumentIcon(selectedDocument.mimeType)}
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+            {selectedDocument?.originalName || selectedDocument?.filename || 'Document'}
+          </p>
+          <div className="flex items-center gap-2 text-[10px] text-gray-500 dark:text-gray-400">
+            <span className="capitalize">{selectedDocument?.type?.replace(/[_-]/g, ' ') || 'File'}</span>
+            <span>•</span>
+            <span>{selectedDocument?.fileSize ? `${(selectedDocument.fileSize / 1024 / 1024).toFixed(1)} MB` : ''}</span>
+            {selectedDocument?.status && (
+              <span className={cn(
+                'px-2 py-0.5 rounded-full text-[9px] font-medium',
+                selectedDocument.status === 'approved' && 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+                selectedDocument.status === 'rejected' && 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                selectedDocument.status === 'pending' && 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+              )}>
+                {selectedDocument.status}
+              </span>
             )}
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
+  
+    </div>
 
+    {/* ─── Content ──────────────────────────────────────────────────── */}
+    <div className="flex-1 overflow-auto p-4 sm:p-6 bg-gray-50/50 dark:bg-gray-900/50 min-h-[300px] sm:min-h-[400px] flex items-center justify-center">
+      {selectedDocument && (() => {
+        const appId = (application as any)?._id || (application as any)?.id || '';
+        let fileUrl = selectedDocument.url || selectedDocument.fileUrl || selectedDocument.path || '';
+        const mimeType = selectedDocument.mimeType || '';
+        const isImage = mimeType?.startsWith('image/') || fileUrl?.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i);
+        const isPDF = mimeType === 'application/pdf' || fileUrl?.match(/\.pdf$/i);
+        
+        if (!fileUrl) return (
+          <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center">
+              <AlertCircle className="w-8 h-8 text-amber-500" />
+            </div>
+            <p className="text-sm font-medium">Document URL not found</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">The document may not be uploaded or the URL is missing</p>
+          </div>
+        );
+        
+        if (isImage) return (
+          <div className="relative w-full flex items-center justify-center">
+            <img 
+              src={fileUrl}
+              alt={selectedDocument.originalName || 'Document'}
+              className="max-w-full max-h-[60vh] object-contain rounded-xl shadow-lg"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                const parent = e.currentTarget.parentElement;
+                if (parent) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'text-center text-gray-500 dark:text-gray-400 p-8';
+                  fallback.innerHTML = `
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <p class="text-sm font-medium">Unable to load preview</p>
+                    <button onclick="window.open('${fileUrl}', '_blank')" class="mt-3 px-4 py-2 bg-[#0A3269] text-white rounded-lg text-sm hover:bg-[#1A4A8A] transition-colors">
+                      Open in new tab
+                    </button>
+                  `;
+                  parent.appendChild(fallback);
+                }
+              }}
+            />
+          </div>
+        );
+        
+        if (isPDF) return (
+          <div className="w-full h-[60vh] rounded-xl overflow-hidden shadow-lg">
+            <iframe 
+              src={fileUrl}
+              className="w-full h-full border-0"
+              title={selectedDocument.originalName || 'PDF Document'}
+            />
+          </div>
+        );
+        
+        return (
+          <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+              <FileText className="w-8 h-8 text-blue-500" />
+            </div>
+            <p className="text-sm font-medium">Preview not available</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">This file type cannot be previewed</p>
+            <Button 
+              onClick={() => handleDocumentDownload(selectedDocument)}
+              className="mt-4 bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 rounded-xl"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download File
+            </Button>
+          </div>
+        );
+      })()}
+    </div>
+
+    {/* ─── Footer ───────────────────────────────────────────────────── */}
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 py-3 border-t border-gray-200 dark:border-white/10 bg-gray-50/80 dark:bg-gray-900/80">
+      <div className="flex items-center gap-3 text-[10px] text-gray-400 dark:text-gray-500">
+        <span className="flex items-center gap-1.5">
+          <Lock className="w-3 h-3" />
+          Secure
+        </span>
+        <span className="w-px h-3 bg-gray-300 dark:bg-gray-700" />
+        <span className="flex items-center gap-1.5">
+          <Shield className="w-3 h-3" />
+          Encrypted
+        </span>
+        <span className="w-px h-3 bg-gray-300 dark:bg-gray-700 hidden xs:block" />
+        <span className="hidden xs:flex items-center gap-1.5">
+          <CheckCircle className="w-3 h-3 text-emerald-500" />
+          Verified
+        </span>
+      </div>
+      
+      <div className="flex items-center gap-2">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => setDocumentPreviewOpen(false)} 
+          className="rounded-lg text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10"
+        >
+          Close
+        </Button>
+        {selectedDocument && (
+          <Button 
+            size="sm" 
+            onClick={() => handleDocumentDownload(selectedDocument)} 
+            className="bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-[#0A3269] rounded-lg text-xs px-4 shadow-lg shadow-[#0A3269]/20 dark:shadow-white/20"
+          >
+            <Download className="w-3.5 h-3.5 mr-1.5" />
+            Download
+          </Button>
+        )}
+      </div>
+    </div>
+  </DialogContent>
+</Dialog>
       {/* ─── Document Review Modal ────────────────────────────────────── */}
       <Dialog open={documentReviewOpen} onOpenChange={setDocumentReviewOpen}>
-        <DialogContent className="max-w-md ">
+        <DialogContent className="max-w-md rounded-2xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
           <DialogHeader>
-            <DialogTitle>Review Document</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-base font-bold text-gray-900 dark:text-white">Review Document</DialogTitle>
+            <DialogDescription className="text-xs text-gray-500 dark:text-white/60">
               {selectedDocument?.originalName || selectedDocument?.path}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Review Status</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Review Status</label>
               <Select value={reviewStatus} onValueChange={(value: 'approved' | 'rejected') => setReviewStatus(value)}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10">
                   <SelectItem value="approved">
                     <div className="flex items-center gap-2">
-                      <ThumbsUp className="w-4 h-4 text-success" />
+                      <ThumbsUp className="w-4 h-4 text-emerald-500" />
                       Approve
                     </div>
                   </SelectItem>
                   <SelectItem value="rejected">
                     <div className="flex items-center gap-2">
-                      <ThumbsDown className="w-4 h-4 text-error" />
+                      <ThumbsDown className="w-4 h-4 text-red-500" />
                       Reject
                     </div>
                   </SelectItem>
@@ -974,38 +1059,32 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
-                Comment {reviewStatus === 'rejected' && '(Required for rejection)'}
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">
+                Comment {reviewStatus === 'rejected' && '(Required)'}
               </label>
               <Textarea
                 value={reviewComment}
                 onChange={(e) => setReviewComment(e.target.value)}
                 placeholder={reviewStatus === 'rejected' ? 'Please provide reason for rejection...' : 'Add a comment...'}
                 rows={3}
-                required={reviewStatus === 'rejected'}
+                className="text-xs rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
               />
             </div>
             
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setDocumentReviewOpen(false)}>
-                Cancel
-              </Button>
+              <Button variant="outline" onClick={() => setDocumentReviewOpen(false)} className="rounded-xl text-xs border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80">Cancel</Button>
               <Button 
                 onClick={handleDocumentReview}
                 disabled={isReviewing || (reviewStatus === 'rejected' && !reviewComment.trim())}
                 className={cn(
-                  "text-white font-medium",
+                  "rounded-xl text-xs font-medium shadow-lg transition-all",
                   reviewStatus === 'approved' 
-                    ? "bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/25 hover:shadow-xl hover:shadow-emerald-600/30" 
-                    : "bg-red-600 hover:bg-red-700 shadow-lg shadow-red-600/25 hover:shadow-xl hover:shadow-red-600/30",
-                  "transition-all duration-300 active:scale-95"
+                    ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/25" 
+                    : "bg-red-600 hover:bg-red-700 text-white shadow-red-600/25"
                 )}
               >
                 {isReviewing ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
+                  <><RefreshCw className="w-3.5 h-3.5 mr-2 animate-spin" /> Processing...</>
                 ) : (
                   `${reviewStatus === 'approved' ? 'Approve' : 'Reject'} Document`
                 )}
@@ -1017,21 +1096,22 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
 
       {/* ─── Fraud Alert Modal ────────────────────────────────────────── */}
       <Dialog open={fraudAlertOpen} onOpenChange={setFraudAlertOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md rounded-2xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
           <DialogHeader>
-            <DialogTitle>Add Fraud Alert</DialogTitle>
-            <DialogDescription>
-              Report suspicious activity or document issues
-            </DialogDescription>
+            <DialogTitle className="text-base font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+              <Shield className="w-4 h-4 text-red-500" />
+              Add Fraud Alert
+            </DialogTitle>
+            <DialogDescription className="text-xs text-gray-500 dark:text-white/60">Report suspicious activity or document issues</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Alert Type</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Alert Type</label>
               <Select value={fraudAlertData.type} onValueChange={(value) => setFraudAlertData(prev => ({ ...prev, type: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10">
                   <SelectItem value="document_verification">Document Verification</SelectItem>
                   <SelectItem value="identity_mismatch">Identity Mismatch</SelectItem>
                   <SelectItem value="suspicious_activity">Suspicious Activity</SelectItem>
@@ -1041,12 +1121,12 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Severity</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Severity</label>
               <Select value={fraudAlertData.severity} onValueChange={(value) => setFraudAlertData(prev => ({ ...prev, severity: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10">
                   <SelectItem value="low">Low</SelectItem>
                   <SelectItem value="medium">Medium</SelectItem>
                   <SelectItem value="high">High</SelectItem>
@@ -1055,24 +1135,20 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Description</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Description</label>
               <Textarea
                 value={fraudAlertData.description}
                 onChange={(e) => setFraudAlertData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Describe the fraud concern..."
                 rows={3}
+                className="text-xs rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                 required
               />
             </div>
             
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setFraudAlertOpen(false)}>
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleFraudAlert}
-                disabled={!fraudAlertData.description.trim()}
-              >
+              <Button variant="outline" onClick={() => setFraudAlertOpen(false)} className="rounded-xl text-xs border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80">Cancel</Button>
+              <Button onClick={handleFraudAlert} disabled={!fraudAlertData.description.trim()} className="rounded-xl bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/25 text-xs">
                 Add Fraud Alert
               </Button>
             </div>
@@ -1082,21 +1158,22 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
 
       {/* ─── Penalty Modal ────────────────────────────────────────────── */}
       <Dialog open={penaltyOpen} onOpenChange={setPenaltyOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md rounded-2xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
           <DialogHeader>
-            <DialogTitle>Issue Penalty</DialogTitle>
-            <DialogDescription>
-              Issue a penalty for violations or non-compliance
-            </DialogDescription>
+            <DialogTitle className="text-base font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+              <Gavel className="w-4 h-4 text-orange-500" />
+              Issue Penalty
+            </DialogTitle>
+            <DialogDescription className="text-xs text-gray-500 dark:text-white/60">Issue a penalty for violations or non-compliance</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Penalty Type</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Penalty Type</label>
               <Select value={penaltyData.type} onValueChange={(value) => setPenaltyData(prev => ({ ...prev, type: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10">
                   <SelectItem value="late_submission">Late Submission</SelectItem>
                   <SelectItem value="document_forgery">Document Forgery</SelectItem>
                   <SelectItem value="false_information">False Information</SelectItem>
@@ -1106,7 +1183,7 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Amount (AED)</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Amount (AED)</label>
               <Input
                 type="number"
                 value={penaltyData.amount}
@@ -1114,29 +1191,26 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
                 placeholder="0"
                 min="0"
                 step="0.01"
+                className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Description</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Description</label>
               <Textarea
                 value={penaltyData.description}
                 onChange={(e) => setPenaltyData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Describe the penalty reason..."
                 rows={3}
+                className="text-xs rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                 required
               />
             </div>
             
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setPenaltyOpen(false)}>
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleIssuePenalty}
-                disabled={!penaltyData.description.trim() || penaltyData.amount <= 0}
-              >
+              <Button variant="outline" onClick={() => setPenaltyOpen(false)} className="rounded-xl text-xs border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80">Cancel</Button>
+              <Button onClick={handleIssuePenalty} disabled={!penaltyData.description.trim() || penaltyData.amount <= 0} className="rounded-xl bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-600/25 text-xs">
                 Issue Penalty
               </Button>
             </div>
@@ -1146,31 +1220,33 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
 
       {/* ─── OTP Request Modal ────────────────────────────────────────── */}
       <Dialog open={otpOpen} onOpenChange={setOtpOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md rounded-2xl bg-white dark:bg-black border border-gray-200 dark:border-white/10">
           <DialogHeader>
-            <DialogTitle>Request OTP</DialogTitle>
-            <DialogDescription>
-              Send OTP to applicant for verification
-            </DialogDescription>
+            <DialogTitle className="text-base font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+              <Key className="w-4 h-4 text-blue-500" />
+              Request OTP
+            </DialogTitle>
+            <DialogDescription className="text-xs text-gray-500 dark:text-white/60">Send OTP to applicant for verification</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Phone Number</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Phone Number</label>
               <Input
                 value={otpData.phone}
                 onChange={(e) => setOtpData(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+971 50 123 4567"
+                className="rounded-xl text-sm bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Valid for (minutes)</label>
+              <label className="text-xs font-medium text-gray-700 dark:text-white/80">Valid for (minutes)</label>
               <Select value={otpData.minutes.toString()} onValueChange={(value) => setOtpData(prev => ({ ...prev, minutes: Number(value) }))}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white dark:bg-black border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10">
                   <SelectItem value="5">5 minutes</SelectItem>
                   <SelectItem value="10">10 minutes</SelectItem>
                   <SelectItem value="15">15 minutes</SelectItem>
@@ -1180,13 +1256,8 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
             
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setOtpOpen(false)}>
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleRequestOTP}
-                disabled={!otpData.phone.trim()}
-              >
+              <Button variant="outline" onClick={() => setOtpOpen(false)} className="rounded-xl text-xs border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80">Cancel</Button>
+              <Button onClick={handleRequestOTP} disabled={!otpData.phone.trim()} className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25 text-xs">
                 Send OTP
               </Button>
             </div>

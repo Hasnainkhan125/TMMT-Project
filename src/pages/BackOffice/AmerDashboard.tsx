@@ -693,57 +693,177 @@ const ApplicationRow: React.FC<{
                   </div>
                 </div>
 
-                {/* Documents - Premium Card */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-[#0A3269]/10">
-                      <FolderOpen className="w-4 h-4 text-[#0A3269]" />
-                    </div>
-                    Documents ({application.attachments.length})
-                  </h4>
-                  <div className="bg-white dark:bg-gray-900/80 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
-                    <div className="space-y-2 max-h-56 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-                      {application.attachments.length > 0 ? (
-                        application.attachments.slice(0, 6).map((doc: any, idx: number) => (
-                          <div 
-                            key={idx} 
-                            className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-[#0A3269]/30 transition-all duration-200 group/doc"
-                          >
-                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                              <FileText className="w-4 h-4 text-[#0A3269] flex-shrink-0" />
-                              <span className="text-sm truncate text-gray-700 dark:text-gray-300 group-hover/doc:text-[#0A3269] transition-colors">
-                                {doc.type?.replace(/_/g, ' ') || 'Document'}
-                              </span>
-                            </div>
-                            <Badge 
-                              variant={doc.status === 'approved' ? 'default' : 'secondary'}
-                              className={cn(
-                                'text-xs rounded-full px-2.5 flex-shrink-0 ml-2',
-                                doc.status === 'approved' 
-                                  ? 'bg-emerald-100 text-emerald-700 border-emerald-200' 
-                                  : doc.status === 'rejected'
-                                  ? 'bg-red-100 text-red-700 border-red-200'
-                                  : 'bg-gray-100 text-gray-600 border-gray-200'
-                              )}
-                            >
-                              {doc.status || 'pending'}
-                            </Badge>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="text-center py-10 text-gray-400 text-sm">
-                          <FileCheck className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                          No documents uploaded yet
-                        </div>
-                      )}
-                      {application.attachments.length > 6 && (
-                        <div className="text-xs text-center text-[#0A3269] font-medium py-2.5 bg-[#0A3269]/5 rounded-xl border border-[#0A3269]/20">
-                          +{application.attachments.length - 6} more documents
-                        </div>
-                      )}
-                    </div>
+{/* Documents - Premium Card with Image Preview */}
+<div className="space-y-3">
+  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+    <div className="p-1.5 rounded-lg bg-[#0A3269]/10">
+      <FolderOpen className="w-4 h-4 text-[#0A3269]" />
+    </div>
+    Documents ({application.attachments.length})
+  </h4>
+  <div className="bg-white dark:bg-gray-900/80 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+    <div className="space-y-3 max-h-56 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+      {application.attachments.length > 0 ? (
+        application.attachments.slice(0, 6).map((doc: any, idx: number) => {
+          // ─── Get the file URL from various possible keys ───
+          const fileUrl = doc.url || doc.fileUrl || doc.file || doc.path || 
+                          doc.location || doc.secure_url || doc.attachmentUrl || 
+                          doc.documentUrl || doc.originalUrl || doc.filePath || '';
+          
+          // ─── Get the original filename ───
+          const fileName = doc.originalName || doc.originalname || doc.fileName || 
+                          doc.filename || doc.name || doc.original_filename || '';
+          
+          // ─── Get the file type / mime ───
+          const mimeType = doc.mimeType || doc.mimetype || doc.fileType || doc.type || '';
+          
+          // ─── Detect if it's an image ───
+          const isImage = fileUrl?.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i) ||
+                          mimeType?.startsWith('image/') ||
+                          fileName?.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i);
+          
+          const isPDF = fileUrl?.match(/\.pdf$/i) || 
+                        mimeType === 'application/pdf' ||
+                        fileName?.match(/\.pdf$/i);
+          
+          // ─── Debug log ───
+          console.log('📄 Document:', { 
+            id: doc._id || doc.id,
+            fileUrl, 
+            fileName, 
+            mimeType,
+            isImage,
+            isPDF,
+            allKeys: Object.keys(doc)
+          });
+          
+          return (
+            <div 
+              key={idx} 
+              className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-[#0A3269]/30 transition-all duration-200 group/doc"
+            >
+              {/* Document Preview / Icon */}
+              <div className="relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+                {fileUrl && isImage ? (
+                  // Image preview - click to enlarge
+                  <img 
+                    src={fileUrl} 
+                    alt={doc.type || 'Document'}
+                    className="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-300"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(fileUrl, '_blank');
+                    }}
+                    onError={(e) => {
+                      // If image fails to load, show file icon instead
+                      e.currentTarget.style.display = 'none';
+                      const parent = e.currentTarget.parentElement;
+                      if (parent) {
+                        const fallback = document.createElement('div');
+                        fallback.className = 'w-full h-full flex items-center justify-center bg-blue-50 dark:bg-blue-900/20';
+                        fallback.innerHTML = `<svg class="w-8 h-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                ) : fileUrl && isPDF ? (
+                  // PDF icon with preview
+                  <div className="w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20 relative">
+                    <FileText className="w-8 h-8 text-red-500" />
+                    <button 
+                      className="absolute inset-0 w-full h-full opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/40 flex items-center justify-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(fileUrl, '_blank');
+                      }}
+                    >
+                      <Eye className="w-5 h-5 text-white" />
+                    </button>
                   </div>
+                ) : fileUrl ? (
+                  // Generic file icon with click to view
+                  <div className="w-full h-full flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 relative cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(fileUrl, '_blank');
+                    }}
+                  >
+                    <FileText className="w-8 h-8 text-blue-500" />
+                  </div>
+                ) : (
+                  // No URL - show broken file icon
+                  <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-600">
+                    <AlertCircle className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                  </div>
+                )}
+                
+                {/* Status badge overlay */}
+                <div className="absolute -top-1 -left-0">
+                  <Badge 
+                    className={cn(
+                      'text-[8px] rounded-full px-1.5 py-0.5 border-0 shadow-sm',
+                      doc.status === 'approved' ? 'bg-emerald-500 text-white' :
+                      doc.status === 'rejected' ? 'bg-red-500 text-white' :
+                      doc.status === 'under_review' ? 'bg-amber-500 text-white' :
+                      'bg-gray-400 text-white'
+                    )}
+                  >
+                    {doc.status || 'pending'}
+                  </Badge>
                 </div>
+              </div>
+              
+              {/* Document info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+                    {doc.type?.replace(/_/g, ' ') || fileName || 'Document'}
+                  </span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 flex-shrink-0 ml-2">
+                    {doc.fileSize ? `${(doc.fileSize / 1024).toFixed(1)} KB` : ''}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 truncate max-w-[120px]">
+                    {fileName || 'Uploaded'}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500">
+                    {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString() : 
+                     doc.createdAt ? new Date(doc.createdAt).toLocaleDateString() : ''}
+                  </span>
+                </div>
+                {/* Preview action - only if we have a URL */}
+                {fileUrl && (
+                  <button 
+                    className="text-[10px] text-[#0A3269] dark:text-[#4A8ABF] hover:underline mt-0.5 flex items-center gap-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(fileUrl, '_blank');
+                    }}
+                  >
+                    <Eye className="w-3 h-3" />
+                    {isImage ? 'View Image' : isPDF ? 'View PDF' : 'View Document'}
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <div className="text-center py-10 text-gray-400 text-sm">
+          <FileCheck className="w-10 h-10 mx-auto mb-3 opacity-30" />
+          No documents uploaded yet
+        </div>
+      )}
+      {application.attachments.length > 6 && (
+        <div className="text-xs text-center text-[#0A3269] font-medium py-2.5 bg-[#0A3269]/5 rounded-xl border border-[#0A3269]/20">
+          +{application.attachments.length - 6} more documents
+        </div>
+      )}
+    </div>
+  </div>
+</div>
 
                 {/* Quick Actions - Premium Big Cards */}
                 <div className="space-y-4">
@@ -2000,7 +2120,6 @@ const filteredStats = useMemo(() => {
           badgeCount={invites.length + rooms.reduce((acc, r) => acc + r.unread, 0)}
         />
 
-
 {/* Premium Mobile Application Details Bottom Sheet - Modern Advanced */}
 <AnimatePresence mode="wait">
   {showMobileDetails && selectedMobileApp && (
@@ -2021,15 +2140,15 @@ const filteredStats = useMemo(() => {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: '100%', opacity: 0 }}
         transition={{ type: 'spring', damping: 30, stiffness: 280, mass: 0.8 }}
-        className="fixed bottom-0 left-0 right-0 bg-gradient-to-b from-white via-white/98 to-gray-50/98 dark:from-[#0A0A0F] dark:via-[#0A0A0F] dark:to-[#0A0A0F] rounded-t-3xl z-50 max-h-[92vh] overflow-y-auto shadow-2xl shadow-black/40"
+        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#0A0A0F] rounded-t-3xl z-50 max-h-[92vh] overflow-y-auto shadow-2xl shadow-black/40"
       >
-        {/* Drag Handle - Premium */}
+        {/* Drag Handle */}
         <div className="sticky top-0 z-20 flex justify-center pt-3 pb-1 bg-transparent">
           <div className="w-16 h-1.5 rounded-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 dark:from-gray-600 dark:via-gray-500 dark:to-gray-600" />
         </div>
 
-        {/* Header - Premium with Glass Effect */}
-        <div className="sticky top-3 z-20 bg-white/80 dark:bg-[#0A0A0F]/80 backdrop-blur-xl px-5 pb-4 border-b border-gray-100/80 dark:border-white/5">
+        {/* Header */}
+        <div className="sticky top-3 z-20 bg-white/95 dark:bg-[#0A0A0F]/95 backdrop-blur-xl px-5 pb-4 border-b border-gray-100/80 dark:border-white/5">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3">
@@ -2037,7 +2156,6 @@ const filteredStats = useMemo(() => {
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0A3269] via-[#1A4A8A] to-[#2A5A9A] flex items-center justify-center shadow-lg shadow-[#0A3269]/30 flex-shrink-0">
                     <FileText className="w-6 h-6 text-white" />
                   </div>
-                  {/* Status Dot */}
                   <div className={cn(
                     "absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-white dark:border-[#0A0A0F]",
                     selectedMobileApp.status === 'approved' ? 'bg-emerald-500' :
@@ -2074,9 +2192,9 @@ const filteredStats = useMemo(() => {
           </div>
         </div>
 
-        {/* Content - Premium Cards with Animations */}
+        {/* Content */}
         <div className="p-5 space-y-6 pb-8">
-          {/* Application Details - Premium Card with Glass */}
+          {/* Application Details */}
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2126,7 +2244,7 @@ const filteredStats = useMemo(() => {
             </div>
           </motion.div>
 
-          {/* Documents - Premium with Expandable */}
+          {/* Documents with Image Preview */}
           {selectedMobileApp.attachments.length > 0 && (
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
@@ -2146,48 +2264,102 @@ const filteredStats = useMemo(() => {
                 </span>
               </div>
               <div className="space-y-2">
-                {selectedMobileApp.attachments.slice(0, 5).map((doc: any, idx: number) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    whileHover={{ scale: 1.01, x: 2 }}
-                    className="flex items-center justify-between bg-white dark:bg-white/5 p-3 rounded-xl border border-gray-100/80 dark:border-white/5 hover:border-[#0A3269]/20 dark:hover:border-[#0A3269]/30 transition-all duration-300 shadow-sm hover:shadow-md"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0A3269]/10 to-[#4A8ABF]/10 dark:from-[#0A3269]/20 dark:to-[#4A8ABF]/20 flex items-center justify-center flex-shrink-0">
-                        <FileText className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                {selectedMobileApp.attachments.slice(0, 5).map((doc: any, idx: number) => {
+                  const fileUrl = doc.url || doc.fileUrl || doc.path || '';
+                  const isImage = fileUrl?.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i) ||
+                                  doc.mimeType?.startsWith('image/');
+                  
+                  return (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      whileHover={{ scale: 1.01, x: 2 }}
+                      className="flex items-center gap-3 bg-white dark:bg-white/5 p-3 rounded-xl border border-gray-100/80 dark:border-white/5 hover:border-[#0A3269]/20 dark:hover:border-[#0A3269]/30 transition-all duration-300 shadow-sm hover:shadow-md"
+                    >
+                      {/* Document Thumbnail Preview */}
+                      <div 
+                        className="relative flex-shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 cursor-pointer"
+                        onClick={() => {
+                          if (fileUrl) {
+                            window.open(fileUrl, '_blank');
+                          }
+                        }}
+                      >
+                        {fileUrl && isImage ? (
+                          <img 
+                            src={fileUrl} 
+                            alt={doc.type || 'Document'}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const parent = e.currentTarget.parentElement;
+                              if (parent) {
+                                const fallback = document.createElement('div');
+                                fallback.className = 'w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700';
+                                fallback.innerHTML = `<svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+                                parent.appendChild(fallback);
+                              }
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A3269]/10 to-[#4A8ABF]/10 dark:from-[#0A3269]/20 dark:to-[#4A8ABF]/20">
+                            <FileText className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                          </div>
+                        )}
+                        
+                        {/* Status Badge on Thumbnail */}
+                        {doc.status && (
+                          <div className="absolute -top-1 -right-1">
+                            <Badge 
+                              className={cn(
+                                'text-[7px] rounded-full px-1.5 py-0.5 border-0 shadow-sm',
+                                doc.status === 'approved' && 'bg-emerald-500 text-white',
+                                doc.status === 'rejected' && 'bg-red-500 text-white',
+                                doc.status === 'pending' && 'bg-amber-500 text-white',
+                                doc.status === 'under_review' && 'bg-blue-500 text-white'
+                              )}
+                            >
+                              {doc.status === 'approved' ? '✓' :
+                               doc.status === 'rejected' ? '✕' :
+                               doc.status === 'pending' ? '⏳' :
+                               doc.status === 'under_review' ? '⟳' :
+                               doc.status?.slice(0, 1).toUpperCase()}
+                            </Badge>
+                          </div>
+                        )}
                       </div>
-                      <div className="min-w-0">
+                      
+                      {/* Document Info */}
+                      <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
                           {doc.type?.replace(/_/g, ' ') || 'Document'}
                         </p>
                         {doc.originalName && (
                           <p className="text-[10px] text-gray-400 dark:text-gray-500 truncate">{doc.originalName}</p>
                         )}
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[9px] text-gray-400 dark:text-gray-500">
+                            {doc.fileSize ? `${(doc.fileSize / 1024).toFixed(0)} KB` : ''}
+                          </span>
+                          {fileUrl && (
+                            <>
+                              <span className="w-px h-2 bg-gray-300 dark:bg-gray-600" />
+                              <button 
+                                className="text-[9px] text-[#0A3269] dark:text-[#4A8ABF] hover:underline flex items-center gap-0.5"
+                                onClick={() => window.open(fileUrl, '_blank')}
+                              >
+                                <Eye className="w-2.5 h-2.5" />
+                                Preview
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <Badge 
-                      className={cn(
-                        'text-[10px] rounded-full px-2.5 py-1 border-0 font-medium flex-shrink-0',
-                        doc.status === 'approved' && 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-                        doc.status === 'rejected' && 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-                        doc.status === 'pending' && 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-                        doc.status === 'under_review' && 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-                        doc.status === 'uploaded' && 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-                        !doc.status && 'bg-gray-100 text-gray-600 dark:bg-white/5 dark:text-gray-400'
-                      )}
-                    >
-                      {doc.status === 'approved' && '✅ Approved'}
-                      {doc.status === 'rejected' && '❌ Rejected'}
-                      {doc.status === 'pending' && '⏳ Pending'}
-                      {doc.status === 'under_review' && '🔄 Under Review'}
-                      {doc.status === 'uploaded' && '📤 Uploaded'}
-                      {!doc.status && '📄 No Status'}
-                    </Badge>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
                 {selectedMobileApp.attachments.length > 5 && (
                   <motion.p 
                     initial={{ opacity: 0 }}
@@ -2201,7 +2373,7 @@ const filteredStats = useMemo(() => {
             </motion.div>
           )}
 
-          {/* Quick Actions - Premium with Glassmorphism */}
+          {/* Quick Actions */}
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2223,12 +2395,12 @@ const filteredStats = useMemo(() => {
             
             <div className="grid grid-cols-2 gap-2.5">
               {[
-                { icon: Upload, label: 'Upload', action: () => handleDocumentUpload(selectedMobileApp._id), color: 'blue', desc: 'Add documents', gradient: 'from-blue-500/10 to-blue-600/5' },
-                { icon: FileText, label: 'Result', action: () => handleResultDocumentUpload(selectedMobileApp._id), color: 'emerald', desc: 'Upload result', gradient: 'from-emerald-500/10 to-emerald-600/5' },
-                { icon: FileCheck, label: 'Review', action: () => handleDocumentReview(selectedMobileApp._id), disabled: !selectedMobileApp.attachments?.length, color: 'purple', desc: 'Review docs', gradient: 'from-purple-500/10 to-purple-600/5' },
-                { icon: Key, label: 'OTP', action: () => handleRequestOTP(selectedMobileApp._id), color: 'amber', desc: 'Request OTP', gradient: 'from-amber-500/10 to-amber-600/5' },
-                { icon: Shield, label: 'Fraud', action: () => handleFraudCheck(selectedMobileApp._id), color: 'red', desc: 'Check fraud', gradient: 'from-red-500/10 to-red-600/5' },
-                { icon: AlertCircle, label: 'Status', action: () => handleStatusUpdateClick(selectedMobileApp._id, selectedMobileApp.status), color: 'blue', desc: 'Update status', gradient: 'from-blue-500/10 to-blue-600/5' },
+                { icon: Upload, label: 'Upload', action: () => handleDocumentUpload(selectedMobileApp._id), color: 'blue', desc: 'Add documents' },
+                { icon: FileText, label: 'Result', action: () => handleResultDocumentUpload(selectedMobileApp._id), color: 'emerald', desc: 'Upload result' },
+                { icon: FileCheck, label: 'Review', action: () => handleDocumentReview(selectedMobileApp._id), disabled: !selectedMobileApp.attachments?.length, color: 'purple', desc: 'Review docs' },
+                { icon: Key, label: 'OTP', action: () => handleRequestOTP(selectedMobileApp._id), color: 'amber', desc: 'Request OTP' },
+                { icon: Shield, label: 'Fraud', action: () => handleFraudCheck(selectedMobileApp._id), color: 'red', desc: 'Check fraud' },
+                { icon: AlertCircle, label: 'Status', action: () => handleStatusUpdateClick(selectedMobileApp._id, selectedMobileApp.status), color: 'blue', desc: 'Update status' },
               ].map((action, idx) => {
                 const colorMap: Record<string, string> = {
                   blue: 'hover:border-[#0A3269]/40 hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/20 hover:text-[#0A3269] dark:hover:text-[#4A8ABF]',
@@ -2246,22 +2418,6 @@ const filteredStats = useMemo(() => {
                   red: 'text-red-500',
                 };
                 
-                const lineColorMap: Record<string, string> = {
-                  blue: 'bg-gradient-to-b from-[#0A3269] to-[#4A8ABF]',
-                  emerald: 'bg-gradient-to-b from-emerald-400 to-emerald-600',
-                  purple: 'bg-gradient-to-b from-purple-400 to-purple-600',
-                  amber: 'bg-gradient-to-b from-amber-400 to-amber-600',
-                  red: 'bg-gradient-to-b from-red-400 to-red-600',
-                };
-                
-                const bgGradientMap: Record<string, string> = {
-                  blue: 'bg-gradient-to-br from-[#0A3269]/5 to-transparent dark:from-[#0A3269]/10',
-                  emerald: 'bg-gradient-to-br from-emerald-50/60 to-transparent dark:from-emerald-900/10',
-                  purple: 'bg-gradient-to-br from-purple-50/60 to-transparent dark:from-purple-900/10',
-                  amber: 'bg-gradient-to-br from-amber-50/60 to-transparent dark:from-amber-900/10',
-                  red: 'bg-gradient-to-br from-red-50/60 to-transparent dark:from-red-900/10',
-                };
-                
                 return (
                   <motion.button
                     key={idx}
@@ -2276,25 +2432,25 @@ const filteredStats = useMemo(() => {
                       'group relative flex items-center gap-2.5 p-3.5 rounded-xl transition-all duration-300 border',
                       'bg-white/90 dark:bg-gray-900/90 border-gray-200/80 dark:border-gray-700/80',
                       colorMap[action.color],
-                      bgGradientMap[action.color],
                       action.disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
                       'pl-4 shadow-sm hover:shadow-lg'
                     )}
                   >
-                    {/* Left Hover Line - Premium Gradient */}
                     <div className={cn(
                       'absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full transition-all duration-300',
-                      lineColorMap[action.color],
+                      colorMap[action.color].includes('[#0A3269]') ? 'bg-gradient-to-b from-[#0A3269] to-[#4A8ABF]' :
+                      colorMap[action.color].includes('emerald') ? 'bg-gradient-to-b from-emerald-400 to-emerald-600' :
+                      colorMap[action.color].includes('purple') ? 'bg-gradient-to-b from-purple-400 to-purple-600' :
+                      colorMap[action.color].includes('amber') ? 'bg-gradient-to-b from-amber-400 to-amber-600' :
+                      'bg-gradient-to-b from-red-400 to-red-600',
                       'opacity-0 group-hover:opacity-100 group-hover:h-10 group-hover:scale-y-110'
                     )} />
                     
-                    {/* Glow Effect on Hover */}
                     <div className={cn(
                       'absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500',
                       'bg-gradient-to-r from-transparent via-white/5 to-transparent'
                     )} />
                     
-                    {/* Icon */}
                     <div className={cn(
                       'flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 relative z-10',
                       'bg-gray-100/80 dark:bg-gray-800/80 group-hover:bg-white/20',
@@ -2307,7 +2463,6 @@ const filteredStats = useMemo(() => {
                       )} />
                     </div>
                     
-                    {/* Label */}
                     <div className="flex-1 text-left min-w-0 relative z-10">
                       <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 block group-hover:text-current transition-colors duration-300 truncate">
                         {action.label}
@@ -2317,7 +2472,6 @@ const filteredStats = useMemo(() => {
                       </span>
                     </div>
                     
-                    {/* Arrow */}
                     <ChevronRight className={cn(
                       'w-3.5 h-3.5 transition-all duration-300 flex-shrink-0 relative z-10',
                       'text-gray-300 dark:text-gray-600',
@@ -2329,7 +2483,7 @@ const filteredStats = useMemo(() => {
             </div>
           </motion.div>
 
-          {/* Footer Action - Close Button with Glass */}
+          {/* Footer Action */}
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

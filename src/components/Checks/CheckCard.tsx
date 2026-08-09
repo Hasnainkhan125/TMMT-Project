@@ -29,11 +29,12 @@ import {
   FileWarning,
   Image,
   FileIcon,
+  Upload,
+  Plus,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { getSocket } from '@/lib/socket';
@@ -564,6 +565,14 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
   const [refreshing, setRefreshing] = useState(false);
   const initialRefreshDone = useRef(false);
 
+  // ── Upload states ────────────────────────────────────────────────────────
+  const [uploading, setUploading] = useState<Record<string, boolean>>({});
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
+  // ── General upload (for Uploaded Documents section) ────────────────────
+  const [uploadingGeneral, setUploadingGeneral] = useState(false);
+  const generalFileInputRef = useRef<HTMLInputElement | null>(null);
+
   // ── Normalise base data ──────────────────────────────────────────────────
   const id = check.id || check._id || '';
   const serviceType = check.serviceType || check.service_type || 'Check';
@@ -628,7 +637,6 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
         const data = await res.json();
         const refreshedCheck = data.data?.check || data.check;
         if (refreshedCheck) {
-          // Update all states with fresh data
           setStatus(refreshedCheck.status || 'pending');
           setComments(refreshedCheck.comments || []);
           setHistory(refreshedCheck.history || refreshedCheck.history_events || []);
@@ -639,7 +647,7 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
           setResultSummary(refreshedCheck.resultSummary || refreshedCheck.result_summary || '');
           setResultStatus(refreshedCheck.resultStatus || refreshedCheck.result_status || '');
           toast.success('Check refreshed successfully');
-          onRefresh?.(); // notify parent
+          onRefresh?.();
         }
       } else {
         toast.error('Failed to refresh check');
@@ -652,14 +660,88 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
     }
   };
 
-  // ── Auto-refresh on expand to fetch history ────────────────────────────
+  // ── Upload handler for requested documents ──────────────────────────────
+  const handleUploadDocument = async (docLabel: string, file: File) => {
+    const uploadKey = docLabel;
+    if (uploading[uploadKey]) return;
+
+    setUploading(prev => ({ ...prev, [uploadKey]: true }));
+
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
+      const token = localStorage.getItem('authToken');
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('documentLabel', docLabel);
+
+      const res = await fetch(`${apiBase}/api/v1/checks/${id}/documents`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Upload failed');
+      }
+
+      toast.success(`Document "${docLabel}" uploaded successfully`);
+      await handleRefresh();
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast.error(error.message || 'Failed to upload document');
+    } finally {
+      setUploading(prev => ({ ...prev, [uploadKey]: false }));
+      const input = fileInputRefs.current[docLabel];
+      if (input) input.value = '';
+    }
+  };
+
+  // ── General upload handler ──────────────────────────────────────────────
+  const handleUploadGeneral = async (file: File) => {
+    if (uploadingGeneral) return;
+    setUploadingGeneral(true);
+
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
+      const token = localStorage.getItem('authToken');
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch(`${apiBase}/api/v1/checks/${id}/documents`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Upload failed');
+      }
+
+      toast.success('Document uploaded successfully');
+      await handleRefresh();
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast.error(error.message || 'Failed to upload document');
+    } finally {
+      setUploadingGeneral(false);
+      if (generalFileInputRef.current) generalFileInputRef.current.value = '';
+    }
+  };
+
+  // ── Auto-refresh on expand ──────────────────────────────────────────────
   useEffect(() => {
     if (expanded && !initialRefreshDone.current) {
-      // Only fetch once per expansion to avoid loops
       initialRefreshDone.current = true;
       handleRefresh();
     }
-    // Reset the flag when collapsed so it can fetch again next time
     if (!expanded) {
       initialRefreshDone.current = false;
     }
@@ -704,10 +786,8 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
       toast.success('New results available');
     };
 
-    // Generic check update (for history and other changes)
     const handleCheckUpdated = (data: any) => {
       if (data.checkId !== id && data._id !== id) return;
-      // If the payload contains the full check object, update everything
       if (data.check) {
         const updated = data.check;
         setStatus(updated.status || 'pending');
@@ -721,7 +801,6 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
         setResultStatus(updated.resultStatus || updated.result_status || '');
         toast.info('Check updated');
       } else {
-        // Otherwise, just refresh to be safe
         handleRefresh();
       }
     };
@@ -1115,13 +1194,18 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
                           {requestedDocuments.map((doc, idx) => {
                             const isPending = doc.status === 'pending';
                             const isFulfilled = doc.status === 'fulfilled' || doc.fulfilledAt;
+                            const isUploading = uploading[doc.label] || false;
+
                             return (
-                              <div key={idx} className={cn(
-                                "flex items-center justify-between p-2 sm:p-2.5 rounded-xl border",
-                                isPending ? "bg-red-50/80 dark:bg-red-950/20 border-red-200/50 dark:border-red-800/30" :
-                                isFulfilled ? "bg-emerald-50/80 dark:bg-emerald-950/20 border-emerald-200/50 dark:border-emerald-800/30" :
-                                "bg-gray-50/80 dark:bg-gray-800/20 border-gray-200/50 dark:border-gray-700/30"
-                              )}>
+                              <div
+                                key={idx}
+                                className={cn(
+                                  "flex items-center justify-between p-2 sm:p-2.5 rounded-xl border",
+                                  isPending ? "bg-red-50/80 dark:bg-red-950/20 border-red-200/50 dark:border-red-800/30" :
+                                  isFulfilled ? "bg-emerald-50/80 dark:bg-emerald-950/20 border-emerald-200/50 dark:border-emerald-800/30" :
+                                  "bg-gray-50/80 dark:bg-gray-800/20 border-gray-200/50 dark:border-gray-700/30"
+                                )}
+                              >
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-1.5">
                                     <FileText className={cn(
@@ -1141,14 +1225,56 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
                                     {isPending ? '⏳ Pending' : '✅ Fulfilled'}
                                   </p>
                                 </div>
-                                <Badge className={cn(
-                                  "text-[8px] sm:text-[10px] shrink-0 ml-2",
-                                  isPending ? "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30" :
-                                  isFulfilled ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30" :
-                                  "bg-gray-500/15 text-gray-600 dark:text-gray-400 border-gray-500/30"
-                                )}>
-                                  {isPending ? 'Pending' : 'Fulfilled'}
-                                </Badge>
+
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                  {isPending && (
+                                    <>
+                                      <input
+                                        type="file"
+                                        ref={(el) => {
+                                          fileInputRefs.current[doc.label] = el;
+                                        }}
+                                        className="hidden"
+                                        onChange={(e) => {
+                                          const file = e.target.files?.[0];
+                                          if (file) {
+                                            handleUploadDocument(doc.label, file);
+                                          }
+                                        }}
+                                        disabled={isUploading}
+                                      />
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className={cn(
+                                          "h-6 w-6 sm:h-7 sm:w-7 p-0 rounded-lg",
+                                          isUploading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-100 dark:hover:bg-blue-900/30"
+                                        )}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          fileInputRefs.current[doc.label]?.click();
+                                        }}
+                                        disabled={isUploading}
+                                        title="Upload document"
+                                      >
+                                        {isUploading ? (
+                                          <div className="h-3 w-3 sm:h-3.5 sm:w-3.5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                          <Upload className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-blue-500 dark:text-blue-400" />
+                                        )}
+                                      </Button>
+                                    </>
+                                  )}
+
+                                  <Badge className={cn(
+                                    "text-[8px] sm:text-[10px]",
+                                    isPending ? "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30" :
+                                    isFulfilled ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30" :
+                                    "bg-gray-500/15 text-gray-600 dark:text-gray-400 border-gray-500/30"
+                                  )}>
+                                    {isPending ? 'Pending' : 'Fulfilled'}
+                                  </Badge>
+                                </div>
                               </div>
                             );
                           })}
@@ -1267,7 +1393,7 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
                       </div>
                     )}
 
-                    {/* ─── HISTORY (now populated from fetched data) ───────────────── */}
+                    {/* ─── HISTORY ──────────────────────────────────────────────────── */}
                     {history.length > 0 && (
                       <div className="space-y-2 sm:space-y-3">
                         <div className="flex items-center justify-between">
@@ -1325,15 +1451,48 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
                       </div>
                     )}
 
-                    {/* ─── Uploaded Documents ──────────────────────────────────────── */}
-                    {documents.length > 0 && (
-                      <div className="space-y-2 sm:space-y-3">
-                        <div className="flex items-center justify-between">
-                          <p className="text-[8px] sm:text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
-                            <FileText className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                            Uploaded Documents ({documents.length})
-                          </p>
-                        </div>
+                    {/* ─── UPLOADED DOCUMENTS (always visible) ────────────────────── */}
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-[8px] sm:text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
+                          <FileText className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                          Uploaded Documents ({documents.length})
+                        </p>
+                        {/* Add Document button always visible */}
+                        <>
+                          <input
+                            type="file"
+                            ref={generalFileInputRef}
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                handleUploadGeneral(file);
+                              }
+                            }}
+                            disabled={uploadingGeneral}
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-[10px] border-blue-300 text-blue-600 hover:bg-blue-50 dark:border-blue-800 dark:text-blue-400 dark:hover:bg-blue-950/20 transition-all duration-300"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              generalFileInputRef.current?.click();
+                            }}
+                            disabled={uploadingGeneral}
+                          >
+                            {uploadingGeneral ? (
+                              <div className="h-3 w-3 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mr-1" />
+                            ) : (
+                              <Plus className="h-3 w-3 mr-1" />
+                            )}
+                            Add Document
+                          </Button>
+                        </>
+                      </div>
+
+                      {documents.length > 0 ? (
                         <div className="space-y-1.5 sm:space-y-2">
                           {documents.map((doc, index) => {
                             const fileUrl = buildDocumentUrl(id, doc.filename, doc.path);
@@ -1383,8 +1542,14 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
                             );
                           })}
                         </div>
-                      </div>
-                    )}
+                      ) : (
+                        <div className="p-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-center">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            No documents uploaded yet. Click "Add Document" to upload.
+                          </p>
+                        </div>
+                      )}
+                    </div>
 
                     {/* ─── Result ──────────────────────────────────────────────────── */}
                     {isCompleted && hasResult && (

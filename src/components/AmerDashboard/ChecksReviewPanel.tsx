@@ -29,6 +29,18 @@ import {
   Eye,
   Image as ImageIcon,
   FileWarning,
+  MoreVertical,
+  Link2,
+  ExternalLink,
+  Copy,
+  ArrowUpRight,
+  Sparkles,
+  Layers,
+  Activity,
+  Users,
+  FolderOpen,
+  MessageCircle,
+  Hash,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -75,6 +87,13 @@ interface Check {
   amount?: number
   identifiers?: Record<string, string>
   attachments?: Array<{ originalName?: string; filename?: string; path?: string }>
+  documents?: Array<{
+    filename: string
+    originalName?: string
+    path?: string
+    mimeType?: string
+    size?: number
+  }>
   requestedDocuments?: Array<{ label: string; description: string; fulfilledAt?: string }>
   resultDocuments?: Array<{ filename: string; originalName?: string }>
   resultSummary?: string
@@ -85,20 +104,84 @@ interface Check {
 
 // ─── Status helpers ────────────────────────────────────────────────────────────
 
-const STATUS_MAP: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  pending: { label: 'Pending', color: 'text-amber-700', bg: 'bg-amber-100 border-amber-300', icon: Clock },
-  submitted: { label: 'Submitted', color: 'text-blue-700', bg: 'bg-blue-100 border-blue-300', icon: Clock },
-  processing: { label: 'Processing', color: 'text-indigo-700', bg: 'bg-indigo-100 border-indigo-300', icon: Clock },
-  reviewing: { label: 'Under Review', color: 'text-orange-700', bg: 'bg-orange-100 border-orange-300', icon: AlertCircle },
-  completed: { label: 'Completed', color: 'text-emerald-700', bg: 'bg-emerald-100 border-emerald-300', icon: CheckCircle },
-  requires_documents: { label: 'Docs Required', color: 'text-rose-700', bg: 'bg-rose-100 border-rose-300', icon: AlertCircle },
-  cancelled: { label: 'Cancelled', color: 'text-gray-600', bg: 'bg-gray-100 border-gray-300', icon: X },
-  failed: { label: 'Failed', color: 'text-red-700', bg: 'bg-red-100 border-red-300', icon: AlertCircle },
-  draft: { label: 'Draft', color: 'text-slate-500', bg: 'bg-slate-100 border-slate-300', icon: FileText },
+const STATUS_MAP: Record<string, { label: string; color: string; bg: string; icon: React.ElementType; glow: string }> = {
+  pending: { 
+    label: 'Pending', 
+    color: 'text-amber-600', 
+    bg: 'bg-amber-50 border-amber-200', 
+    icon: Clock,
+    glow: 'shadow-amber-500/20'
+  },
+  submitted: { 
+    label: 'Submitted', 
+    color: 'text-blue-600', 
+    bg: 'bg-blue-50 border-blue-200', 
+    icon: Clock,
+    glow: 'shadow-blue-500/20'
+  },
+  processing: { 
+    label: 'Processing', 
+    color: 'text-indigo-600', 
+    bg: 'bg-indigo-50 border-indigo-200', 
+    icon: Clock,
+    glow: 'shadow-indigo-500/20'
+  },
+  reviewing: { 
+    label: 'Under Review', 
+    color: 'text-orange-600', 
+    bg: 'bg-orange-50 border-orange-200', 
+    icon: AlertCircle,
+    glow: 'shadow-orange-500/20'
+  },
+  completed: { 
+    label: 'Completed', 
+    color: 'text-emerald-600', 
+    bg: 'bg-emerald-50 border-emerald-200', 
+    icon: CheckCircle,
+    glow: 'shadow-emerald-500/20'
+  },
+  requires_documents: { 
+    label: 'Docs Required', 
+    color: 'text-rose-600', 
+    bg: 'bg-rose-50 border-rose-200', 
+    icon: AlertCircle,
+    glow: 'shadow-rose-500/20'
+  },
+  cancelled: { 
+    label: 'Cancelled', 
+    color: 'text-slate-600', 
+    bg: 'bg-slate-50 border-slate-200', 
+    icon: X,
+    glow: 'shadow-slate-500/20'
+  },
+  failed: { 
+    label: 'Failed', 
+    color: 'text-red-600', 
+    bg: 'bg-red-50 border-red-200', 
+    icon: AlertCircle,
+    glow: 'shadow-red-500/20'
+  },
+  draft: { 
+    label: 'Draft', 
+    color: 'text-slate-500', 
+    bg: 'bg-slate-50 border-slate-200', 
+    icon: FileText,
+    glow: 'shadow-slate-500/20'
+  },
 }
 
 function getStatus(key: string) {
   return STATUS_MAP[key] ?? STATUS_MAP.submitted
+}
+
+// ─── Helper: Get document URL ──────────────────────────────────────────────
+function getDocumentUrl(checkId: string, doc: { filename: string; path?: string }): string {
+  if (doc.path) {
+    if (doc.path.startsWith('http')) return doc.path
+    if (doc.path.startsWith('/')) return `${apiBase}${doc.path}`
+    return `${apiBase}/${doc.path}`
+  }
+  return `${apiBase}/uploads/checks/${doc.filename}`
 }
 
 // ─── Document Preview Modal ──────────────────────────────────────────────────
@@ -202,30 +285,33 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4"
         onClick={onClose}
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="relative max-w-4xl w-full max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-2xl"
+          initial={{ scale: 0.9, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.9, opacity: 0, y: 20 }}
+          className="relative max-w-4xl w-full max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-white/20 dark:border-slate-700/50"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between p-4 border-b border-slate-200/60 dark:border-slate-800/60 bg-gradient-to-r from-slate-50/50 to-white dark:from-slate-900 dark:to-slate-800/50">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25">
                 {isImage ? <ImageIcon className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
               </div>
               <div className="min-w-0">
-                <p className="font-medium text-gray-900 dark:text-white truncate">{filename}</p>
+                <p className="font-medium text-slate-900 dark:text-white truncate">{filename}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {isImage ? 'Image file' : 'Document file'}
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-9 w-9 p-0 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="h-9 w-9 p-0 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                 onClick={handleDownload}
                 title="Download"
               >
@@ -234,7 +320,7 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-9 w-9 p-0 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="h-9 w-9 p-0 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                 onClick={onClose}
               >
                 <X className="h-4 w-4" />
@@ -242,23 +328,23 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
             </div>
           </div>
 
-          <div className="p-4 overflow-auto max-h-[calc(90vh-80px)]">
+          <div className="p-4 overflow-auto max-h-[calc(90vh-80px)] bg-slate-50/50 dark:bg-slate-900/50">
             {loading && (
               <div className="flex items-center justify-center h-64">
-                <div className="relative h-12 w-12">
-                  <div className="absolute inset-0 rounded-full border-4 border-gray-200 dark:border-gray-700"></div>
-                  <div className="absolute inset-0 rounded-full border-4 border-t-primary animate-spin"></div>
+                <div className="relative h-16 w-16">
+                  <div className="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-700"></div>
+                  <div className="absolute inset-0 rounded-full border-4 border-t-blue-600 animate-spin"></div>
                 </div>
               </div>
             )}
 
             {error && !loading && (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="p-6 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
-                  <AlertCircle className="h-12 w-12 text-red-500" />
+                <div className="p-6 rounded-full bg-rose-100 dark:bg-rose-900/30 mb-4">
+                  <AlertCircle className="h-12 w-12 text-rose-500" />
                 </div>
-                <p className="text-red-600 dark:text-red-400 font-medium">Failed to load preview</p>
-                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{error}</p>
+                <p className="text-rose-600 dark:text-rose-400 font-medium">Failed to load preview</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{error}</p>
                 <div className="flex gap-3 mt-4">
                   <Button
                     variant="outline"
@@ -266,13 +352,13 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
                     onClick={() => window.open(url, '_blank')}
                     className="gap-2"
                   >
-                    <ExternalLinkIcon className="h-4 w-4" />
+                    <ExternalLink className="h-4 w-4" />
                     Open in New Tab
                   </Button>
                   <Button
                     size="sm"
                     onClick={handleDownload}
-                    className="gap-2 bg-primary text-white hover:bg-primary/90"
+                    className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
                   >
                     <Download className="h-4 w-4" />
                     Download
@@ -282,26 +368,28 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
             )}
 
             {isImage && imageUrl && !loading && !error && (
-              <img
-                src={imageUrl}
-                alt={filename}
-                className="max-w-full max-h-[70vh] object-contain mx-auto rounded-lg"
-                onError={() => {
-                  setError('Failed to render image')
-                  setLoading(false)
-                }}
-              />
+              <div className="flex items-center justify-center min-h-[200px]">
+                <img
+                  src={imageUrl}
+                  alt={filename}
+                  className="max-w-full max-h-[70vh] object-contain rounded-xl shadow-lg"
+                  onError={() => {
+                    setError('Failed to render image')
+                    setLoading(false)
+                  }}
+                />
+              </div>
             )}
 
             {!isImage && !loading && !error && (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="p-6 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                  <FileText className="h-16 w-16 text-gray-400 dark:text-gray-600" />
+                <div className="p-8 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 mb-4 shadow-inner">
+                  <FileText className="h-20 w-20 text-slate-400 dark:text-slate-600" />
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">
                   This file type cannot be previewed directly.
                 </p>
-                <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
+                <p className="text-slate-400 dark:text-slate-500 text-xs mt-1">
                   Please download to view the file.
                 </p>
                 <div className="flex gap-3 mt-4">
@@ -311,13 +399,13 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
                     onClick={() => window.open(url, '_blank')}
                     className="gap-2"
                   >
-                    <ExternalLinkIcon className="h-4 w-4" />
+                    <ExternalLink className="h-4 w-4" />
                     Open in New Tab
                   </Button>
                   <Button
                     size="sm"
                     onClick={handleDownload}
-                    className="gap-2 bg-primary text-white hover:bg-primary/90"
+                    className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
                   >
                     <Download className="h-4 w-4" />
                     Download
@@ -329,27 +417,6 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
         </motion.div>
       </motion.div>
     </AnimatePresence>
-  )
-}
-
-function ExternalLinkIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="10" y1="14" x2="21" y2="3" />
-    </svg>
   )
 }
 
@@ -658,74 +725,101 @@ const ChecksReviewPanel: React.FC = () => {
     )
   })
 
+  // Stats
+  const totalChecks = checks.length
+  const pendingChecks = checks.filter(c => c.status === 'pending').length
+  const completedChecks = checks.filter(c => c.status === 'completed').length
+  const requiresDocsChecks = checks.filter(c => c.status === 'requires_documents').length
+
   return (
-    <div className="">
-{/* ─── Modern Header ──────────────────────────────────────────────── */}
-<Card className="border-0 bg-gradient-to-br from-white to-slate-50/80 dark:from-slate-900 dark:to-slate-800/80 shadow-sm backdrop-blur-sm">
-  <CardContent className="p-4 sm:p-6">
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      {/* Left side – Icon + Title + Description */}
-      <div className="flex items-center gap-3">
-        <div className="rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 p-2 text-white ">
-          <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-5" />
-        </div>
-        <div>
-               <h4 className="text-base sm:text-lg md:text-2xl">Immigration Status Checks</h4>
-
-          <p className="text-xs text-slate-500 dark:text-slate-400 sm:text-sm">
-            Review and process submitted status check inquiries
-          </p>
-        </div>
+    <div className="space-y-6">
+   {/* ─── Modern Header with Stats ──────────────────────────────────────── */}
+<div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-50 dark:from-slate-900 dark:via-indigo-950 dark:to-slate-900 p-4 sm:p-6 md:p-8 border border-slate-200/50 dark:border-slate-700/30">
+  
+  <div className="relative z-10 flex flex-col gap-4 md:gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <div className="flex items-center gap-3 sm:gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-2.5 sm:p-3 ">
+        <ShieldCheck className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
       </div>
-
-      {/* Right side – Search + Filter + Refresh */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-        <div className="relative flex-1 min-w-[180px] sm:flex-none">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <Input
-            placeholder="Search checks..."
-            className="h-9 w-full pl-9 border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white sm:w-48 md:w-60"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="h-9 w-full border-slate-200 bg-white text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white sm:w-44">
-            <Filter className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="processing">Processing</SelectItem>
-            <SelectItem value="reviewing">Under Review</SelectItem>
-            <SelectItem value="requires_documents">Docs Required</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-            <SelectItem value="failed">Failed</SelectItem>
-            <SelectItem value="cancelled">Cancelled</SelectItem>
-            <SelectItem value="submitted">Submitted</SelectItem>
-            <SelectItem value="draft">Draft</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={fetchChecks}
-          disabled={loading}
-          className="h-9 gap-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          {loading ? 'Loading...' : 'Refresh'}
-        </Button>
+      <div className="min-w-0">
+        <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5 sm:gap-2">
+          <span className="truncate">Immigration Status Checks</span>
+        </h4>
+        <p className="text-[9px] sm:text-sm text-slate-600 dark:text-slate-300 truncate">
+          Review and process submitted status check inquiries
+        </p>
       </div>
     </div>
-  </CardContent>
-</Card>
-      {/* ─── Error State ───────────────────────────────────────────────────── */}
+
+    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-2 sm:gap-4 bg-white/70 dark:bg-white/5 backdrop-blur-sm rounded-2xl px-3 py-1.5 sm:px-4 sm:py-2 border border-slate-200/50 dark:border-white/10 shadow-sm dark:shadow-none overflow-x-auto">
+        <div className="text-center shrink-0">
+          <p className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">{totalChecks}</p>
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Total</p>
+        </div>
+        <div className="w-px h-6 sm:h-8 bg-slate-200/50 dark:bg-white/10 shrink-0"></div>
+        <div className="text-center shrink-0">
+          <p className="text-lg sm:text-xl font-bold text-amber-600 dark:text-amber-400">{pendingChecks}</p>
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Pending</p>
+        </div>
+        <div className="w-px h-6 sm:h-8 bg-slate-200/50 dark:bg-white/10 shrink-0"></div>
+        <div className="text-center shrink-0">
+          <p className="text-lg sm:text-xl font-bold text-emerald-600 dark:text-emerald-400">{completedChecks}</p>
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Complete</p>
+        </div>
+        <div className="w-px h-6 sm:h-8 bg-slate-200/50 dark:bg-white/10 shrink-0"></div>
+        <div className="text-center shrink-0">
+          <p className="text-lg sm:text-xl font-bold text-rose-600 dark:text-rose-400">{requiresDocsChecks}</p>
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Docs Needed</p>
+        </div>
+      </div>
+
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={fetchChecks}
+        disabled={loading}
+        className="border-slate-200 dark:border-white/20 bg-white/70 dark:bg-white/5 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white backdrop-blur-sm shrink-0 h-9 sm:h-10 px-3 sm:px-4"
+      >
+        <RefreshCw className={`h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 ${loading ? 'animate-spin' : ''}`} />
+        <span className="text-xs sm:text-sm">{loading ? 'Loading...' : 'Refresh'}</span>
+      </Button>
+    </div>
+  </div>
+
+  {/* Search and Filter */}
+  <div className="relative z-10 mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:gap-3">
+    <div className="relative flex-1">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 dark:text-slate-500" />
+      <Input
+        placeholder="Search by ID, service, or email..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="pl-9 sm:pl-10 h-9 sm:h-10 text-sm bg-white/70 dark:bg-white/10 border-slate-200 dark:border-white/20 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-blue-400 focus:ring-blue-400/20 backdrop-blur-sm"
+      />
+    </div>
+    <Select value={statusFilter} onValueChange={setStatusFilter}>
+      <SelectTrigger className="w-full sm:w-44 md:w-48 h-9 sm:h-10 bg-white/70 dark:bg-white/10 border-slate-200 dark:border-white/20 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-blue-400 focus:ring-blue-400/20 backdrop-blur-sm text-sm">
+        <Filter className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 dark:text-slate-500" />
+        <SelectValue placeholder="Filter by status" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">All Statuses</SelectItem>
+        <SelectItem value="pending">Pending</SelectItem>
+        <SelectItem value="processing">Processing</SelectItem>
+        <SelectItem value="reviewing">Under Review</SelectItem>
+        <SelectItem value="requires_documents">Docs Required</SelectItem>
+        <SelectItem value="completed">Completed</SelectItem>
+        <SelectItem value="failed">Failed</SelectItem>
+        <SelectItem value="cancelled">Cancelled</SelectItem>
+        <SelectItem value="submitted">Submitted</SelectItem>
+        <SelectItem value="draft">Draft</SelectItem>
+      </SelectContent>
+    </Select>
+  </div>
+</div>      {/* ─── Error State ───────────────────────────────────────────────────── */}
       {error && (
-        <Card className="border-rose-200 bg-rose-50 dark:border-rose-800 dark:bg-rose-950/50">
+        <Card className="border-rose-200 bg-rose-50/80 backdrop-blur-sm dark:border-rose-800 dark:bg-rose-950/50">
           <CardContent className="py-8 text-center">
             <AlertCircle className="mx-auto mb-3 h-10 w-10 text-rose-500" />
             <p className="text-lg font-semibold text-rose-700 dark:text-rose-400">Failed to load checks</p>
@@ -745,7 +839,7 @@ const ChecksReviewPanel: React.FC = () => {
 
       {/* ─── Server Unavailable ────────────────────────────────────────────── */}
       {serverAvailable === false && !error && (
-        <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/50">
+        <Card className="border-amber-200 bg-amber-50/80 backdrop-blur-sm dark:border-amber-800 dark:bg-amber-950/50">
           <CardContent className="py-8 text-center">
             <AlertCircle className="mx-auto mb-3 h-10 w-10 text-amber-500" />
             <p className="text-lg font-semibold text-amber-700 dark:text-amber-400">Server Unavailable</p>
@@ -768,16 +862,18 @@ const ChecksReviewPanel: React.FC = () => {
       {/* ─── Checks List ───────────────────────────────────────────────────── */}
       {loading ? (
         <div className="py-20 text-center">
-          <div className="relative mx-auto h-12 w-12">
+          <div className="relative mx-auto h-16 w-16">
             <div className="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-700"></div>
             <div className="absolute inset-0 rounded-full animate-spin border-4 border-t-blue-600"></div>
           </div>
           <p className="mt-4 text-sm font-medium text-slate-500 dark:text-slate-400">Loading checks…</p>
         </div>
       ) : filteredChecks.length === 0 ? (
-        <Card className="border-2 border-dashed border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
-          <CardContent className="py-16 text-center">
-            <ShieldCheck className="mx-auto mb-4 h-14 w-14 text-slate-300 dark:text-slate-600" />
+        <Card className="border-2 border-dashed border-slate-200 bg-white/50 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/50">
+          <CardContent className="py-20 text-center">
+            <div className="mx-auto mb-4 w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center">
+              <ShieldCheck className="h-10 w-10 text-slate-400 dark:text-slate-600" />
+            </div>
             <p className="text-lg font-semibold text-slate-600 dark:text-slate-400">No checks found</p>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-500">
               {statusFilter !== 'all' ? 'Try changing the status filter.' : 'No submissions yet.'}
@@ -791,7 +887,11 @@ const ChecksReviewPanel: React.FC = () => {
             const StatusIcon = s.icon
             const isExpanded = expandedId === check._id
             const isActing = actionLoading[check._id] || false
+
             const attachCount = check.attachments?.length || 0
+            const docCount = check.documents?.length || 0
+            const totalFiles = attachCount + docCount
+
             const checkRequestedDocs = check.requestedDocuments || []
             const pendingDocs = checkRequestedDocs.filter(d => !d.fulfilledAt).length || 0
             const fulfilledDocs = checkRequestedDocs.filter(d => d.fulfilledAt).length || 0
@@ -805,73 +905,74 @@ const ChecksReviewPanel: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card 
+                <Card
                   className={cn(
-                    "border bg-white transition-all duration-300 dark:bg-slate-900",
-                    isExpanded 
-                      ? "border-blue-300 shadow-md dark:border-blue-700" 
-                      : "border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600"
+                    "border transition-all duration-300 bg-white/90 backdrop-blur-sm dark:bg-slate-900/90",
+                    isExpanded
+                      ? "border-blue-400 shadow-xl shadow-blue-500/10 dark:border-blue-600"
+                      : "border-slate-200/70 hover:border-slate-300 dark:border-slate-700/70 dark:hover:border-slate-600"
                   )}
                 >
-                  <CardContent className="p-3 sm:p-5">
+                  <CardContent className="p-4 sm:p-6">
                     {/* ─── Header ──────────────────────────────────────────── */}
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
-                        <div className={cn("mt-0.5 rounded-xl border p-2", s.bg)}>
-                          <StatusIcon className={cn("h-4 w-4 sm:h-5 sm:w-5", s.color)} />
+                        <div className={cn("mt-0.5 rounded-xl p-2.5 shadow-sm", s.bg)}>
+                          <StatusIcon className={cn("h-5 w-5 sm:h-5 sm:w-5", s.color)} />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                            <p className="text-sm font-semibold text-slate-900 dark:text-white sm:text-base">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="text-base font-semibold text-slate-900 dark:text-white">
                               {check?.serviceType || 'Check'}
                             </p>
-                            <Badge variant="outline" className="bg-slate-50 font-mono text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-400">
-                              #{check?._id?.slice(-6)?.toUpperCase()}
-                            </Badge>
-                            <Badge className={cn("border text-xs font-medium", s.color, s.bg)}>
+                            <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
+                              <Hash className="h-3 w-3" />
+                              {check?._id?.slice(-6)?.toUpperCase()}
+                            </div>
+                            <Badge className={cn("border text-xs font-medium px-3 py-1", s.color, s.bg)}>
                               {s.label}
                             </Badge>
                             {pendingDocs > 0 && (
-                              <Badge className="border-rose-200 bg-rose-100 text-rose-700 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-400">
-                                <FileWarning className="mr-1 h-3 w-3" />
+                              <Badge className="border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-400 gap-1.5 px-3 py-1">
+                                <FileWarning className="h-3 w-3" />
                                 {pendingDocs} pending
                               </Badge>
                             )}
                             {fulfilledDocs > 0 && (
-                              <Badge className="border-emerald-200 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-400">
-                                <Check className="mr-1 h-3 w-3" />
+                              <Badge className="border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-400 gap-1.5 px-3 py-1">
+                                <Check className="h-3 w-3" />
                                 {fulfilledDocs} fulfilled
                               </Badge>
                             )}
                             {check.resultDocuments && check.resultDocuments.length > 0 && (
-                              <Badge className="border-emerald-200 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-400">
-                                <FileCheck className="mr-1 h-3 w-3" />
+                              <Badge className="border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-400 gap-1.5 px-3 py-1">
+                                <FileCheck className="h-3 w-3" />
                                 Result uploaded
                               </Badge>
                             )}
                           </div>
-                          <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 sm:gap-3">
-                            <span className="flex items-center gap-1">
-                              <User className="h-3 w-3" />
+                          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                            <span className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-full">
+                              <User className="h-3 w-3 text-slate-400" />
                               {userEmail(check)}
                             </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
+                            <span className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-full">
+                              <Calendar className="h-3 w-3 text-slate-400" />
                               {new Date(check?.createdAt).toLocaleDateString()}
                             </span>
-                            <span className="flex items-center gap-1">
-                              <DollarSign className="h-3 w-3" />
+                            <span className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-full">
+                              <DollarSign className="h-3 w-3 text-slate-400" />
                               {check?.isFreeService ? 'Free' : `AED ${check?.amount ?? 0}`}
                             </span>
-                            {attachCount > 0 && (
-                              <span className="flex items-center gap-1">
-                                <Paperclip className="h-3 w-3" />
-                                {attachCount} attachment{attachCount > 1 ? 's' : ''}
+                            {totalFiles > 0 && (
+                              <span className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-full">
+                                <Paperclip className="h-3 w-3 text-slate-400" />
+                                {totalFiles} attachment{totalFiles > 1 ? 's' : ''}
                               </span>
                             )}
                             {checkComments.length > 0 && (
-                              <span className="flex items-center gap-1">
-                                <MessageSquare className="h-3 w-3 text-blue-500" />
+                              <span className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/30 px-2.5 py-1 rounded-full text-blue-600 dark:text-blue-400">
+                                <MessageCircle className="h-3 w-3" />
                                 {checkComments.length}
                               </span>
                             )}
@@ -882,7 +983,7 @@ const ChecksReviewPanel: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 shrink-0 rounded-full p-0 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        className="h-8 w-8 shrink-0 rounded-xl p-0 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                         onClick={() => setExpandedId(isExpanded ? null : check?._id)}
                       >
                         {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -900,24 +1001,27 @@ const ChecksReviewPanel: React.FC = () => {
                           transition={{ duration: 0.3, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="mt-4 space-y-6 border-t border-slate-200 pt-4 dark:border-slate-700 sm:mt-5 sm:pt-5">
+                          <div className="mt-5 space-y-6 border-t border-slate-200/60 dark:border-slate-700/60 pt-5">
                             {/* Identifiers */}
                             {check?.identifiers && Object.keys(check?.identifiers).length > 0 && (
                               <section>
-                                <h4 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                  <FileText className="h-4 w-4" /> Identifiers
+                                <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                  <div className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800">
+                                    <FileText className="h-3.5 w-3.5" />
+                                  </div>
+                                  Identifiers
                                 </h4>
                                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                                   {Object.entries(check?.identifiers).map(([k, v]) => {
                                     if (typeof v === 'object') {
                                       return (
-                                        <div key={k} className="rounded-lg bg-slate-100 px-3 py-2 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                        <div key={k} className="rounded-xl bg-slate-50 dark:bg-slate-800/50 px-4 py-3 text-xs text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50">
                                           <p className="font-medium break-all">{JSON.stringify(v) || '—'}</p>
                                         </div>
                                       )
                                     }
                                     return (
-                                      <div key={k} className="rounded-lg bg-slate-100 px-3 py-2 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                      <div key={k} className="rounded-xl bg-slate-50 dark:bg-slate-800/50 px-4 py-3 text-xs text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50">
                                         <p className="font-medium break-all">{v?.toString() || '—'}</p>
                                       </div>
                                     )
@@ -926,179 +1030,275 @@ const ChecksReviewPanel: React.FC = () => {
                               </section>
                             )}
 
-                            {/* ─── REQUESTED DOCUMENTS ─────────────────────────────── */}
-                            <section>
-                              <h4 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                <FileWarning className="h-4 w-4 text-rose-500" /> 
-                                Requested Documents
-                                {checkRequestedDocs.length > 0 && (
-                                  <span className="text-[10px] font-normal text-slate-400 dark:text-slate-500">
-                                    ({pendingDocs} pending, {fulfilledDocs} fulfilled)
-                                  </span>
-                                )}
-                              </h4>
-                              
-                              {checkRequestedDocs.length > 0 ? (
-                                <div className="mb-3 space-y-2">
-                                  {checkRequestedDocs.map((doc, idx) => {
-                                    const isFulfilled = !!doc.fulfilledAt
-                                    return (
-                                      <div 
-                                        key={idx} 
-                                        className={cn(
-                                          "flex flex-col gap-2 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between",
-                                          isFulfilled 
-                                            ? "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800" 
-                                            : "bg-rose-50 border-rose-200 dark:bg-rose-950/20 dark:border-rose-800"
-                                        )}
-                                      >
-                                        <div className="flex-1 min-w-0">
-                                          <div className="flex items-center gap-2">
-                                            <FileText className={cn(
-                                              "h-4 w-4",
-                                              isFulfilled ? "text-emerald-500" : "text-rose-500"
-                                            )} />
-                                            <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                              {doc.label}
-                                            </p>
-                                          </div>
-                                          {doc.description && (
-                                            <p className="text-xs text-slate-500 dark:text-slate-400 ml-6">
-                                              {doc.description}
-                                            </p>
-                                          )}
-                                          <p className="text-[10px] text-slate-400 dark:text-slate-500 ml-6 mt-0.5">
-                                            {isFulfilled ? `✅ Fulfilled` : `⏳ Pending`}
-                                          </p>
-                                        </div>
-                                        <Badge className={cn(
-                                          "text-xs shrink-0",
-                                          isFulfilled 
-                                            ? "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/30 dark:text-emerald-400" 
-                                            : "bg-rose-100 text-rose-700 border-rose-300 dark:bg-rose-900/30 dark:text-rose-400"
-                                        )}>
-                                          {isFulfilled ? 'Fulfilled' : 'Pending'}
-                                        </Badge>
-                                      </div>
-                                    )
-                                  })}
-                                </div>
-                              ) : (
-                                <div className="mb-3 p-3 rounded-lg bg-slate-50 border border-slate-200 dark:bg-slate-800/50 dark:border-slate-700 text-center">
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    No documents have been requested yet.
-                                  </p>
-                                </div>
-                              )}
+{/* ─── REQUESTED DOCUMENTS ─────────────────────────────── */}
+<section>
+  <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+    <div className="p-1 rounded-lg bg-rose-100 dark:bg-rose-900/30">
+      <FileWarning className="h-3.5 w-3.5 text-rose-500" />
+    </div>
+    Requested Documents
+    {checkRequestedDocs.length > 0 && (
+      <span className="text-[10px] font-normal text-slate-400 dark:text-slate-500">
+        ({pendingDocs} pending, {fulfilledDocs} fulfilled)
+      </span>
+    )}
+  </h4>
 
-                              {/* New document request form */}
-                              {(requestedDocs[check?._id] || []).length > 0 && (
-                                <div className="mb-2">
-                                  <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5">Pending requests to send:</p>
-                                  {requestedDocs[check?._id]?.map((doc, idx) => (
-                                    <div key={idx} className="mb-1.5 flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-3 py-1.5 text-xs dark:border-orange-800 dark:bg-orange-950/50">
-                                      <span className="flex-1 text-slate-700 dark:text-slate-300">
-                                        <strong>{doc.label}</strong>{doc.description && ` — ${doc.description}`}
-                                      </span>
-                                      <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-6 w-6 p-0 text-rose-500 hover:bg-rose-100 hover:text-rose-700 dark:hover:bg-rose-900/30"
-                                        onClick={() => removeDocRow(check._id, idx)}
-                                      >
-                                        <Trash2 className="h-3.5 w-3.5" />
-                                      </Button>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                              <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-                                <Input
-                                  placeholder="Document label *"
-                                  className="h-9 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                                  value={docLabel[check._id] || ''}
-                                  onChange={e => setDocLabel(prev => ({ ...prev, [check._id]: e.target.value }))}
-                                />
-                                <Input
-                                  placeholder="Description (optional)"
-                                  className="h-9 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                                  value={docDesc[check._id] || ''}
-                                  onChange={e => setDocDesc(prev => ({ ...prev, [check._id]: e.target.value }))}
-                                />
-                                <Button 
-                                  variant="outline" 
-                                  size="sm" 
-                                  className="h-9 shrink-0 border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-                                  onClick={() => addDocRow(check._id)}
-                                >
-                                  <Plus className="h-4 w-4" />
-                                </Button>
-                              </div>
-                              <Button
-                                size="sm"
-                                className="mt-2 w-full gap-2 bg-amber-600 text-white hover:bg-amber-700 dark:bg-amber-600 dark:hover:bg-amber-700 sm:w-auto"
-                                disabled={isActing || (requestedDocs[check._id] || []).length === 0}
-                                onClick={() => handleRequestDocs(check)}
-                              >
-                                <Send className="h-4 w-4" /> Send Request
-                              </Button>
-                            </section>
+  {checkRequestedDocs.length > 0 ? (
+    <div className="mb-3 space-y-2">
+      {checkRequestedDocs.map((doc, idx) => {
+        const isFulfilled = !!doc.fulfilledAt
+        return (
+          <div
+            key={idx}
+            className={cn(
+              "flex flex-col gap-2 rounded-xl border p-3.5 transition-all group",
+              isFulfilled
+                ? "bg-emerald-50/70 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800"
+                : "bg-rose-50/70 border-rose-200 dark:bg-rose-950/20 dark:border-rose-800"
+            )}
+          >
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2.5">
+                  <FileText className={cn(
+                    "h-4 w-4",
+                    isFulfilled ? "text-emerald-500" : "text-rose-500"
+                  )} />
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">
+                    {doc.label}
+                  </p>
+                </div>
+                {doc.description && (
+                  <p className="text-xs text-slate-500 dark:text-slate-400 ml-7">
+                    {doc.description}
+                  </p>
+                )}
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 ml-7 mt-1">
+                  {isFulfilled ? '✅ Fulfilled' : '⏳ Pending'}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <Badge className={cn(
+                  "text-xs shrink-0",
+                  isFulfilled
+                    ? "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/30 dark:text-emerald-400"
+                    : "bg-rose-100 text-rose-700 border-rose-300 dark:bg-rose-900/30 dark:text-rose-400"
+                )}>
+                  {isFulfilled ? 'Fulfilled' : 'Pending'}
+                </Badge>
+                {/* Delete button for pending documents */}
+                {!isFulfilled && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0 text-rose-500 hover:bg-rose-100 hover:text-rose-700 dark:hover:bg-rose-900/30 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={async () => {
+                      try {
+                        // Remove the document from the array
+                        const updatedRequestedDocs = [...checkRequestedDocs];
+                        updatedRequestedDocs.splice(idx, 1);
+                        
+                        // Update the entire check with the new array
+                        const res = await fetch(`${apiBase}/api/v1/checks/${check._id}`, {
+                          method: 'PUT',
+                          headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            requestedDocuments: updatedRequestedDocs
+                          }),
+                        });
+                        
+                        if (!res.ok) throw new Error('Failed to delete document request');
+                        
+                        toast.success('Document request removed');
+                        fetchChecks(); // Refresh the list
+                      } catch (err: any) {
+                        console.error('❌ Delete error:', err);
+                        toast.error(err?.message || 'Failed to delete document request');
+                      }
+                    }}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  ) : (
+    <div className="mb-3 p-4 rounded-xl bg-slate-50/70 border border-slate-200/50 dark:bg-slate-800/50 dark:border-slate-700/50 text-center">
+      <p className="text-xs text-slate-500 dark:text-slate-400">
+        No documents have been requested yet.
+      </p>
+    </div>
+  )}
 
-                            {/* ─── COMMENTS ─────────────────────────────────────────── */}
-                            {checkComments.length > 0 && (
-                              <section>
-                                <h4 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                  <MessageSquare className="h-4 w-4 text-blue-500" /> 
-                                  Comments ({checkComments.length})
-                                </h4>
-                                <div className="space-y-2 max-h-48 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                                  {checkComments.map((comment, idx) => (
-                                    <div key={idx} className="p-2.5 rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50">
-                                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                                        <p className="text-xs font-medium text-slate-900 dark:text-white">
-                                          {comment.role || comment.author || 'Officer'}
-                                        </p>
-                                        <span className="text-[10px] text-slate-400 dark:text-slate-500">
-                                          {new Date(comment.createdAt).toLocaleString()}
-                                        </span>
-                                      </div>
-                                      <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">
-                                        {comment.text}
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
-                              </section>
-                            )}
+  {/* New document request form */}
+  {(requestedDocs[check?._id] || []).length > 0 && (
+    <div className="mb-3 p-3 rounded-xl bg-amber-50/70 border border-amber-200/70 dark:bg-amber-950/20 dark:border-amber-800/50">
+      <p className="text-[10px] font-medium text-amber-600 dark:text-amber-400 mb-2 flex items-center gap-1.5">
+        <Clock className="h-3 w-3" /> Pending requests to send:
+      </p>
+      {requestedDocs[check?._id]?.map((doc, idx) => (
+        <div key={idx} className="mb-1.5 flex items-center gap-2 rounded-lg border border-amber-200/70 bg-amber-100/50 dark:border-amber-800/50 dark:bg-amber-900/30 px-3 py-2 text-xs">
+          <span className="flex-1 text-slate-700 dark:text-slate-300">
+            <strong>{doc.label}</strong>{doc.description && ` — ${doc.description}`}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 w-6 p-0 text-rose-500 hover:bg-rose-100 hover:text-rose-700 dark:hover:bg-rose-900/30"
+            onClick={() => removeDocRow(check._id, idx)}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      ))}
+    </div>
+  )}
+  <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+    <div className="flex-1 relative">
+      <Input
+        placeholder="Document label *"
+        className="h-10 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:ring-blue-400/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+        value={docLabel[check._id] || ''}
+        onChange={e => setDocLabel(prev => ({ ...prev, [check._id]: e.target.value }))}
+      />
+    </div>
+    <div className="flex-1 relative">
+      <Input
+        placeholder="Description (optional)"
+        className="h-10 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:ring-blue-400/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+        value={docDesc[check._id] || ''}
+        onChange={e => setDocDesc(prev => ({ ...prev, [check._id]: e.target.value }))}
+      />
+    </div>
+    <Button
+      variant="outline"
+      size="sm"
+      className="h-10 shrink-0 border-slate-200 bg-white text-slate-700 hover:bg-slate-100 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+      onClick={() => addDocRow(check._id)}
+    >
+      <Plus className="h-4 w-4 mr-1" /> Add
+    </Button>
+  </div>
+  <Button
+    size="sm"
+    className="mt-3 w-full gap-2 bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 dark:from-amber-600 dark:to-rose-600 sm:w-auto"
+    disabled={isActing || (requestedDocs[check._id] || []).length === 0}
+    onClick={() => handleRequestDocs(check)}
+  >
+    <Send className="h-4 w-4" /> Send Request
+  </Button>
+</section>
 
-                            {/* ─── Attachments ───────────────────────────────────────── */}
+{/* ─── COMMENTS ─────────────────────────────────────────── */}
+{checkComments.length > 0 && (
+  <section>
+    <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+      <div className="p-1 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+        <MessageSquare className="h-3.5 w-3.5 text-blue-500" />
+      </div>
+      Comments ({checkComments.length})
+    </h4>
+    <div className="space-y-2 max-h-52 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent">
+      {checkComments.map((comment, idx) => (
+        <div key={idx} className="p-3.5 rounded-xl border border-slate-200/70 bg-slate-50/70 dark:border-slate-700/70 dark:bg-slate-800/50 group">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex items-start gap-2 flex-1">
+              <span className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                {(comment.role || comment.author || 'O')[0].toUpperCase()}
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                  <p className="text-xs font-medium text-slate-900 dark:text-white">
+                    {comment.role || comment.author || 'Officer'}
+                  </p>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                    {new Date(comment.createdAt).toLocaleString()}
+                  </span>
+                </div>
+                <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">
+                  {comment.text}
+                </p>
+              </div>
+            </div>
+            {/* Delete comment button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0 text-rose-500 hover:bg-rose-100 hover:text-rose-700 dark:hover:bg-rose-900/30 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 self-end sm:self-start"
+              onClick={async () => {
+                if (!confirm('Are you sure you want to delete this comment?')) return;
+                try {
+                  // Remove the comment from the array
+                  const updatedComments = [...checkComments];
+                  updatedComments.splice(idx, 1);
+                  
+                  // Update the entire check with the new comments array
+                  const res = await fetch(`${apiBase}/api/v1/checks/${check._id}`, {
+                    method: 'PUT',
+                    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      comments: updatedComments
+                    }),
+                  });
+                  
+                  if (!res.ok) throw new Error('Failed to delete comment');
+                  
+                  toast.success('Comment deleted');
+                  fetchChecks(); // Refresh the list
+                } catch (err: any) {
+                  console.error('❌ Delete error:', err);
+                  toast.error(err?.message || 'Failed to delete comment');
+                }
+              }}
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
+
+                            {/* ─── OLD ATTACHMENTS ────────────────────────── */}
                             {attachCount > 0 && (
                               <section>
-                                <h4 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                  <Upload className="h-4 w-4" /> Attachments ({attachCount})
+                                <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                  <div className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800">
+                                    <Upload className="h-3.5 w-3.5" />
+                                  </div>
+                                  Attachments ({attachCount})
                                 </h4>
                                 <div className="space-y-1.5">
                                   {check?.attachments?.map((att, idx) => {
-                                    const fileUrl = `${apiBase}/uploads/checks/${check._id}/${att.filename || att.path}`
-                                    
+                                    const fileUrl = getDocumentUrl(check._id, {
+                                      filename: att.filename || att.path || '',
+                                      path: att.path,
+                                    })
                                     return (
-                                      <div key={idx} className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs dark:border-slate-700 dark:bg-slate-800 sm:flex-row sm:items-center sm:justify-between">
-                                        <span className="truncate text-slate-700 dark:text-slate-300">
+                                      <div key={idx} className="flex flex-col gap-2 rounded-xl border border-slate-200/70 bg-white px-4 py-2.5 text-xs dark:border-slate-700/70 dark:bg-slate-800/50 sm:flex-row sm:items-center sm:justify-between">
+                                        <span className="truncate text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                          <Paperclip className="h-3.5 w-3.5 text-slate-400" />
                                           {att.originalName || att.filename || `File ${idx + 1}`}
                                         </span>
                                         <div className="flex gap-1">
                                           <Button
                                             variant="outline"
                                             size="sm"
-                                            className="h-7 border-slate-300 text-xs hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-700"
+                                            className="h-8 border-slate-300 text-xs hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-700 gap-1.5"
                                             onClick={() => openPreview(fileUrl, att.originalName || att.filename || `File ${idx + 1}`)}
                                           >
-                                            <Eye className="mr-1.5 h-3.5 w-3.5" /> View
+                                            <Eye className="h-3.5 w-3.5" /> View
                                           </Button>
                                           <Button
                                             variant="outline"
                                             size="sm"
-                                            className="h-7 border-slate-300 text-xs hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-700"
+                                            className="h-8 border-slate-300 text-xs hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-700"
                                             onClick={async () => {
                                               try {
                                                 const token = localStorage.getItem('authToken') || ''
@@ -1138,135 +1338,211 @@ const ChecksReviewPanel: React.FC = () => {
                               </section>
                             )}
 
-                            <div className="border-t border-slate-200 dark:border-slate-700 " />
+                            {/* ─── NEW: UPLOADED DOCUMENTS ────────────────── */}
+                            {docCount > 0 && (
+                              <section>
+                                <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                  <div className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800">
+                                    <Upload className="h-3.5 w-3.5" />
+                                  </div>
+                                  Uploaded Documents ({docCount})
+                                </h4>
+                                <div className="space-y-1.5">
+                                  {check?.documents?.map((doc, idx) => {
+                                    const fileUrl = getDocumentUrl(check._id, doc)
+                                    return (
+                                      <div key={idx} className="flex flex-col gap-2 rounded-xl border border-slate-200/70 bg-white px-4 py-2.5 text-xs dark:border-slate-700/70 dark:bg-slate-800/50 sm:flex-row sm:items-center sm:justify-between">
+                                        <span className="truncate text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                          <Paperclip className="h-3.5 w-3.5 text-slate-400" />
+                                          {doc.originalName || doc.filename || `File ${idx + 1}`}
+                                          {doc.size && (
+                                            <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                                              ({(doc.size / 1024).toFixed(1)} KB)
+                                            </span>
+                                          )}
+                                        </span>
+                                        <div className="flex gap-1">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-8 border-slate-300 text-xs hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-700 gap-1.5"
+                                            onClick={() => openPreview(fileUrl, doc.originalName || doc.filename || `File ${idx + 1}`)}
+                                          >
+                                            <Eye className="h-3.5 w-3.5" /> View
+                                          </Button>
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-8 border-slate-300 text-xs hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-700"
+                                            onClick={async () => {
+                                              try {
+                                                const token = localStorage.getItem('authToken') || ''
+                                                const response = await fetch(fileUrl, {
+                                                  headers: { Authorization: `Bearer ${token}` },
+                                                })
+                                                if (!response.ok) throw new Error('Download failed')
+                                                const blob = await response.blob()
+                                                const blobUrl = URL.createObjectURL(blob)
+                                                const link = document.createElement('a')
+                                                link.href = blobUrl
+                                                link.download = doc.originalName || doc.filename || 'file'
+                                                document.body.appendChild(link)
+                                                link.click()
+                                                document.body.removeChild(link)
+                                                setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
+                                                toast.success('Download started')
+                                              } catch {
+                                                const link = document.createElement('a')
+                                                link.href = fileUrl
+                                                link.download = doc.originalName || doc.filename || 'file'
+                                                link.target = '_blank'
+                                                document.body.appendChild(link)
+                                                link.click()
+                                                document.body.removeChild(link)
+                                                toast.success('Download started')
+                                              }
+                                            }}
+                                          >
+                                            <Download className="h-3.5 w-3.5" />
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              </section>
+                            )}
 
-                   {/* ─── Status Update ───────────────────────────────────── */}
-<section className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm transition dark:border-slate-700/80 dark:bg-slate-800/90 dark:shadow-slate-700/20">
-  <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-    <CheckCircle className="h-4 w-4 text-blue-500" />
-    Update Status
-  </h4>
+                            <div className="border-t border-slate-200/60 dark:border-slate-700/60" />
 
-  <div className="space-y-4">
-    {/* Status selector with coloured dots */}
-    <div>
-      <Select
-        value={newStatus[check._id] || ''}
-        onValueChange={(val) =>
-          setNewStatus((prev) => ({ ...prev, [check._id]: val }))
-        }
-      >
-        <SelectTrigger className="h-11 w-full border-slate-200 bg-white text-sm font-medium text-slate-900 transition hover:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:border-blue-500">
-          <SelectValue placeholder="Choose a new status…" />
-        </SelectTrigger>
-        <SelectContent>
-          {availableStatuses.map((status) => {
-            // Map each status to a dot colour (Tailwind bg classes)
-            const dotColorClass =
-              {
-                pending: 'bg-amber-500',
-                processing: 'bg-blue-500',
-                reviewing: 'bg-orange-500',
-                completed: 'bg-emerald-500',
-                requires_documents: 'bg-rose-500',
-                cancelled: 'bg-slate-400',
-                failed: 'bg-red-500',
-                submitted: 'bg-indigo-500',
-                draft: 'bg-slate-300',
-              }[status.value] || 'bg-slate-400'
-
-            return (
-              <SelectItem
-                key={status.value}
-                value={status.value}
-                className="flex items-center gap-2"
-              >
-                <span
-                  className={cn(
-                    'inline-block h-2.5 w-2.5 rounded-full ring-1 ring-black/10 dark:ring-white/20',
-                    dotColorClass
-                  )}
-                />
-                {status.label}
-              </SelectItem>
-            )
-          })}
-        </SelectContent>
-      </Select>
-
-      {/* Show current selection with a dot preview */}
-      {newStatus[check._id] && (
-        <p className="mt-1.5 flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
-          <span
-            className={cn(
-              'inline-block h-2 w-2 rounded-full',
-              {
-                'bg-amber-500': newStatus[check._id] === 'pending',
-                'bg-blue-500': newStatus[check._id] === 'processing',
-                'bg-orange-500': newStatus[check._id] === 'reviewing',
-                'bg-emerald-500': newStatus[check._id] === 'completed',
-                'bg-rose-500': newStatus[check._id] === 'requires_documents',
-                'bg-slate-400': newStatus[check._id] === 'cancelled',
-                'bg-red-500': newStatus[check._id] === 'failed',
-                'bg-indigo-500': newStatus[check._id] === 'submitted',
-                'bg-slate-300': newStatus[check._id] === 'draft',
-              }[newStatus[check._id]] || 'bg-slate-400'
-            )}
-          />
-          Selected: <span className="font-medium text-slate-700 dark:text-slate-300">
-            {availableStatuses.find((s) => s.value === newStatus[check._id])?.label}
-          </span>
-        </p>
-      )}
-    </div>
-
-    {/* Note input with character counter */}
-    <div>
-      <Textarea
-        placeholder="Add a note (optional)…"
-        className="min-h-[72px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
-        value={statusNote[check._id] || ''}
-        onChange={(e) =>
-          setStatusNote((prev) => ({ ...prev, [check._id]: e.target.value }))
-        }
-        maxLength={200}
-      />
-      <div className="mt-1 flex justify-between text-xs text-slate-400 dark:text-slate-500">
-        <span>Optional</span>
-        <span>{(statusNote[check._id] || '').length}/200</span>
-      </div>
-    </div>
-
-    {/* Action button with gradient & hover scale */}
-    <Button
-      size="sm"
-      disabled={isActing || !newStatus[check._id]}
-      onClick={() => handleStatusUpdate(check)}
-      className="relative w-full gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-60 disabled:hover:scale-100 dark:from-blue-500 dark:to-indigo-500 sm:w-auto"
-    >
-      {isActing ? (
-        <>
-          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-          Updating…
-        </>
-      ) : (
-        <>
-          <CheckCircle className="h-4 w-4" />
-          Update Status
-        </>
-      )}
-    </Button>
-  </div>
-</section>
-                            {/* ─── Add Comment ────────────────────────────────────── */}
-                            <section>
-                              <h4 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                <MessageSquare className="h-4 w-4" /> Add Comment
+                            {/* ─── Status Update ───────────────────────────────────── */}
+                            <section className="rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white to-slate-50/50 p-5 shadow-sm transition dark:border-slate-700/70 dark:from-slate-800/80 dark:to-slate-900/50 dark:shadow-slate-700/20">
+                              <h4 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                <div className="p-1 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                                  <CheckCircle className="h-3.5 w-3.5 text-blue-500" />
+                                </div>
+                                Update Status
                               </h4>
-                              <div className="space-y-2">
+
+                              <div className="space-y-4">
+                                <div>
+                                  <Select
+                                    value={newStatus[check._id] || ''}
+                                    onValueChange={(val) =>
+                                      setNewStatus((prev) => ({ ...prev, [check._id]: val }))
+                                    }
+                                  >
+                                    <SelectTrigger className="h-11 w-full border-slate-200 bg-white text-sm font-medium text-slate-900 transition hover:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:border-blue-500">
+                                      <SelectValue placeholder="Choose a new status…" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {availableStatuses.map((status) => {
+                                        const dotColorClass =
+                                          {
+                                            pending: 'bg-amber-500',
+                                            processing: 'bg-blue-500',
+                                            reviewing: 'bg-orange-500',
+                                            completed: 'bg-emerald-500',
+                                            requires_documents: 'bg-rose-500',
+                                            cancelled: 'bg-slate-400',
+                                            failed: 'bg-red-500',
+                                            submitted: 'bg-indigo-500',
+                                            draft: 'bg-slate-300',
+                                          }[status.value] || 'bg-slate-400'
+
+                                        return (
+                                          <SelectItem
+                                            key={status.value}
+                                            value={status.value}
+                                            className="flex items-center gap-2"
+                                          >
+                                            <span
+                                              className={cn(
+                                                'inline-block h-2.5 w-2.5 rounded-full ring-1 ring-black/10 dark:ring-white/20',
+                                                dotColorClass
+                                              )}
+                                            />
+                                            {status.label}
+                                          </SelectItem>
+                                        )
+                                      })}
+                                    </SelectContent>
+                                  </Select>
+
+                                  {newStatus[check._id] && (
+                                    <p className="mt-1.5 flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
+                                      <span
+                                        className={cn(
+                                          'inline-block h-2 w-2 rounded-full',
+                                          {
+                                            'bg-amber-500': newStatus[check._id] === 'pending',
+                                            'bg-blue-500': newStatus[check._id] === 'processing',
+                                            'bg-orange-500': newStatus[check._id] === 'reviewing',
+                                            'bg-emerald-500': newStatus[check._id] === 'completed',
+                                            'bg-rose-500': newStatus[check._id] === 'requires_documents',
+                                            'bg-slate-400': newStatus[check._id] === 'cancelled',
+                                            'bg-red-500': newStatus[check._id] === 'failed',
+                                            'bg-indigo-500': newStatus[check._id] === 'submitted',
+                                            'bg-slate-300': newStatus[check._id] === 'draft',
+                                          }[newStatus[check._id]] || 'bg-slate-400'
+                                        )}
+                                      />
+                                      Selected: <span className="font-medium text-slate-700 dark:text-slate-300">
+                                        {availableStatuses.find((s) => s.value === newStatus[check._id])?.label}
+                                      </span>
+                                    </p>
+                                  )}
+                                </div>
+
+                                <div>
+                                  <Textarea
+                                    placeholder="Add a note (optional)…"
+                                    className="min-h-[72px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
+                                    value={statusNote[check._id] || ''}
+                                    onChange={(e) =>
+                                      setStatusNote((prev) => ({ ...prev, [check._id]: e.target.value }))
+                                    }
+                                    maxLength={200}
+                                  />
+                                  <div className="mt-1 flex justify-between text-xs text-slate-400 dark:text-slate-500">
+                                    <span>Optional</span>
+                                    <span>{(statusNote[check._id] || '').length}/200</span>
+                                  </div>
+                                </div>
+
+                                <Button
+                                  size="sm"
+                                  disabled={isActing || !newStatus[check._id]}
+                                  onClick={() => handleStatusUpdate(check)}
+                                  className="relative w-full gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] hover:shadow-blue-500/40 disabled:opacity-60 disabled:hover:scale-100 dark:from-blue-500 dark:to-indigo-500 sm:w-auto"
+                                >
+                                  {isActing ? (
+                                    <>
+                                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                                      Updating…
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CheckCircle className="h-4 w-4" />
+                                      Update Status
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            </section>
+
+                            {/* ─── Add Comment ────────────────────────────────────── */}
+                            <section className="rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white to-slate-50/50 p-5 shadow-sm dark:border-slate-700/70 dark:from-slate-800/80 dark:to-slate-900/50">
+                              <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                <div className="p-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
+                                  <MessageSquare className="h-3.5 w-3.5 text-indigo-500" />
+                                </div>
+                                Add Comment
+                              </h4>
+                              <div className="space-y-3">
                                 <Textarea
                                   placeholder="Write a comment visible to the applicant…"
-                                  className="min-h-[60px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                                  className="min-h-[60px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-indigo-400/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                                   value={commentText[check._id] || ''}
                                   onChange={e => setCommentText(prev => ({ ...prev, [check._id]: e.target.value }))}
                                 />
@@ -1274,7 +1550,7 @@ const ChecksReviewPanel: React.FC = () => {
                                   size="sm"
                                   disabled={isActing || !commentText[check._id]?.trim()}
                                   onClick={() => handleAddComment(check)}
-                                  className="w-full gap-2 bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 sm:w-auto"
+                                  className="w-full gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 dark:from-indigo-500 dark:to-purple-500 sm:w-auto"
                                 >
                                   <Send className="h-4 w-4" /> Send Comment
                                 </Button>
@@ -1282,33 +1558,36 @@ const ChecksReviewPanel: React.FC = () => {
                             </section>
 
                             {/* ─── Upload Result ───────────────────────────────────── */}
-                            <section>
-                              <h4 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                <Upload className="h-4 w-4" /> Upload Result
+                            <section className="rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white to-slate-50/50 p-5 shadow-sm dark:border-slate-700/70 dark:from-slate-800/80 dark:to-slate-900/50">
+                              <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                <div className="p-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
+                                  <Upload className="h-3.5 w-3.5 text-emerald-500" />
+                                </div>
+                                Upload Result
                               </h4>
                               {check?.resultDocuments && check?.resultDocuments?.length > 0 && (
                                 <div className="mb-3 space-y-1.5">
                                   {check?.resultDocuments?.map((rd, idx) => {
                                     const fileUrl = `${apiBase}/uploads/checks/${check._id}/results/${rd.filename}`
-                                    
                                     return (
-                                      <div key={idx} className="flex flex-col gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs dark:border-emerald-800 dark:bg-emerald-950/50 sm:flex-row sm:items-center sm:justify-between">
-                                        <span className="truncate text-emerald-700 dark:text-emerald-400">
+                                      <div key={idx} className="flex flex-col gap-2 rounded-xl border border-emerald-200/70 bg-emerald-50/70 px-4 py-2.5 text-xs dark:border-emerald-800/70 dark:bg-emerald-950/30 sm:flex-row sm:items-center sm:justify-between">
+                                        <span className="truncate text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+                                          <FileCheck className="h-3.5 w-3.5 text-emerald-500" />
                                           {rd.originalName || rd.filename}
                                         </span>
                                         <div className="flex gap-1">
                                           <Button
                                             variant="outline"
                                             size="sm"
-                                            className="h-7 border-emerald-300 text-xs text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-900/30"
+                                            className="h-8 border-emerald-300 text-xs text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-900/30 gap-1.5"
                                             onClick={() => openPreview(fileUrl, rd.originalName || rd.filename)}
                                           >
-                                            <Eye className="mr-1.5 h-3.5 w-3.5" /> View
+                                            <Eye className="h-3.5 w-3.5" /> View
                                           </Button>
                                           <Button
                                             variant="outline"
                                             size="sm"
-                                            className="h-7 border-emerald-300 text-xs text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-900/30"
+                                            className="h-8 border-emerald-300 text-xs text-emerald-700 hover:bg-emerald-100 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-900/30"
                                             onClick={async () => {
                                               try {
                                                 const token = localStorage.getItem('authToken') || ''
@@ -1350,7 +1629,7 @@ const ChecksReviewPanel: React.FC = () => {
                                 <Input
                                   type="file"
                                   accept=".pdf,.png,.jpg,.jpeg"
-                                  className="h-9 w-full cursor-pointer border-slate-200 bg-white text-sm text-slate-900 file:mr-3 file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:file:bg-slate-700 dark:file:text-slate-300"
+                                  className="h-10 w-full cursor-pointer border-slate-200 bg-white text-sm text-slate-900 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:file:bg-slate-700 dark:file:text-slate-300"
                                   onChange={e => {
                                     const file = e.target.files?.[0] ?? null
                                     setResultFile(prev => ({ ...prev, [check._id]: file }))
@@ -1358,7 +1637,7 @@ const ChecksReviewPanel: React.FC = () => {
                                 />
                                 <Textarea
                                   placeholder="Result summary (visible to applicant)…"
-                                  className="min-h-[60px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                                  className="min-h-[60px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-emerald-400 focus:ring-emerald-400/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                                   value={resultSummary[check._id] || ''}
                                   onChange={e => setResultSummary(prev => ({ ...prev, [check._id]: e.target.value }))}
                                 />
@@ -1368,7 +1647,7 @@ const ChecksReviewPanel: React.FC = () => {
                                     setResultStatus(prev => ({ ...prev, [check._id]: val as 'clear' | 'flagged' | 'pending' }))
                                   }
                                 >
-                                  <SelectTrigger className="h-9 w-full border-slate-200 bg-white text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                                  <SelectTrigger className="h-10 w-full border-slate-200 bg-white text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
                                     <SelectValue placeholder="Result status…" />
                                   </SelectTrigger>
                                   <SelectContent>
@@ -1393,7 +1672,7 @@ const ChecksReviewPanel: React.FC = () => {
                                   size="sm"
                                   disabled={isActing || !resultFile[check._id]}
                                   onClick={() => handleUploadResult(check)}
-                                  className="w-full gap-2 bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700 sm:w-auto"
+                                  className="w-full gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 dark:from-emerald-500 dark:to-teal-500 sm:w-auto"
                                 >
                                   {isActing ? (
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

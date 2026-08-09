@@ -52,39 +52,39 @@ export default function SuccessStep({ serviceName, applicationId, onClose }: Suc
         initial={{ scale: 0, rotate: -20 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: 'spring', stiffness: 280, damping: 20, delay: 0.1 }}
-        className="mx-auto w-20 h-20 rounded-full bg-[#F0FDF4] border border-[#BBF451]/40 flex items-center justify-center"
+        className="mx-auto w-20 h-20 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-300/40 dark:border-emerald-700/30 flex items-center justify-center"
       >
-        <CheckCircle2 className="w-10 h-10 text-[#BBF451]" strokeWidth={2} />
+        <CheckCircle2 className="w-10 h-10 text-emerald-500 dark:text-emerald-400" strokeWidth={2} />
       </motion.div>
 
       {/* Headline */}
       <div className="space-y-2">
         <h2
-          className="font-bold text-[#0F2A44] leading-tight"
+          className="font-bold text-gray-900 dark:text-white leading-tight"
           style={{ fontSize: 'clamp(1.65rem, 5.5vw, 2.3rem)' }}
         >
           {t('successStep.title', 'Your visa process has started')}
         </h2>
-        <p className="text-[#64748B] text-[15px] leading-relaxed">
+        <p className="text-gray-500 dark:text-gray-400 text-[15px] leading-relaxed">
           {t('successStep.subtitle', "We're now handling everything for you")}
         </p>
         {applicationId && (
-          <p className="text-[11px] text-[#CBD5E1] font-mono mt-1">
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 font-mono mt-1">
             {t('successStep.ref', 'Ref')}: {applicationId.slice(-10).toUpperCase()}
           </p>
         )}
-        <p className="text-[13px] text-[#94A3B8]">
+        <p className="text-[13px] text-gray-400 dark:text-gray-500">
           {t('successStep.applicationFor', 'Application for')}{' '}
-          <span className="font-semibold text-[#0F2A44]">{serviceName}</span>
+          <span className="font-semibold text-gray-900 dark:text-white">{serviceName}</span>
         </p>
       </div>
 
       {/* Next steps */}
-      <div className="rounded-2xl border border-[#F1F5F9] bg-[#F8FAFC] p-5 text-left">
-        <p className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider mb-3">
+      <div className="rounded-2xl border border-gray-200/60 dark:border-white/10 bg-gray-50/80 dark:bg-white/5 p-5 text-left">
+        <p className="text-[10px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-3">
           {t('successStep.whatHappensNext', 'What happens next')}
         </p>
-        <Separator className="bg-[#F1F5F9] mb-4" />
+        <Separator className="bg-gray-200/50 dark:bg-white/5 mb-4" />
         <motion.div
           variants={stagger}
           initial="initial"
@@ -93,12 +93,12 @@ export default function SuccessStep({ serviceName, applicationId, onClose }: Suc
         >
           {NEXT_STEPS.map((s, i) => (
             <motion.div key={i} variants={fadeUp} className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#BBF451]/20 border border-[#BBF451]/40 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[10px] font-bold text-[#4D7C0F]">{i + 1}</span>
+              <div className="w-5 h-5 rounded-full bg-emerald-100/30 dark:bg-emerald-400/20 border border-emerald-400/30 dark:border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300">{i + 1}</span>
               </div>
               <div className="text-left">
-                <p className="text-[14px] font-semibold text-[#0F2A44]">{s.title}</p>
-                <p className="text-[12px] text-[#94A3B8] leading-snug mt-0.5">{s.sub}</p>
+                <p className="text-[14px] font-semibold text-gray-900 dark:text-white">{s.title}</p>
+                <p className="text-[12px] text-gray-400 dark:text-white/50 leading-snug mt-0.5">{s.sub}</p>
               </div>
             </motion.div>
           ))}
@@ -109,10 +109,10 @@ export default function SuccessStep({ serviceName, applicationId, onClose }: Suc
       <div className="flex flex-col gap-3">
         <motion.a
           whileTap={{ scale: 0.97 }}
-          href="https://wa.me/971000000000?text=Hi+Tammat%2C+I+just+submitted+my+application"
+          href="https://wa.me/971501676916?text=Hi+Tammat%2C+I+just+submitted+my+application"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2.5 h-14 rounded-2xl bg-[#0F2A44] text-white font-semibold active:scale-[0.97] transition-transform"
+          className="flex items-center justify-center gap-2.5 h-14 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold shadow-lg shadow-gray-900/25 dark:shadow-white/20 hover:shadow-xl hover:shadow-gray-900/35 dark:hover:shadow-white/30 transition-all duration-300 active:scale-[0.97]"
           style={{ fontSize: '16px' }}
         >
           <MessageCircle className="w-5 h-5" />
@@ -122,12 +122,12 @@ export default function SuccessStep({ serviceName, applicationId, onClose }: Suc
         <Button
           variant="outline"
           onClick={onClose}
-          className="h-12 rounded-2xl border-[#F1F5F9] bg-white text-[#64748B] hover:text-[#0F2A44] hover:bg-[#F8FAFC] flex items-center justify-center gap-2"
+          className="h-12 rounded-2xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/30 flex items-center justify-center gap-2 transition-all duration-300"
           style={{ fontSize: '15px' }}
         >
           <LayoutDashboard className="w-4 h-4" />
           {t('successStep.trackApp', 'Track my application')}
-          <ChevronRight className="w-3.5 h-3.5 text-[#CBD5E1]" />
+          <ChevronRight className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600" />
         </Button>
       </div>
     </motion.div>

@@ -1,10 +1,6 @@
 'use client';
 
-<<<<<<< HEAD
 import { useState, useEffect } from 'react';
-=======
-import { useState, useEffect, useRef } from 'react';
->>>>>>> 0bb91c2 (tmmt update frontend)
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Card,
@@ -17,10 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
-<<<<<<< HEAD
-=======
-import { Textarea } from '@/components/ui/textarea';
->>>>>>> 0bb91c2 (tmmt update frontend)
 import {
   Dialog,
   DialogContent,
@@ -60,14 +52,6 @@ import {
   User,
   UserCog,
   Info,
-<<<<<<< HEAD
-=======
-  Send,
-  RefreshCw,
-  FileWarning,
-  BadgeCheck,
-  Headphones,
->>>>>>> 0bb91c2 (tmmt update frontend)
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getSocket } from '@/lib/socket';
@@ -78,7 +62,6 @@ import { cn } from '@/lib/utils';
 const STATUS_CONFIG = {
   approved: {
     label: 'Approved',
-<<<<<<< HEAD
     color: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     dotColor: 'bg-emerald-500',
     icon: CheckCircle,
@@ -112,56 +95,12 @@ const STATUS_CONFIG = {
     description: 'Your check is queued for processing',
     gradient: 'from-amber-50/80 to-amber-100/30 dark:from-amber-950/20 dark:to-amber-900/10',
     border: 'border-amber-200/50 dark:border-amber-800/30',
-=======
-    color: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-800/30',
-    dotColor: 'bg-emerald-400',
-    icon: CheckCircle,
-    gradient: 'from-emerald-50/50 to-emerald-100/20 dark:from-emerald-950/10 dark:to-emerald-900/5',
-    border: 'border-emerald-200/40 dark:border-emerald-800/20',
-    description: 'Your application has been approved successfully',
-    bg: 'bg-emerald-50 dark:bg-emerald-950/20',
-    textColor: 'text-emerald-700 dark:text-emerald-400',
-  },
-  under_review: {
-    label: 'Under Review',
-    color: 'bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-200/50 dark:border-blue-800/30',
-    dotColor: 'bg-blue-400',
-    icon: Clock,
-    gradient: 'from-blue-50/50 to-blue-100/20 dark:from-blue-950/10 dark:to-blue-900/5',
-    border: 'border-blue-200/40 dark:border-blue-800/20',
-    description: 'Our team is reviewing your application',
-    bg: 'bg-blue-50 dark:bg-blue-950/20',
-    textColor: 'text-blue-700 dark:text-blue-400',
-  },
-  docs_required: {
-    label: 'Docs Required',
-    color: 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400 border-amber-200/50 dark:border-amber-800/30',
-    dotColor: 'bg-amber-400',
-    icon: AlertCircle,
-    gradient: 'from-amber-50/50 to-amber-100/20 dark:from-amber-950/10 dark:to-amber-900/5',
-    border: 'border-amber-200/40 dark:border-amber-800/20',
-    description: 'Additional documents are required',
-    bg: 'bg-amber-50 dark:bg-amber-950/20',
-    textColor: 'text-amber-700 dark:text-amber-400',
-  },
-  pending: {
-    label: 'Pending',
-    color: 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400 border-amber-200/50 dark:border-amber-800/30',
-    dotColor: 'bg-amber-400',
-    icon: Clock,
-    description: 'Your check is queued for processing',
-    gradient: 'from-amber-50/50 to-amber-100/20 dark:from-amber-950/10 dark:to-amber-900/5',
-    border: 'border-amber-200/40 dark:border-amber-800/20',
-    bg: 'bg-amber-50 dark:bg-amber-950/20',
-    textColor: 'text-amber-700 dark:text-amber-400',
->>>>>>> 0bb91c2 (tmmt update frontend)
   },
 };
 
 // ─── Helper Functions ──────────────────────────────────────────────────────
 
 const formatDate = (dateString: string): string => {
-<<<<<<< HEAD
   return new Date(dateString).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
@@ -169,20 +108,6 @@ const formatDate = (dateString: string): string => {
     hour: '2-digit',
     minute: '2-digit',
   });
-=======
-  if (!dateString) return 'N/A';
-  try {
-    return new Date(dateString).toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  } catch {
-    return 'Invalid date';
-  }
->>>>>>> 0bb91c2 (tmmt update frontend)
 };
 
 const formatBytes = (bytes: number): string => {
@@ -193,24 +118,6 @@ const formatBytes = (bytes: number): string => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
-<<<<<<< HEAD
-=======
-// ─── Helper: Check if document is an image ─────────────────────────────────
-const isDocumentImage = (doc: any, fileUrl: string): boolean => {
-  const mimeType = doc.mimeType || '';
-  if (mimeType.startsWith('image/')) return true;
-  const ext = doc.originalName?.split('.').pop()?.toLowerCase() || '';
-  return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'heic', 'heif'].includes(ext);
-};
-
-const isDocumentPdf = (doc: any, fileUrl: string): boolean => {
-  const mimeType = doc.mimeType || '';
-  if (mimeType === 'application/pdf') return true;
-  const ext = doc.originalName?.split('.').pop()?.toLowerCase() || '';
-  return ext === 'pdf';
-};
-
->>>>>>> 0bb91c2 (tmmt update frontend)
 // ─── Helper: Build receipt URL ─────────────────────────────────────────────
 const getReceiptUrl = (receipt: any, apiBase: string, appId: string): string | null => {
   if (!receipt) return null;
@@ -253,7 +160,6 @@ const getReceiptUrl = (receipt: any, apiBase: string, appId: string): string | n
   return null;
 };
 
-<<<<<<< HEAD
 // ─── Helper: Check if document is an image ─────────────────────────────────
 const isDocumentImage = (doc: any, fileUrl: string): boolean => {
   const mimeType = doc.mimeType || '';
@@ -269,8 +175,6 @@ const isDocumentPdf = (doc: any, fileUrl: string): boolean => {
   return ext === 'pdf';
 };
 
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
 interface ExpandedApplicationCardProps {
   application: any;
   isExpanded: boolean;
@@ -307,19 +211,12 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     );
   }
 
-<<<<<<< HEAD
-=======
-  // ─── State ──────────────────────────────────────────────────────────────────
->>>>>>> 0bb91c2 (tmmt update frontend)
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [showBoostDialog, setShowBoostDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
-<<<<<<< HEAD
   const [showLiveChat, setShowLiveChat] = useState(false);
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
   const [boostCount, setBoostCount] = useState(application.metadata?.boostCount || 0);
   const [requestedDocuments, setRequestedDocuments] = useState<any[]>(application.requestedDocuments || []);
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -336,31 +233,15 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle');
 
-<<<<<<< HEAD
   // ─── New state for inline image preview ────────────────────────────────
   const [previewImage, setPreviewImage] = useState<{ doc: any; url: string } | null>(null);
 
-=======
-  // ─── State for inline image preview ────────────────────────────────
-  const [previewImage, setPreviewImage] = useState<{ doc: any; url: string } | null>(null);
-
-  // ─── History expand state ──────────────────────────────────────────────────
-  const [showHistory, setShowHistory] = useState(false);
-
->>>>>>> 0bb91c2 (tmmt update frontend)
   const statusConfig = STATUS_CONFIG[application.status] || STATUS_CONFIG.pending;
   const StatusIcon = statusConfig.icon;
   const hasResultDocs = application.resultDocuments && application.resultDocuments.length > 0;
 
   const receipts = application.receipts || [];
 
-<<<<<<< HEAD
-=======
-  const appId = application._id || application.id;
-
-  // ─── Handlers ──────────────────────────────────────────────────────────────
-
->>>>>>> 0bb91c2 (tmmt update frontend)
   const handleDocumentDownload = async (attachment: any) => {
     try {
       const token = localStorage.getItem('authToken') || '';
@@ -493,24 +374,13 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     }
   };
 
-<<<<<<< HEAD
-=======
-  // ─── WebSocket listeners (only for document and status updates) ──────────
->>>>>>> 0bb91c2 (tmmt update frontend)
   useEffect(() => {
     if (!application) return;
 
     const socket = getSocket();
-<<<<<<< HEAD
 
     socket.on('document_requested', (data: any) => {
       if (data.applicationId === application.id || data.applicationId === application._id) {
-=======
-    const appId = application._id || application.id;
-
-    const handleDocumentRequest = (data: any) => {
-      if (data.applicationId === appId) {
->>>>>>> 0bb91c2 (tmmt update frontend)
         const newDocs = data.requestedDocuments || [];
         setRequestedDocuments(prev => [...prev, ...newDocs.map((doc: any) => ({
           documentType: doc,
@@ -528,17 +398,10 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
           description: `${newDocs.length} document(s) needed: ${newDocs.join(', ')}`,
         });
       }
-<<<<<<< HEAD
     });
 
     socket.on('otp_requested', (data: any) => {
       if (data.applicationId === application.id || data.applicationId === application._id) {
-=======
-    };
-
-    const handleOtpRequest = (data: any) => {
-      if (data.applicationId === appId) {
->>>>>>> 0bb91c2 (tmmt update frontend)
         setOtpRequests(prev => [...prev, {
           phone: data.phone,
           expiresIn: data.expiresIn,
@@ -555,7 +418,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
           description: `Please check ${data.phone} for the verification code`,
         });
       }
-<<<<<<< HEAD
     });
 
     socket.on('application_status_updated', (data: any) => {
@@ -574,33 +436,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
   }, [application]);
 
   // ─── Document Upload Handler (with progress) ────────────────────────────
-=======
-    };
-
-    const handleStatusUpdate = (data: any) => {
-      if (data.applicationId === appId) {
-        toast.success('Application status updated', {
-          description: `New status: ${data.status}`,
-        });
-        if (refetchApplications) {
-          refetchApplications();
-        }
-      }
-    };
-
-    socket.on('document_requested', handleDocumentRequest);
-    socket.on('otp_requested', handleOtpRequest);
-    socket.on('application_status_updated', handleStatusUpdate);
-
-    return () => {
-      socket.off('document_requested', handleDocumentRequest);
-      socket.off('otp_requested', handleOtpRequest);
-      socket.off('application_status_updated', handleStatusUpdate);
-    };
-  }, [application, refetchApplications]);
-
-  // ─── Document Upload Handler ─────────────────────────────────────────────
->>>>>>> 0bb91c2 (tmmt update frontend)
   const handleFileUpload = async () => {
     if (!uploadFile) {
       toast.error('Please select a file first');
@@ -633,10 +468,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       const endpoint = `${apiBase}/api/v1/visa/${application._id}/documents`;
 
-<<<<<<< HEAD
       // ─── Simulate progress ─────────────────────────────────────────────
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
       const progressInterval = setInterval(() => {
         setUploadProgress(prev => {
           if (prev >= 90) {
@@ -693,10 +525,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
         await refetchApplications();
       }
 
-<<<<<<< HEAD
       // Reset status after a short delay
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
       setTimeout(() => {
         setUploadStatus('idle');
         setUploadProgress(0);
@@ -711,10 +540,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     }
   };
 
-<<<<<<< HEAD
   // ─── Clear selected file ──────────────────────────────────────────────────
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
   const clearSelectedFile = () => {
     setUploadFile(null);
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
@@ -800,11 +626,8 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     }
   };
 
-<<<<<<< HEAD
   const appId = application._id || application.id;
 
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
   // ─── Split documents by uploader role ─────────────────────────────────
   const userDocuments = (application.attachments || []).filter(
     (doc: any) => doc.uploadedByRole === 'user' || doc.uploadedByRole === 'sponsor' || !doc.uploadedByRole
@@ -825,11 +648,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     uploadedByRole: receipt.uploadedByRole || 'user',
   }));
 
-<<<<<<< HEAD
   // ─── Document render helper (modified to show inline image preview) ──
-=======
-  // ─── Document render helper ──────────────────────────────────────────────
->>>>>>> 0bb91c2 (tmmt update frontend)
   const renderDocumentItem = (doc: any, idx: number, isReceipt: boolean = false) => {
     let fileUrl = '';
     if (isReceipt) {
@@ -852,10 +671,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     const isPdf = isDocumentPdf(doc, fileUrl);
     const isAmer = doc.uploadedByRole === 'amer' || doc.uploadedByRole === 'admin';
 
-<<<<<<< HEAD
     // ─── Handle image click: show inline preview ──────────────────────
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
     const handleImageClick = () => {
       if (isImage && fileUrl) {
         setPreviewImage({ doc, url: fileUrl });
@@ -873,11 +689,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: idx * 0.05 }}
         className={cn(
-<<<<<<< HEAD
           "flex items-center gap-3 p-3 rounded-xl bg-white/60 dark:bg-white/5 border transition-all duration-300 group/doc",
-=======
-          "flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-white/60 dark:bg-white/5 border transition-all duration-300 group/doc",
->>>>>>> 0bb91c2 (tmmt update frontend)
           isReceipt 
             ? "border-emerald-200/50 dark:border-emerald-800/30 hover:border-emerald-400/50 dark:hover:border-emerald-700/50" 
             : isAmer
@@ -885,11 +697,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               : "border-gray-200/50 dark:border-white/5 hover:border-primary/30 dark:hover:border-primary/30"
         )}
       >
-<<<<<<< HEAD
         <div className="relative flex-shrink-0 w-14 h-14 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-=======
-        <div className="relative flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
->>>>>>> 0bb91c2 (tmmt update frontend)
           {fileUrl && isImage ? (
             <img
               src={fileUrl}
@@ -902,50 +710,30 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 if (parent) {
                   const fallback = document.createElement('div');
                   fallback.className = 'w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800';
-<<<<<<< HEAD
                   fallback.innerHTML = `<svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
-=======
-                  fallback.innerHTML = `<svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
->>>>>>> 0bb91c2 (tmmt update frontend)
                   parent.appendChild(fallback);
                 }
               }}
             />
           ) : fileUrl && isPdf ? (
             <div className="w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20">
-<<<<<<< HEAD
               <FileText className="w-6 h-6 text-red-500" />
-=======
-              <FileText className="w-5 h-5 text-red-500" />
->>>>>>> 0bb91c2 (tmmt update frontend)
             </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-primary/10 dark:bg-primary/20">
               {isReceipt ? (
-<<<<<<< HEAD
                 <Receipt className="w-6 h-6 text-emerald-500" />
               ) : isAmer ? (
                 <UserCog className="w-6 h-6 text-blue-500" />
               ) : (
                 <FileText className="w-6 h-6 text-primary" />
-=======
-                <Receipt className="w-5 h-5 text-emerald-500" />
-              ) : isAmer ? (
-                <UserCog className="w-5 h-5 text-blue-500" />
-              ) : (
-                <FileText className="w-5 h-5 text-primary" />
->>>>>>> 0bb91c2 (tmmt update frontend)
               )}
             </div>
           )}
           {doc.status && (
             <div className="absolute -top-1 -right-1">
               <Badge className={cn(
-<<<<<<< HEAD
                 "text-[7px] rounded-full px-1.5 py-0.5 border-0 shadow-sm",
-=======
-                "text-[6px] sm:text-[7px] rounded-full px-1.5 py-0.5 border-0 shadow-sm",
->>>>>>> 0bb91c2 (tmmt update frontend)
                 doc.status === 'approved' && "bg-emerald-500 text-white",
                 doc.status === 'verified' && "bg-emerald-500 text-white",
                 doc.status === 'pending_verification' && "bg-amber-500 text-white",
@@ -963,22 +751,14 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
           )}
           {isReceipt && (
             <div className="absolute -bottom-1 -left-1">
-<<<<<<< HEAD
               <Badge className="text-[7px] bg-emerald-500/20 text-emerald-600 border-emerald-500/30">
-=======
-              <Badge className="text-[6px] sm:text-[7px] bg-emerald-500/20 text-emerald-600 border-emerald-500/30">
->>>>>>> 0bb91c2 (tmmt update frontend)
                 Receipt
               </Badge>
             </div>
           )}
           {isAmer && (
             <div className="absolute -bottom-1 -left-1">
-<<<<<<< HEAD
               <Badge className="text-[7px] bg-blue-500/20 text-blue-600 border-blue-500/30">
-=======
-              <Badge className="text-[6px] sm:text-[7px] bg-blue-500/20 text-blue-600 border-blue-500/30">
->>>>>>> 0bb91c2 (tmmt update frontend)
                 Amer
               </Badge>
             </div>
@@ -986,31 +766,18 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
         </div>
 
         <div className="flex-1 min-w-0">
-<<<<<<< HEAD
           <p className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
             {doc.originalName || doc.filename || (isReceipt ? 'Receipt' : 'Document')}
           </p>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             {doc.size && (
               <span className="text-[10px] text-gray-400 dark:text-gray-500">
-=======
-          <p className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
-            {doc.originalName || doc.filename || (isReceipt ? 'Receipt' : 'Document')}
-          </p>
-          <div className="flex items-center gap-1.5 sm:gap-2 mt-0.5 sm:mt-1 flex-wrap">
-            {doc.size && (
-              <span className="text-[9px] sm:text-[10px] text-gray-400 dark:text-gray-500">
->>>>>>> 0bb91c2 (tmmt update frontend)
                 {formatBytes(doc.size)}
               </span>
             )}
             {doc.uploadedByRole && (
               <Badge className={cn(
-<<<<<<< HEAD
                 "text-[8px] border-0",
-=======
-                "text-[7px] sm:text-[8px] border-0",
->>>>>>> 0bb91c2 (tmmt update frontend)
                 doc.uploadedByRole === 'amer' || doc.uploadedByRole === 'admin' 
                   ? "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400" 
                   : "bg-gray-500/10 text-gray-600 dark:bg-gray-500/20 dark:text-gray-400"
@@ -1020,11 +787,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             )}
             {isReceipt && doc.status && (
               <Badge className={cn(
-<<<<<<< HEAD
                 "text-[8px] font-normal border-0",
-=======
-                "text-[7px] sm:text-[8px] font-normal border-0",
->>>>>>> 0bb91c2 (tmmt update frontend)
                 doc.status === 'approved' && "bg-emerald-500/20 text-emerald-600",
                 doc.status === 'verified' && "bg-emerald-500/20 text-emerald-600",
                 doc.status === 'pending_verification' && "bg-yellow-500/20 text-yellow-600",
@@ -1036,20 +799,12 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             )}
           </div>
         </div>
-<<<<<<< HEAD
         <div className="flex items-center gap-1 opacity-0 group-hover/doc:opacity-100 transition-all duration-300">
-=======
-        <div className="flex items-center gap-0.5 sm:gap-1 opacity-0 group-hover/doc:opacity-100 transition-all duration-300">
->>>>>>> 0bb91c2 (tmmt update frontend)
           {fileUrl && !isImage && (
             <Button
               variant="ghost"
               size="sm"
-<<<<<<< HEAD
               className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
-=======
-              className="h-7 w-7 sm:h-8 sm:w-8 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
->>>>>>> 0bb91c2 (tmmt update frontend)
               onClick={() => {
                 if (isReceipt) {
                   handleOpenReceiptPreview(doc);
@@ -1059,21 +814,13 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               }}
               title="View document"
             >
-<<<<<<< HEAD
               <Eye className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
-=======
-              <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-500 hover:text-primary transition-colors" />
->>>>>>> 0bb91c2 (tmmt update frontend)
             </Button>
           )}
           <Button
             variant="ghost"
             size="sm"
-<<<<<<< HEAD
             className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
-=======
-            className="h-7 w-7 sm:h-8 sm:w-8 p-0 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20"
->>>>>>> 0bb91c2 (tmmt update frontend)
             onClick={() => {
               if (isReceipt) {
                 const url = getReceiptUrl(doc, apiBase, appId);
@@ -1105,11 +852,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             }}
             title="Download document"
           >
-<<<<<<< HEAD
             <Download className="h-3.5 w-3.5 text-gray-500 hover:text-primary transition-colors" />
-=======
-            <Download className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-500 hover:text-primary transition-colors" />
->>>>>>> 0bb91c2 (tmmt update frontend)
           </Button>
         </div>
       </motion.div>
@@ -1128,7 +871,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
       >
         <Card
           className={cn(
-<<<<<<< HEAD
             "border transition-all duration-300",
             "bg-gradient-to-br",
             statusConfig.gradient,
@@ -1155,53 +897,19 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       <span className="flex h-2.5 w-2.5">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-=======
-            "border transition-all duration-300 bg-white dark:bg-slate-900/80",
-            statusConfig.border,
-          )}
-        >
-          <CardHeader
-            className="cursor-pointer p-3 sm:p-4 hover:bg-gray-50/50 dark:hover:bg-white/5 transition-all duration-300 rounded-t-xl"
-            onClick={onToggle}
-          >
-            <div className="flex items-center justify-between gap-2 sm:gap-3">
-              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                <div className="relative">
-                  <div className={cn(
-                    "flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full border-2",
-                    statusConfig.color,
-                    "transition-all duration-300 group-hover:scale-110"
-                  )}>
-                    <StatusIcon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
-                  </div>
-                  {application.status === 'under_review' && (
-                    <div className="absolute -top-0.5 -right-0.5">
-                      <span className="flex h-2 w-2 sm:h-2.5 sm:w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-blue-500"></span>
->>>>>>> 0bb91c2 (tmmt update frontend)
                       </span>
                     </div>
                   )}
                   {application.status === 'approved' && (
                     <div className="absolute -top-0.5 -right-0.5">
-<<<<<<< HEAD
                       <span className="flex h-2.5 w-2.5">
                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-=======
-                      <span className="flex h-2 w-2 sm:h-2.5 sm:w-2.5">
-                        <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-emerald-500"></span>
->>>>>>> 0bb91c2 (tmmt update frontend)
                       </span>
                     </div>
                   )}
                   {boostCount > 0 && (
                     <div className="absolute -bottom-0.5 -right-0.5">
-<<<<<<< HEAD
                       <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-[6px] font-bold text-white">
-=======
-                      <span className="flex h-3 w-3 sm:h-3.5 sm:w-3.5 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-[6px] font-bold text-white">
->>>>>>> 0bb91c2 (tmmt update frontend)
                         {boostCount}
                       </span>
                     </div>
@@ -1209,20 +917,14 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 </div>
 
                 <div className="min-w-0 flex-1">
-<<<<<<< HEAD
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-semibold text-sm truncate text-gray-900 dark:text-white">
-=======
-                  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                    <p className="font-semibold text-xs sm:text-sm truncate text-gray-900 dark:text-white">
->>>>>>> 0bb91c2 (tmmt update frontend)
                       {application.applicationType
                         .replace(/_/g, ' ')
                         .split(' ')
                         .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
                         .join(' ')}
                     </p>
-<<<<<<< HEAD
                     <Badge className={cn("text-[10px] font-medium", statusConfig.color)}>
                       <StatusIcon className="h-2.5 w-2.5 mr-1" />
                       {statusConfig.label}
@@ -1230,90 +932,48 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     {hasResultDocs && (
                       <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px] font-medium">
                         <Sparkles className="h-2.5 w-2.5 mr-1" />
-=======
-                    <Badge className={cn("text-[8px] sm:text-[10px] font-medium", statusConfig.color)}>
-                      <StatusIcon className="h-2 w-2 sm:h-2.5 sm:w-2.5 mr-0.5 sm:mr-1" />
-                      {statusConfig.label}
-                    </Badge>
-                    {hasResultDocs && (
-                      <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[8px] sm:text-[10px] font-medium">
-                        <Sparkles className="h-2 w-2 sm:h-2.5 sm:w-2.5 mr-0.5 sm:mr-1" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                         Results Ready
                       </Badge>
                     )}
                     {boostCount > 0 && (
-<<<<<<< HEAD
                       <Badge className="bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30 text-[10px] font-medium">
                         <Rocket className="h-2.5 w-2.5 mr-1" />
-=======
-                      <Badge className="bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30 text-[8px] sm:text-[10px] font-medium">
-                        <Rocket className="h-2 w-2 sm:h-2.5 sm:w-2.5 mr-0.5 sm:mr-1" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                         Boosted
                       </Badge>
                     )}
                   </div>
-<<<<<<< HEAD
                   <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                     <Calendar className="h-3 w-3" />
                     <span>{formatDate(application.createdAt)}</span>
                     <span className="h-3 w-px bg-gray-200 dark:bg-gray-700" />
                     <FileText className="h-3 w-3" />
-=======
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
-                    <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                    <span className="hidden xs:inline">{formatDate(application.createdAt)}</span>
-                    <span className="xs:hidden">{new Date(application.createdAt).toLocaleDateString()}</span>
-                    <span className="h-3 w-px bg-gray-200 dark:bg-gray-700" />
-                    <FileText className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                     <span>{application.attachments?.length || 0}</span>
                     {notifications.length > 0 && (
                       <>
                         <span className="h-3 w-px bg-gray-200 dark:bg-gray-700" />
-<<<<<<< HEAD
                         <Bell className="h-3 w-3 text-red-500" />
                         <span className="text-red-500 font-medium text-xs">{notifications.length}</span>
-=======
-                        <Bell className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-red-500" />
-                        <span className="text-red-500 font-medium text-[9px] sm:text-[10px]">{notifications.length}</span>
->>>>>>> 0bb91c2 (tmmt update frontend)
                       </>
                     )}
                   </div>
                 </div>
               </div>
 
-<<<<<<< HEAD
               <div className="flex items-center gap-2 shrink-0">
                 <div className="hidden sm:block w-20" />
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-300"
-=======
-              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-300"
->>>>>>> 0bb91c2 (tmmt update frontend)
                   onClick={(e) => {
                     e.stopPropagation();
                     onToggle();
                   }}
                 >
                   {isExpanded ? (
-<<<<<<< HEAD
                     <ChevronUp className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   ) : (
                     <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-=======
-                    <ChevronUp className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-500 dark:text-gray-400" />
-                  ) : (
-                    <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-500 dark:text-gray-400" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                   )}
                 </Button>
               </div>
@@ -1328,7 +988,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               >
-<<<<<<< HEAD
                 <CardContent className="pt-0 pb-4 px-4">
                   <div className="border-t border-gray-200/50 dark:border-white/10 pt-4 space-y-4">
                     {/* ─── Status Description ───────────────────────────────── */}
@@ -1337,16 +996,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       <span className="text-gray-600 dark:text-gray-300">{statusConfig.description}</span>
                       <div className="flex items-center gap-1 ml-auto shrink-0">
                         <Badge variant="outline" className="text-[9px] font-mono text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700">
-=======
-                <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
-                  <div className="border-t border-gray-200/50 dark:border-white/10 pt-3 sm:pt-4 space-y-3 sm:space-y-4">
-                    {/* ─── Status Description ───────────────────────────────── */}
-                    <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm p-2 sm:p-3 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5">
-                      <div className={cn("h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full", statusConfig.dotColor)} />
-                      <span className="text-gray-600 dark:text-gray-300">{statusConfig.description}</span>
-                      <div className="flex items-center gap-1 ml-auto shrink-0">
-                        <Badge variant="outline" className="text-[8px] sm:text-[9px] font-mono text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700">
->>>>>>> 0bb91c2 (tmmt update frontend)
                           {appId.slice(0, 6).toUpperCase()}
                         </Badge>
                         <button
@@ -1354,7 +1003,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                             e.stopPropagation();
                             handleCopyId();
                           }}
-<<<<<<< HEAD
                           className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                           title="Copy ID"
                         >
@@ -1362,36 +1010,18 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                             <Check className="h-3 w-3 text-emerald-500" />
                           ) : (
                             <Copy className="h-3 w-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
-=======
-                          className="p-0.5 sm:p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                          title="Copy ID"
-                        >
-                          {copied ? (
-                            <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-emerald-500" />
-                          ) : (
-                            <Copy className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                           )}
                         </button>
                       </div>
                     </div>
 
                     {/* ─── Progress Bar ────────────────────────────────────── */}
-<<<<<<< HEAD
                     <div className="space-y-1.5">
                       <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
                         <span className="font-medium">Application Progress</span>
                         <span className="font-medium">{getProgress()}%</span>
                       </div>
                       <div className="relative h-2 rounded-full overflow-hidden bg-gray-200/50 dark:bg-gray-700/50">
-=======
-                    <div className="space-y-1 sm:space-y-1.5">
-                      <div className="flex justify-between text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
-                        <span className="font-medium">Application Progress</span>
-                        <span className="font-medium">{getProgress()}%</span>
-                      </div>
-                      <div className="relative h-1.5 sm:h-2 rounded-full overflow-hidden bg-gray-200/50 dark:bg-gray-700/50">
->>>>>>> 0bb91c2 (tmmt update frontend)
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${getProgress()}%` }}
@@ -1408,7 +1038,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     </div>
 
                     {/* ─── Quick Stats ────────────────────────────────────── */}
-<<<<<<< HEAD
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <div className="p-3 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-center transition-all duration-300 hover:border-primary/30 dark:hover:border-primary/30">
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-1.5">
@@ -1443,48 +1072,11 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                         </div>
                         <span className="text-base lg:text-lg font-bold text-gray-900 dark:text-white block">{boostCount}</span>
                         <span className="text-[10px] text-gray-500 dark:text-gray-400">Boosts</span>
-=======
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-                      <div className="p-2 sm:p-3 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-center transition-all duration-300 hover:border-primary/30 dark:hover:border-primary/30">
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-1 sm:mb-1.5">
-                          <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
-                        </div>
-                        <span className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white block">
-                          {application.attachments?.length || 0}
-                        </span>
-                        <span className="text-[8px] sm:text-[10px] text-gray-500 dark:text-gray-400">Documents</span>
-                      </div>
-                      <div className="p-2 sm:p-3 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-center transition-all duration-300 hover:border-primary/30 dark:hover:border-primary/30">
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-500/10 flex items-center justify-center mx-auto mb-1 sm:mb-1.5">
-                          <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
-                        </div>
-                        <span className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white block">
-                          {Math.ceil((Date.now() - new Date(application.createdAt).getTime()) / (1000 * 60 * 60 * 24))}
-                        </span>
-                        <span className="text-[8px] sm:text-[10px] text-gray-500 dark:text-gray-400">Days Old</span>
-                      </div>
-                      <div className="p-2 sm:p-3 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-center transition-all duration-300 hover:border-primary/30 dark:hover:border-primary/30">
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mx-auto mb-1 sm:mb-1.5">
-                          <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500" />
-                        </div>
-                        <span className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white block">
-                          {hasResultDocs ? application.resultDocuments.length : 0}
-                        </span>
-                        <span className="text-[8px] sm:text-[10px] text-gray-500 dark:text-gray-400">Results</span>
-                      </div>
-                      <div className="p-2 sm:p-3 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-center transition-all duration-300 hover:border-primary/30 dark:hover:border-primary/30">
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple-500/10 flex items-center justify-center mx-auto mb-1 sm:mb-1.5">
-                          <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500" />
-                        </div>
-                        <span className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white block">{boostCount}</span>
-                        <span className="text-[8px] sm:text-[10px] text-gray-500 dark:text-gray-400">Boosts</span>
->>>>>>> 0bb91c2 (tmmt update frontend)
                       </div>
                     </div>
 
                     {/* ─── User Uploaded Documents ────────────────────────── */}
                     {userDocuments.length > 0 && (
-<<<<<<< HEAD
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
                           <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -1493,16 +1085,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                           </p>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
-=======
-                      <div className="space-y-2 sm:space-y-3">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 dark:text-gray-400" />
-                          <p className="text-[8px] sm:text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Documents ({userDocuments.length})
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-1.5 sm:gap-2">
->>>>>>> 0bb91c2 (tmmt update frontend)
                           {userDocuments.map((doc: any, idx: number) => renderDocumentItem(doc, idx, false))}
                         </div>
                       </div>
@@ -1510,7 +1092,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
                     {/* ─── Amer Uploaded Documents ────────────────────────── */}
                     {amerDocuments.length > 0 && (
-<<<<<<< HEAD
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
                           <UserCog className="w-4 h-4 text-blue-500 dark:text-blue-400" />
@@ -1519,16 +1100,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                           </p>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
-=======
-                      <div className="space-y-2 sm:space-y-3">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <UserCog className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 dark:text-blue-400" />
-                          <p className="text-[8px] sm:text-[10px] font-semibold text-blue-500 dark:text-blue-400 uppercase tracking-wider">
-                            Amer Uploaded Documents ({amerDocuments.length})
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-1.5 sm:gap-2">
->>>>>>> 0bb91c2 (tmmt update frontend)
                           {amerDocuments.map((doc: any, idx: number) => renderDocumentItem(doc, idx, false))}
                         </div>
                       </div>
@@ -1536,7 +1107,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
                     {/* ─── Payment Receipts ────────────────────────────────── */}
                     {receiptDocuments.length > 0 && (
-<<<<<<< HEAD
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
                           <Receipt className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
@@ -1545,16 +1115,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                           </p>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
-=======
-                      <div className="space-y-2 sm:space-y-3">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <Receipt className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 dark:text-emerald-400" />
-                          <p className="text-[8px] sm:text-[10px] font-semibold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider">
-                            Payment Receipts ({receiptDocuments.length})
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-1.5 sm:gap-2">
->>>>>>> 0bb91c2 (tmmt update frontend)
                           {receiptDocuments.map((doc: any, idx: number) => renderDocumentItem(doc, idx, true))}
                         </div>
                       </div>
@@ -1565,7 +1125,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-<<<<<<< HEAD
                         className="rounded-xl bg-gradient-to-br from-emerald-50/80 to-emerald-100/30 dark:from-emerald-950/30 dark:to-emerald-900/20 border border-emerald-200/50 dark:border-emerald-800/30 p-4 space-y-3"
                       >
                         <div className="flex items-center gap-2.5">
@@ -1580,31 +1139,11 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                           </div>
                           <Badge className="ml-auto bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[10px]">
                             <Sparkles className="h-2.5 w-2.5 mr-1" />
-=======
-                        className="rounded-xl bg-gradient-to-br from-emerald-50/50 to-emerald-100/20 dark:from-emerald-950/10 dark:to-emerald-900/5 border border-emerald-200/40 dark:border-emerald-800/20 p-3 sm:p-4 space-y-2 sm:space-y-3"
-                      >
-                        <div className="flex items-center gap-2 sm:gap-2.5">
-                          <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-emerald-500/20 dark:bg-emerald-500/30">
-                            <CheckCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-600 dark:text-emerald-400" />
-                          </div>
-                          <div>
-                            <p className="font-semibold text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm">Results Ready</p>
-                            <p className="text-[10px] sm:text-xs text-emerald-600/70 dark:text-emerald-400/70">
-                              {application.resultDocuments.length} document(s) available
-                            </p>
-                          </div>
-                          <Badge className="ml-auto bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[8px] sm:text-[10px]">
-                            <Sparkles className="h-2 w-2 sm:h-2.5 sm:w-2.5 mr-0.5 sm:mr-1" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                             Verified
                           </Badge>
                         </div>
 
-<<<<<<< HEAD
                         <div className="grid grid-cols-1 gap-2">
-=======
-                        <div className="grid grid-cols-1 gap-1.5 sm:gap-2">
->>>>>>> 0bb91c2 (tmmt update frontend)
                           {application.resultDocuments.map((doc: any, idx: number) => {
                             const fileUrl = doc.url || doc.fileUrl || doc.path || '';
                             const isImage = isDocumentImage(doc, fileUrl);
@@ -1613,17 +1152,10 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                             return (
                               <div
                                 key={idx}
-<<<<<<< HEAD
                                 className="flex items-center justify-between p-2.5 rounded-lg bg-white/50 dark:bg-black/20 border border-emerald-200/50 dark:border-emerald-800/30"
                               >
                                 <div className="flex items-center gap-2.5 flex-1 min-w-0">
                                   <div className="relative flex-shrink-0 w-10 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-=======
-                                className="flex items-center justify-between p-2 sm:p-2.5 rounded-lg bg-white/50 dark:bg-black/20 border border-emerald-200/50 dark:border-emerald-800/30"
-                              >
-                                <div className="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
-                                  <div className="relative flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
->>>>>>> 0bb91c2 (tmmt update frontend)
                                     {fileUrl && isImage ? (
                                       <img
                                         src={fileUrl}
@@ -1636,53 +1168,32 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                                           if (parent) {
                                             const fallback = document.createElement('div');
                                             fallback.className = 'w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800';
-<<<<<<< HEAD
                                             fallback.innerHTML = `<svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
-=======
-                                            fallback.innerHTML = `<svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
->>>>>>> 0bb91c2 (tmmt update frontend)
                                             parent.appendChild(fallback);
                                           }
                                         }}
                                       />
                                     ) : fileUrl && isPdf ? (
                                       <div className="w-full h-full flex items-center justify-center bg-red-50 dark:bg-red-900/20">
-<<<<<<< HEAD
                                         <FileText className="w-5 h-5 text-red-500" />
                                       </div>
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-emerald-500/10">
                                         <Zap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-=======
-                                        <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
-                                      </div>
-                                    ) : (
-                                      <div className="w-full h-full flex items-center justify-center bg-emerald-500/10">
-                                        <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 dark:text-emerald-400" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                                       </div>
                                     )}
                                   </div>
                                   <div className="flex-1 min-w-0">
-<<<<<<< HEAD
                                     <p className="text-xs font-medium text-emerald-900 dark:text-emerald-300 truncate">
                                       {doc.label || doc.originalName || 'Result'}
                                     </p>
                                     {doc.uploadedByRole && (
                                       <Badge className="bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30 text-[9px] mt-0.5 border-0 rounded-full">
-=======
-                                    <p className="text-[10px] sm:text-xs font-medium text-emerald-900 dark:text-emerald-300 truncate">
-                                      {doc.label || doc.originalName || 'Result'}
-                                    </p>
-                                    {doc.uploadedByRole && (
-                                      <Badge className="bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30 text-[8px] sm:text-[9px] mt-0.5 border-0 rounded-full">
->>>>>>> 0bb91c2 (tmmt update frontend)
                                         by {doc.uploadedByRole}
                                       </Badge>
                                     )}
                                   </div>
                                 </div>
-<<<<<<< HEAD
                                 <div className="flex gap-0.5 ml-2 shrink-0">
                                   <Button
                                     variant="ghost"
@@ -1692,34 +1203,15 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                                     title="View document"
                                   >
                                     <Eye className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-=======
-                                <div className="flex gap-0.5 ml-1.5 sm:ml-2 shrink-0">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-6 w-6 sm:h-7 sm:w-7 p-0 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
-                                    onClick={() => onDocumentView(doc)}
-                                    title="View document"
-                                  >
-                                    <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-600 dark:text-emerald-400" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                                   </Button>
                                   <Button
                                     variant="ghost"
                                     size="sm"
-<<<<<<< HEAD
                                     className="h-7 w-7 p-0 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
                                     onClick={() => onDocumentDownload(doc)}
                                     title="Download document"
                                   >
                                     <Download className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-=======
-                                    className="h-6 w-6 sm:h-7 sm:w-7 p-0 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
-                                    onClick={() => onDocumentDownload(doc)}
-                                    title="Download document"
-                                  >
-                                    <Download className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-600 dark:text-emerald-400" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                                   </Button>
                                 </div>
                               </div>
@@ -1729,61 +1221,34 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       </motion.div>
                     )}
 
-<<<<<<< HEAD
                     {/* ─── Document Upload (with clear button and progress) ── */}
                     <div className="space-y-3">
                       <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
                         <Upload className="h-3 w-3" />
-=======
-                    {/* ─── Document Upload ────────────────────────────────── */}
-                    <div className="space-y-2 sm:space-y-3">
-                      <p className="text-[8px] sm:text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
-                        <Upload className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                         Upload Document
                       </p>
 
                       {uploadFile && (
-<<<<<<< HEAD
                         <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 dark:bg-white/5 border border-gray-200/50 dark:border-white/10">
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
                               {uploadFile.name}
                             </p>
                             <p className="text-[10px] text-gray-400 dark:text-gray-500">
-=======
-                        <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/60 dark:bg-white/5 border border-gray-200/50 dark:border-white/10">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
-                              {uploadFile.name}
-                            </p>
-                            <p className="text-[8px] sm:text-[10px] text-gray-400 dark:text-gray-500">
->>>>>>> 0bb91c2 (tmmt update frontend)
                               {formatBytes(uploadFile.size)}
                             </p>
                           </div>
                           <button
                             onClick={clearSelectedFile}
-<<<<<<< HEAD
                             className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 hover:text-red-700 transition-colors"
                             title="Remove file"
                           >
                             <X className="w-4 h-4" />
-=======
-                            className="p-1 sm:p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 hover:text-red-700 transition-colors"
-                            title="Remove file"
-                          >
-                            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                           </button>
                         </div>
                       )}
 
-<<<<<<< HEAD
                       <div className="flex flex-col sm:flex-row gap-2">
-=======
-                      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
->>>>>>> 0bb91c2 (tmmt update frontend)
                         <div className="flex-1">
                           <Input
                             type="file"
@@ -1793,11 +1258,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                               setUploadStatus('idle');
                               setUploadProgress(0);
                             }}
-<<<<<<< HEAD
                             className="h-10 text-xs rounded-xl bg-white/50 dark:bg-white/5 border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white file:text-gray-700 dark:file:text-gray-300 file:bg-gray-100/50 dark:file:bg-white/10 file:border-0 file:rounded-lg file:text-xs file:font-medium hover:file:bg-gray-200/50 dark:hover:file:bg-white/20 transition-all duration-300"
-=======
-                            className="h-9 sm:h-10 text-[10px] sm:text-xs rounded-xl bg-white/50 dark:bg-white/5 border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white file:text-gray-700 dark:file:text-gray-300 file:bg-gray-100/50 dark:file:bg-white/10 file:border-0 file:rounded-lg file:text-[10px] sm:file:text-xs file:font-medium hover:file:bg-gray-200/50 dark:hover:file:bg-white/20 transition-all duration-300"
->>>>>>> 0bb91c2 (tmmt update frontend)
                             accept=".pdf,.jpg,.jpeg,.png"
                           />
                         </div>
@@ -1805,18 +1266,13 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                           onClick={handleFileUpload}
                           disabled={!uploadFile || uploading || uploadStatus === 'uploading'}
                           className={cn(
-<<<<<<< HEAD
                             "h-10 text-xs font-semibold rounded-xl transition-all duration-300 gap-2 shrink-0 relative overflow-hidden",
-=======
-                            "h-9 sm:h-10 text-[10px] sm:text-xs font-semibold rounded-xl transition-all duration-300 gap-1.5 sm:gap-2 shrink-0 relative overflow-hidden px-3 sm:px-4",
->>>>>>> 0bb91c2 (tmmt update frontend)
                             !uploadFile || uploading || uploadStatus === 'uploading'
                               ? "bg-gray-100/70 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-200 dark:border-white/5"
                               : "bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] hover:shadow-lg hover:shadow-[#0A3269]/25 dark:hover:shadow-white/20 hover:scale-[1.02] active:scale-95 shadow-md"
                           )}
                         >
                           {uploading || uploadStatus === 'uploading' ? (
-<<<<<<< HEAD
                             <div className="flex items-center gap-2.5">
                               <div className="h-3.5 w-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
                               <span className="font-medium">Uploading {uploadProgress}%</span>
@@ -1824,15 +1280,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                           ) : (
                             <div className="flex items-center gap-2.5 relative z-10">
                               <Upload className="h-3.5 w-3.5 transition-transform duration-300 group-hover:scale-110" />
-=======
-                            <div className="flex items-center gap-1.5 sm:gap-2.5">
-                              <div className="h-3 w-3 sm:h-3.5 sm:w-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                              <span className="font-medium">Uploading {uploadProgress}%</span>
-                            </div>
-                          ) : (
-                            <div className="flex items-center gap-1.5 sm:gap-2.5 relative z-10">
-                              <Upload className="h-3 w-3 sm:h-3.5 sm:w-3.5 transition-transform duration-300 group-hover:scale-110" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                               <span className="font-medium">
                                 {uploadFile ? 'Upload Document' : 'Select a file'}
                               </span>
@@ -1841,43 +1288,26 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                         </Button>
                       </div>
 
-<<<<<<< HEAD
                       {/* Progress bar for upload */}
                       {uploadStatus === 'uploading' && (
                         <div className="w-full">
                           <Progress value={uploadProgress} className="h-1.5" />
                           <p className="text-[10px] text-gray-400 dark:text-white/30 mt-1 text-right">
-=======
-                      {uploadStatus === 'uploading' && (
-                        <div className="w-full">
-                          <Progress value={uploadProgress} className="h-1" />
-                          <p className="text-[8px] sm:text-[10px] text-gray-400 dark:text-white/30 mt-0.5 text-right">
->>>>>>> 0bb91c2 (tmmt update frontend)
                             {uploadProgress}%
                           </p>
                         </div>
                       )}
 
                       {uploadStatus === 'done' && (
-<<<<<<< HEAD
                         <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs">
                           <CheckCircle className="w-3.5 h-3.5" />
-=======
-                        <div className="flex items-center gap-1.5 sm:gap-2 text-emerald-600 dark:text-emerald-400 text-[10px] sm:text-xs">
-                          <CheckCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                           <span>Upload complete!</span>
                         </div>
                       )}
 
                       {uploadStatus === 'error' && (
-<<<<<<< HEAD
                         <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-xs">
                           <AlertCircle className="w-3.5 h-3.5" />
-=======
-                        <div className="flex items-center gap-1.5 sm:gap-2 text-red-600 dark:text-red-400 text-[10px] sm:text-xs">
-                          <AlertCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                           <span>Upload failed. Please try again.</span>
                         </div>
                       )}
@@ -1886,7 +1316,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     <Separator className="bg-gray-200/50 dark:bg-white/10" />
 
                     {/* ─── Action Buttons ────────────────────────────────── */}
-<<<<<<< HEAD
                     <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                       <Button
                         variant="outline"
@@ -1918,55 +1347,12 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       >
                         <div className="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                           <Edit className="h-3 w-3 text-blue-600 dark:text-blue-400" />
-=======
-                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 sm:gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full text-[8px] sm:text-[10px] h-8 sm:h-9 rounded-xl border-gray-200/50 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-700 dark:text-gray-300 hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 gap-1.5 sm:gap-2"
-                        onClick={() => setShowBoostDialog(true)}
-                      >
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                          <Rocket className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-purple-600 dark:text-purple-400" />
-                        </div>
-                        Priority
-                      </Button>
-      {/* ─── Coming Soon Chat Button ────────────────────────── */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full text-[10px] sm:text-xs h-9 sm:h-10 rounded-xl border-blue-200/50 dark:border-blue-800/30 bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300 transition-all duration-300 gap-2 cursor-not-allowed opacity-75"
-                      disabled
-                      onClick={() => {
-                        toast.info('Chat feature coming soon!', {
-                          description: 'We are working on this feature and it will be available shortly.',
-                          duration: 3000,
-                        });
-                      }}
-                    >
-                      <div className="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                        <MessageSquare className="h-3 w-3 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <span>Chat</span>
-                   
-                    </Button>
-
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full text-[8px] sm:text-[10px] h-8 sm:h-9 rounded-xl border-gray-200/50 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-700 dark:text-gray-300 hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 gap-1.5 sm:gap-2"
-                        onClick={() => setShowEditDialog(true)}
-                      >
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                          <Edit className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-blue-600 dark:text-blue-400" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                         </div>
                         Edit
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-<<<<<<< HEAD
                         className="w-full text-[10px] h-9 rounded-xl border-gray-200/50 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-700 dark:text-gray-300 hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 gap-2"
                         onClick={onToggle}
                       >
@@ -1987,37 +1373,12 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                             <div className="h-3 w-3 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
                           ) : (
                             <Trash2 className="h-3 w-3 text-red-600 dark:text-red-400" />
-=======
-                        className="w-full text-[8px] sm:text-[10px] h-8 sm:h-9 rounded-xl border-gray-200/50 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-700 dark:text-gray-300 hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 gap-1.5 sm:gap-2"
-                        onClick={onToggle}
-                      >
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                          <ChevronUp className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-gray-600 dark:text-gray-400" />
-                        </div>
-                        Collapse
-                      </Button>
-                      
-              
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full text-[8px] sm:text-[10px] h-8 sm:h-9 rounded-xl border-red-200/50 dark:border-red-800/30 bg-red-50/50 dark:bg-red-950/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-700 dark:hover:text-red-300 transition-all duration-300 gap-1.5 sm:gap-2"
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                      >
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                          {isDeleting ? (
-                            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
-                          ) : (
-                            <Trash2 className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-red-600 dark:text-red-400" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                           )}
                         </div>
                         {isDeleting ? 'Deleting...' : 'Delete'}
                       </Button>
                     </div>
 
-<<<<<<< HEAD
                     {/* ─── Application History ────────────────────────────── */}
                     {application.history && application.history.length > 0 && (
                       <div className="space-y-2">
@@ -2045,63 +1406,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                         </div>
                       </div>
                     )}
-=======
-                    {/* ─── Application History with Toggle ────────────────── */}
-                    {application.history && application.history.length > 0 && (
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => setShowHistory(!showHistory)}
-                          className="w-full flex items-center justify-between p-2 sm:p-2.5 rounded-xl bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 hover:bg-gray-100/50 dark:hover:bg-white/10 transition-all duration-300 group"
-                        >
-                          <div className="flex items-center gap-2">
-                            <History className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                            <span className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-gray-300">
-                              Application History ({application.history.length})
-                            </span>
-                          </div>
-                          <motion.div
-                            animate={{ rotate: showHistory ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="p-1 rounded-lg bg-white/50 dark:bg-slate-800/50 group-hover:bg-white/70 dark:group-hover:bg-slate-700/50"
-                          >
-                            <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                          </motion.div>
-                        </button>
-
-                        <AnimatePresence>
-                          {showHistory && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                              className="overflow-hidden"
-                            >
-                              <div className="space-y-1 sm:space-y-1.5 max-h-48 overflow-y-auto pr-1 sm:pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                                {application.history.map((event: any, idx: number) => (
-                                  <div key={idx} className="flex items-start gap-2 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 hover:bg-white/80 dark:hover:bg-white/10 transition-colors">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 mt-1.5 shrink-0" />
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-[10px] sm:text-xs font-medium text-gray-900 dark:text-white">
-                                        {event.action?.replace(/_/g, ' ').toUpperCase()}
-                                      </p>
-                                      {event.note && (
-                                        <p className="text-[8px] sm:text-[10px] text-gray-500 dark:text-gray-400 truncate">{event.note}</p>
-                                      )}
-                                      <p className="text-[8px] sm:text-[10px] text-gray-400 dark:text-gray-500">
-                                        {new Date(event.at).toLocaleString()}
-                                      </p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    )}
-
->>>>>>> 0bb91c2 (tmmt update frontend)
                   </div>
                 </CardContent>
               </motion.div>
@@ -2112,7 +1416,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       {/* ─── Receipt Preview Dialog ──────────────────────────────────────── */}
       <Dialog open={showReceiptPreview} onOpenChange={setShowReceiptPreview}>
-<<<<<<< HEAD
         <DialogContent className="max-w-4xl max-h-[90vh] w-[95vw] bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl shadow-2xl">
           <div className="flex items-center justify-between p-4 border-b border-gray-200/50 dark:border-white/10">
             <DialogTitle className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -2120,15 +1423,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               {selectedReceipt?.originalName || 'Receipt'}
             </DialogTitle>
             <div className="flex items-center gap-2">
-=======
-        <DialogContent className="max-w-4xl max-h-[90vh] w-[95vw] bg-white dark:bg-slate-900 border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl shadow-2xl">
-          <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200/50 dark:border-white/10">
-            <DialogTitle className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
-              <Receipt className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600 dark:text-emerald-400" />
-              {selectedReceipt?.originalName || 'Receipt'}
-            </DialogTitle>
-            <div className="flex items-center gap-1.5 sm:gap-2">
->>>>>>> 0bb91c2 (tmmt update frontend)
               <Button
                 variant="ghost"
                 size="sm"
@@ -2140,50 +1434,30 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     toast.error('Receipt URL not available');
                   }
                 }}
-<<<<<<< HEAD
                 className="h-8 gap-1.5 text-xs rounded-lg"
               >
                 <Download className="h-4 w-4" />
-=======
-                className="h-7 sm:h-8 gap-1 sm:gap-1.5 text-[10px] sm:text-xs rounded-lg"
-              >
-                <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                 Download
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleCloseReceiptPreview}
-<<<<<<< HEAD
                 className="h-8 w-8 p-0 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10"
               >
                 <X className="h-4 w-4" />
-=======
-                className="h-7 w-7 sm:h-8 sm:w-8 p-0 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10"
-              >
-                <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
->>>>>>> 0bb91c2 (tmmt update frontend)
               </Button>
             </div>
           </div>
 
-<<<<<<< HEAD
           <div className="p-4 overflow-auto max-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-100/50 dark:bg-black/30">
-=======
-          <div className="p-3 sm:p-4 overflow-auto max-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-100/50 dark:bg-black/30">
->>>>>>> 0bb91c2 (tmmt update frontend)
             {selectedReceipt && (() => {
               const url = getReceiptUrl(selectedReceipt, apiBase, appId);
               
               if (!url) {
                 return (
                   <div className="text-center text-red-500">
-<<<<<<< HEAD
                     <AlertCircle className="w-12 h-12 mx-auto mb-2" />
-=======
-                    <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                     <p>Receipt file not found.</p>
                   </div>
                 );
@@ -2218,7 +1492,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               } else {
                 return (
                   <div className="text-center text-text-muted">
-<<<<<<< HEAD
                     <FileText className="w-16 h-16 mx-auto mb-4" />
                     <p>Preview not available for this file type</p>
                     <Button
@@ -2226,15 +1499,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       className="mt-4"
                     >
                       <Download className="w-4 h-4 mr-2" />
-=======
-                    <FileText className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
-                    <p>Preview not available for this file type</p>
-                    <Button
-                      onClick={() => window.open(url, '_blank')}
-                      className="mt-3 sm:mt-4"
-                    >
-                      <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
->>>>>>> 0bb91c2 (tmmt update frontend)
                       Open file
                     </Button>
                   </div>
@@ -2247,13 +1511,8 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       {/* ─── Inline Image Preview Dialog ────────────────────────────────── */}
       <Dialog open={!!previewImage} onOpenChange={() => setPreviewImage(null)}>
-<<<<<<< HEAD
         <DialogContent className="max-w-4xl max-h-[90vh] w-[50vw]  border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl shadow-2xl">
           <div className="relative flex items-center justify-center w-full h-full min-h-[300px] p-4">
-=======
-        <DialogContent className="max-w-4xl max-h-[90vh] w-[90vw] sm:w-[50vw] border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl shadow-2xl">
-          <div className="relative flex items-center justify-center w-full h-full min-h-[200px] sm:min-h-[300px] p-3 sm:p-4">
->>>>>>> 0bb91c2 (tmmt update frontend)
             {previewImage && (
               <img
                 src={previewImage.url}
@@ -2265,15 +1524,11 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 }}
               />
             )}
-<<<<<<< HEAD
           
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
           </div>
         </DialogContent>
       </Dialog>
 
-<<<<<<< HEAD
       {/* ─── Existing Dialogs ────────────────────────────────────────────── */}
       <Dialog open={showBoostDialog} onOpenChange={setShowBoostDialog}>
         <DialogContent className="max-w-md bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 rounded-2xl p-6">
@@ -2333,154 +1588,12 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold rounded-xl h-12"
             >
               <DollarSign className="h-4 w-4 mr-2" />
-=======
-    {/* ─── Boost Dialog ────────────────────────────────────────────────── */}
-<Dialog open={showBoostDialog} onOpenChange={setShowBoostDialog}>
-  <DialogContent className="max-w-md bg-white/95 dark:bg-[#0A1628] backdrop-blur-sm border border-[#0A3269]/20 dark:border-[#0A3269]/30 rounded-2xl p-0 shadow-2xl shadow-[#0A3269]/10 dark:shadow-[#0A3269]/20 overflow-hidden">
-    {/* Premium Header with #0A3269 */}
-    <div className="relative px-6 pt-6 pb-4 border-b border-[#0A3269]/10 dark:border-[#0A3269]/20 bg-gradient-to-br from-[#0A3269]/5 to-[#1A4A8A]/5 dark:from-[#0A3269]/10 dark:to-[#1A4A8A]/10">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-[#0A3269]/10 rounded-full blur-3xl -translate-y-12 translate-x-12" />
-      <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#1A4A8A]/10 rounded-full blur-2xl translate-y-8 -translate-x-8" />
-      
-      <DialogHeader className="relative">
-        <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-white">
-          <div className="p-2 rounded-xl bg-[#0A3269] shadow-lg shadow-[#0A3269]/25">
-            <Rocket className="h-5 w-5 text-white" strokeWidth={1.8} />
-          </div>
-          <span>Priority Boost</span>
-        </DialogTitle>
-        <DialogDescription className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0A3269]/10 dark:bg-[#0A3269]/20 text-[#0A3269] dark:text-[#4A8ABF] text-[10px] font-medium">
-            <Sparkles className="h-3 w-3" />
-            {boostCount < 3 
-              ? `${3 - boostCount} free boost${3 - boostCount > 1 ? 's' : ''} remaining` 
-              : 'All boosts used'}
-          </span>
-          <span className="w-px h-4 bg-gray-300/50 dark:bg-white/10" />
-          <span className="text-[11px] text-gray-400 dark:text-gray-500">Get priority processing</span>
-        </DialogDescription>
-      </DialogHeader>
-    </div>
-
-    {/* Content */}
-    <div className="p-6 space-y-4">
-      {/* Boost Usage Progress */}
-      <div className="space-y-2">
-        <div className="flex justify-between text-xs">
-          <span className="text-gray-500 dark:text-gray-400 font-medium">Free boosts used</span>
-          <span className="text-gray-700 dark:text-gray-300 font-semibold">{boostCount}/3</span>
-        </div>
-        <div className="h-1.5 rounded-full bg-gray-200/60 dark:bg-white/10 overflow-hidden">
-          <div 
-            className={cn(
-              "h-full rounded-full transition-all duration-500",
-              boostCount >= 3 ? "bg-red-500" : "bg-[#0A3269]"
-            )}
-            style={{ width: `${Math.min((boostCount / 3) * 100, 100)}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Boost Options */}
-      <div className="space-y-2.5">
-        {boostCount < 3 ? (
-          <Button
-            onClick={handlePriorityBoost}
-            className="w-full group relative overflow-hidden rounded-xl bg-[#0A3269] hover:bg-[#1A4A8A] text-white font-semibold h-12 px-4 shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 border-0"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-            <div className="flex items-center justify-center gap-2.5 relative z-10">
-              <Sparkles className="h-4 w-4" />
-              <span>Activate Free Boost</span>
-              <Badge className="bg-white/20 text-white border-0 text-[9px] px-2 py-0.5">
-                {3 - boostCount} left
-              </Badge>
-            </div>
-          </Button>
-        ) : (
-          <Button
-            onClick={() => { setShowPaymentDialog(true); setShowBoostDialog(false); }}
-            className="w-full group relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold h-12 px-4 shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300 border-0"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-            <div className="flex items-center justify-center gap-2.5 relative z-10">
-              <DollarSign className="h-4 w-4" />
-              <span>Pay AED 10 for Boost</span>
-              <Badge className="bg-white/20 text-white border-0 text-[9px] px-2 py-0.5">
-                Premium
-              </Badge>
-            </div>
-          </Button>
-        )}
-      </div>
-
-      {/* Benefits List */}
-      <div className="bg-gray-50/80 dark:bg-white/5 rounded-xl p-3.5 border border-gray-200/50 dark:border-white/5">
-        <p className="text-[10px] font-semibold text-[#0A3269] dark:text-[#4A8ABF] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-          <Award className="h-3.5 w-3.5" />
-          Boost Benefits
-        </p>
-        <div className="grid grid-cols-2 gap-2 text-[11px]">
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <CheckCircle className="h-3 w-3 text-emerald-500" />
-            <span>Priority queue</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <Zap className="h-3 w-3 text-amber-500" />
-            <span>Faster review</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <Clock className="h-3 w-3 text-blue-500" />
-            <span>24/7 support</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <TrendingUp className="h-3 w-3 text-[#0A3269]" />
-            <span>Higher visibility</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Cancel Button */}
-      <Button
-        variant="ghost"
-        onClick={() => setShowBoostDialog(false)}
-        className="w-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/10 rounded-xl h-10 text-sm font-medium transition-all duration-200"
-      >
-        Cancel
-      </Button>
-    </div>
-  </DialogContent>
-</Dialog>
-
-      {/* ─── Payment Dialog ────────────────────────────────────────────────── */}
-      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-        <DialogContent className="max-w-md bg-white dark:bg-slate-900 border border-gray-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-6">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
-              <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500" />
-              Payment for Boost
-            </DialogTitle>
-            <DialogDescription className="text-xs sm:text-sm">
-              Pay AED 10 to get priority processing for your application.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 sm:space-y-4">
-            <Button
-              onClick={handlePaymentBoost}
-              className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold rounded-xl h-10 sm:h-12"
-            >
-              <DollarSign className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
->>>>>>> 0bb91c2 (tmmt update frontend)
               Pay AED 10
             </Button>
             <Button
               variant="outline"
               onClick={() => setShowPaymentDialog(false)}
-<<<<<<< HEAD
               className="w-full border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 rounded-xl h-10"
-=======
-              className="w-full border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 rounded-xl h-9 sm:h-10"
->>>>>>> 0bb91c2 (tmmt update frontend)
             >
               Cancel
             </Button>
@@ -2488,7 +1601,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
         </DialogContent>
       </Dialog>
 
-<<<<<<< HEAD
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="max-w-lg bg-white/95 dark:bg-black/95 backdrop-blur-sm border border-gray-200/50 dark:border-white/10 rounded-3xl p-0 shadow-2xl overflow-hidden">
           {/* ─── Header ────────────────────────────────────── */}
@@ -2501,26 +1613,11 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 <span>Edit Application</span>
               </DialogTitle>
               <DialogDescription className="text-sm text-gray-500 dark:text-white/60 mt-1">
-=======
-      {/* ─── Edit Dialog ──────────────────────────────────────────────────── */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-lg bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-gray-200/50 dark:border-white/10 rounded-3xl p-0 shadow-2xl overflow-hidden">
-          <div className="px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-200/50 dark:border-white/10">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
-                <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25">
-                  <Edit className="h-4 w-4 sm:h-5 sm:w-5 text-white" strokeWidth={1.8} />
-                </div>
-                <span>Edit Application</span>
-              </DialogTitle>
-              <DialogDescription className="text-xs sm:text-sm text-gray-500 dark:text-white/60 mt-0.5 sm:mt-1">
->>>>>>> 0bb91c2 (tmmt update frontend)
                 Update the sponsor and applicant details below.
               </DialogDescription>
             </DialogHeader>
           </div>
 
-<<<<<<< HEAD
           {/* ─── Body ──────────────────────────────────────── */}
           <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
             {/* Sponsor Information */}
@@ -2545,79 +1642,34 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     id="editLastName"
                     defaultValue={application.sponsor?.lastName || ''}
                     className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
-=======
-          <div className="p-4 sm:p-6 space-y-4 sm:space-y-5 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
-            {/* Sponsor Information */}
-            <div className="space-y-2 sm:space-y-3">
-              <p className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40 flex items-center gap-1.5 sm:gap-2">
-                <User className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                Sponsor Details
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                <div className="space-y-1 sm:space-y-1.5">
-                  <Label htmlFor="editFirstName" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">First Name</Label>
-                  <Input
-                    id="editFirstName"
-                    defaultValue={application.sponsor?.firstName || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
-                    placeholder="John"
-                  />
-                </div>
-                <div className="space-y-1 sm:space-y-1.5">
-                  <Label htmlFor="editLastName" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Last Name</Label>
-                  <Input
-                    id="editLastName"
-                    defaultValue={application.sponsor?.lastName || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
->>>>>>> 0bb91c2 (tmmt update frontend)
                     placeholder="Doe"
                   />
                 </div>
               </div>
 
-<<<<<<< HEAD
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor="editEmail" className="text-xs font-medium text-gray-700 dark:text-white/80">Email Address</Label>
-=======
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                <div className="space-y-1 sm:space-y-1.5">
-                  <Label htmlFor="editEmail" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Email Address</Label>
->>>>>>> 0bb91c2 (tmmt update frontend)
                   <Input
                     id="editEmail"
                     type="email"
                     defaultValue={application.sponsor?.email || ''}
-<<<<<<< HEAD
                     className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
                     placeholder="john@example.com"
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="editPhone" className="text-xs font-medium text-gray-700 dark:text-white/80">Phone Number</Label>
-=======
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
-                    placeholder="john@example.com"
-                  />
-                </div>
-                <div className="space-y-1 sm:space-y-1.5">
-                  <Label htmlFor="editPhone" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Phone Number</Label>
->>>>>>> 0bb91c2 (tmmt update frontend)
                   <Input
                     id="editPhone"
                     type="tel"
                     defaultValue={application.sponsor?.phone || ''}
-<<<<<<< HEAD
                     className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
-=======
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
->>>>>>> 0bb91c2 (tmmt update frontend)
                     placeholder="+971 50 123 4567"
                   />
                 </div>
               </div>
 
-<<<<<<< HEAD
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor="editEmiratesId" className="text-xs font-medium text-gray-700 dark:text-white/80">Emirates ID</Label>
@@ -2634,24 +1686,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     id="editPassport"
                     defaultValue={application.sponsor?.passportNumber || ''}
                     className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
-=======
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                <div className="space-y-1 sm:space-y-1.5">
-                  <Label htmlFor="editEmiratesId" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Emirates ID</Label>
-                  <Input
-                    id="editEmiratesId"
-                    defaultValue={application.sponsor?.emiratesId || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
-                    placeholder="784-1234-5678900-1"
-                  />
-                </div>
-                <div className="space-y-1 sm:space-y-1.5">
-                  <Label htmlFor="editPassport" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Passport Number</Label>
-                  <Input
-                    id="editPassport"
-                    defaultValue={application.sponsor?.passportNumber || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
->>>>>>> 0bb91c2 (tmmt update frontend)
                     placeholder="A1234567"
                   />
                 </div>
@@ -2661,7 +1695,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             {application.sponsored && (
               <>
                 <Separator className="bg-gray-200/50 dark:bg-white/10" />
-<<<<<<< HEAD
                 <div className="space-y-3">
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40 flex items-center gap-2">
                     <UserCheck className="h-3.5 w-3.5" />
@@ -2683,34 +1716,10 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                         id="editSponsoredLastName"
                         defaultValue={application.sponsored?.lastName || ''}
                         className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
-=======
-                <div className="space-y-2 sm:space-y-3">
-                  <p className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40 flex items-center gap-1.5 sm:gap-2">
-                    <User className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                    Sponsored Person Details
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                    <div className="space-y-1 sm:space-y-1.5">
-                      <Label htmlFor="editSponsoredFirstName" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">First Name</Label>
-                      <Input
-                        id="editSponsoredFirstName"
-                        defaultValue={application.sponsored?.firstName || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
-                        placeholder="Jane"
-                      />
-                    </div>
-                    <div className="space-y-1 sm:space-y-1.5">
-                      <Label htmlFor="editSponsoredLastName" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Last Name</Label>
-                      <Input
-                        id="editSponsoredLastName"
-                        defaultValue={application.sponsored?.lastName || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
->>>>>>> 0bb91c2 (tmmt update frontend)
                         placeholder="Smith"
                       />
                     </div>
                   </div>
-<<<<<<< HEAD
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                       <Label htmlFor="editSponsoredNationality" className="text-xs font-medium text-gray-700 dark:text-white/80">Nationality</Label>
@@ -2727,24 +1736,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                         id="editSponsoredPassport"
                         defaultValue={application.sponsored?.passportNumber || ''}
                         className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200"
-=======
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                    <div className="space-y-1 sm:space-y-1.5">
-                      <Label htmlFor="editSponsoredNationality" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Nationality</Label>
-                      <Input
-                        id="editSponsoredNationality"
-                        defaultValue={application.sponsored?.nationality || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
-                        placeholder="British"
-                      />
-                    </div>
-                    <div className="space-y-1 sm:space-y-1.5">
-                      <Label htmlFor="editSponsoredPassport" className="text-[10px] sm:text-xs font-medium text-gray-700 dark:text-white/80">Passport Number</Label>
-                      <Input
-                        id="editSponsoredPassport"
-                        defaultValue={application.sponsored?.passportNumber || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
->>>>>>> 0bb91c2 (tmmt update frontend)
                         placeholder="B7654321"
                       />
                     </div>
@@ -2754,26 +1745,17 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             )}
           </div>
 
-<<<<<<< HEAD
           {/* ─── Footer ──────────────────────────────────────── */}
           <div className="px-6 py-4 border-t border-gray-200/50 dark:border-white/10 bg-gray-50/50 dark:bg-white/5 flex flex-col sm:flex-row gap-3 justify-end">
             <Button
               variant="outline"
               onClick={() => setShowEditDialog(false)}
               className="rounded-xl border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white transition-all duration-200 order-2 sm:order-1"
-=======
-          <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-200/50 dark:border-white/10 bg-gray-50/50 dark:bg-white/5 flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
-            <Button
-              variant="outline"
-              onClick={() => setShowEditDialog(false)}
-              className="rounded-xl border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white transition-all duration-200 order-2 sm:order-1 h-9 sm:h-10 text-xs sm:text-sm"
->>>>>>> 0bb91c2 (tmmt update frontend)
             >
               Cancel
             </Button>
             <Button
               onClick={() => {
-<<<<<<< HEAD
                 // Here you would collect the values and call an API to update
                 toast.success('Application updated successfully');
                 setShowEditDialog(false);
@@ -2781,20 +1763,11 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               className="rounded-xl bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] font-semibold shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 order-1 sm:order-2"
             >
               <Save className="h-4 w-4 mr-2" />
-=======
-                toast.success('Application updated successfully');
-                setShowEditDialog(false);
-              }}
-              className="rounded-xl bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] font-semibold shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 order-1 sm:order-2 h-9 sm:h-10 text-xs sm:text-sm px-4 sm:px-6"
-            >
-              <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
->>>>>>> 0bb91c2 (tmmt update frontend)
               Save Changes
             </Button>
           </div>
         </DialogContent>
       </Dialog>
-<<<<<<< HEAD
 
       <Dialog open={showLiveChat} onOpenChange={setShowLiveChat}>
         <DialogContent className="max-w-md bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 rounded-2xl p-6">
@@ -2831,8 +1804,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
           </div>
         </DialogContent>
       </Dialog>
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
     </>
   );
 };

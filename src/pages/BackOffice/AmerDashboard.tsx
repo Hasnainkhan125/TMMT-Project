@@ -650,6 +650,7 @@ const ApplicationRow: React.FC<{
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Expanded Content - Premium Big Cards */}
         {isExpanded && (
           <motion.div
@@ -948,6 +949,259 @@ const ApplicationRow: React.FC<{
     </motion.div>
   );
 };
+=======
+     {/* Expanded Content - Modern Premium */}
+{isExpanded && (
+  <motion.div
+    initial={{ opacity: 0, height: 0 }}
+    animate={{ opacity: 1, height: 'auto' }}
+    exit={{ opacity: 0, height: 0 }}
+    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-b from-gray-50/80 to-white dark:from-gray-900/50 dark:to-gray-900 rounded-b-2xl overflow-hidden"
+  >
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        
+        {/* ─── Application Details ──────────────────────────────────────── */}
+        <div className="space-y-2 sm:space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
+              <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+            </div>
+            <h4 className="text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              Application Details
+            </h4>
+          </div>
+          
+          <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm bg-white/60 dark:bg-white/5 rounded-xl p-3 sm:p-4 border border-gray-200/50 dark:border-white/5 ">
+            <div className="flex justify-between items-center py-1 border-b border-gray-100/60 dark:border-white/5">
+              <span className="text-gray-500 dark:text-gray-400">ID</span>
+              <span className="font-mono font-medium text-gray-900 dark:text-white">#{application._id.slice(-8)}</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-gray-100/60 dark:border-white/5">
+              <span className="text-gray-500 dark:text-gray-400">Type</span>
+              <span className="capitalize font-medium text-gray-900 dark:text-white">{application.applicationType.replace(/_/g, ' ')}</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-gray-100/60 dark:border-white/5">
+              <span className="text-gray-500 dark:text-gray-400">Submitted</span>
+              <span className="font-medium text-gray-900 dark:text-white">{new Date(application.metadata.submittedAt || '').toLocaleDateString()}</span>
+            </div>
+            {(application.metadata as any).govStage && (
+              <div className="flex justify-between items-center py-1">
+                <span className="text-gray-500 dark:text-gray-400">Gov Stage</span>
+                <Badge className="bg-[#0A3269]/10 text-[#0A3269] dark:bg-[#0A3269]/20 dark:text-[#4A8ABF] border-0 rounded-full text-[8px] sm:text-[10px]">
+                  {(application.metadata as any).govStage}
+                </Badge>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ─── Documents ────────────────────────────────────────────────── */}
+        <div className="space-y-2 sm:space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
+                <FolderOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+              </div>
+              <h4 className="text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                Documents ({application.attachments.length})
+              </h4>
+            </div>
+            <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 text-[8px] sm:text-[10px]">
+              {application.attachments.filter((d: any) => d.status === 'approved').length} approved
+            </Badge>
+          </div>
+          
+          <div className="bg-white/60 dark:bg-white/5 rounded-xl border border-gray-200/50 dark:border-white/5 p-3 sm:p-4 shadow-sm">
+            <div className="space-y-2 max-h-48 sm:max-h-56 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+              {application.attachments.length > 0 ? (
+                application.attachments.slice(0, 5).map((doc: any, idx: number) => {
+                  const fileUrl = doc.url || doc.fileUrl || doc.path || '';
+                  const isImage = fileUrl?.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i) ||
+                                  doc.mimeType?.startsWith('image/');
+                  const fileName = doc.originalName || doc.filename || doc.type || 'Document';
+                  
+                  return (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      whileHover={{ scale: 1.01 }}
+                      className="flex items-center gap-2.5 sm:gap-3 bg-white/80 dark:bg-white/5 p-2 sm:p-3 rounded-xl border border-gray-100/80 dark:border-white/5 hover:border-[#0A3269]/20 dark:hover:border-[#0A3269]/30 transition-all duration-300 shadow-sm hover:shadow-md"
+                    >
+                      {/* Thumbnail */}
+                      <div className="relative flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 cursor-pointer"
+                        onClick={() => fileUrl && window.open(fileUrl, '_blank')}
+                      >
+                        {fileUrl && isImage ? (
+                          <img 
+                            src={fileUrl} 
+                            alt={doc.type || 'Document'}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const parent = e.currentTarget.parentElement;
+                              if (parent) {
+                                const fallback = document.createElement('div');
+                                fallback.className = 'w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700';
+                                fallback.innerHTML = `<svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+                                parent.appendChild(fallback);
+                              }
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A3269]/10 to-[#4A8ABF]/10 dark:from-[#0A3269]/20 dark:to-[#4A8ABF]/20">
+                            <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                          </div>
+                        )}
+                        {/* Status badge */}
+                        {doc.status && (
+                          <div className="absolute -top-0.5 -right-0.5">
+                            <Badge 
+                              className={cn(
+                                'text-[6px] sm:text-[7px] rounded-full px-1 py-0 border-0 shadow-sm',
+                                doc.status === 'approved' ? 'bg-emerald-500 text-white' :
+                                doc.status === 'rejected' ? 'bg-red-500 text-white' :
+                                doc.status === 'pending' ? 'bg-amber-500 text-white' :
+                                'bg-blue-500 text-white'
+                              )}
+                            >
+                              {doc.status === 'approved' ? '✓' :
+                               doc.status === 'rejected' ? '✕' :
+                               doc.status === 'pending' ? '⏳' : '⟳'}
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] sm:text-xs font-medium text-gray-900 dark:text-white truncate">
+                          {fileName}
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="text-[8px] sm:text-[10px] text-gray-400 dark:text-gray-500">
+                            {doc.fileSize ? `${(doc.fileSize / 1024).toFixed(0)} KB` : ''}
+                          </span>
+                          {fileUrl && (
+                            <>
+                              <span className="w-px h-2 bg-gray-300 dark:bg-gray-600" />
+                              <button 
+                                className="text-[8px] sm:text-[10px] text-[#0A3269] dark:text-[#4A8ABF] hover:underline flex items-center gap-0.5"
+                                onClick={() => window.open(fileUrl, '_blank')}
+                              >
+                                <Eye className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                                <span className="hidden xs:inline">Preview</span>
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })
+              ) : (
+                <div className="text-center py-6 sm:py-8 text-gray-400 text-xs sm:text-sm">
+                  <FileCheck className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 opacity-30" />
+                  No documents uploaded yet
+                </div>
+              )}
+              {application.attachments.length > 5 && (
+                <div className="text-[10px] sm:text-xs text-center text-[#0A3269] dark:text-[#4A8ABF] font-medium py-2 bg-[#0A3269]/5 dark:bg-[#0A3269]/10 rounded-xl border border-[#0A3269]/20 dark:border-[#0A3269]/30">
+                  +{application.attachments.length - 5} more documents
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* ─── Quick Actions ────────────────────────────────────────────── */}
+        <div className="space-y-2 sm:space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
+              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+            </div>
+            <h4 className="text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              Quick Actions
+            </h4>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
+            {[
+              { icon: Eye, label: 'View', onClick: () => onViewDetails(application), color: 'blue', desc: 'Full details' },
+              { icon: Upload, label: 'Upload', onClick: () => onDocumentUpload(application._id), color: 'emerald', desc: 'Add documents' },
+              { icon: FileText, label: 'Result', onClick: () => onResultUpload(application._id), color: 'purple', desc: 'Upload result' },
+              { icon: FileCheck, label: 'Review', onClick: () => onDocumentReview(application._id), disabled: !application.attachments?.length, color: 'amber', desc: 'Review docs' },
+            ].map((action, idx) => {
+              const colorMap: Record<string, string> = {
+                blue: 'hover:border-[#0A3269]/30 hover:bg-[#0A3269]/5 hover:text-[#0A3269] dark:hover:border-[#4A8ABF]/30 dark:hover:bg-[#4A8ABF]/10 dark:hover:text-[#4A8ABF]',
+                emerald: 'hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400',
+                purple: 'hover:border-purple-300 hover:bg-purple-50 hover:text-purple-600 dark:hover:border-purple-700 dark:hover:bg-purple-900/20 dark:hover:text-purple-400',
+                amber: 'hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600 dark:hover:border-amber-700 dark:hover:bg-amber-900/20 dark:hover:text-amber-400',
+              };
+              
+              const iconColorMap: Record<string, string> = {
+                blue: 'text-[#0A3269] dark:text-[#4A8ABF]',
+                emerald: 'text-emerald-500',
+                purple: 'text-purple-500',
+                amber: 'text-amber-500',
+              };
+              
+              return (
+                <motion.button
+                  key={idx}
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={action.disabled}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    action.onClick();
+                  }}
+                  className={cn(
+                    'group/btn relative flex flex-col items-center gap-1 p-3 sm:p-4 rounded-xl transition-all duration-300',
+                    'bg-white/60 dark:bg-white/5 border border-gray-200/50 dark:border-white/5',
+                    colorMap[action.color],
+                    action.disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
+                    'shadow-sm hover:shadow-md'
+                  )}
+                >
+                  <div className={cn(
+                    'flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg transition-all duration-300',
+                    'bg-gray-100/80 dark:bg-gray-800/80 group-hover/btn:bg-white/20',
+                    `group-hover/btn:${iconColorMap[action.color]}`
+                  )}>
+                    <action.icon className={cn(
+                      'w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300',
+                      iconColorMap[action.color],
+                      'group-hover/btn:scale-110'
+                    )} />
+                  </div>
+                  
+                  <span className="text-[10px] sm:text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover/btn:text-current transition-colors duration-300">
+                    {action.label}
+                  </span>
+                  <span className="text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 group-hover/btn:text-current/70 transition-colors duration-300">
+                    {action.disabled ? 'No docs' : action.desc}
+                  </span>
+                  
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+)}   
+ </div>
+    </motion.div>
+  );
+};
+
+>>>>>>> 0bb91c2 (tmmt update frontend)
 // ========== MAIN COMPONENT ==========
 const AmerDashboard: React.FC = () => {
   const { user, loading: authLoading, checkRole } = useAuth();

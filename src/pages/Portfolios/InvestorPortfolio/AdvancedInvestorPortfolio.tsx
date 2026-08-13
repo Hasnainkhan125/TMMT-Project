@@ -779,6 +779,7 @@ const AdvancedInvestorPortfolio = () => {
    {/* ─── CHECKS VIEW ────────────────────────────────────────────────────── */}
 {dataView === 'checks' && (
   <Card className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm">
+<<<<<<< HEAD
     <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
       <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
         <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
@@ -836,6 +837,59 @@ const AdvancedInvestorPortfolio = () => {
           </button>
         )}
       </div>
+=======
+<CardHeader className="flex flex-col items-start justify-between gap-4 p-3 sm:p-4 md:p-6">
+  <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
+    <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+      <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
+        <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
+          Your Checks
+          <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
+            {filteredChecks.length}
+          </Badge>
+        </CardTitle>
+        <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
+          Track all your government status checks
+        </CardDescription>
+      </div>
+    </div>
+  </div>
+</CardHeader>
+
+    <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
+{/* ─── Check Filter Buttons ────────────────────────────────────── */}
+<div className="mb-3 flex flex-wrap items-center gap-1.5">
+  {checkFilterButtons.map(({ key, label, count }) => (
+    <button
+      key={key}
+      type="button"
+      onClick={() => setCheckFilter(key)}
+      className={`
+        px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
+        ${checkFilter === key
+          ? 'bg-[#0A3269] text-white border-[#0A3269]'
+          : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
+        }
+      `}
+    >
+      <span className="whitespace-nowrap">{label}</span>
+      <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
+    </button>
+  ))}
+  {checkFilter !== 'all' && (
+    <button
+      type="button"
+      onClick={() => setCheckFilter('all')}
+      className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+    >
+      <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+    </button>
+  )}
+</div>
+>>>>>>> 0bb91c2 (tmmt update frontend)
 
       {/* ─── Content ────────────────────────────────────────────────── */}
       {checksLoading ? (
@@ -905,6 +959,7 @@ const AdvancedInvestorPortfolio = () => {
 )}
 {/* ─── APPLICATIONS VIEW ────────────────────────────────────────────── */}
 {dataView === 'applications' && (
+<<<<<<< HEAD
   <Card id="applications-section" className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm scroll-mt-20">
     <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
       <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
@@ -986,6 +1041,83 @@ const AdvancedInvestorPortfolio = () => {
             </Button>
           )}
         </div>
+=======
+ <Card id="applications-section" className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm scroll-mt-20">
+  <CardHeader className="flex flex-col items-start justify-between gap-3 sm:gap-4 p-3 sm:p-4 md:p-6">
+    <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+        <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
+          <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
+            Your Applications
+            <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
+              {filteredApplications.length}
+            </Badge>
+          </CardTitle>
+          <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
+            Track and manage all your visa applications
+          </CardDescription>
+        </div>
+      </div>
+    
+    </div>
+  </CardHeader>
+
+    <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
+{/* ─── Application Filter Buttons ──────────────────────────────── */}
+<div className="mb-3 flex flex-wrap items-center gap-1.5">
+  {appFilterButtons.map(({ key, label, count }) => (
+    <button
+      key={key}
+      type="button"
+      onClick={() => setAppFilter(key)}
+      className={`
+        px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
+        ${appFilter === key
+          ? 'bg-[#0A3269] text-white border-[#0A3269]'
+          : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
+        }
+      `}
+    >
+      <span className="whitespace-nowrap">{label}</span>
+      <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
+    </button>
+  ))}
+  {appFilter !== 'all' && (
+    <button
+      type="button"
+      onClick={() => setAppFilter('all')}
+      className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+    >
+      <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+    </button>
+  )}
+</div>
+{/* ─── Content ────────────────────────────────────────────────── */}
+{filteredApplications.length === 0 ? (
+  <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
+    <ClipboardList className="text-[#0A3269] dark:text-white mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+    <h4 className="text-gray-900 dark:text-white mb-1 sm:mb-1.5 text-sm sm:text-base md:text-lg font-light">
+      {applications.length === 0 ? 'No applications yet' : 'No applications match'}
+    </h4>
+    <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
+      {applications.length === 0
+        ? 'Start your first visa application today!'
+        : 'Try changing your filter to see more applications.'}
+    </p>
+    {applications.length === 0 && (
+      <Button
+        className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-light"
+        onClick={() => setShowStartApplication(true)}
+      >
+        <Plus className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
+        Create Application
+      </Button>
+    )}
+  </div>
+>>>>>>> 0bb91c2 (tmmt update frontend)
       ) : (
         <div className="space-y-4 sm:space-y-5">
           <AnimatePresence mode="popLayout">
@@ -1057,6 +1189,7 @@ const AdvancedInvestorPortfolio = () => {
             </CardDescription>
           </div>
         </div>
+<<<<<<< HEAD
         <Button
           className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-light tracking-wide"
           onClick={() => navigate('/packages')}
@@ -1064,10 +1197,14 @@ const AdvancedInvestorPortfolio = () => {
           <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
           Browse Packages
         </Button>
+=======
+      
+>>>>>>> 0bb91c2 (tmmt update frontend)
       </div>
     </CardHeader>
 
     <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
+<<<<<<< HEAD
       {/* ─── Package Filter ────────────────────────────────────────── */}
       <div className="mb-3 flex flex-wrap items-center gap-1.5">
         {[
@@ -1153,6 +1290,92 @@ const AdvancedInvestorPortfolio = () => {
       )}
     </CardContent>
   </Card>
+=======
+{/* ─── Package Filter ────────────────────────────────────────── */}
+<div className="mb-3 flex flex-wrap items-center gap-1.5">
+  {[
+    { key: 'all', label: 'All' },
+    { key: 'submitted', label: 'Submitted' },
+    { key: 'processing', label: 'Processing' },
+    { key: 'completed', label: 'Completed' },
+    { key: 'cancelled', label: 'Cancelled' },
+  ].map(({ key, label }) => (
+    <button
+      key={key}
+      type="button"
+      onClick={() => setPackageFilter(key as any)}
+      className={`
+        px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
+        ${packageFilter === key
+          ? 'bg-[#0A3269] text-white border-[#0A3269]'
+          : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
+        }
+      `}
+    >
+      <span className="whitespace-nowrap">{label}</span>
+      <span className="opacity-60 ml-0.5 sm:ml-1">({key === 'all'
+        ? packageApps.length
+        : packageApps.filter(p => p.status === key).length})</span>
+    </button>
+  ))}
+  {packageFilter !== 'all' && (
+    <button
+      type="button"
+      onClick={() => setPackageFilter('all')}
+      className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+    >
+      <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+    </button>
+  )}
+</div>
+
+    {/* ─── Content ────────────────────────────────────────────────── */}
+{packageLoading ? (
+  <div className="space-y-2">
+    {[1, 2, 3].map((i) => (
+      <div key={i} className="animate-pulse">
+        <div className="h-16 sm:h-20 rounded-xl bg-gray-100/60 dark:bg-white/5" />
+      </div>
+    ))}
+  </div>
+) : filteredPackages.length === 0 ? (
+  <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-xl py-6 sm:py-8 md:py-10 text-center">
+    <Package className="text-[#0A3269] dark:text-white mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+    <h3 className="text-gray-900 dark:text-white mb-1 text-sm sm:text-base md:text-lg font-light">
+      {packageApps.length === 0 ? 'No packages yet' : 'No packages match filter'}
+    </h3>
+    <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
+      {packageApps.length === 0
+        ? 'Explore our packages and start your journey'
+        : 'Try changing your filter to see more packages'}
+    </p>
+    {packageApps.length === 0 && (
+      <Button
+        className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-light"
+        onClick={() => navigate('/packages')}
+      >
+        <Package className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
+        Explore Packages
+      </Button>
+    )}
+  </div>
+) : (
+  <div className="space-y-2 sm:space-y-3 md:space-y-4">
+    <AnimatePresence mode="popLayout">
+      {filteredPackages.map((pkg) => (
+        <PackageCard
+          key={pkg._id}
+          package={pkg}
+          onDelete={() => fetchPackages()}
+          onRefresh={() => fetchPackages()}
+        />
+      ))}
+    </AnimatePresence>
+  </div>
+)}
+</CardContent>
+</Card>
+>>>>>>> 0bb91c2 (tmmt update frontend)
 )}
       {/* ─── EMPTY STATE (When no view is selected) ────────────────────────── */}
       {dataView === null && (

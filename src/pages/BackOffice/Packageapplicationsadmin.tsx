@@ -1,29 +1,18 @@
 // components/PackageApplicationsAdmin.jsx
 // Modern, responsive admin panel for package applications
-<<<<<<< HEAD
-import { useState, useMemo, useRef } from 'react';
-=======
 import { useState, useMemo, useRef, useEffect } from 'react';
->>>>>>> 0bb91c2 (tmmt update frontend)
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Layers, FileText, Download, Check, X, ChevronDown, ChevronUp,
   Send, CreditCard, MessageSquare, Users, TrendingUp, AlertCircle,
-<<<<<<< HEAD
-  Clock, DollarSign, Eye, Trash2, Filter, RefreshCw,
-=======
   Clock, DollarSign, Eye, Trash2, Filter, RefreshCw, User, UserCog,
   Image, FileIcon, EyeIcon, ThumbsUp, ThumbsDown, Shield,
->>>>>>> 0bb91c2 (tmmt update frontend)
 } from 'lucide-react';
 import { Package } from 'lucide-react';
 import { usePackageAdmin } from '@/hooks/usePackageAdmin';
 import { PACKAGE_CONFIG } from '@/config/packageDocs';
 import { cn } from '@/lib/utils';
-<<<<<<< HEAD
-=======
 import { toast } from 'sonner';
->>>>>>> 0bb91c2 (tmmt update frontend)
 
 const STATUS_FLOW = ['submitted', 'contacted', 'docs_required', 'pending_payment', 'paid', 'processing', 'completed', 'rejected', 'cancelled'];
 const STATUS_STYLE = {
@@ -40,8 +29,6 @@ const STATUS_STYLE = {
 const fmtAED = (n) => `AED ${Math.round(n || 0).toLocaleString()}`;
 const accentOf = (slug) => PACKAGE_CONFIG[slug]?.accent || '#888780';
 
-<<<<<<< HEAD
-=======
 // ─── Helper: Get file icon based on mime type ──────────────────────
 const getFileIcon = (mimeType, filename) => {
   if (!mimeType && !filename) return FileText;
@@ -410,7 +397,6 @@ function DocumentPreview({ doc, appId, downloadUrl, previewUrl, accent, onApprov
   );
 }
 
->>>>>>> 0bb91c2 (tmmt update frontend)
 // ─── Main Component ────────────────────────────────────────────────────
 export default function PackageApplicationsAdmin() {
   const {
@@ -423,12 +409,9 @@ export default function PackageApplicationsAdmin() {
     addComment,
     updatePayment,
     downloadUrl,
-<<<<<<< HEAD
-=======
     previewUrl,
     approveDocument,
     rejectDocument,
->>>>>>> 0bb91c2 (tmmt update frontend)
     fetchApplications,
   } = usePackageAdmin({ mine: false });
 
@@ -449,10 +432,7 @@ export default function PackageApplicationsAdmin() {
     searchRef.current?.focus();
   };
 
-<<<<<<< HEAD
   // ─── Status chips data ──────────────────────────────────────────────
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
   const statusChips = [
     { label: 'All', value: 'all', count: applications.length },
     { label: 'Submitted', value: 'submitted', count: applications.filter(a => a.status === 'submitted').length },
@@ -462,20 +442,12 @@ export default function PackageApplicationsAdmin() {
   ];
 
   return (
-<<<<<<< HEAD
-    <div className="space-y-2 ">
-=======
     <div className="space-y-2">
->>>>>>> 0bb91c2 (tmmt update frontend)
       {/* ─── Header ────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h4 className="text-xl font-light tracking-tight text-foreground flex items-center gap-2">
-<<<<<<< HEAD
-    <Package className="h-10 w-10 sm:h-12 sm:w-14 text-[#0A3269] dark:text-[#0A3269]" strokeWidth={1.5} />
-=======
             <Package className="h-10 w-10 sm:h-12 sm:w-14 text-[#0A3269] dark:text-[#0A3269]" strokeWidth={1.5} />
->>>>>>> 0bb91c2 (tmmt update frontend)
             Package Applications
           </h4>
           <p className="text-sm text-muted-foreground">Manage all package applications from customers</p>
@@ -552,38 +524,6 @@ export default function PackageApplicationsAdmin() {
         })}
       </div>
 
-<<<<<<< HEAD
-{/* ─── Applications List ────────────────────────────────────────── */}
-{loading ? (
-  <div className="flex flex-col items-center justify-center py-8 sm:py-16">
-    <div className="relative h-8 w-8 sm:h-10 sm:w-10">
-      <div className="absolute inset-0 rounded-full border-2 border-muted" />
-      <div className="absolute inset-0 rounded-full border-2 border-[#0A3269] dark:border-[#4A8ABF] border-t-transparent animate-spin" />
-    </div>
-    <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-muted-foreground">Loading applications…</p>
-  </div>
-) : applications.length === 0 ? (
-  <div className="flex flex-col items-center justify-center py-8 sm:py-16 text-center border-2 border-dashed border-border rounded-2xl bg-muted/20 px-4 sm:px-8">
-    <Package className="h-10 w-10 sm:h-12 sm:w-14 text-[#0A3269] dark:text-[#0A3269]" strokeWidth={1.5} />
-    <h4 className="mt-2 sm:mt-3 text-base sm:text-lg font-medium text-foreground">No package applications</h4>
-<p className="text-xs sm:text-sm text-muted-foreground max-w-[220px] sm:max-w-sm mx-auto">
-  Applications submitted by customers will appear here.
-</p>  </div>
-) : (
-  <div className="space-y-2 sm:space-y-3">
-    {applications.map((app) => (
-      <PackageRow
-        key={app._id}
-        app={app}
-        isOpen={openId === app._id}
-        onToggle={() => setOpenId(openId === app._id ? null : app._id)}
-        actions={{ updateStatus, requestDocs, addComment, updatePayment, downloadUrl }}
-        accent={accentOf(app.packageSlug)}
-      />
-    ))}
-  </div>
-)}
-=======
       {/* ─── Applications List ────────────────────────────────────────── */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-8 sm:py-16">
@@ -624,7 +564,6 @@ export default function PackageApplicationsAdmin() {
           ))}
         </div>
       )}
->>>>>>> 0bb91c2 (tmmt update frontend)
     </div>
   );
 }
@@ -719,8 +658,6 @@ function DetailPanel({ app, actions, accent }) {
   const [msg, setMsg] = useState('');
   const [payLink, setPayLink] = useState(app.payment?.paymentLink || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
-<<<<<<< HEAD
-=======
   const chatContainerRef = useRef(null);
 
   // ─── Comments state ──────────────────────────────────────────────────
@@ -765,7 +702,6 @@ function DetailPanel({ app, actions, accent }) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [comments]);
->>>>>>> 0bb91c2 (tmmt update frontend)
 
   const handleAction = async (fn, ...args) => {
     setIsSubmitting(true);
@@ -776,8 +712,6 @@ function DetailPanel({ app, actions, accent }) {
     }
   };
 
-<<<<<<< HEAD
-=======
   // ─── Send Message (Admin) ──────────────────────────────────────────
   const handleSendMessage = async () => {
     if (!msg.trim()) {
@@ -813,40 +747,11 @@ function DetailPanel({ app, actions, accent }) {
     }
   };
 
->>>>>>> 0bb91c2 (tmmt update frontend)
   return (
     <div className="p-4 md:p-5 bg-gradient-to-b from-muted/10 to-transparent">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ─── LEFT COLUMN ─────────────────────────────────────────────── */}
         <div className="space-y-5">
-<<<<<<< HEAD
-          {/* Documents */}
-          <Section title={`Documents (${app.documents?.length || 0})`} icon={<FileText className="h-3.5 w-3.5" />}>
-            {app.documents?.length ? (
-              <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-                {app.documents.map((d) => (
-                  <div key={d._id} className="flex items-center gap-2 rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 transition hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30">
-                    <FileText className="h-4 w-4 shrink-0" style={{ color: accent }} />
-                    <span className="flex-1 text-xs truncate font-medium">{d.label}</span>
-                    <a
-                      href={actions.downloadUrl(app._id, d._id)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="p-1 rounded-lg hover:bg-muted transition-colors"
-                      title="Download"
-                    >
-                      <Download className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
-                    </a>
-                    <span className={cn(
-                      "text-[9px] px-2 py-0.5 rounded-full font-medium",
-                      d.status === 'approved' ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" :
-                      d.status === 'rejected' ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" :
-                      "bg-muted text-muted-foreground"
-                    )}>
-                      {d.status || 'pending'}
-                    </span>
-                  </div>
-=======
           {/* Documents with Preview and Approve/Reject */}
           <Section title={`Documents (${app.documents?.length || 0})`} icon={<FileText className="h-3.5 w-3.5" />}>
             {app.documents?.length ? (
@@ -862,7 +767,6 @@ function DetailPanel({ app, actions, accent }) {
                     onApprove={actions.approveDocument}
                     onReject={actions.rejectDocument}
                   />
->>>>>>> 0bb91c2 (tmmt update frontend)
                 ))}
               </div>
             ) : (
@@ -885,47 +789,6 @@ function DetailPanel({ app, actions, accent }) {
             </Section>
           )}
 
-<<<<<<< HEAD
-          {/* Conversation */}
-          <Section title="Conversation" icon={<MessageSquare className="h-3.5 w-3.5" />}>
-            <div className="rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 p-3 max-h-40 overflow-y-auto space-y-2">
-              {app.comments?.length ? (
-                app.comments.map((c) => (
-                  <div key={c._id} className={cn("text-xs", c.by === 'customer' ? '' : 'text-right')}>
-                    <span
-                      className="inline-block rounded-xl px-3 py-1.5 max-w-[85%] leading-relaxed"
-                      style={{ background: c.by === 'customer' ? 'var(--muted)' : `${accent}1a` }}
-                    >
-                      {c.message}
-                    </span>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">
-                      {c.authorName || c.by} · {new Date(c.at).toLocaleString()}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <Empty>No messages yet.</Empty>
-              )}
-            </div>
-            <div className="flex gap-1.5 mt-2">
-              <input
-                value={msg}
-                onChange={(e) => setMsg(e.target.value)}
-                placeholder="Message customer…"
-                className="flex-1 rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2 text-xs outline-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition"
-              />
-              <button
-                onClick={async () => {
-                  if (msg.trim()) {
-                    await handleAction(actions.addComment, app._id, msg);
-                    setMsg('');
-                  }
-                }}
-                disabled={isSubmitting}
-                className="rounded-xl bg-foreground px-4 text-background disabled:opacity-50 transition hover:bg-foreground/90"
-              >
-                <Send className="h-3.5 w-3.5" />
-=======
           {/* Request Documents */}
           <Section title="Request Documents" icon={<FileText className="h-3.5 w-3.5" />}>
             <div className="space-y-2">
@@ -946,7 +809,6 @@ function DetailPanel({ app, actions, accent }) {
                 className="w-full rounded-xl border border-border/50 py-2.5 text-sm font-medium transition hover:bg-muted/50 disabled:opacity-50"
               >
                 Request from Customer
->>>>>>> 0bb91c2 (tmmt update frontend)
               </button>
             </div>
           </Section>
@@ -982,33 +844,6 @@ function DetailPanel({ app, actions, accent }) {
             </div>
           </Section>
 
-<<<<<<< HEAD
-          {/* Request Documents */}
-          <Section title="Request Documents" icon={<FileText className="h-3.5 w-3.5" />}>
-            <div className="space-y-2">
-              <input
-                value={reqLabel}
-                onChange={(e) => setReqLabel(e.target.value)}
-                placeholder="e.g. Tenancy contract"
-                className="w-full rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 text-sm outline-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition"
-              />
-              <button
-                onClick={() => {
-                  if (reqLabel.trim()) {
-                    handleAction(actions.requestDocs, app._id, [{ label: reqLabel }], '');
-                    setReqLabel('');
-                  }
-                }}
-                disabled={isSubmitting}
-                className="w-full rounded-xl border border-border/50 py-2.5 text-sm font-medium transition hover:bg-muted/50 disabled:opacity-50"
-              >
-                Request from Customer
-              </button>
-            </div>
-          </Section>
-
-=======
->>>>>>> 0bb91c2 (tmmt update frontend)
           {/* Payment */}
           <Section title="Payment" icon={<CreditCard className="h-3.5 w-3.5" />}>
             <div className="space-y-2">
@@ -1043,8 +878,6 @@ function DetailPanel({ app, actions, accent }) {
               </button>
             </div>
           </Section>
-<<<<<<< HEAD
-=======
 
           {/* ─── MODERN CONVERSATION SECTION ──────────────────────────── */}
           <Section title="Conversation" icon={<MessageSquare className="h-3.5 w-3.5" />}>
@@ -1123,7 +956,6 @@ function DetailPanel({ app, actions, accent }) {
               </div>
             </div>
           </Section>
->>>>>>> 0bb91c2 (tmmt update frontend)
         </div>
       </div>
     </div>
@@ -1145,8 +977,4 @@ function Section({ title, icon, children }) {
 
 function Empty({ children }) {
   return <p className="text-xs text-muted-foreground py-1">{children}</p>;
-<<<<<<< HEAD
-} 
-=======
 }
->>>>>>> 0bb91c2 (tmmt update frontend)

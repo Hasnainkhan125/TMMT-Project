@@ -171,20 +171,17 @@ const AdvancedInvestorPortfolio = () => {
     return 'dashboard';
   };
 
-
   const handleEmailClick = () => {
-  const email = 'support@tammat.ae';
-  window.location.href = `mailto:${email}`;
-  // Fallback after 2 seconds
-  setTimeout(() => {
-    if (document.hasFocus()) {
-      navigator.clipboard.writeText(email)
-        .then(() => toast.info('Email copied to clipboard!'))
-        .catch(() => toast.info(`Please email ${email}`));
-    }
-  }, 2000);
-};
-
+    const email = 'support@tammat.ae';
+    window.location.href = `mailto:${email}`;
+    setTimeout(() => {
+      if (document.hasFocus()) {
+        navigator.clipboard.writeText(email)
+          .then(() => toast.info('Email copied to clipboard!'))
+          .catch(() => toast.info(`Please email ${email}`));
+      }
+    }, 2000);
+  };
 
   const [activeTab, setActiveTab] = useState<TabKey>(getTabFromPath(location.pathname));
   const [showStartApplication, setShowStartApplication] = useState(false);
@@ -776,607 +773,381 @@ const AdvancedInvestorPortfolio = () => {
         )}
       </div>
 
-   {/* ─── CHECKS VIEW ────────────────────────────────────────────────────── */}
-{dataView === 'checks' && (
-  <Card className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm">
-<<<<<<< HEAD
-    <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
-      <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-          <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
-            <ClipboardCheck className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <CardTitle className="flex flex-wrap items-center gap-1.5 text-base sm:text-lg md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
-              Your Checks
-              <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[11px] sm:text-[10px] md:text-[11px] font-light px-2.5 py-1 rounded-full">
-                {filteredChecks.length}
-              </Badge>
-            </CardTitle>
-            <CardDescription className="text-sm sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
-              Track all your government status checks
-            </CardDescription>
-          </div>
-        </div>
-        <Button
-          className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1A4A8A] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-light tracking-wide"
-          onClick={() => navigate('/customer-dashboard')}
-        >
-          <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-          New Check
-        </Button>
-      </div>
-    </CardHeader>
-
-    <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-      {/* ─── Check Filter Buttons ────────────────────────────────────── */}
-      <div className="mb-3 flex flex-wrap items-center gap-1.5">
-        {checkFilterButtons.map(({ key, label, count }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setCheckFilter(key)}
-            className={`
-              px-3 py-1.5 rounded-full text-[10px] font-medium transition-all duration-200 border
-              ${checkFilter === key
-                ? 'bg-[#0A3269] text-white border-[#0A3269]'
-                : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
-              }
-            `}
-          >
-            {label} <span className="opacity-60">({count})</span>
-          </button>
-        ))}
-        {checkFilter !== 'all' && (
-          <button
-            type="button"
-            onClick={() => setCheckFilter('all')}
-            className="px-2 py-0.5 rounded-full text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
-          >
-            <XCircle className="h-3.5 w-3.5" />
-          </button>
-        )}
-      </div>
-=======
-<CardHeader className="flex flex-col items-start justify-between gap-4 p-3 sm:p-4 md:p-6">
-  <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-    <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-      <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
-        <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
-          Your Checks
-          <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
-            {filteredChecks.length}
-          </Badge>
-        </CardTitle>
-        <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
-          Track all your government status checks
-        </CardDescription>
-      </div>
-    </div>
-  </div>
-</CardHeader>
-
-    <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-{/* ─── Check Filter Buttons ────────────────────────────────────── */}
-<div className="mb-3 flex flex-wrap items-center gap-1.5">
-  {checkFilterButtons.map(({ key, label, count }) => (
-    <button
-      key={key}
-      type="button"
-      onClick={() => setCheckFilter(key)}
-      className={`
-        px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
-        ${checkFilter === key
-          ? 'bg-[#0A3269] text-white border-[#0A3269]'
-          : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
-        }
-      `}
-    >
-      <span className="whitespace-nowrap">{label}</span>
-      <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
-    </button>
-  ))}
-  {checkFilter !== 'all' && (
-    <button
-      type="button"
-      onClick={() => setCheckFilter('all')}
-      className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
-    >
-      <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-    </button>
-  )}
-</div>
->>>>>>> 0bb91c2 (tmmt update frontend)
-
-      {/* ─── Content ────────────────────────────────────────────────── */}
-      {checksLoading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse">
-              <div className="h-20 sm:h-24 rounded-xl bg-gray-100/60 dark:bg-white/5" />
+      {/* ─── CHECKS VIEW ────────────────────────────────────────────────────── */}
+      {dataView === 'checks' && (
+        <Card className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm">
+          <CardHeader className="flex flex-col items-start justify-between gap-4 p-3 sm:p-4 md:p-6">
+            <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
+              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
+                  <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
+                    Your Checks
+                    <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
+                      {filteredChecks.length}
+                    </Badge>
+                  </CardTitle>
+                  <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
+                    Track all your government status checks
+                  </CardDescription>
+                </div>
+              </div>
+              <Button
+                className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1A4A8A] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-light tracking-wide"
+                onClick={() => navigate('/customer-dashboard')}
+              >
+                <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+                New Check
+              </Button>
             </div>
-          ))}
-        </div>
-      ) : filteredChecks.length === 0 ? (
-        <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-xl py-12 sm:py-16 text-center">
-          <ClipboardCheck className="text-[#0A3269] dark:text-white mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
-          <h3 className="text-gray-900 dark:text-white mb-2 text-lg sm:text-xl font-light">
-            {checks.length === 0 ? 'No checks yet' : 'No checks match filter'}
-          </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-4 px-4 text-sm sm:text-base font-light max-w-md mx-auto">
-            {checks.length === 0
-              ? 'Start your first government status check today'
-              : 'Try changing your filter to see more checks'}
-          </p>
-          {checks.length === 0 && (
-            <Button
-              className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1A4A8A] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-light"
-              onClick={() => navigate('/services')}
-            >
-              <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Start a Check
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className="space-y-3 sm:space-y-4">
-          <AnimatePresence mode="popLayout">
-            {filteredChecks.map((check) => (
-              <CheckCard
-                key={check._id || check.id}
-                check={{
-                  id: check._id || check.id,
-                  serviceId: check.serviceId,
-                  serviceType: check.serviceType,
-                  status: check.status,
-                  speedTier: check.speedTier,
-                  documents: check.documents || [],
-                  identifiers: check.identifiers || {},
-                  result: check.result,
-                  createdAt: check.createdAt,
-                  updatedAt: check.updatedAt,
-                }}
-                onViewResult={(check) => {
-                  toast.info('Viewing check result...');
-                }}
-                onDownloadDocument={(doc) => {
-                  toast.info('Downloading document...');
-                }}
-                onDelete={(checkId) => {
-                  setChecks(prev => prev.filter(c => (c._id || c.id) !== checkId));
-                  toast.success('Check deleted successfully');
-                }}
-              />
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
-    </CardContent>
-  </Card>
-)}
-{/* ─── APPLICATIONS VIEW ────────────────────────────────────────────── */}
-{dataView === 'applications' && (
-<<<<<<< HEAD
-  <Card id="applications-section" className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm scroll-mt-20">
-    <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
-      <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-          <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
-            <ClipboardList className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <CardTitle className="flex flex-wrap items-center gap-1.5 text-base sm:text-lg md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
-              Your Applications
-              <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[11px] sm:text-[10px] md:text-[11px] font-light px-2.5 py-1 rounded-full">
-                {filteredApplications.length}
-              </Badge>
-            </CardTitle>
-            <CardDescription className="text-sm sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
-              Track and manage all your visa applications
-            </CardDescription>
-          </div>
-        </div>
-        <Button
-          className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-light tracking-wide"
-          onClick={() => setShowStartApplication(true)}
-        >
-          <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-          Create Application
-        </Button>
-      </div>
-    </CardHeader>
+          </CardHeader>
 
-    <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-      {/* ─── Application Filter Buttons ──────────────────────────────── */}
-      <div className="mb-3 flex flex-wrap items-center gap-1.5">
-        {appFilterButtons.map(({ key, label, count }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setAppFilter(key)}
-            className={`
-              px-3 py-1.5 rounded-full text-[10px] font-medium transition-all duration-200 border
-              ${appFilter === key
-                ? 'bg-[#0A3269] text-white border-[#0A3269]'
-                : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
-              }
-            `}
-          >
-            {label} ({count})
-          </button>
-        ))}
-        {appFilter !== 'all' && (
-          <button
-            type="button"
-            onClick={() => setAppFilter('all')}
-            className="px-2 py-0.5 rounded-full text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
-          >
-            <XCircle className="h-3.5 w-3.5" />
-          </button>
-        )}
-      </div>
-
-      {/* ─── Content ────────────────────────────────────────────────── */}
-      {filteredApplications.length === 0 ? (
-        <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-12 sm:py-16 text-center">
-          <ClipboardList className="text-[#0A3269] dark:text-white mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
-          <h3 className="text-gray-900 dark:text-white mb-2 text-lg sm:text-xl font-light">
-            {applications.length === 0 ? 'No applications yet' : 'No applications match filter'}
-          </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-4 px-4 text-sm sm:text-base font-light max-w-md mx-auto">
-            {applications.length === 0
-              ? 'Start your first visa application today!'
-              : 'Try changing your filter to see more applications.'}
-          </p>
-          {applications.length === 0 && (
-            <Button
-              className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-light"
-              onClick={() => setShowStartApplication(true)}
-            >
-              <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Create Application
-            </Button>
-          )}
-        </div>
-=======
- <Card id="applications-section" className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm scroll-mt-20">
-  <CardHeader className="flex flex-col items-start justify-between gap-3 sm:gap-4 p-3 sm:p-4 md:p-6">
-    <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-        <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
-          <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
-            Your Applications
-            <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
-              {filteredApplications.length}
-            </Badge>
-          </CardTitle>
-          <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
-            Track and manage all your visa applications
-          </CardDescription>
-        </div>
-      </div>
-    
-    </div>
-  </CardHeader>
-
-    <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-{/* ─── Application Filter Buttons ──────────────────────────────── */}
-<div className="mb-3 flex flex-wrap items-center gap-1.5">
-  {appFilterButtons.map(({ key, label, count }) => (
-    <button
-      key={key}
-      type="button"
-      onClick={() => setAppFilter(key)}
-      className={`
-        px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
-        ${appFilter === key
-          ? 'bg-[#0A3269] text-white border-[#0A3269]'
-          : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
-        }
-      `}
-    >
-      <span className="whitespace-nowrap">{label}</span>
-      <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
-    </button>
-  ))}
-  {appFilter !== 'all' && (
-    <button
-      type="button"
-      onClick={() => setAppFilter('all')}
-      className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
-    >
-      <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-    </button>
-  )}
-</div>
-{/* ─── Content ────────────────────────────────────────────────── */}
-{filteredApplications.length === 0 ? (
-  <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
-    <ClipboardList className="text-[#0A3269] dark:text-white mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
-    <h4 className="text-gray-900 dark:text-white mb-1 sm:mb-1.5 text-sm sm:text-base md:text-lg font-light">
-      {applications.length === 0 ? 'No applications yet' : 'No applications match'}
-    </h4>
-    <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
-      {applications.length === 0
-        ? 'Start your first visa application today!'
-        : 'Try changing your filter to see more applications.'}
-    </p>
-    {applications.length === 0 && (
-      <Button
-        className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-light"
-        onClick={() => setShowStartApplication(true)}
-      >
-        <Plus className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
-        Create Application
-      </Button>
-    )}
-  </div>
->>>>>>> 0bb91c2 (tmmt update frontend)
-      ) : (
-        <div className="space-y-4 sm:space-y-5">
-          <AnimatePresence mode="popLayout">
-            {filteredApplications.map((app: any) => {
-              const appId = app._id || app.id;
-              const canDelete = userDetails?.role === 'amer' || userDetails?.role === 'admin';
-              const handleDelete = async () => {
-                try {
-                  const token = localStorage.getItem('authToken');
-                  if (!token) throw new Error('Not authenticated');
-                  const response = await fetch(`${apiBase}/api/v1/visa/${appId}`, {
-                    method: 'DELETE',
-                    headers: { Authorization: `Bearer ${token}` },
-                  });
-                  if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.message || 'Failed to delete application');
-                  }
-                  await fetchApplications();
-                  toast.success('Application deleted successfully');
-                } catch (error: any) {
-                  toast.error(error.message || 'You do not have permission to delete this application.');
-                }
-              };
-              return (
-                <ExpandedApplicationCard
-                  key={appId}
-                  application={app}
-                  isExpanded={expandedApplicationIds.has(appId)}
-                  onToggle={() => {
-                    setExpandedApplicationIds(prev => {
-                      const newSet = new Set(prev);
-                      if (newSet.has(appId)) newSet.delete(appId);
-                      else newSet.add(appId);
-                      return newSet;
-                    });
-                  }}
-                  onDocumentView={(doc) => handleViewResultDocument(doc, app)}
-                  onDocumentDownload={(doc) => handleDocumentDownload(doc, app)}
-                  canDelete={canDelete}
-                  onDelete={canDelete ? handleDelete : undefined}
-                />
-              );
-            })}
-          </AnimatePresence>
-        </div>
-      )}
-    </CardContent>
-  </Card>
-)}
-    {/* ─── PACKAGES VIEW ────────────────────────────────────────────── */}
-{dataView === 'packages' && (
-  <Card className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm">
-    <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
-      <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-          <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
-            <Package className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <CardTitle className="flex flex-wrap items-center gap-1.5 text-base sm:text-lg md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
-              Your Packages
-              <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[11px] sm:text-[10px] md:text-[11px] font-light px-2.5 py-1 rounded-full">
-                {filteredPackages.length}
-              </Badge>
-            </CardTitle>
-            <CardDescription className="text-sm sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
-              View all your package applications
-            </CardDescription>
-          </div>
-        </div>
-<<<<<<< HEAD
-        <Button
-          className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-light tracking-wide"
-          onClick={() => navigate('/packages')}
-        >
-          <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-          Browse Packages
-        </Button>
-=======
-      
->>>>>>> 0bb91c2 (tmmt update frontend)
-      </div>
-    </CardHeader>
-
-    <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-<<<<<<< HEAD
-      {/* ─── Package Filter ────────────────────────────────────────── */}
-      <div className="mb-3 flex flex-wrap items-center gap-1.5">
-        {[
-          { key: 'all', label: 'All' },
-          { key: 'submitted', label: 'Submitted' },
-          { key: 'processing', label: 'Processing' },
-          { key: 'completed', label: 'Completed' },
-          { key: 'cancelled', label: 'Cancelled' },
-        ].map(({ key, label }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setPackageFilter(key as any)}
-            className={`
-              px-3 py-1.5 rounded-full text-[10px] font-medium transition-all duration-200 border
-              ${packageFilter === key
-                ? 'bg-[#0A3269] text-white border-[#0A3269]'
-                : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
-              }
-            `}
-          >
-            {label} (
-            {key === 'all'
-              ? packageApps.length
-              : packageApps.filter(p => p.status === key).length}
-            )
-          </button>
-        ))}
-        {packageFilter !== 'all' && (
-          <button
-            type="button"
-            onClick={() => setPackageFilter('all')}
-            className="px-2 py-0.5 rounded-full text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
-          >
-            <XCircle className="h-3.5 w-3.5" />
-          </button>
-        )}
-      </div>
-
-      {/* ─── Content ────────────────────────────────────────────────── */}
-      {packageLoading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse">
-              <div className="h-20 sm:h-24 rounded-xl bg-gray-100/60 dark:bg-white/5" />
+          <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
+            {/* ─── Check Filter Buttons ────────────────────────────────────── */}
+            <div className="mb-3 flex flex-wrap items-center gap-1.5">
+              {checkFilterButtons.map(({ key, label, count }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setCheckFilter(key)}
+                  className={`
+                    px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
+                    ${checkFilter === key
+                      ? 'bg-[#0A3269] text-white border-[#0A3269]'
+                      : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
+                    }
+                  `}
+                >
+                  <span className="whitespace-nowrap">{label}</span>
+                  <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
+                </button>
+              ))}
+              {checkFilter !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => setCheckFilter('all')}
+                  className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+                >
+                  <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </button>
+              )}
             </div>
-          ))}
-        </div>
-      ) : filteredPackages.length === 0 ? (
-        <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-xl py-12 sm:py-16 text-center">
-          <Package className="text-[#0A3269] dark:text-white mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
-          <h3 className="text-gray-900 dark:text-white mb-2 text-lg sm:text-xl font-light">
-            {packageApps.length === 0 ? 'No packages yet' : 'No packages match filter'}
-          </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-4 px-4 text-sm sm:text-base font-light max-w-md mx-auto">
-            {packageApps.length === 0
-              ? 'Explore our packages and start your journey'
-              : 'Try changing your filter to see more packages'}
-          </p>
-          {packageApps.length === 0 && (
-            <Button
-              className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-light"
-              onClick={() => navigate('/packages')}
-            >
-              <Package className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Explore Packages
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className="space-y-3 sm:space-y-4">
-          <AnimatePresence mode="popLayout">
-            {filteredPackages.map((pkg) => (
-              <PackageCard
-                key={pkg._id}
-                package={pkg}
-                onDelete={() => fetchPackages()}
-                onRefresh={() => fetchPackages()}
-              />
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
-    </CardContent>
-  </Card>
-=======
-{/* ─── Package Filter ────────────────────────────────────────── */}
-<div className="mb-3 flex flex-wrap items-center gap-1.5">
-  {[
-    { key: 'all', label: 'All' },
-    { key: 'submitted', label: 'Submitted' },
-    { key: 'processing', label: 'Processing' },
-    { key: 'completed', label: 'Completed' },
-    { key: 'cancelled', label: 'Cancelled' },
-  ].map(({ key, label }) => (
-    <button
-      key={key}
-      type="button"
-      onClick={() => setPackageFilter(key as any)}
-      className={`
-        px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
-        ${packageFilter === key
-          ? 'bg-[#0A3269] text-white border-[#0A3269]'
-          : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
-        }
-      `}
-    >
-      <span className="whitespace-nowrap">{label}</span>
-      <span className="opacity-60 ml-0.5 sm:ml-1">({key === 'all'
-        ? packageApps.length
-        : packageApps.filter(p => p.status === key).length})</span>
-    </button>
-  ))}
-  {packageFilter !== 'all' && (
-    <button
-      type="button"
-      onClick={() => setPackageFilter('all')}
-      className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
-    >
-      <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-    </button>
-  )}
-</div>
 
-    {/* ─── Content ────────────────────────────────────────────────── */}
-{packageLoading ? (
-  <div className="space-y-2">
-    {[1, 2, 3].map((i) => (
-      <div key={i} className="animate-pulse">
-        <div className="h-16 sm:h-20 rounded-xl bg-gray-100/60 dark:bg-white/5" />
-      </div>
-    ))}
-  </div>
-) : filteredPackages.length === 0 ? (
-  <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-xl py-6 sm:py-8 md:py-10 text-center">
-    <Package className="text-[#0A3269] dark:text-white mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
-    <h3 className="text-gray-900 dark:text-white mb-1 text-sm sm:text-base md:text-lg font-light">
-      {packageApps.length === 0 ? 'No packages yet' : 'No packages match filter'}
-    </h3>
-    <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
-      {packageApps.length === 0
-        ? 'Explore our packages and start your journey'
-        : 'Try changing your filter to see more packages'}
-    </p>
-    {packageApps.length === 0 && (
-      <Button
-        className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-light"
-        onClick={() => navigate('/packages')}
-      >
-        <Package className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
-        Explore Packages
-      </Button>
-    )}
-  </div>
-) : (
-  <div className="space-y-2 sm:space-y-3 md:space-y-4">
-    <AnimatePresence mode="popLayout">
-      {filteredPackages.map((pkg) => (
-        <PackageCard
-          key={pkg._id}
-          package={pkg}
-          onDelete={() => fetchPackages()}
-          onRefresh={() => fetchPackages()}
-        />
-      ))}
-    </AnimatePresence>
-  </div>
-)}
-</CardContent>
-</Card>
->>>>>>> 0bb91c2 (tmmt update frontend)
-)}
+            {/* ─── Content ────────────────────────────────────────────────── */}
+            {checksLoading ? (
+              <div className="space-y-3">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="h-20 sm:h-24 rounded-xl bg-gray-100/60 dark:bg-white/5" />
+                  </div>
+                ))}
+              </div>
+            ) : filteredChecks.length === 0 ? (
+              <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-xl py-12 sm:py-16 text-center">
+                <ClipboardCheck className="text-[#0A3269] dark:text-white mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
+                <h3 className="text-gray-900 dark:text-white mb-2 text-lg sm:text-xl font-light">
+                  {checks.length === 0 ? 'No checks yet' : 'No checks match filter'}
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-4 px-4 text-sm sm:text-base font-light max-w-md mx-auto">
+                  {checks.length === 0
+                    ? 'Start your first government status check today'
+                    : 'Try changing your filter to see more checks'}
+                </p>
+                {checks.length === 0 && (
+                  <Button
+                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1A4A8A] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-light"
+                    onClick={() => navigate('/services')}
+                  >
+                    <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                    Start a Check
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-3 sm:space-y-4">
+                <AnimatePresence mode="popLayout">
+                  {filteredChecks.map((check) => (
+                    <CheckCard
+                      key={check._id || check.id}
+                      check={{
+                        id: check._id || check.id,
+                        serviceId: check.serviceId,
+                        serviceType: check.serviceType,
+                        status: check.status,
+                        speedTier: check.speedTier,
+                        documents: check.documents || [],
+                        identifiers: check.identifiers || {},
+                        result: check.result,
+                        createdAt: check.createdAt,
+                        updatedAt: check.updatedAt,
+                      }}
+                      onViewResult={(check) => {
+                        toast.info('Viewing check result...');
+                      }}
+                      onDownloadDocument={(doc) => {
+                        toast.info('Downloading document...');
+                      }}
+                      onDelete={(checkId) => {
+                        setChecks(prev => prev.filter(c => (c._id || c.id) !== checkId));
+                        toast.success('Check deleted successfully');
+                      }}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* ─── APPLICATIONS VIEW ────────────────────────────────────────────────── */}
+      {dataView === 'applications' && (
+        <Card id="applications-section" className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm scroll-mt-20">
+          <CardHeader className="flex flex-col items-start justify-between gap-3 sm:gap-4 p-3 sm:p-4 md:p-6">
+            <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
+              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
+                  <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
+                    Your Applications
+                    <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
+                      {filteredApplications.length}
+                    </Badge>
+                  </CardTitle>
+                  <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
+                    Track and manage all your visa applications
+                  </CardDescription>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
+            {/* ─── Application Filter Buttons ──────────────────────────────── */}
+            <div className="mb-3 flex flex-wrap items-center gap-1.5">
+              {appFilterButtons.map(({ key, label, count }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setAppFilter(key)}
+                  className={`
+                    px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
+                    ${appFilter === key
+                      ? 'bg-[#0A3269] text-white border-[#0A3269]'
+                      : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
+                    }
+                  `}
+                >
+                  <span className="whitespace-nowrap">{label}</span>
+                  <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
+                </button>
+              ))}
+              {appFilter !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => setAppFilter('all')}
+                  className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+                >
+                  <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </button>
+              )}
+            </div>
+
+            {/* ─── Content ────────────────────────────────────────────────── */}
+            {filteredApplications.length === 0 ? (
+              <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
+                <ClipboardList className="text-[#0A3269] dark:text-white mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+                <h4 className="text-gray-900 dark:text-white mb-1 sm:mb-1.5 text-sm sm:text-base md:text-lg font-light">
+                  {applications.length === 0 ? 'No applications yet' : 'No applications match'}
+                </h4>
+                <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
+                  {applications.length === 0
+                    ? 'Start your first visa application today!'
+                    : 'Try changing your filter to see more applications.'}
+                </p>
+                {applications.length === 0 && (
+                  <Button
+                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-light"
+                    onClick={() => setShowStartApplication(true)}
+                  >
+                    <Plus className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
+                    Create Application
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4 sm:space-y-5">
+                <AnimatePresence mode="popLayout">
+                  {filteredApplications.map((app: any) => {
+                    const appId = app._id || app.id;
+                    const canDelete = userDetails?.role === 'amer' || userDetails?.role === 'admin';
+                    const handleDelete = async () => {
+                      try {
+                        const token = localStorage.getItem('authToken');
+                        if (!token) throw new Error('Not authenticated');
+                        const response = await fetch(`${apiBase}/api/v1/visa/${appId}`, {
+                          method: 'DELETE',
+                          headers: { Authorization: `Bearer ${token}` },
+                        });
+                        if (!response.ok) {
+                          const errorData = await response.json().catch(() => ({}));
+                          throw new Error(errorData.message || 'Failed to delete application');
+                        }
+                        await fetchApplications();
+                        toast.success('Application deleted successfully');
+                      } catch (error: any) {
+                        toast.error(error.message || 'You do not have permission to delete this application.');
+                      }
+                    };
+                    return (
+                      <ExpandedApplicationCard
+                        key={appId}
+                        application={app}
+                        isExpanded={expandedApplicationIds.has(appId)}
+                        onToggle={() => {
+                          setExpandedApplicationIds(prev => {
+                            const newSet = new Set(prev);
+                            if (newSet.has(appId)) newSet.delete(appId);
+                            else newSet.add(appId);
+                            return newSet;
+                          });
+                        }}
+                        onDocumentView={(doc) => handleViewResultDocument(doc, app)}
+                        onDocumentDownload={(doc) => handleDocumentDownload(doc, app)}
+                        canDelete={canDelete}
+                        onDelete={canDelete ? handleDelete : undefined}
+                      />
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* ─── PACKAGES VIEW ────────────────────────────────────────────────────── */}
+      {dataView === 'packages' && (
+        <Card className="rounded-2xl border border-gray-200/70 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-sm">
+          <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
+            <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
+              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A3269]/5 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
+                  <Package className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-white/80" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="flex flex-wrap items-center gap-1.5 text-base sm:text-lg md:text-xl font-thin tracking-wide text-gray-700 dark:text-gray-200">
+                    Your Packages
+                    <Badge className="bg-[#0A3269]/5 text-[#0A3269]/70 dark:bg-white/5 dark:text-white/60 border-0 text-[11px] sm:text-[10px] md:text-[11px] font-light px-2.5 py-1 rounded-full">
+                      {filteredPackages.length}
+                    </Badge>
+                  </CardTitle>
+                  <CardDescription className="text-sm sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-extralight tracking-wide mt-0.5 sm:mt-0">
+                    View all your package applications
+                  </CardDescription>
+                </div>
+              </div>
+              <Button
+                className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-light tracking-wide"
+                onClick={() => navigate('/packages')}
+              >
+                <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+                Browse Packages
+              </Button>
+            </div>
+          </CardHeader>
+
+          <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
+            {/* ─── Package Filter ────────────────────────────────────────── */}
+            <div className="mb-3 flex flex-wrap items-center gap-1.5">
+              {[
+                { key: 'all', label: 'All' },
+                { key: 'submitted', label: 'Submitted' },
+                { key: 'processing', label: 'Processing' },
+                { key: 'completed', label: 'Completed' },
+                { key: 'cancelled', label: 'Cancelled' },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setPackageFilter(key as any)}
+                  className={`
+                    px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-medium transition-all duration-200 border whitespace-nowrap
+                    ${packageFilter === key
+                      ? 'bg-[#0A3269] text-white border-[#0A3269]'
+                      : 'bg-white dark:bg-black/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20'
+                    }
+                  `}
+                >
+                  <span className="whitespace-nowrap">{label}</span>
+                  <span className="opacity-60 ml-0.5 sm:ml-1">({key === 'all'
+                    ? packageApps.length
+                    : packageApps.filter(p => p.status === key).length})</span>
+                </button>
+              ))}
+              {packageFilter !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => setPackageFilter('all')}
+                  className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+                >
+                  <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </button>
+              )}
+            </div>
+
+            {/* ─── Content ────────────────────────────────────────────────── */}
+            {packageLoading ? (
+              <div className="space-y-2">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="h-16 sm:h-20 rounded-xl bg-gray-100/60 dark:bg-white/5" />
+                  </div>
+                ))}
+              </div>
+            ) : filteredPackages.length === 0 ? (
+              <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-xl py-6 sm:py-8 md:py-10 text-center">
+                <Package className="text-[#0A3269] dark:text-white mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+                <h3 className="text-gray-900 dark:text-white mb-1 text-sm sm:text-base md:text-lg font-light">
+                  {packageApps.length === 0 ? 'No packages yet' : 'No packages match filter'}
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
+                  {packageApps.length === 0
+                    ? 'Explore our packages and start your journey'
+                    : 'Try changing your filter to see more packages'}
+                </p>
+                {packageApps.length === 0 && (
+                  <Button
+                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a2a4a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-light"
+                    onClick={() => navigate('/packages')}
+                  >
+                    <Package className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
+                    Explore Packages
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2 sm:space-y-3 md:space-y-4">
+                <AnimatePresence mode="popLayout">
+                  {filteredPackages.map((pkg) => (
+                    <PackageCard
+                      key={pkg._id}
+                      package={pkg}
+                      onDelete={() => fetchPackages()}
+                      onRefresh={() => fetchPackages()}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* ─── EMPTY STATE (When no view is selected) ────────────────────────── */}
       {dataView === null && (
         <motion.div
@@ -1385,9 +1156,6 @@ const AdvancedInvestorPortfolio = () => {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="relative overflow-hidden rounded-2xl border border-gray-200/60 dark:border-white/10 bg-gradient-to-br from-white via-gray-50/50 to-white dark:from-black/60 dark:via-gray-900/30 dark:to-black/60 backdrop-blur-sm p-6 sm:p-10 text-center"
         >
-          {/* ─── Background Decorations ────────────────────────────────────────── */}
-
-          {/* ─── Subtle Pattern ────────────────────────────────────────────────── */}
           <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.01]">
             <div className="absolute inset-0" style={{
               backgroundImage: `radial-gradient(circle at 20px 20px, #0A3269 2px, transparent 2px)`,
@@ -1396,19 +1164,16 @@ const AdvancedInvestorPortfolio = () => {
           </div>
 
           <div className="relative flex flex-col items-center gap-4">
-            {/* ─── Icon with Premium Ring ─────────────────────────────────────── */}
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 blur-xl animate-pulse" />
               <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#0A3269]/10 to-[#0A3269]/5 dark:from-[#4A8ABF]/20 dark:to-[#4A8ABF]/10 border border-[#0A3269]/20 dark:border-[#4A8ABF]/20">
                 <FileText className="h-7 w-7 text-[#0A3269] dark:text-[#4A8ABF] opacity-60" strokeWidth={1.5} />
               </div>
-              {/* ─── Floating Badge ────────────────────────────────────────────── */}
               <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[8px] font-medium animate-pulse">
                 <span>✦</span>
               </div>
             </div>
 
-            {/* ─── Text Content ────────────────────────────────────────────────── */}
             <div className="space-y-1.5">
               <h3 className="text-xl sm:text-2xl font-normal text-black dark:text-white tracking-tight">
                 Select a section to view
@@ -1418,7 +1183,6 @@ const AdvancedInvestorPortfolio = () => {
               </p>
             </div>
 
-            {/* ─── Action Buttons ─────────────────────────────────────────────── */}
             <div className="flex flex-wrap items-center justify-center gap-3 mt-0.5">
               <motion.button
                 whileHover={{ scale: 1.03, y: -2 }}
@@ -1455,7 +1219,6 @@ const AdvancedInvestorPortfolio = () => {
               </motion.button>
             </div>
 
-            {/* ─── Quick Stats ────────────────────────────────────────────────── */}
             <div className="flex flex-wrap items-center justify-center gap-5 mt-1 pt-3 border-t border-gray-200/30 dark:border-white/5">
               <div className="flex items-center gap-2">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
@@ -1567,34 +1330,34 @@ const AdvancedInvestorPortfolio = () => {
               </span>
               <ArrowRight className="h-4 w-4 text-text-secondary/40 transition-all group-hover:translate-x-0.5 group-hover:text-[#0A3269] dark:group-hover:text-white" />
             </button>
-          <a
-  href="tel:+97145551234"
-  onClick={(e) => {
-    setTimeout(() => {
-      if (document.hasFocus()) {
-        navigator.clipboard
-          .writeText('+971 4 555 1234')
-          .then(() => {
-            toast.info('Phone number copied to clipboard. Please make the call.');
-          })
-          .catch(() => {
-            toast.info('Please call +971 4 555 1234');
-          });
-      }
-    }, 1500);
-  }}
-  className="group flex w-full items-center gap-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-black/20 p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A3269]/20 dark:hover:border-white/20"
->
-  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400">
-    <Phone className="h-4 w-4" />
-  </div>
-  <span className="text-foreground flex-1 text-sm font-medium">
-    Call Center
-  </span>
-  <ArrowRight className="h-4 w-4 text-text-secondary/40 transition-all group-hover:translate-x-0.5 group-hover:text-[#0A3269] dark:group-hover:text-white" />
-</a>
+            <a
+              href="tel:+97145551234"
+              onClick={(e) => {
+                setTimeout(() => {
+                  if (document.hasFocus()) {
+                    navigator.clipboard
+                      .writeText('+971 4 555 1234')
+                      .then(() => {
+                        toast.info('Phone number copied to clipboard. Please make the call.');
+                      })
+                      .catch(() => {
+                        toast.info('Please call +971 4 555 1234');
+                      });
+                  }
+                }, 1500);
+              }}
+              className="group flex w-full items-center gap-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-black/20 p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A3269]/20 dark:hover:border-white/20"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400">
+                <Phone className="h-4 w-4" />
+              </div>
+              <span className="text-foreground flex-1 text-sm font-medium">
+                Call Center
+              </span>
+              <ArrowRight className="h-4 w-4 text-text-secondary/40 transition-all group-hover:translate-x-0.5 group-hover:text-[#0A3269] dark:group-hover:text-white" />
+            </a>
             <button
-onClick={handleEmailClick}
+              onClick={handleEmailClick}
               className="group flex w-full items-center gap-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-black/20 p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A3269]/20 dark:hover:border-white/20"
             >
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">

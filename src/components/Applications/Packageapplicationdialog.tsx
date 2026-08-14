@@ -5,21 +5,13 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import {
   ArrowRight, ArrowLeft, Check, UploadCloud,
   FileText, Loader2, Heart, Award, Briefcase, Users, IdCard, Baby,
-<<<<<<< HEAD
-  X, Clock, FileCheck, Sparkles, MapPin, Plane,
-=======
   X, Clock, FileCheck, Sparkles, MapPin, Plane, AlertCircle,
->>>>>>> 0bb91c2 (tmmt update frontend)
 } from 'lucide-react';
 import { PACKAGE_CONFIG } from '@/config/packageDocs';
 import { usePackageApplication } from '@/hooks/usePackageApplication';
 import { toast } from 'sonner';
 
-<<<<<<< HEAD
-const STEP_COUNT = 4; // Package, Plan, Details, Documents
-=======
 const STEP_COUNT = 4;
->>>>>>> 0bb91c2 (tmmt update frontend)
 const STEP_LABELS = ['Package', 'Plan', 'Details', 'Documents'];
 const fmtAED = (n) => `AED ${Math.round(n).toLocaleString()}`;
 
@@ -35,17 +27,6 @@ const slide = {
   exit: (d) => ({ x: d > 0 ? -28 : 28, opacity: 0 }),
 };
 
-<<<<<<< HEAD
-// Hides scrollbars visually while keeping scroll (wheel/touch/drag) fully functional.
-const NoScrollbarStyle = () => (
-  <style>{`
-    .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;     /* Firefox */
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;             /* Chrome, Safari, Opera */
-=======
 const NoScrollbarStyle = () => (
   <style>{`
     .no-scrollbar {
@@ -54,7 +35,6 @@ const NoScrollbarStyle = () => (
     }
     .no-scrollbar::-webkit-scrollbar {
       display: none;
->>>>>>> 0bb91c2 (tmmt update frontend)
       width: 0;
       height: 0;
     }
@@ -66,23 +46,16 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
   const [dir, setDir] = useState(1);
   const [slug, setSlug] = useState(null);
   const [applicantType, setApplicantType] = useState('outside');
-<<<<<<< HEAD
-  const [contact, setContact] = useState({ fullName: '', email: '', phone: '', nationality: '', preferredLanguage: 'en' });
-=======
   const [contact, setContact] = useState({ 
     fullName: '', email: '', phone: '', nationality: '', preferredLanguage: 'en' 
   });
->>>>>>> 0bb91c2 (tmmt update frontend)
   const [files, setFiles] = useState({});
   const [refId, setRefId] = useState('');
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
-<<<<<<< HEAD
-=======
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadErrors, setUploadErrors] = useState([]);
->>>>>>> 0bb91c2 (tmmt update frontend)
 
   const { submitApplication, uploadDocuments } = usePackageApplication();
 
@@ -109,28 +82,19 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
     return true;
   };
 
-<<<<<<< HEAD
-=======
   // ─── HANDLE SUBMIT ──────────────────────────────────────────────────────────
->>>>>>> 0bb91c2 (tmmt update frontend)
   const handleSubmit = async () => {
     if (!cfg) return;
 
     setSubmitting(true);
-<<<<<<< HEAD
-=======
     setUploadErrors([]);
     
->>>>>>> 0bb91c2 (tmmt update frontend)
     try {
       const stored = (() => {
         try { return JSON.parse(localStorage.getItem('userData') || 'null'); } catch { return null; }
       })();
 
-<<<<<<< HEAD
-=======
       // 1. Submit application
->>>>>>> 0bb91c2 (tmmt update frontend)
       const payload = {
         packageSlug: slug,
         packageName: cfg.name,
@@ -144,25 +108,14 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
         user_id: stored?._id || undefined,
       };
 
-<<<<<<< HEAD
-      const app = await submitApplication(payload);
-      if (!app) {
-=======
       const result = await submitApplication(payload);
       
       if (!result) {
->>>>>>> 0bb91c2 (tmmt update frontend)
         toast.error('Failed to submit application. Please try again.');
         setSubmitting(false);
         return;
       }
 
-<<<<<<< HEAD
-      setRefId(app.referenceId || app.refId || `PKG-${Date.now().toString(36).toUpperCase()}`);
-
-      // Upload documents if any
-      const list = Object.entries(files).map(([docKey, file]) => ({
-=======
       const appId = result._id || result.application?._id;
       
       if (!appId) {
@@ -175,27 +128,11 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
 
       // 2. Upload documents if any
       const docList = Object.entries(files).map(([docKey, file]) => ({
->>>>>>> 0bb91c2 (tmmt update frontend)
         docKey,
         label: cfg.docs.find((d) => d.docKey === docKey)?.label || docKey,
         file,
       }));
 
-<<<<<<< HEAD
-      if (list.length) {
-        setUploading(true);
-        const ok = await uploadDocuments(app._id, list);
-        if (!ok) {
-          toast.warning('Application submitted, but some documents failed to upload. You can send them later.');
-        } else {
-          toast.success('Documents uploaded successfully.');
-        }
-        setUploading(false);
-      }
-
-      toast.success('Application submitted successfully!');
-      setDone(true);
-=======
       if (docList.length) {
         setUploading(true);
         setUploadProgress(0);
@@ -243,7 +180,6 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
       toast.success('✅ Application submitted successfully!');
       setDone(true);
       
->>>>>>> 0bb91c2 (tmmt update frontend)
     } catch (error) {
       console.error('Submit error:', error);
       toast.error(error.message || 'Something went wrong. Please try again.');
@@ -260,11 +196,8 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
     setApplicantType('outside');
     setRefId('');
     setDone(false);
-<<<<<<< HEAD
-=======
     setUploadProgress(0);
     setUploadErrors([]);
->>>>>>> 0bb91c2 (tmmt update frontend)
     setContact({ fullName: '', email: '', phone: '', nationality: '', preferredLanguage: 'en' });
   };
 
@@ -345,13 +278,6 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                 </div>
               </div>
 
-<<<<<<< HEAD
-              {/* Body */}
-              <div className="relative min-h-[480px] px-6 pt-6">
-                <AnimatePresence mode="wait" custom={dir}>
-                  <motion.div key={step} custom={dir} variants={slide} initial="enter" animate="center" exit="exit"
-                    transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}>
-=======
               {/* ─── UPLOAD PROGRESS BAR ──────────────────────────────────── */}
               {uploading && (
                 <div className="px-6 pt-3">
@@ -404,15 +330,10 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                     exit="exit"
                     transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                   >
->>>>>>> 0bb91c2 (tmmt update frontend)
                     {step === 0 && <StepPackage cards={cards} onPick={pickPackage} selected={slug} />}
                     {step === 1 && cfg && (
                       <StepPlan cfg={cfg} slug={slug} applicantType={applicantType} setApplicantType={setApplicantType} />
                     )}
-<<<<<<< HEAD
-                    {step === 2 && <StepDetails cfg={cfg} contact={contact} setContact={setContact} applicantType={applicantType} price={price} />}
-                    {step === 3 && cfg && <StepDocuments cfg={cfg} files={files} setFiles={setFiles} />}
-=======
                     {step === 2 && (
                       <StepDetails 
                         cfg={cfg} 
@@ -430,7 +351,6 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                         uploading={uploading}
                       />
                     )}
->>>>>>> 0bb91c2 (tmmt update frontend)
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -438,16 +358,11 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
               {/* Footer */}
               <div className="flex items-center justify-between gap-3 border-t border-border px-6 py-4 mt-2 bg-muted/40 backdrop-blur-sm rounded-b-[28px]">
                 {step > 0 ? (
-<<<<<<< HEAD
-                  <button onClick={() => go(step - 1)}
-                    className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-=======
                   <button 
                     onClick={() => go(step - 1)}
                     disabled={busy}
                     className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
                   >
->>>>>>> 0bb91c2 (tmmt update frontend)
                     <ArrowLeft className="h-4 w-4" /> Back
                   </button>
                 ) : <span />}
@@ -456,23 +371,6 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                   {cfg && step > 0 && (
                     <div className="text-right">
                       <p className="text-[10px] text-muted-foreground leading-none">total</p>
-<<<<<<< HEAD
-                      <p className="text-[16px] font-bold leading-tight mt-0.5" style={{ color: accent }}>{fmtAED(price)}</p>
-                    </div>
-                  )}
-                  {step < 3 ? (
-                    <motion.button whileHover={{ scale: canContinue() ? 1.02 : 1 }} whileTap={{ scale: canContinue() ? 0.97 : 1 }}
-                      disabled={!canContinue()} onClick={() => go(step + 1)}
-                      className="flex items-center gap-2 rounded-xl bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-[0_4px_16px_rgba(0,0,0,0.12)] disabled:opacity-40 disabled:shadow-none transition-all">
-                      Continue <ArrowRight className="h-4 w-4" />
-                    </motion.button>
-                  ) : (
-                    <motion.button whileHover={{ scale: busy ? 1 : 1.02 }} whileTap={{ scale: busy ? 1 : 0.97 }}
-                      disabled={busy} onClick={handleSubmit}
-                      className="flex items-center gap-2 rounded-xl bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-[0_4px_16px_rgba(0,0,0,0.12)] disabled:opacity-60 transition-all">
-                      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
-                      {busy ? (uploading ? 'Uploading...' : 'Submitting...') : 'Submit'}
-=======
                       <p className="text-[16px] font-bold leading-tight mt-0.5" style={{ color: accent }}>
                         {fmtAED(price)}
                       </p>
@@ -498,7 +396,6 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                     >
                       {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
                       {busy ? (uploading ? `Uploading ${uploadProgress}%...` : 'Submitting...') : 'Submit'}
->>>>>>> 0bb91c2 (tmmt update frontend)
                     </motion.button>
                   )}
                 </div>
@@ -511,12 +408,8 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
   );
 }
 
-<<<<<<< HEAD
-/* ----------------------------- Step components (unchanged) ---------------------------- */
-=======
 /* ─── Step Components ──────────────────────────────────────────────────────── */
 
->>>>>>> 0bb91c2 (tmmt update frontend)
 function StepPackage({ cards, onPick, selected }) {
   return (
     <>
@@ -725,18 +618,11 @@ function Field({ id, label, value, onChange, placeholder, type = 'text', require
   );
 }
 
-<<<<<<< HEAD
-function StepDocuments({ cfg, files, setFiles }) {
-  const uploaded = Object.keys(files).length;
-  const total = cfg.docs.length;
-  const pct = total ? (uploaded / total) * 100 : 0;
-=======
 function StepDocuments({ cfg, files, setFiles, uploading = false }) {
   const uploaded = Object.keys(files).length;
   const total = cfg.docs.length;
   const pct = total ? (uploaded / total) * 100 : 0;
   
->>>>>>> 0bb91c2 (tmmt update frontend)
   return (
     <>
       <div className="flex items-end justify-between mb-1">
@@ -754,15 +640,6 @@ function StepDocuments({ cfg, files, setFiles, uploading = false }) {
           <span className="text-xs text-muted-foreground shrink-0">{uploaded}/{total}</span>
         </div>
       </div>
-<<<<<<< HEAD
-      <p className="max-w-[20rem] md:max-w-full truncate mt-1 mb-4 text-[13px] text-muted-foreground">Add what you have now. You can send the rest after our team calls you.</p>
-      <div className="flex flex-col gap-2 max-h-[330px] overflow-y-auto no-scrollbar -mr-2 pr-2">
-        {cfg.docs.map((doc) => (
-          <DocRow key={doc.docKey} doc={doc} accent={cfg.accent}
-            file={files[doc.docKey]}
-            onSet={(f) => setFiles({ ...files, [doc.docKey]: f })}
-            onClear={() => { const n = { ...files }; delete n[doc.docKey]; setFiles(n); }} />
-=======
       <p className="max-w-[20rem] md:max-w-full truncate mt-1 mb-4 text-[13px] text-muted-foreground">
         {uploading ? '📤 Uploading your documents...' : 'Add what you have now. You can send the rest after our team calls you.'}
       </p>
@@ -777,28 +654,20 @@ function StepDocuments({ cfg, files, setFiles, uploading = false }) {
             onClear={() => { const n = { ...files }; delete n[doc.docKey]; setFiles(n); }}
             uploading={uploading}
           />
->>>>>>> 0bb91c2 (tmmt update frontend)
         ))}
       </div>
     </>
   );
 }
 
-<<<<<<< HEAD
-function DocRow({ doc, accent, file, onSet, onClear }) {
-=======
 function DocRow({ doc, accent, file, onSet, onClear, uploading = false }) {
->>>>>>> 0bb91c2 (tmmt update frontend)
   const inputRef = useRef(null);
   return (
     <div
       className={`
         flex items-center gap-3 rounded-2xl p-3 transition-all duration-200 md:max-w-full max-w-[20rem]
         ${file ? '' : 'bg-slate-50 dark:bg-white/[0.05] border border-dashed border-slate-200 dark:border-white/15'}
-<<<<<<< HEAD
-=======
         ${uploading ? 'opacity-60 pointer-events-none' : ''}
->>>>>>> 0bb91c2 (tmmt update frontend)
       `}
       style={
         file
@@ -837,12 +706,8 @@ function DocRow({ doc, accent, file, onSet, onClear, uploading = false }) {
       {file ? (
         <button
           onClick={onClear}
-<<<<<<< HEAD
-          className="p-1.5 rounded-lg text-slate-500 dark:text-slate-300 hover:bg-white dark:hover:bg-white/10 transition-colors shrink-0"
-=======
           disabled={uploading}
           className="p-1.5 rounded-lg text-slate-500 dark:text-slate-300 hover:bg-white dark:hover:bg-white/10 transition-colors shrink-0 disabled:opacity-50"
->>>>>>> 0bb91c2 (tmmt update frontend)
           aria-label="Remove"
         >
           <X className="h-4 w-4" />
@@ -850,12 +715,8 @@ function DocRow({ doc, accent, file, onSet, onClear, uploading = false }) {
       ) : (
         <button
           onClick={() => inputRef.current?.click()}
-<<<<<<< HEAD
-          className="flex items-center gap-1 text-xs font-semibold shrink-0 px-2.5 py-1.5 rounded-lg hover:bg-white dark:hover:bg-white/10 transition-colors"
-=======
           disabled={uploading}
           className="flex items-center gap-1 text-xs font-semibold shrink-0 px-2.5 py-1.5 rounded-lg hover:bg-white dark:hover:bg-white/10 transition-colors disabled:opacity-50"
->>>>>>> 0bb91c2 (tmmt update frontend)
           style={{ color: accent }}
         >
           <UploadCloud className="h-3.5 w-3.5" />
@@ -868,21 +729,14 @@ function DocRow({ doc, accent, file, onSet, onClear, uploading = false }) {
         className="hidden"
         accept=".pdf,.jpg,.jpeg,.png"
         onChange={(e) => e.target.files?.[0] && onSet(e.target.files[0])}
-<<<<<<< HEAD
-=======
         disabled={uploading}
->>>>>>> 0bb91c2 (tmmt update frontend)
       />
     </div>
   );
 }
 
-<<<<<<< HEAD
-/* ------------------------------ Success ----------------------------------- */
-=======
 /* ─── Success Screen ───────────────────────────────────────────────────────── */
 
->>>>>>> 0bb91c2 (tmmt update frontend)
 function SuccessScreen({ refId, onClose, accent }) {
   return (
     <div className="flex flex-col items-center justify-center text-center px-6 py-16">
@@ -914,10 +768,6 @@ function SuccessScreen({ refId, onClose, accent }) {
         <Clock className="h-3.5 w-3.5 shrink-0" />
         Our team will call you within 2 hours to confirm and process payment.
       </p>
-<<<<<<< HEAD
-      <motion.button whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} onClick={onClose}
-        className="mt-8 w-full rounded-xl bg-foreground py-3.5 text-sm font-semibold text-background shadow-[0_4px_16px_rgba(0,0,0,0.12)]">Done</motion.button>
-=======
       <motion.button 
         whileHover={{ scale: 1.01 }} 
         whileTap={{ scale: 0.98 }} 
@@ -926,7 +776,6 @@ function SuccessScreen({ refId, onClose, accent }) {
       >
         Done
       </motion.button>
->>>>>>> 0bb91c2 (tmmt update frontend)
     </div>
   );
 }

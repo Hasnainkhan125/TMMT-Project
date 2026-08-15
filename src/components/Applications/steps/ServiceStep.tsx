@@ -412,11 +412,11 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
       >
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="h-7 sm:h-9 w-1 rounded-full bg-gradient-to-b from-[var(--primary)] via-[var(--primary)]/60 to-transparent" />
-          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[var(#fff)]">
             {t('upload.step', 'Choose your service')}
           </p>
           {!hasNoServices && !loading && (
-            <Badge className="bg-[var(--primary)]/15 text-[var(--primary)] border-[var(--primary)]/25 text-[8px] sm:text-[9px] font-semibold rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 backdrop-blur-sm">
+            <Badge className="bg-[var(--primary)]/15 text-[var(#fff)] border-[var(--primary)]/25 text-[8px] sm:text-[9px] font-semibold rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 backdrop-blur-sm">
               <Sparkles className="w-2.5 sm:w-3 h-2.5 sm:h-3 mr-1" />
               {filtered.length} services
             </Badge>

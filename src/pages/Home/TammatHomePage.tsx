@@ -599,137 +599,177 @@ return (
     <div className="relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
     </div>
 
-    <section className="pb-10">
-      <div className="max-w-[1400px] mx-auto px-2 sm:px-5 lg:px-5">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-          {[
-            {
-              name: isArabic ? "المدققون" : "Checkers",
-              image: isDarkMode ? checkDark : checkWhite,
-              description: isArabic
-                ? "تحقق من غرامات التجاوز، حظر السفر، الاختفاء، النواكاس، والمزيد."
-                : "Check overstay fines, travel bans, absconding, nawakas, and more.",
-              cta: isArabic ? "تقديم" : "Apply",
-              link: "/customer-dashboard",
-              gradient: "from-blue-500/10 to-cyan-500/5",
-            },
-            {
-              name: isArabic ? "الخدمات" : "Services",
-              image: isDarkMode ? servicesImageDark : servicesImage3,
-              description: isArabic
-                ? "تقديم طلبات تصاريح الدخول، تأشيرة الإقامة، الهوية الإماراتية، التجديدات، وغيرها."
-                : "Apply for entry permits, residence visa, emiratesid, renewals, etc.",
-              cta: isArabic ? "تقديم" : "Apply",
-              link: "/apply",
-              gradient: "from-emerald-500/10 to-teal-500/5",
-            },
-            {
-              name: isArabic ? "الباقات" : "Packages",
-              image: isDarkMode ? packagesImageDark : servicesImage2,
-              description: isArabic
-                ? "تتيح لك الباقات اختيار التطبيقات المجمعة لمعاملاتك الحكومية"
-                : "Packages allow you to choose bundled applications for your govt transactions",
-              cta: isArabic ? "تقديم" : "Apply",
-              link: "/packages",
-              gradient: "from-purple-500/10 to-pink-500/5",
-            },
-          ].map((card, idx) => {
-            const { ref, isInView } = useInView({ threshold: 0.1 });
-            return (
-              <div
-                key={idx}
-                ref={ref as any}
-                onClick={() => {
-                  if (card.link === "/packages") {
-                    setOpen(true);
-                  } else {
-                    navigate(card.link);
-                  }
-                }}
-                className={`
-                  group relative flex w-full flex-col 
-                  rounded-2xl sm:rounded-3xl overflow-hidden 
-                  cursor-pointer 
-                  bg-white dark:bg-slate-900/80 
-                  border border-slate-200/60 dark:border-slate-700/50 
-                  transition-all duration-500 
-                  backdrop-blur-sm
-                  ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-                `}
-                style={{ transitionDelay: `${idx * 100}ms` }}
-              >
-                {/* Gradient Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+   <section className="py-10 sm:py-12 md:py-16">
+  <div className="max-w-[1400px] mx-auto ">
 
-                {/* Premium Top Accent */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[var(--primary)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Image with Modern Overlay */}
-                <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
-                  <img
-                    src={card.image}
-                    alt={card.name}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-[10px] font-medium border border-white/20">
-                      {card.name}
-                    </span>
-                  </div>
-                </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
+      {[
+        {
+          name: isArabic ? "المدققون" : "Checkers",
+          image: isDarkMode ? checkDark : checkWhite,
+          description: isArabic
+            ? "تحقق من غرامات التجاوز، حظر السفر، الاختفاء، النواكاس، والمزيد."
+            : "Check overstay fines, travel bans, absconding, nawakas, and more.",
+          cta: isArabic ? "تقديم" : "Apply",
+          link: "/customer-dashboard",
+          gradient: "from-blue-500/20 via-cyan-500/10 to-blue-500/5",
+          borderColor: "hover:border-blue-500/40 dark:hover:border-blue-400/40",
+          iconColor: "text-blue-500",
+          badge: isArabic ? "تحقق" : "Verify",
+        },
+        {
+          name: isArabic ? "الخدمات" : "Services",
+          image: isDarkMode ? servicesImageDark : servicesImage3,
+          description: isArabic
+            ? "تقديم طلبات تصاريح الدخول، تأشيرة الإقامة، الهوية الإماراتية، التجديدات، وغيرها."
+            : "Apply for entry permits, residence visa, emiratesid, renewals, etc.",
+          cta: isArabic ? "تقديم" : "Apply",
+          link: "/apply",
+          gradient: "from-emerald-500/20 via-teal-500/10 to-emerald-500/5",
+          borderColor: "hover:border-emerald-500/40 dark:hover:border-emerald-400/40",
+          iconColor: "text-emerald-500",
+          badge: isArabic ? "تقديم" : "Apply",
+        },
+        {
+          name: isArabic ? "الباقات" : "Packages",
+          image: isDarkMode ? packagesImageDark : servicesImage2,
+          description: isArabic
+            ? "تتيح لك الباقات اختيار التطبيقات المجمعة لمعاملاتك الحكومية"
+            : "Packages allow you to choose bundled applications for your govt transactions",
+          cta: isArabic ? "تقديم" : "Apply",
+          link: "/packages",
+          gradient: "from-purple-500/20 via-pink-500/10 to-purple-500/5",
+          borderColor: "hover:border-purple-500/40 dark:hover:border-purple-400/40",
+          iconColor: "text-purple-500",
+          badge: isArabic ? "باقات" : "Bundles",
+        },
+      ].map((card, idx) => {
+        const { ref, isInView } = useInView({ threshold: 0.1 });
+        return (
+          <div
+            key={idx}
+            ref={ref as any}
+            onClick={() => {
+              if (card.link === "/packages") {
+                setOpen(true);
+              } else {
+                navigate(card.link);
+              }
+            }}
+            className={`
+              group relative flex w-full flex-col 
+              rounded-3xl overflow-hidden 
+              cursor-pointer 
+              bg-white dark:bg-black/60 
+              border-2 border-slate-200/60 dark:border-slate-800/50 
+              transition-all duration-500 
+              backdrop-blur-sm
+              hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#0A3269]/10 dark:hover:shadow-[#4A8ABF]/10
+              ${card.borderColor}
+              ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+            `}
+            style={{ transitionDelay: `${idx * 100}ms` }}
+          >
+            {/* Premium Glow Effect */}
+            <div className={`absolute -inset-0.5 rounded-3xl bg-gradient-to-r ${card.gradient} opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-700`} />
 
-                {/* Content */}
-                <div className="relative z-10 p-5 sm:p-6 lg:p-7">
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-2.5">
-                    {card.name}
-                  </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-light max-w-sm">
-                    {card.description}
-                  </p>
+            {/* Top Accent Line */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                  <button
-                    className="
-                      group/btn relative inline-flex items-center justify-start gap-4
-                      overflow-hidden rounded-full
-                      px-4 sm:px-7
-                      py-2 sm:py-2.5
-                      text-[13px] sm:text-[14px]
-                      font-semibold tracking-tight
-                      bg-white dark:bg-black
-                      text-black dark:text-white
-                      border border-black/10 dark:border-white/10
-                      transition-all duration-300
-                      mt-2
-                      hover:-translate-y-0.5 hover:scale-105
-                    "
-                  >
-                    <span className="relative z-10 whitespace-nowrap">
-                      {card.cta}
-                    </span>
-
-                    <div
-                      className="
-                        relative z-10
-                        flex h-7 w-7 sm:h-8 sm:w-8
-                        items-center justify-center
-                        rounded-full
-                        bg-[var(--primary)] dark:bg-[#4A8ABF]
-                        transition-transform duration-300
-                        group-hover/btn:translate-x-1
-                      "
-                    >
-                      <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white dark:text-black" />
-                    </div>
-                  </button>
-                </div>
+            {/* Image Container */}
+            <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
+              <img
+                src={card.image}
+                alt={card.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+              />
+              
+              {/* Image Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Badge */}
+              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-105">
+             
               </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+
+              {/* Category Label */}
+              <div className="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className={`px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] font-medium border border-white/10 flex items-center gap-1.5 ${card.iconColor}`}>
+                  {card.name}
+                </span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="relative z-10 p-5 sm:p-6 lg:p-7">
+              <div className="flex items-center gap-2 mb-2">
+                <div className={`w-1 h-6 rounded-full ${card.iconColor} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                  {card.name}
+                </h3>
+              </div>
+              
+              <p className="text-sm text-black/60 dark:text-white/50 leading-relaxed font-light max-w-sm">
+                {card.description}
+              </p>
+
+              {/* Modern CTA Button */}
+              <button
+                className="
+                  group/btn relative inline-flex items-center justify-start gap-3
+                  overflow-hidden rounded-full
+                  px-5 sm:px-6
+                  py-2.5 sm:py-2
+                  text-[17px] sm:text-[19px]
+                  font-medium tracking-tight
+                  bg-white dark:bg-white
+                  text-[#000] dark:text-[#000]
+                  border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20
+                  transition-all duration-300
+                  mt-3
+                  hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0A3269]/10 dark:hover:shadow-[#4A8ABF]/10
+                  hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40
+                "
+              >
+                {/* Shimmer Effect */}
+                <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#0A3269]/10 dark:via-[#4A8ABF]/10 to-transparent" />
+                
+                <span className="relative z-10 whitespace-nowrap">
+                  {card.cta}
+                </span>
+
+                <div
+                  className="
+                    relative z-10
+                    flex h-7 w-7 sm:h-8 sm:w-8
+                    items-center justify-center
+                    rounded-full
+                    bg-[#0A3269] dark:bg-[#000]/60  
+                    transition-transform duration-300
+                    group-hover/btn:translate-x-1
+                    hover:scale-110
+                  "
+                >
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white dark:text-[#fff]" />
+                </div>
+              </button>
+
+              {/* Bottom Accent Line */}
+              <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+            </div>
+
+            {/* Corner Decoration */}
+            <div className="absolute top-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#0A3269]/30 dark:border-[#4A8ABF]/30 rounded-tr-2xl" />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
   {/* ─── FULLSCREEN VIDEO MODAL (CSS only) ────────────────────────────────────── */}
   {isVideoModalOpen && (
@@ -4476,9 +4516,7 @@ const Hero = () => {
           <span className="text-lg font-bold tracking-tight text-black dark:text-white">
             TMMT
           </span>
-          <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-black/30 dark:text-white/30">
-            Premium Services
-          </p>
+     
         </div>
       </div>
 

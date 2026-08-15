@@ -184,58 +184,86 @@ export function MembershipDetailsPage() {
         </button>
 
         {/* ─── Hero Header ────────────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mb-8 sm:mb-10 md:mb-12 overflow-hidden rounded-2xl sm:rounded-3xl border border-black/5 dark:border-white/5 bg-gradient-to-br from-black/5 via-transparent to-black/5 dark:from-white/5 dark:via-transparent dark:to-white/5 p-5 sm:p-8 md:p-10 lg:p-12"
-        >
-          <div className="absolute -right-20 -top-20 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl" />
-          <div className="absolute -left-20 -bottom-20 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-amber-500/5 blur-3xl" />
-          
-          <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-4 sm:gap-5 lg:gap-6">
-            <div className={cn(
-              'p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2',
-              selectedPlan.popular 
-                ? 'bg-[#0A3269]/10 dark:bg-[#4A8ABF]/20 border-[#0A3269]/30 dark:border-[#4A8ABF]/30' 
-                : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10'
-            )}>
-              <PlanIcon className={cn(
-                'h-8 w-8 sm:h-10 sm:w-10',
-                selectedPlan.popular ? 'text-[#0A3269] dark:text-[#4A8ABF]' : 'text-black/60 dark:text-white/60'
-              )} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-light text-black dark:text-white tracking-tight">
-                  {selectedPlan.label}
-                </h1>
-                {selectedPlan.popular && (
-                  <Badge className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black border-0 px-3 sm:px-4 py-1 text-[10px] sm:text-xs rounded-full shrink-0">
-                    <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1 fill-current" />
-                    {isArabic ? 'الأكثر شعبية' : 'Most Popular'}
-                  </Badge>
-                )}
-              </div>
-              <p className="text-sm sm:text-base text-black/60 dark:text-white/60 font-light mt-1 max-w-2xl">
-                {selectedPlan.headline}
-              </p>
-            </div>
-            <Button
-              onClick={() => handleSubscribe(selectedPlan)}
-              className={cn(
-                'w-full sm:w-auto rounded-full px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-light gap-2 shadow-lg transition-all hover:scale-[1.02]',
-                selectedPlan.popular
-                  ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black hover:bg-[#0A3269]/90 dark:hover:bg-[#4A8ABF]/90 shadow-[#0A3269]/25 dark:shadow-[#4A8ABF]/25'
-                  : 'bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80'
-              )}
-            >
-              {isArabic ? 'اشترك الآن' : 'Subscribe Now'}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </motion.div>
+      <motion.div
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+  className="relative mb-8 sm:mb-10 md:mb-12 overflow-hidden rounded-3xl sm:rounded-4xl border border-black/5 dark:border-white/5 bg-gradient-to-br from-black/5 via-transparent to-black/5 dark:from-white/5 dark:via-transparent dark:to-white/5 p-5 sm:p-8 md:p-10 lg:p-12"
+>
+  {/* Premium Background Glows */}
+  <div className="absolute -right-20 -top-20 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl" />
+  <div className="absolute -left-20 -bottom-20 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-amber-500/5 blur-3xl" />
+  
+  {/* Subtle Grid Pattern */}
+  <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.03]" style={{
+    backgroundImage: `
+      linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
+    `,
+    backgroundSize: '40px 40px'
+  }} />
+  
+  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-5 lg:gap-6">
+    {/* Left: Icon + Title */}
+    <div className="flex items-center gap-3 sm:gap-4 md:gap-5 w-full lg:w-auto">
+      <div className={cn(
+        'p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 transition-all duration-300 hover:scale-105',
+        selectedPlan.popular 
+          ? 'bg-gradient-to-br from-[#0A3269]/15 to-[#0A3269]/5 dark:from-[#4A8ABF]/20 dark:to-[#4A8ABF]/8 border-[#0A3269]/30 dark:border-[#4A8ABF]/30' 
+          : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10'
+      )}>
+        <PlanIcon className={cn(
+          'h-8 w-8 sm:h-10 sm:w-10 transition-all duration-300',
+          selectedPlan.popular ? 'text-[#0A3269] dark:text-[#4A8ABF]' : 'text-black/60 dark:text-white/60'
+        )} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-light text-black dark:text-white tracking-tight">
+            {selectedPlan.label}
+          </h1>
+          {selectedPlan.popular && (
+            <Badge className="bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-[#4A8ABF] dark:to-[#6AA8CF] text-white dark:text-black border-0 px-3 sm:px-4 py-1 text-[10px] sm:text-xs rounded-full shadow-md shadow-[#0A3269]/20 dark:shadow-[#4A8ABF]/20">
+              <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1 fill-current" />
+              {isArabic ? 'الأكثر شعبية' : 'Most Popular'}
+            </Badge>
+          )}
+        </div>
+        <p className="text-sm sm:text-base text-black/60 dark:text-white/60 font-light mt-1 max-w-2xl">
+          {selectedPlan.headline}
+        </p>
+      </div>
+    </div>
 
+    {/* Right: Subscribe Button - White */}
+    <Button
+      onClick={() => handleSubscribe(selectedPlan)}
+      className={cn(
+        'w-full sm:w-auto rounded-full px-6 sm:px-8 md:px-10 py-5 sm:py-6 text-sm sm:text-base font-light gap-2 transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] relative overflow-hidden group/hero',
+        'bg-white text-[#0A3269] dark:bg-white dark:text-[#0A3269] border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 shadow-lg hover:shadow-xl',
+        selectedPlan.popular
+          ? 'shadow-[#0A3269]/20 dark:shadow-[#4A8ABF]/20'
+          : 'shadow-gray-200 dark:shadow-gray-800'
+      )}
+    >
+      {/* Shimmer Effect */}
+      <span className="absolute inset-0 -translate-x-full group-hover/hero:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#0A3269]/10 dark:via-[#4A8ABF]/10 to-transparent" />
+      
+      {/* Subtle Glow on Hover */}
+      <span className={cn(
+        'absolute inset-0 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-500 blur-xl',
+        selectedPlan.popular 
+          ? 'bg-[#0A3269]/20 dark:bg-[#4A8ABF]/20' 
+          : 'bg-black/10 dark:bg-white/10'
+      )} />
+      
+      <span className="relative z-10 flex items-center gap-2">
+        {isArabic ? 'اشترك الآن' : 'Subscribe Now'}
+        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/hero:translate-x-1" />
+      </span>
+    </Button>
+  </div>
+</motion.div>
         {/* ─── Price Summary ──────────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -521,22 +549,22 @@ export function MembershipDetailsPage() {
           </div>
         </motion.div>
 
-       {/* ─── Plan Cards with Subscribe Buttons ────────────────────────── */}
+   {/* ─── Plan Cards with Subscribe Buttons ────────────────────────── */}
 <motion.div
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ delay: 0.4, duration: 0.5 }}
 >
   <div className="flex items-center justify-between mb-4 sm:mb-5 md:mb-6">
-    <h2 className="text-lg sm:text-xl font-semibold text-black dark:text-white flex items-center gap-2">
-      <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+    <h2 className="text-lg sm:text-xl font-light text-black dark:text-white flex items-center gap-2">
+      <div className="p-1.5 sm:p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
         <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
       </div>
       {isArabic ? 'اختر خطتك' : 'Choose Your Plan'}
     </h2>
     <Badge 
       variant="outline" 
-      className="text-[8px] sm:text-[10px] font-light border-[#0A3269]/30 dark:border-[#4A8ABF]/30 text-[#0A3269] dark:text-[#4A8ABF] rounded-full px-2 sm:px-3 py-0.5"
+      className="text-[8px] sm:text-[10px] font-light border-[#0A3269]/30 dark:border-[#4A8ABF]/30 text-[#0A3269] dark:text-[#4A8ABF] rounded-full px-2 sm:px-3 py-0.5 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5"
     >
       {translatedPlans.length} {isArabic ? 'خطط' : 'Plans'}
     </Badge>
@@ -552,20 +580,28 @@ export function MembershipDetailsPage() {
       return (
         <motion.div
           key={plan.id}
-          whileHover={{ y: -4 }}
+          whileHover={{ y: -6 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className={cn(
-            'group relative flex flex-col rounded-2xl border-2 p-6 transition-all duration-300 bg-white dark:bg-black/40',
+            'group relative flex flex-col rounded-3xl border-2 p-6 transition-all duration-300 bg-white dark:bg-black/40 backdrop-blur-sm',
             isPopular
-              ? 'border-[#0A3269] dark:border-[#4A8ABF]'
+              ? 'border-[#0A3269] dark:border-[#4A8ABF] shadow-[0_8px_30px_-8px_rgba(10,50,105,0.15)] dark:shadow-[0_8px_30px_-8px_rgba(74,138,191,0.15)]'
               : 'border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30',
             isSelected && !isPopular && 'ring-2 ring-[#0A3269]/60 dark:ring-[#4A8ABF]/50 border-transparent'
           )}
         >
-          {/* Popular Badge */}
+          {/* Premium Glow Effect */}
+          <div className={cn(
+            'absolute -inset-0.5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl',
+            isPopular 
+              ? 'bg-gradient-to-r from-[#0A3269]/30 via-[#0A3269]/10 to-[#0A3269]/30 dark:from-[#4A8ABF]/30 dark:via-[#4A8ABF]/10 dark:to-[#4A8ABF]/30' 
+              : 'bg-gradient-to-r from-black/10 via-transparent to-black/10 dark:from-white/10 dark:via-transparent dark:to-white/10'
+          )} />
+
+          {/* Popular Badge - Modern Gradient */}
           {isPopular && (
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-              <Badge className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black px-4 py-1 rounded-full text-[10px] font-semibold">
+              <Badge className="bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-[#4A8ABF] dark:to-[#6AA8CF] text-white dark:text-black px-4 py-1.5 rounded-full text-[10px] font-semibold shadow-lg shadow-[#0A3269]/20 dark:shadow-[#4A8ABF]/20">
                 <Star className="h-3 w-3 mr-1.5 fill-current" />
                 {isArabic ? 'الأكثر شعبية' : 'Most Popular'}
               </Badge>
@@ -575,16 +611,16 @@ export function MembershipDetailsPage() {
           {/* Plan Header */}
           <div className="flex items-center gap-3 mb-4">
             <div className={cn(
-              'p-2.5 rounded-xl',
+              'p-2.5 rounded-xl transition-all duration-300 group-hover:scale-105',
               isPopular 
-                ? 'bg-[#0A3269]/10 dark:bg-[#4A8ABF]/20' 
-                : 'bg-black/5 dark:bg-white/5'
+                ? 'bg-gradient-to-br from-[#0A3269]/20 to-[#0A3269]/5 dark:from-[#4A8ABF]/20 dark:to-[#4A8ABF]/5' 
+                : 'bg-black/5 dark:bg-white/5 group-hover:bg-black/10 dark:group-hover:bg-white/10'
             )}>
               <PlanIcon className={cn(
-                'h-5 w-5',
+                'h-5 w-5 transition-all duration-300',
                 isPopular 
                   ? 'text-[#0A3269] dark:text-[#4A8ABF]' 
-                  : 'text-black/60 dark:text-white/60'
+                  : 'text-black/60 dark:text-white/60 group-hover:text-black dark:group-hover:text-white'
               )} />
             </div>
             <div>
@@ -600,12 +636,12 @@ export function MembershipDetailsPage() {
           {/* Price */}
           <div className="mb-4">
             <div className="flex items-baseline gap-2"> 
-             <span 
-  className="text-4xl font-bold text-black dark:text-white tracking-tight"
-  style={{ fontFamily: "'Fraunces', serif" }}
->
-  AED {eff.amount}
-</span>
+              <span 
+                className="text-4xl font-bold text-black dark:text-white tracking-tight"
+                style={{ fontFamily: "'Fraunces', serif" }}
+              >
+                AED {eff.amount}
+              </span>
               <span className="text-sm font-light text-black/40 dark:text-white/40">
                 /{plan.intervalLabel}
               </span>
@@ -622,13 +658,15 @@ export function MembershipDetailsPage() {
             )}
           </div>
 
-          {/* Features List */}
+          {/* Features List - Modern */}
           <ul className="space-y-3 flex-1 mb-6">
             {plan.bullets?.map((bullet: string, idx: number) => (
-              <li key={idx} className="flex items-start gap-3 text-sm text-black/80 dark:text-white/80">
+              <li key={idx} className="flex items-start gap-3 text-sm text-black/80 dark:text-white/80 group/item transition-all duration-200 hover:translate-x-1">
                 <div className={cn(
-                  'p-0.5 rounded-full mt-0.5 shrink-0',
-                  isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-black/30 dark:bg-white/30'
+                  'p-0.5 rounded-full mt-0.5 shrink-0 transition-all duration-300',
+                  isPopular 
+                    ? 'bg-[#0A3269] dark:bg-[#4A8ABF] group-hover/item:scale-110' 
+                    : 'bg-black/30 dark:bg-white/30 group-hover/item:bg-black/50 dark:group-hover/item:bg-white/50'
                 )}>
                   <Check className="h-3 w-3 text-white dark:text-black" strokeWidth={3} />
                 </div>
@@ -637,21 +675,24 @@ export function MembershipDetailsPage() {
             ))}
           </ul>
 
-          {/* Subscribe Button */}
-          <Button
-            onClick={() => handleSubscribe(plan)}
-            className={cn(
-              'w-full rounded-full text-sm font-medium py-4 transition-all duration-300',
-              isPopular
-                ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black hover:bg-[#0A3269]/90 dark:hover:bg-[#4A8ABF]/90'
-                : 'bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80'
-            )}
-          >
-            <span className="flex items-center gap-2">
-              {isArabic ? 'اشترك الآن' : 'Subscribe Now'}
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </span>
-          </Button>
+       {/* Subscribe Button - Modern White */}
+<Button
+  onClick={() => handleSubscribe(plan)}
+  className={cn(
+    'w-full rounded-full text-sm font-medium py-5 sm:py-6 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden group/btn',
+    isPopular
+      ? 'bg-white dark:bg-white text-[#0A3269] dark:text-[#0A3269] border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 shadow-lg shadow-[#0A3269]/10 dark:shadow-[#4A8ABF]/10'
+      : 'bg-white dark:bg-white text-[#0A3269] dark:text-[#0A3269] border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40'
+  )}
+>
+  {/* Shimmer Effect */}
+  <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#0A3269]/10 dark:via-[#4A8ABF]/10 to-transparent" />
+  
+  <span className="relative flex items-center gap-2">
+    {isArabic ? 'اشترك الآن' : 'Subscribe Now'}
+    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+  </span>
+</Button>
         </motion.div>
       );
     })}

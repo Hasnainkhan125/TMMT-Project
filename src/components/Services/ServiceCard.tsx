@@ -26,8 +26,8 @@ import { cn } from '@/lib/utils';
 import type { Service } from '@/lib/services';
 import { motion } from 'framer-motion';
 
-// Primary accent color for the whole card system
-const PRIMARY_COLOR = '#5B3DF9'; // A rich, modern deep violet/navy
+// Primary accent color - #0A3269 (Deep Navy)
+const PRIMARY_COLOR = '#0A3269';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   'calendar-clock': CalendarClock,
@@ -40,27 +40,27 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   'clock-alert': Clock,
 };
 
-// Premium color gradients for cards
+// Premium color gradients for cards - Using #0A3269 variants
 const GRADIENT_MAP: Record<string, string> = {
-  'calendar-clock': 'from-blue-500 to-cyan-500',
-  'plane-off': 'from-purple-500 to-pink-500',
-  'briefcase-off': 'from-amber-500 to-orange-500',
-  'map-pin': 'from-emerald-500 to-teal-500',
-  'file-search': 'from-violet-500 to-indigo-500',
-  'file-warning': 'from-red-500 to-rose-500',
-  'building-2': 'from-slate-600 to-gray-600',
-  'clock-alert': 'from-yellow-500 to-amber-500',
+  'calendar-clock': 'from-[#0A3269] to-[#1A4A8A]',
+  'plane-off': 'from-[#0A3269] to-[#2A5A9A]',
+  'briefcase-off': 'from-[#0A3269] to-[#3A6AAA]',
+  'map-pin': 'from-[#0A3269] to-[#1A4A8A]',
+  'file-search': 'from-[#0A3269] to-[#2A5A9A]',
+  'file-warning': 'from-[#0A3269] to-[#4A7ABA]',
+  'building-2': 'from-[#0A3269] to-[#1A4A8A]',
+  'clock-alert': 'from-[#0A3269] to-[#3A6AAA]',
 };
 
 const SHADOW_MAP: Record<string, string> = {
-  'calendar-clock': 'shadow-blue-500/20',
-  'plane-off': 'shadow-purple-500/20',
-  'briefcase-off': 'shadow-amber-500/20',
-  'map-pin': 'shadow-emerald-500/20',
-  'file-search': 'shadow-violet-500/20',
-  'file-warning': 'shadow-red-500/20',
-  'building-2': 'shadow-slate-600/20',
-  'clock-alert': 'shadow-yellow-500/20',
+  'calendar-clock': 'shadow-[#0A3269]/20',
+  'plane-off': 'shadow-[#0A3269]/20',
+  'briefcase-off': 'shadow-[#0A3269]/20',
+  'map-pin': 'shadow-[#0A3269]/20',
+  'file-search': 'shadow-[#0A3269]/20',
+  'file-warning': 'shadow-[#0A3269]/20',
+  'building-2': 'shadow-[#0A3269]/20',
+  'clock-alert': 'shadow-[#0A3269]/20',
 };
 
 interface ServiceCardProps {
@@ -71,8 +71,8 @@ interface ServiceCardProps {
 
 export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
   const Icon = iconMap[service.icon] || FileSearch;
-  const gradient = GRADIENT_MAP[service.icon] || 'from-slate-500 to-gray-500';
-  const shadow = SHADOW_MAP[service.icon] || 'shadow-slate-500/20';
+  const gradient = GRADIENT_MAP[service.icon] || 'from-[#0A3269] to-[#1A4A8A]';
+  const shadow = SHADOW_MAP[service.icon] || 'shadow-[#0A3269]/20';
 
   // Card variants for animation
   const cardVariants = {
@@ -126,7 +126,7 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
         "border border-zinc-200/60 dark:border-zinc-800",
         "transition-all duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)]",
         "shadow-[0_4px_20px_-8px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_-8px_rgba(0,0,0,0.5)]",
-        "hover:shadow-[0_20px_60px_-15px_rgba(91,61,249,0.2)] dark:hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]",
+        "hover:shadow-[0_20px_60px_-15px_rgba(10,50,105,0.2)] dark:hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2",
         "text-left w-full"
       )}
@@ -140,13 +140,13 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
       {/* Background Glow - subtle on hover */}
       <div className="absolute -inset-px pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
         <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-[var(--primary)]/10 dark:bg-[var(--primary)]/20 blur-2xl" />
-        <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-blue-500/10 dark:bg-blue-500/20 blur-2xl" />
+        <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-[#0A3269]/10 dark:bg-[#0A3269]/20 blur-2xl" />
       </div>
 
       {/* Popular Badge - Premium */}
       {service.popular && (
         <div className="absolute top-4 right-4 z-20">
-          <Badge className="bg-[var(--primary)] text-white border-0 shadow-[0_4px_16px_-4px_rgba(91,61,249,0.3)] gap-1.5 backdrop-blur-sm px-3 py-1.5 text-[10px] font-bold rounded-full">
+          <Badge className="bg-[var(--primary)] text-white border-0 shadow-[0_4px_16px_-4px_rgba(10,50,105,0.3)] gap-1.5 backdrop-blur-sm px-3 py-1.5 text-[10px] font-bold rounded-full">
             <Sparkles className="h-3 w-3" />
             Popular
           </Badge>
@@ -259,7 +259,7 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
               "bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300",
               "transition-all duration-300 ease-out",
               "group-hover:bg-[var(--primary)] group-hover:text-white",
-              "group-hover:shadow-[0_0_0_6px_rgba(91,61,249,0.12)] dark:group-hover:shadow-[0_0_0_6px_rgba(91,61,249,0.25)]",
+              "group-hover:shadow-[0_0_0_6px_rgba(10,50,105,0.12)] dark:group-hover:shadow-[0_0_0_6px_rgba(10,50,105,0.25)]",
               "group-hover:scale-110"
             )}
           >

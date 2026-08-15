@@ -16,7 +16,7 @@ import {
   ChevronRight, Brain, MessageSquare, Crown, CreditCard, Phone, Mail, Shield,
   Rocket, Minimize2, Globe, Users, Briefcase,
   DollarSign,
-  Lock, ArrowRight        
+  Lock, ArrowRight, X        
 } from 'lucide-react'
 import { 
   TrendingUp, 
@@ -201,6 +201,22 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [paymentCompleted, setPaymentCompleted] = useState(false)
   const [applicationFee] = useState(1500)
+
+  // Handle dialog close with X button
+  const handleClose = useCallback(() => {
+    onOpenChange(false)
+  }, [onOpenChange])
+
+  // Handle ESC key
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && open) {
+        handleClose()
+      }
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [open, handleClose])
 
   useEffect(() => {
     if (voiceAgentState.selectedService && !selected && services.length > 0) {
@@ -1525,13 +1541,22 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
       <DialogContent 
         className="max-w-[95vw] h-[94dvh] max-h-[94dvh] flex flex-col overflow-hidden p-0 bg-white dark:bg-[#0A0A0F] border-0 rounded-3xl"
         dir={isRTL ? 'rtl' : 'ltr'}
+        hideCloseButton // Add this to hide the default close button
       >
+        {/* Custom Close Button - Only one X */}
+        <button
+          onClick={handleClose}
+          className="absolute top-0 right-0 z-50 p-2 rounded-full hover:bg-[#0A3269]/10 dark:hover:bg-white/10 transition-all duration-300 text-[#0A3269] dark:text-white/60 hover:scale-110"
+          aria-label="Close dialog"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         {/* Minimal Background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#0A3269]/5 dark:bg-[#0A3269]/10 rounded-full blur-[120px]" />
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#0A3269]/3 dark:bg-[#0A3269]/8 rounded-full blur-[120px]" />
         </div>
-
         <div className="flex-1 min-h-0 flex flex-col p-3 sm:p-4 lg:p-5 overflow-hidden relative z-10">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex flex-col min-h-0 flex-1">
             {/* Clean Stepper */}
@@ -1731,7 +1756,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                                   <button
                                     key={type.value}
                                     type="button"
-                                    onClick={() => setSponsorInfo(prev => ({ ...prev, sponsorType: type.value }))}
+                                    onClick={() => setSponsorInfo(prev => ({ ...prev, sponsorType: type.value as any }))}
                                     className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
                                       isActive
                                         ? 'bg-[#0A3269] text-white'
@@ -1763,7 +1788,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                                   <button
                                     key={loc.value}
                                     type="button"
-                                    onClick={() => setSponsorInfo(prev => ({ ...prev, location: loc.value }))}
+                                    onClick={() => setSponsorInfo(prev => ({ ...prev, location: loc.value as any }))}
                                     className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
                                       isActive
                                         ? 'bg-[#0A3269] text-white'

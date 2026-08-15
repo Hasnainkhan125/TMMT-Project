@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
-  Play, ArrowRight, Shield, Star, Users, CheckCircle, 
-  Sparkles, Clock, Award, Zap, Globe, Briefcase, Heart, 
-  Rocket, TrendingUp, BadgeCheck, Crown, X, Maximize2, Minimize2, Pause
+  Play, ArrowRight, Shield, Users, 
+  Zap, Globe, Rocket, TrendingUp, 
+  X, Diamond, ChevronRight
 } from 'lucide-react';
 
 const VideoSection = () => {
@@ -18,7 +18,29 @@ const VideoSection = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isArabic, setIsArabic] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Check dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkMode(isDark);
+    };
+    
+    checkDarkMode();
+    
+    const observer = new MutationObserver(() => {
+      checkDarkMode();
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    
+    return () => observer.disconnect();
+  }, []);
 
   // Check language
   useEffect(() => {
@@ -59,6 +81,15 @@ const VideoSection = () => {
     if (videoRef.current) {
       videoRef.current.play().catch(() => {});
     }
+  }, []);
+
+  // Track mouse position for parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const openModal = () => {
@@ -133,6 +164,7 @@ const VideoSection = () => {
         success: '97% Success'
       },
       cta: 'Start Your Journey',
+      clickToWatch: 'Click to watch'
     },
     ar: {
       watchJourney: 'شاهد الرحلة',
@@ -149,6 +181,7 @@ const VideoSection = () => {
         success: 'نجاح 97%'
       },
       cta: 'ابدأ رحلتك',
+      clickToWatch: 'انقر للمشاهدة'
     }
   };
 
@@ -166,35 +199,37 @@ const VideoSection = () => {
   return (
     <>
       <section 
-        className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 overflow-hidden bg-white dark:bg-[#0A0A0F] scroll-mt-20 px-1.5 sm:px-4"
+        className={`relative py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 overflow-hidden scroll-mt-20 px-4 sm:px-6 ${
+          isDarkMode ? 'bg-black' : 'bg-white'
+        }`}
       >
-        {/* Gradient Orbs for dark mode - modern background effect */}
+        {/* Background Effects - Subtle */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 -right-20 w-[600px] h-[600px] rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/8 blur-3xl" />
-          <div className="absolute bottom-0 -left-20 w-[600px] h-[600px] rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/8 blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[#0A3269]/3 dark:bg-[#4A8ABF]/5 blur-3xl" />
+          <div className={`absolute top-0 -right-20 w-[600px] h-[600px] rounded-full blur-3xl ${
+            isDarkMode ? 'bg-[#4A8ABF]/3' : 'bg-[#0A3269]/3'
+          }`} />
+          <div className={`absolute bottom-0 -left-20 w-[600px] h-[600px] rounded-full blur-3xl ${
+            isDarkMode ? 'bg-[#4A8ABF]/3' : 'bg-[#0A3269]/3'
+          }`} />
+          <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl ${
+            isDarkMode ? 'bg-[#4A8ABF]/2' : 'bg-[#0A3269]/2'
+          }`} />
         </div>
 
         <div className="container mx-auto px-1.5 sm:px-4 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 xl:gap-20 items-center max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-14 xl:gap-20 items-center max-w-7xl mx-auto">
             
             {/* ─── Right Column - Video ────────── */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative px-1 sm:px-0 order-1 lg:order-2"
+            <div
+              className="relative px-0 order-1 lg:order-2"
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
             >
-              <motion.div 
-                className="relative rounded-2xl overflow-hidden shadow-lg shadow-black/10 dark:shadow-black/60 ring-1 ring-gray-200/50 dark:ring-white/10 cursor-pointer group"
-                whileHover={!isMobile ? { scale: 1.03 } : {}}
-                transition={{ type: "spring", stiffness: 200, damping: 25 }}
+              <div 
+                className="relative rounded-2xl overflow-hidden cursor-pointer group shadow-2xl shadow-black/30 dark:shadow-black/60"
                 onClick={openModal}
               >
-                <div className="relative aspect-video bg-black/95">
+                <div className="relative aspect-video bg-black">
                   <video
                     ref={videoRef}
                     className="w-full h-full object-cover"
@@ -205,127 +240,178 @@ const VideoSection = () => {
                     playsInline
                     preload="auto"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                   
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 pointer-events-none" />
+                  
+                  {/* Play Button */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-lg transition-transform duration-300 group-hover:scale-110">
-                      <Play className="h-7 w-7 sm:h-8 sm:w-8 text-white ml-1" strokeWidth={2.5} />
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 transition-all duration-300 group-hover:scale-110 group-hover:bg-white/30 shadow-2xl">
+                      <Play className="h-8 w-8 sm:h-10 sm:w-10 text-white ml-1" strokeWidth={2.5} />
                     </div>
                   </div>
                   
+                  {/* Bottom Label */}
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
-                    <span className="text-white/50 text-xs font-light bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
-                      Click to watch
+                    <span className="text-white/70 text-xs font-light bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10">
+                      {lang.clickToWatch}
                     </span>
                   </div>
+
+                  {/* Corner Accents */}
+                  <div className="absolute top-3 left-3 w-6 h-6 border-t-2 border-l-2 border-white/20 rounded-tl-lg" />
+                  <div className="absolute top-3 right-3 w-6 h-6 border-t-2 border-r-2 border-white/20 rounded-tr-lg" />
+                  <div className="absolute bottom-3 left-3 w-6 h-6 border-b-2 border-l-2 border-white/20 rounded-bl-lg" />
+                  <div className="absolute bottom-3 right-3 w-6 h-6 border-b-2 border-r-2 border-white/20 rounded-br-lg" />
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
             {/* ─── Left Column - Content ──────── */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="space-y-5 sm:space-y-6 px-1 sm:px-0 order-2 lg:order-1"
-            >
+            <div className="space-y-5 sm:space-y-6 px-0 order-2 lg:order-1">
               <div className="space-y-3 sm:space-y-4">
+                {/* Premium Badge */}
+                <div
+                  className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${
+                    isDarkMode 
+                      ? 'bg-white/5' 
+                      : 'bg-[#0A3269]/5'
+                  }`}
+                >
+                  <Diamond className={`w-3.5 h-3.5 ${
+                    isDarkMode ? 'text-white/60' : 'text-[#0A3269]/90'
+                  }`} />
+                  <span className={`text-[10px] font-semibold uppercase tracking-wider ${
+                    isDarkMode ? 'text-white/60' : 'text-[#0A3269]/90'
+                  }`}>
+                    Premium Service
+                  </span>
+                </div>
+
                 <h2 
-                  className="text-black dark:text-white leading-[1.05] tracking-tight whitespace-normal break-words"
+                  className={`leading-[1.05] tracking-tight whitespace-normal break-words ${
+                    isDarkMode ? 'text-white' : 'text-black'
+                  }`}
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: 'clamp(1.8rem, 6vw, 3rem)'
+                    fontSize: 'clamp(2.2rem, 7vw, 4rem)'
                   }}
                 >
                   <span className="font-bold">{lang.visaJourney}</span>
                   <br />
                   <span className="relative inline-block">
-                    <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light" style={{ fontSize: 'clamp(1.8rem, 6vw, 3rem)' }}>
+                    <span 
+                      className={`font-light ${
+                        isDarkMode ? 'text-[#4A8ABF]' : 'text-[#0A3269]'
+                      }`}
+                      style={{ fontSize: 'clamp(1.8rem, 6vw, 3.2rem)' }}
+                    >
                       {lang.nowSeamless}
                     </span>
-                    <span className="absolute -bottom-2 left-0 w-full h-px bg-[#0A3269]/30 dark:bg-[#4A8ABF]/30 rounded-full" />
                   </span>
                 </h2>
 
-                <p className="text-sm sm:text-base md:text-lg text-black/60 dark:text-white/50 leading-relaxed max-w-lg font-light">
+                <p 
+                  className={`text-sm sm:text-base md:text-lg leading-relaxed max-w-lg font-light ${
+                    isDarkMode ? 'text-white/50' : 'text-black/50'
+                  }`}
+                >
                   {lang.description}
-                  <span className="text-black dark:text-white/70 font-normal block mt-1">{lang.descriptionHighlight}</span>
+                  <span className={`font-normal block mt-1 ${
+                    isDarkMode ? 'text-white/70' : 'text-black/70'
+                  }`}>{lang.descriptionHighlight}</span>
                 </p>
 
-                {/* ─── BIG MODERN FEATURE CARDS ────────────────────────── */}
+                {/* ─── FEATURE CARDS ────────────────────── */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 pt-1">
                   {features.map((feature, idx) => {
                     const Icon = feature.icon;
                     return (
                       <motion.div
                         key={idx}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: idx * 0.05 }}
-                        whileHover={{ y: -3, scale: 1.02 }}
-                        className="group relative flex flex-col items-center gap-1.5 p-3 sm:p-4 rounded-2xl bg-white/80 dark:bg-[#4A8ABF]/10 border border-black/5 dark:border-[#4A8ABF]/20 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/50 hover:bg-white dark:hover:bg-[#4A8ABF]/15 transition-all duration-300 shadow-sm hover:shadow-md"
+                        transition={{ 
+                          delay: idx * 0.05, 
+                          duration: 0.4,
+                          ease: "easeOut"
+                        }}
+                        whileHover={{ 
+                          y: -4,
+                          transition: { duration: 0.2 }
+                        }}
+                        className={`group flex flex-col items-center gap-1.5 p-3 sm:p-4 rounded-2xl transition-all duration-300 border ${
+                          isDarkMode 
+                            ? 'bg-black border-white/10 hover:border-white/30 hover:bg-[#1a1a1a]' 
+                            : 'bg-[#0A3269]/5 border-[#0A3269]/10 hover:border-[#0A3269]/30 hover:bg-[#0A3269]/10'
+                        }`}
                       >
-                        {/* Icon with Premium Background */}
-                        <div className="p-2.5 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/20 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-300">
-                          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#0A3269] dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={2} />
+                        {/* Icon */}
+                        <div 
+                          className={`p-2.5 rounded-xl transition-all duration-300 ${
+                            isDarkMode 
+                              ? 'bg-white/10 group-hover:bg-white/20' 
+                              : 'bg-[#0A3269]/10 group-hover:bg-[#0A3269]/20'
+                          }`}
+                        >
+                          <Icon className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 ${
+                            isDarkMode 
+                              ? 'text-white group-hover:text-white' 
+                              : 'text-[#0A3269] group-hover:text-[#0A3269]'
+                          }`} strokeWidth={2} />
                         </div>
                         
-                        {/* Label - Bigger & Bolder */}
-                        <span className="text-[11px] sm:text-[13px] md:text-[14px] font-semibold text-black/80 dark:text-white/80 text-center leading-tight group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                        {/* Label */}
+                        <span className={`text-[11px] sm:text-[13px] md:text-[14px] font-semibold text-center leading-tight transition-colors duration-300 ${
+                          isDarkMode 
+                            ? 'text-white/80 group-hover:text-white' 
+                            : 'text-black/70 group-hover:text-[#0A3269]'
+                        }`}>
                           {feature.label}
                         </span>
-                        
-                        {/* Bottom Accent Line */}
-                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[#0A3269]/20 dark:bg-[#4A8ABF]/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       </motion.div>
                     );
                   })}
                 </div>
               </div>
-<motion.button
-  whileHover={{ y: -2, scale: 1.02 }}
-  whileTap={{ scale: 0.97 }}
-  transition={{ type: "spring", stiffness: 320, damping: 20 }}
-  onClick={() => window.location.href = '/apply'}
-  className="
-    group/btn relative inline-flex items-center justify-start gap-1.5 sm:gap-2
-    overflow-hidden rounded-full
-    px-3.5 sm:px-6
-    py-3 sm:py-2.5
-    text-[12px] sm:text-[14px] md:text-[15px]
-    font-medium tracking-tight
-    bg-white dark:bg-black
-    text-black dark:text-white
-    border border-[#0A3269]/20 dark:border-white/10
-    transition-all duration-300
-    w-auto
-  "
->
-  <span className="relative z-10 whitespace-nowrap">
-    {lang.cta}
-  </span>
 
-  <div
-    className="
-      relative z-10
-      flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9
-      items-center justify-center
-      rounded-full
-      bg-[#0A3269] dark:bg-[#4A8ABF]
-      transition-transform duration-300
-      group-hover/btn:translate-x-1
-    "
-  >
-    <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-4.5 md:w-4.5 text-white dark:text-black" />
-  </div>
-</motion.button>
+              {/* Premium CTA Button - Smaller */}
+              <motion.button
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                onClick={() => window.location.href = '/apply'}
+                className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-5 sm:px-7 py-2.5 sm:py-3 text-[13px] sm:text-[14px] font-medium tracking-tight transition-all duration-300 w-auto min-w-[160px] sm:min-w-[180px] ${
+                  isDarkMode 
+                    ? 'bg-white text-black hover:bg-gray-100' 
+                    : 'bg-[#013269] text-white hover:bg-[#1a4a7a]'
+                } shadow-lg ${
+                  isDarkMode 
+                    ? 'shadow-white/10 hover:shadow-white/20' 
+                    : 'shadow-[#013269]/30 hover:shadow-[#013269]/40'
+                }`}
+              >
+                <span className="relative z-10  whitespace-nowrap">
+                  {lang.cta}
+                </span>
 
-
-
-
-            </motion.div>
+                <motion.div
+                  className={`relative z-10 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover/btn:translate-x-1 ${
+                    isDarkMode 
+                      ? 'bg-black/30 text-white' 
+                      : 'bg-white text-[#013269]'
+                  }`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <ArrowRight className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${
+                    isDarkMode ? 'text-black' : 'text-[#013269]'
+                  }`} />
+                </motion.div>
+              </motion.button>
+            </div>
           </div>
         </div>
       </section>
@@ -337,15 +423,21 @@ const VideoSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center"
             onClick={closeModal}
           >
             <motion.div
               ref={modalContainerRef}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ 
+                type: "spring", 
+                damping: 25, 
+                stiffness: 300,
+                duration: 0.5,
+              }}
               className="relative w-full h-full bg-black"
               onClick={(e) => e.stopPropagation()}
             >
@@ -359,14 +451,20 @@ const VideoSection = () => {
                 controlsList="nodownload"
               />
 
-              <button
+              {/* Premium Close Button */}
+              <motion.button
                 onClick={closeModal}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all duration-300 hover:scale-110 z-20 border border-white/10"
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-300 hover:scale-110 z-20 border border-white/20 backdrop-blur-sm"
+                whileHover={{ rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
               >
-                <X className="h-6 w-6" />
-              </button>
+                <X className="h-5 w-5" />
+              </motion.button>
 
-              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/30 text-xs font-light bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full border border-white/5 pointer-events-none">
+              {/* Bottom Hint */}
+              <div 
+                className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/30 text-xs font-light bg-black/60 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/5 pointer-events-none"
+              >
                 Press ESC or click ✕ to exit
               </div>
             </motion.div>

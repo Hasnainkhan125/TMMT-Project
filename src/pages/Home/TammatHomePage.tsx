@@ -1754,8 +1754,6 @@ const ServiceJourney = () => {
     >
       {/* ================= Premium Hero Header ================= */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-[-18rem] h-[52rem] w-[52rem] -translate-x-1/2 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 blur-[180px] animate-pulse-slow" />
-        <div className="absolute left-[-12rem] top-32 h-[34rem] w-[34rem] rounded-full bg-sky-500/10 dark:bg-sky-500/10 blur-[150px] animate-float-slow" />
         <div className="absolute right-[-10rem] bottom-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 blur-[150px] animate-float-slower" />
         <div
           className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07]"
@@ -1855,9 +1853,6 @@ const ServiceJourney = () => {
             style={{ transitionDelay: '200ms' }}
           >
             <div className="absolute -top-20 -right-20 w-64 h-64 opacity-10 hidden sm:block">
-              <div className="absolute inset-0 border-2 border-[#0A3269]/30 dark:border-[#4A8ABF]/30 rounded-full animate-spin-slow" />
-              <div className="absolute inset-8 border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20 rounded-full animate-spin-slower" />
-              <div className="absolute inset-16 border-2 border-[#0A3269]/10 dark:border-[#4A8ABF]/10 rounded-full animate-spin-slowest" />
             </div>
 
             <div className="mb-5 sm:mb-8">
@@ -2518,7 +2513,6 @@ const FAQSection = () => {
     </section>
   );
 };
-
 // Email Capture Section - Modern, Premium Design (no Framer Motion)
 const EmailCapture = () => {
   const { t } = useTranslation();
@@ -2533,6 +2527,24 @@ const EmailCapture = () => {
   const [hasStarted, setHasStarted] = useState(false);
   const [isArabic, setIsArabic] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Check dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkMode(isDark);
+    };
+    checkDarkMode();
+    const observer = new MutationObserver(() => {
+      checkDarkMode();
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   // Check language
   useEffect(() => {
@@ -2559,445 +2571,463 @@ const EmailCapture = () => {
       window.removeEventListener('languageChanged', handleChange);
     };
   }, []);
-// ─── Translation Constants ──────────────────────────────────────────
-const translations = {
-  en: {
-    heading: 'Get Your Free',
-    headingHighlight: 'Government Guidance',
-    description: 'Everything you need to know about UAE visas, Emirates ID, fines, business setup, and all government procedures. Expert insights from professionals with 10+ years of experience.',
-    placeholder: 'Enter your email address',
-    cta: 'Get Free Guide',
-    terms: 'By downloading, you agree to our',
-    termsLink: 'Terms & Conditions',
-    privacyLink: 'Privacy Policy',
-    unsubscribe: 'Unsubscribe anytime.',
-    mute: 'Mute',
-    unmute: 'Unmute',
-    muted: 'Muted',
-    unmuted: 'Unmuted'
-  },
-  ar: {
-    badge: 'استشارة خبير مجانية',
-    heading: 'احصل على',
-    headingHighlight: 'إرشاد حكومي مجاني',
-    description: 'كل ما تحتاج معرفته عن تأشيرات الإمارات، الهوية الإماراتية، الغرامات، تأسيس الأعمال، وجميع الإجراءات الحكومية. رؤى خبراء من محترفين لديهم أكثر من 10 سنوات من الخبرة.',
-    placeholder: 'أدخل بريدك الإلكتروني',
-    cta: 'احصل على الدليل المجاني',
-    terms: 'بتحميلك، فإنك توافق على',
-    termsLink: 'الشروط والأحكام',
-    privacyLink: 'سياسة الخصوصية',
-    unsubscribe: 'يمكنك إلغاء الاشتراك في أي وقت.',
-    mute: 'كتم الصوت',
-    unmute: 'إلغاء كتم الصوت',
-    muted: 'مكتوم',
-    unmuted: 'غير مكتوم'
-  }
-};
 
-const lang = translations[isArabic ? 'ar' : 'en'];
-
-// Intersection Observer to detect when section is in view
-useEffect(() => {
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        if (videoRef.current && !hasStarted) {
-          videoRef.current.play().catch(() => {});
-          setHasStarted(true);
-        }
-      } else {
-        if (videoRef.current && hasStarted) {
-          videoRef.current.pause();
-        }
-      }
+  // ─── Translation Constants ──────────────────────────────────────────
+  const translations = {
+    en: {
+      heading: 'Get Your Free',
+      headingHighlight: 'Government Guidance',
+      description: 'Everything you need to know about UAE visas, Emirates ID, fines, business setup, and all government procedures. Expert insights from professionals with 10+ years of experience.',
+      placeholder: 'Enter your email address',
+      cta: 'Get Free Guide',
+      terms: 'By downloading, you agree to our',
+      termsLink: 'Terms & Conditions',
+      privacyLink: 'Privacy Policy',
+      unsubscribe: 'Unsubscribe anytime.',
+      mute: 'Mute',
+      unmute: 'Unmute',
+      muted: 'Muted',
+      unmuted: 'Unmuted'
     },
-    { threshold: 0.2 }
-  );
-
-  if (containerRef.current) {
-    observer.observe(containerRef.current);
-  }
-
-  return () => {
-    if (containerRef.current) {
-      observer.unobserve(containerRef.current);
-    }
-  };
-}, [hasStarted]);
-
-useEffect(() => {
-  const handleVisibilityChange = () => {
-    if (document.hidden && videoRef.current) {
-      videoRef.current.pause();
-    } else if (!document.hidden && videoRef.current) {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (rect && rect.top < window.innerHeight && rect.bottom > 0) {
-        videoRef.current.play().catch(() => {});
-      }
+    ar: {
+      heading: 'احصل على',
+      headingHighlight: 'إرشاد حكومي مجاني',
+      description: 'كل ما تحتاج معرفته عن تأشيرات الإمارات، الهوية الإماراتية، الغرامات، تأسيس الأعمال، وجميع الإجراءات الحكومية. رؤى خبراء من محترفين لديهم أكثر من 10 سنوات من الخبرة.',
+      placeholder: 'أدخل بريدك الإلكتروني',
+      cta: 'احصل على الدليل المجاني',
+      terms: 'بتحميلك، فإنك توافق على',
+      termsLink: 'الشروط والأحكام',
+      privacyLink: 'سياسة الخصوصية',
+      unsubscribe: 'يمكنك إلغاء الاشتراك في أي وقت.',
+      mute: 'كتم الصوت',
+      unmute: 'إلغاء كتم الصوت',
+      muted: 'مكتوم',
+      unmuted: 'غير مكتوم'
     }
   };
 
-  document.addEventListener('visibilitychange', handleVisibilityChange);
-  return () => {
-    document.removeEventListener('visibilitychange', handleVisibilityChange);
-  };
-}, []);
+  const lang = translations[isArabic ? 'ar' : 'en'];
 
-const toggleSound = () => {
-  if (videoRef.current) {
-    videoRef.current.muted = !videoRef.current.muted;
-    setIsMuted(videoRef.current.muted);
-  }
-};
-
-// Handle modal open with auto-fullscreen
-const openModal = () => {
-  setIsModalOpen(true);
-  setTimeout(() => {
-    if (modalVideoRef.current) {
-      modalVideoRef.current.play().catch(() => {});
-      requestFullscreen();
-    }
-  }, 100);
-};
-
-// Handle modal close
-const closeModal = () => {
-  if (modalVideoRef.current) {
-    modalVideoRef.current.pause();
-  }
-  if (document.fullscreenElement) {
-    document.exitFullscreen().catch(() => {});
-  }
-  setIsModalOpen(false);
-};
-
-// Request fullscreen
-const requestFullscreen = () => {
-  try {
-    if (modalContainerRef.current) {
-      if (modalContainerRef.current.requestFullscreen) {
-        modalContainerRef.current.requestFullscreen();
-      }
-    }
-  } catch (err) {
-    try {
-      document.documentElement.requestFullscreen();
-    } catch (e) {
-      console.log('Fullscreen not supported');
-    }
-  }
-};
-
-// Handle fullscreen change
-useEffect(() => {
-  const handleFullscreenChange = () => {
-    if (!document.fullscreenElement && isModalOpen) {
-      setTimeout(() => {
-        if (isModalOpen && modalContainerRef.current) {
-          try {
-            modalContainerRef.current.requestFullscreen();
-          } catch (e) {}
+  // Intersection Observer to detect when section is in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (videoRef.current && !hasStarted) {
+            videoRef.current.play().catch(() => {});
+            setHasStarted(true);
+          }
+        } else {
+          if (videoRef.current && hasStarted) {
+            videoRef.current.pause();
+          }
         }
-      }, 100);
+      },
+      { threshold: 0.2 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, [hasStarted]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && videoRef.current) {
+        videoRef.current.pause();
+      } else if (!document.hidden && videoRef.current) {
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (rect && rect.top < window.innerHeight && rect.bottom > 0) {
+          videoRef.current.play().catch(() => {});
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  const toggleSound = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
     }
   };
 
-  document.addEventListener('fullscreenchange', handleFullscreenChange);
-  return () => {
-    document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  // Handle modal open with auto-fullscreen
+  const openModal = () => {
+    setIsModalOpen(true);
+    setTimeout(() => {
+      if (modalVideoRef.current) {
+        modalVideoRef.current.play().catch(() => {});
+        requestFullscreen();
+      }
+    }, 100);
   };
-}, [isModalOpen]);
 
-return (
-  <>
-    <section ref={containerRef} className="relative bg-white dark:bg-black overflow-hidden">
-      {/* Ambient Glow Effects - Subtle */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/8 rounded-full blur-[150px]" />
-      </div>
+  // Handle modal close
+  const closeModal = () => {
+    if (modalVideoRef.current) {
+      modalVideoRef.current.pause();
+    }
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    setIsModalOpen(false);
+  };
 
-      {/* Grid Pattern Overlay - Subtle */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(10,50,105,0.03) 1px, transparent 0)`,
-        backgroundSize: '40px 40px'
-      }} />
+  // Request fullscreen
+  const requestFullscreen = () => {
+    try {
+      if (modalContainerRef.current) {
+        if (modalContainerRef.current.requestFullscreen) {
+          modalContainerRef.current.requestFullscreen();
+        }
+      }
+    } catch (err) {
+      try {
+        document.documentElement.requestFullscreen();
+      } catch (e) {
+        console.log('Fullscreen not supported');
+      }
+    }
+  };
 
-      <div className="container mx-auto px-0 sm:px-4 relative z-10">
-        <div className="relative">
-          {/* Main Card - Clean */}
-          <div className="relative rounded-3xl sm:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-white dark:bg-[#0A0A0F] shadow-2xl shadow-[#0A3269]/5 dark:shadow-[#4A8ABF]/10">
-            
-            {/* Background Image with Overlay - Clean */}
-            <div className="absolute inset-0">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcPFn8w41Do-AU84eTh-TDGEJII7tle_SO02AvzlhUrA&s=10"
-                alt="Dubai skyline modern"
-                className="w-full h-full object-cover opacity-10 dark:opacity-20"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/95 via-white/90 to-white/80 dark:from-[#0A0A0F]/95 dark:via-[#0A0A0F]/90 dark:to-[#0A0A0F]/80" />
-            </div>
+  // Handle fullscreen change
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement && isModalOpen) {
+        setTimeout(() => {
+          if (isModalOpen && modalContainerRef.current) {
+            try {
+              modalContainerRef.current.requestFullscreen();
+            } catch (e) {}
+          }
+        }, 100);
+      }
+    };
 
-            {/* Content - Video FIRST on mobile */}
-            <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8 lg:gap-16 xl:gap-20 p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20">
-              
-              {/* ─── Right - Video (Shows FIRST on mobile) ────────────── */}
-              <div className="flex-1 w-full lg:w-auto order-1 lg:order-2">
-                <div className="relative max-w-md mx-auto lg:ml-auto w-full">
-                  {/* Video Card - Clickable */}
-                  <div 
-                    className="relative rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-[#4A8ABF]/20 shadow-xl shadow-[#0A3269]/5 dark:shadow-[#4A8ABF]/10 bg-black w-full h-[200px] sm:h-[200px] md:h-[380px] lg:h-[550px] xl:h-[650px] cursor-pointer group"
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
-                    onClick={openModal}
-                  >
-                    <video
-                      ref={videoRef}
-                      src="/images/laptop/sufiyan.mp4"
-                      className="w-full h-full object-cover"
-                      loop
-                      muted
-                      playsInline
-                      preload="metadata"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A3269]/10 dark:from-[#4A8ABF]/10 via-transparent to-transparent" />
-                    
-                    {/* Play Button Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-2xl transition-transform duration-300 group-hover:scale-110">
-                        <Play className="h-8 w-8 sm:h-10 sm:w-10 text-white ml-1" strokeWidth={2.5} />
-                      </div>  
-                    </div>
-                    
-                    {/* Sound Toggle Button - Shows on hover */}
-                    {isHovering && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleSound();
-                        }}
-                        className="absolute bottom-4 right-4 z-10"
-                        aria-label={isMuted ? lang.unmute : lang.mute}
-                      >
-                        <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-300 hover:bg-black/80 hover:scale-110">
-                          {isMuted ? (
-                            <VolumeX className="h-4 w-4 text-white" strokeWidth={1.5} />
-                          ) : (
-                            <Volume2 className="h-4 w-4 text-white" strokeWidth={1.5} />
-                          )}
-                        </div>
-                      </button>
-                    )}
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, [isModalOpen]);
 
-                    {/* Sound Status Badge */}
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-2.5 py-1">
-                      {isMuted ? (
-                        <VolumeX className="h-2.5 w-2.5 text-white/60" strokeWidth={1.5} />
-                      ) : (
-                        <Volume2 className="h-2.5 w-2.5 text-white/80" strokeWidth={1.5} />
-                      )}
-                      <span className="text-[8px] text-white/60">
-                        {isMuted ? lang.muted : lang.unmuted}
-                      </span>
-                    </div>
+  return (
+    <>
+<section ref={containerRef} className={`relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 ${
+  isDarkMode ? 'bg-black' : 'bg-white'
+}`}>
+  {/* Ambient Glow Effects */}
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className={`absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full blur-[120px] ${
+      isDarkMode ? 'bg-[#4A8ABF]/10' : 'bg-[#0A3269]/5'
+    }`} />
+    <div className={`absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full blur-[100px] ${
+      isDarkMode ? 'bg-[#4A8ABF]/8' : 'bg-[#0A3269]/3'
+    }`} />
+    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[150px] ${
+      isDarkMode ? 'bg-[#4A8ABF]/8' : 'bg-[#0A3269]/3'
+    }`} />
+  </div>
 
-                    {/* Click to play hint */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
-                      <span className="text-white/60 text-xs font-medium bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
-                        Click to watch
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ─── Left - Content (Shows SECOND on mobile) ──────────── */}
-              <div className="flex-1 max-w-3xl order-2 lg:order-1">
-                {/* Heading - Clean */}
-                <h1
-                  className="
-                    font-black
-                    leading-[1.05]
-                    tracking-[-0.03em]
-                    text-gray-900 dark:text-white
-                    text-[2rem]
-                    xs:text-[2.5rem]
-                    sm:text-[3.5rem]
-                    md:text-[4.5rem]
-                    lg:text-[5rem]
-                    xl:text-[5.5rem]
-                    2xl:text-[6rem]
-                    max-w-4xl
-                  "
-                  style={{ fontFamily: "'Fraunces', serif" }}
-                >
-                  {lang.heading}
-                  <span className="block mt-1 sm:mt-2 text-[#0A3269] dark:text-[#4A8ABF] font-bold">
-                    {lang.headingHighlight}
-                  </span>
-                </h1>
-
-                {/* Description */}
-                <p
-                  className="
-                    mt-3 sm:mt-4
-                    max-w-xl
-                    text-gray-500 dark:text-white/60
-                    text-sm
-                    sm:text-base
-                    lg:text-lg
-                    leading-relaxed
-                    sm:leading-relaxed
-                  "
-                >
-                  {lang.description}
-                </p>
-
-                {/* Email Capture Form */}
-                <div className="mt-6 sm:mt-8 w-full max-w-lg">
-                  <div className="flex flex-col sm:flex-row items-stretch gap-3">
-
-                    {/* Modern Email Input - Clean */}
-                    <div
-                      className={`
-                        group relative flex-1 flex items-center gap-3
-                        overflow-hidden
-                        rounded-2xl
-                        border
-                        ${focused
-                          ? 'border-[#0A3269] dark:border-[#4A8ABF] ring-2 ring-[#0A3269]/20 dark:ring-[#4A8ABF]/20'
-                          : 'border-gray-200 dark:border-[#4A8ABF]/20'
-                        }
-                        bg-white dark:bg-white/5
-                        transition-all duration-300
-                        px-4 sm:px-5
-                        py-3.5
-                        hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30
-                      `}
-                    >
-                      {/* Icon */}
-                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF]">
-                        <Mail className="h-4.5 w-4.5" />
-                      </div>
-
-                      {/* Input */}
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        onFocus={() => setFocused(true)}
-                        onBlur={() => setFocused(false)}
-                        placeholder={lang.placeholder}
-                        className="
-                          relative
-                          w-full
-                          bg-transparent
-                          text-[15px] sm:text-base
-                          font-medium
-                          text-gray-900 dark:text-white
-                          placeholder:text-gray-400 dark:placeholder:text-white/30
-                          outline-none
-                          caret-[#0A3269] dark:caret-[#4A8ABF]
-                        "
-                        style={{ fontFamily: "'Inter', sans-serif" }}
-                      />
-                    </div>
-
-                {/* CTA Button - Clean */}
-                <button
-                  className="
-                    group
-                    relative
-                    overflow-hidden
-                    flex items-center justify-center gap-2.5
-                    w-full sm:w-auto
-                    rounded-xl sm:rounded-2xl
-                    px-6 sm:px-8
-                    py-3.5 sm:py-4
-                    text-sm sm:text-base
-                    font-bold
-                    text-white
-                    whitespace-nowrap
-                    transition-all duration-300
-                    bg-[#0A3269] dark:bg-[#4A8ABF]
-                    hover:bg-[#1A4A8A] dark:hover:bg-[#4A8ABF]/80
-                    shadow-lg shadow-[#0A3269]/25 dark:shadow-[#4A8ABF]/25
-                    hover:scale-105 active:scale-95
-                  "
-                >
-                  {/* Shimmer Effect */}
-                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                  
-                  <span className="relative z-10 flex items-center gap-2.5">
-                    {lang.cta}
-                    <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </button>
-                  </div>
-
-                  {/* Terms */}
-                  <p className="mt-3 sm:mt-4 px-1 text-[10px] sm:text-xs leading-5 text-gray-400 dark:text-white/30">
-                    {lang.terms}
-                    <a href="/t&c" className="mx-1 font-medium text-[#0A3269] dark:text-[#4A8ABF] hover:text-[#1A4A8A] dark:hover:text-[#4A8ABF]/80 transition-colors underline underline-offset-2">
-                      {lang.termsLink}
-                    </a>
-                    {isArabic ? 'و' : 'and'}
-                    <a href="/privacy" className="mx-1 font-medium text-[#0A3269] dark:text-[#4A8ABF] hover:text-[#1A4A8A] dark:hover:text-[#4A8ABF]/80 transition-colors underline underline-offset-2">
-                      {lang.privacyLink}
-                    </a>
-                    . {lang.unsubscribe}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-      {/* ─── FULLSCREEN VIDEO MODAL ────────────────────────────────────── */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
-          onClick={closeModal}
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    {/* Content - No card wrapper, direct background */}
+    <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 xl:gap-16 py-4 sm:py-6 lg:py-8">
+      
+      {/* ─── Left - Content ──────────── */}
+      <div className="flex-1 max-w-2xl order-2 lg:order-1">
+        {/* Heading */}
+        <h1
+          className={`
+            font-black
+            leading-[1.05]
+            tracking-[-0.03em]
+            text-[2rem]
+            xs:text-[2.5rem]
+            sm:text-[3.2rem]
+            md:text-[4rem]
+            lg:text-[4.5rem]
+            xl:text-[5rem]
+            max-w-3xl
+            ${isDarkMode ? 'text-[#4A8ABF]' : 'text-gray-900'}
+          `}
+          style={{ fontFamily: "'Fraunces', serif" }}
         >
-          <div
-            ref={modalContainerRef}
-            className="relative w-full h-full bg-black"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Video - Fullscreen */}
-            <video
-              ref={modalVideoRef}
-              className="w-full h-full object-contain"
-              src="/images/laptop/sufiyan.mp4"
-              controls
-              autoPlay
-              playsInline
-              controlsList="nodownload"
-            />
+          {lang.heading}
+          <span className={`block mt-1 sm:mt-2 font-bold ${
+            isDarkMode ? 'text-white' : 'text-[#0A3269]'
+          }`}>
+            {lang.headingHighlight}
+          </span>
+        </h1>
 
-            {/* Close Button */}
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all duration-300 hover:scale-110 z-20 border border-white/20"
+        {/* Description */}
+        <p
+          className={`
+            mt-3 sm:mt-4
+            max-w-xl
+            text-sm
+            sm:text-base
+            lg:text-lg
+            leading-relaxed
+            sm:leading-relaxed
+            ${isDarkMode ? 'text-white/60' : 'text-gray-500'}
+          `}
+        >
+          {lang.description}
+        </p>
+
+        {/* Email Capture Form */}
+        <div className="mt-6 sm:mt-8 w-full max-w-lg">
+          <div className="flex flex-col sm:flex-row items-stretch gap-3">
+
+            {/* Email Input */}
+            <div
+              className={`
+                group relative flex-1 flex items-center gap-3
+                overflow-hidden
+                rounded-xl sm:rounded-2xl
+                ${focused
+                  ? isDarkMode 
+                    ? 'ring-2 ring-[#4A8ABF]/30' 
+                    : 'ring-2 ring-[#0A3269]/20'
+                  : ''
+                }
+                ${isDarkMode ? 'bg-white/10' : 'bg-gray-50'}
+                transition-all duration-300
+                px-4 sm:px-5
+                py-3.5
+              `}
             >
-              <X className="h-6 w-6" />
-            </button>
+              {/* Icon */}
+              <div className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                isDarkMode 
+                  ? 'bg-[#4A8ABF]/20 text-[#4A8ABF]' 
+                  : 'bg-[#0A3269]/10 text-[#0A3269]'
+              }`}>
+                <Mail className="h-4.5 w-4.5" />
+              </div>
 
-            {/* Exit fullscreen hint */}
-            <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/40 text-xs bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 pointer-events-none">
-              Press ESC or click ✕ to exit
+              {/* Input */}
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                placeholder={lang.placeholder}
+                className={`
+                  relative
+                  w-full
+                  bg-transparent
+                  text-[15px] sm:text-base
+                  font-medium
+                  outline-none
+                  placeholder:text-gray-400 dark:placeholder:text-white/40
+                  ${isDarkMode ? 'text-white' : 'text-gray-900'}
+                  ${isDarkMode ? 'caret-[#4A8ABF]' : 'caret-[#0A3269]'}
+                `}
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              />
+            </div>
+
+            {/* CTA Button - White in Dark Mode, #0A3269 in Light Mode */}
+            <button
+              className={`
+                group
+                relative
+                overflow-hidden
+                flex items-center justify-center gap-2.5
+                w-full sm:w-auto
+                rounded-xl sm:rounded-2xl
+                px-6 sm:px-8
+                py-3.5 sm:py-4
+                text-sm sm:text-base
+                font-bold
+                whitespace-nowrap
+                transition-all duration-300
+                ${isDarkMode 
+                  ? 'bg-white text-black hover:bg-gray-100' 
+                  : 'bg-[#0A3269] text-white hover:bg-[#1A4A8A]'
+                }
+                hover:scale-105 active:scale-95
+              `}
+            >
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <span className="relative z-10 flex items-center gap-2.5">
+                {lang.cta}
+                <ArrowRight className={`h-4 w-4 sm:h-4.5 sm:w-4.5 transition-transform duration-300 group-hover:translate-x-1 ${
+                  isDarkMode ? 'text-black' : 'text-white'
+                }`} />
+              </span>
+            </button>
+          </div>
+
+          {/* Terms */}
+          <p className={`mt-3 sm:mt-4 px-1 text-[10px] sm:text-xs leading-5 ${
+            isDarkMode ? 'text-white/30' : 'text-gray-400'
+          }`}>
+            {lang.terms}
+            <a href="/t&c" className={`mx-1 font-medium transition-colors underline underline-offset-2 ${
+              isDarkMode 
+                ? 'text-[#4A8ABF] hover:text-[#4A8ABF]/80' 
+                : 'text-[#0A3269] hover:text-[#1A4A8A]'
+            }`}>
+              {lang.termsLink}
+            </a>
+            {isArabic ? 'و' : 'and'}
+            <a href="/privacy" className={`mx-1 font-medium transition-colors underline underline-offset-2 ${
+              isDarkMode 
+                ? 'text-[#4A8ABF] hover:text-[#4A8ABF]/80' 
+                : 'text-[#0A3269] hover:text-[#1A4A8A]'
+            }`}>
+              {lang.privacyLink}
+            </a>
+            . {lang.unsubscribe}
+          </p>
+        </div>
+      </div>
+
+      {/* ─── Right - Video ────────────── */}
+      <div className="flex-1 w-full lg:w-auto order-1 lg:order-2">
+        <div className="relative max-w-md mx-auto lg:ml-auto w-full">
+          {/* Video - No borders, no card wrapper */}
+          <div 
+            className="relative rounded-2xl overflow-hidden shadow-xl bg-black w-full h-[240px] sm:h-[280px] md:h-[360px] lg:h-[480px] xl:h-[580px] cursor-pointer group"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+            onClick={openModal}
+          >
+            <video
+              ref={videoRef}
+              src="/images/laptop/sufiyan.mp4"
+              className="w-full h-full object-cover"
+              loop
+              muted
+              playsInline
+              preload="metadata"
+            />
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A3269]/10 dark:from-[#4A8ABF]/20 via-transparent to-transparent" />
+            
+            {/* Play Button - Shows #0A3269 on hover */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className={`
+                w-16 h-16 sm:w-20 sm:h-20 
+                rounded-full 
+                flex items-center justify-center 
+                shadow-2xl 
+                transition-all duration-300 
+                bg-white/20 backdrop-blur-sm
+                group-hover:bg-[#0A3269]
+                group-hover:scale-110
+                border border-white/30
+                group-hover:border-[#0A3269]
+              `}>
+                <Play className={`
+                  h-8 w-8 sm:h-10 sm:w-10 
+                  text-white 
+                  ml-1
+                  transition-all duration-300
+                  group-hover:text-white
+                `} strokeWidth={2.5} />
+              </div>
+            </div>
+            
+            {/* Sound Toggle Button */}
+            {isHovering && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleSound();
+                }}
+                className="absolute bottom-4 right-4 z-10"
+                aria-label={isMuted ? lang.unmute : lang.mute}
+              >
+                <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-300 hover:bg-black/80 hover:scale-110">
+                  {isMuted ? (
+                    <VolumeX className="h-4 w-4 text-white" strokeWidth={1.5} />
+                  ) : (
+                    <Volume2 className="h-4 w-4 text-white" strokeWidth={1.5} />
+                  )}
+                </div>
+              </button>
+            )}
+
+            {/* Sound Status Badge */}
+            <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-2.5 py-1">
+              {isMuted ? (
+                <VolumeX className="h-2.5 w-2.5 text-white/60" strokeWidth={1.5} />
+              ) : (
+                <Volume2 className="h-2.5 w-2.5 text-white/80" strokeWidth={1.5} />
+              )}
+              <span className="text-[8px] text-white/60">
+                {isMuted ? lang.muted : lang.unmuted}
+              </span>
+            </div>
+
+            {/* Click to watch hint */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
+              <span className="text-white/60 text-xs font-medium bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
+                Click to watch
+              </span>
             </div>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* ─── FULLSCREEN VIDEO MODAL ────────────────────────────────────── */}
+{isModalOpen && (
+  <div
+    className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
+    onClick={closeModal}
+  >
+    <div
+      ref={modalContainerRef}
+      className="relative w-full h-full bg-black"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <video
+        ref={modalVideoRef}
+        className="w-full h-full object-contain"
+        src="/images/laptop/sufiyan.mp4"
+        controls
+        autoPlay
+        playsInline
+        controlsList="nodownload"
+      />
+
+      <button
+        onClick={closeModal}
+        className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all duration-300 hover:scale-110 z-20 border border-white/20"
+      >
+        <X className="h-6 w-6" />
+      </button>
+
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/40 text-xs bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 pointer-events-none">
+        Press ESC or click ✕ to exit
+      </div>
+    </div>
+  </div>
+)}
+
     </>
   );
 };
+
 // Custom TikTok icon
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -3777,167 +3807,149 @@ const LaptopShowcase = () => {
   };
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden"
+   <section
+  ref={sectionRef}
+  className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden bg-gray-50/80 dark:bg-black/95"
+>
+  {/* Premium Background - Clean & Subtle */}
+  <div className="absolute inset-0">
+    {/* Gradient Orbs - Subtle */}
+    <div className="absolute top-1/4 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-2xl sm:blur-3xl" />
+    <div className="absolute bottom-1/4 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-2xl sm:blur-3xl" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-3xl" />
+    
+    {/* Grid Pattern - Subtle */}
+    <div 
+      className="absolute inset-0 opacity-[0.02] dark:opacity-[0.03]"
+      style={{
+        backgroundImage: `
+          linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
+        `,
+        backgroundSize: '60px 60px'
+      }}
+    />
+  </div>
+
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+    {/* Header */}
+    <div
+      className={`text-center mb-10 sm:mb-14 md:mb-16 transition-all duration-700 ${
+        isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
     >
-      {/* Premium Background with Smooth Animations */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card/10" />
-        
-        {/* Animated Orbs - pure CSS */}
-        <div className="absolute top-1/4 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-2xl sm:blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-1/4 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-2xl sm:blur-3xl animate-pulse-slower" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl animate-pulse-slowest" />
-        
-        <div 
-          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px'
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-background/30" />
-      </div>
+      <h2 
+        className="font-bold text-black dark:text-white leading-[1.05] tracking-[-0.02em]"
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: 'clamp(2rem, 8vw, 3rem)'
+        }}
+      >
+        {isArabic ? (
+          <>
+            شاهد كيف{' '}
+            <br />
+            <span className="relative inline-block">
+              <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light">
+                تعمل TMMT
+              </span>
+            </span>
+          </>
+        ) : (
+          <>
+            See how{' '}
+            <br />
+            <span className="relative inline-block">
+              <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light">
+                TMMT works
+              </span>
+            </span>
+          </>
+        )}
+      </h2>
+      
+      <p className="text-black/50 dark:text-white/40 text-sm sm:text-base mt-3 max-w-2xl mx-auto font-light">
+        {isArabic 
+          ? 'اختبر معالجة التأشيرات السلسة مع منصتنا البديهية'
+          : 'Experience seamless visa processing with our intuitive platform'
+        }
+      </p>
+    </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Header with Smooth Reveal */}
-        <div
-          className={`text-center mb-12 sm:mb-16 md:mb-20 transition-all duration-700 ${
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <h2 
-            className="font-bold text-black dark:text-white leading-[1.05] tracking-tight"
-            style={{
-              fontFamily: "'Fraunces', serif",
-              fontWeight: 700,
-              fontVariationSettings: "'opsz' 144",
-              fontSize: 'clamp(2rem, 8vw, 3rem)'
-            }}
+    {/* Modern Laptop Mockup */}
+    <div
+      className={`relative max-w-6xl mx-auto transition-all duration-700 ${
+        isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="relative transition-all duration-300 hover:-translate-y-1">
+        {/* Premium Bezel */}
+        <div className="relative bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 rounded-xl sm:rounded-2xl md:rounded-3xl p-1.5 sm:p-2 md:p-3 shadow-2xl shadow-black/50 dark:shadow-black/70">
+          {/* Top Bar with Camera */}
+          <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-10">
+            <div className="w-2 h-2 sm:w-2.5 md:w-3 bg-neutral-700 rounded-full border border-neutral-600/50">
+              <div className="absolute inset-0 m-auto w-0.5 h-0.5 sm:w-1 sm:h-1 bg-neutral-500 rounded-full" />
+            </div>
+            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-green-400" />
+          </div>
+
+          {/* Screen Container */}
+          <div 
+            className="relative bg-black rounded-lg sm:rounded-xl md:rounded-3xl overflow-hidden aspect-[16/11] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/9] cursor-pointer group"
+            onClick={handleScreenClick}
           >
-            {isArabic ? (
-              <>
-                شاهد كيف{' '}
-                <br />
-                <span className="relative inline-block">
-                  <span className="bg-gradient-to-r from-[#0A3269] via-[#0A3269]/80 to-[#0A3269] bg-clip-text text-transparent">
-                    تعمل TMMT
-                  </span>
-                </span>
-              </>
-            ) : (
-              <>
-                See how{' '}
-                <br />
-                <span className="relative inline-block">
-<span className="bg-gradient-to-r from-[#0A3269] via-[#0A3269]/80 to-[#0A3269] dark:from-[#4A8ABF] dark:via-[#4A8ABF]/80 dark:to-[#4A8ABF] bg-clip-text text-transparent font-normal">
-  TMMT works
-</span>
-                </span>
-              </>
-            )}
-          </h2>
-          
-          <p className="text-black/60 dark:text-white/40 text-sm sm:text-base mt-3 max-w-2xl mx-auto">
-            {isArabic 
-              ? 'اختبر معالجة التأشيرات السلسة مع منصتنا البديهية'
-              : 'Experience seamless visa processing with our intuitive platform'
-            }
-          </p>
-        </div>
-
-        {/* Modern Laptop Mockup with Smooth Animations */}
-        <div
-          className={`relative max-w-6xl mx-auto transition-all duration-900 delay-200 ${
-            isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
-          }`}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          {/* Glow Effect Behind Laptop */}
-          <div className="absolute -inset-6 sm:-inset-10 bg-gradient-to-r from-primary/20 dark:from-primary/30 via-transparent to-purple-500/20 dark:to-purple-500/30 blur-2xl sm:blur-3xl opacity-50 dark:opacity-70 animate-pulse-slow" />
-
-          {/* Laptop Frame */}
-          <div className="relative transition-all duration-300 hover:-translate-y-1">
-            {/* Premium Bezel */}
-            <div className="relative bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-950 rounded-xl sm:rounded-2xl md:rounded-3xl p-1.5 sm:p-2 md:p-3 shadow-2xl shadow-black/50 dark:shadow-black/70">
-              {/* Top Bar with Camera */}
-              <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-10">
-                <div className="w-2 h-2 sm:w-2.5 md:w-3 bg-neutral-700 rounded-full border border-neutral-600/50 dark:border-neutral-600/30">
-                  <div className="absolute inset-0 m-auto w-0.5 h-0.5 sm:w-1 sm:h-1 bg-neutral-500 rounded-full" />
-                  <div className="absolute -inset-1 bg-primary/30 rounded-full blur-sm animate-pulse" />
+            <div className="absolute inset-0 transition-opacity duration-700">
+              <div className="w-full h-full flex items-center justify-center p-0 sm:p-1 md:p-1.5 lg:p-2">
+                <div className="relative w-full h-full rounded-none sm:rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden">
+                  <img
+                    src={screens[activeScreen].image}
+                    alt={`Screenshot ${activeScreen + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-                <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-green-400 animate-pulse" />
-              </div>
-
-              {/* Screen Container */}
-              <div 
-                className="relative bg-black rounded-lg sm:rounded-xl md:rounded-3xl overflow-hidden aspect-[16/11] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/9] cursor-pointer group"
-                onClick={handleScreenClick}
-              >
-                <div className="absolute inset-0 transition-opacity duration-700">
-                  <div className="w-full h-full flex items-center justify-center bg-black/5 p-0 sm:p-1 md:p-1.5 lg:p-2">
-                    <div className="relative w-full h-full rounded-none sm:rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden">
-                      <img
-                        src={screens[activeScreen].image}
-                        alt={`Screenshot ${activeScreen + 1}`}
-                        className="w-full h-full object-center transition-transform duration-700 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pause/Play Status */}
-                {isPaused && (
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
-                    <span className="text-white text-[10px] sm:text-xs font-medium bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5 shadow-lg">
-                      <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={2} />
-                      Paused
-                    </span>
-                  </div>
-                )}
-
-                {/* Tap/Click Hint */}
-                {!isPaused && (
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-                    <span className="text-white/40 text-[8px] sm:text-[9px] font-medium bg-black/30 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/5 flex items-center gap-1.5 animate-pulse">
-                      Click to pause
-                    </span>
-                  </div>
-                )}
-
-                {/* Screen Glare Effect */}
-                <div className="absolute inset-0 pointer-events-none rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden animate-glare">
-                  <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-white/5 via-transparent to-transparent rotate-12" />
-                </div>
-              </div>
-
-              {/* Screen Reflection - Subtle */}
-              <div className="absolute inset-0 pointer-events-none rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden">
-                <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-white/3 via-transparent to-transparent rotate-12" />
               </div>
             </div>
 
-            {/* Laptop Base with Smooth Shadow */}
-            <div className="relative">
-              <div className="relative h-2 sm:h-3 md:h-4 bg-gradient-to-b from-neutral-700 to-neutral-800 dark:from-neutral-700 dark:to-neutral-800 rounded-b-lg sm:rounded-b-xl md:rounded-b-2xl shadow-xl">
-                <div className="absolute left-1/2 top-0 -translate-x-1/2 w-12 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-neutral-500 dark:via-neutral-400 to-transparent rounded-b" />
-                <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 -translate-x-1/2 w-10 sm:w-16 h-0.5 sm:h-1 bg-neutral-800/50 rounded-full blur-sm" />
+            {/* Pause/Play Status */}
+            {isPaused && (
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
+                <span className="text-white text-[10px] sm:text-xs font-medium bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5">
+                  <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={2} />
+                  Paused
+                </span>
               </div>
+            )}
+
+            {/* Tap/Click Hint */}
+            {!isPaused && (
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                <span className="text-white/40 text-[8px] sm:text-[9px] font-medium bg-black/30 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/5 flex items-center gap-1.5">
+                  Click to pause
+                </span>
+              </div>
+            )}
+
+            {/* Screen Glare */}
+            <div className="absolute inset-0 pointer-events-none rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden">
+              <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-white/5 via-transparent to-transparent rotate-12" />
             </div>
           </div>
         </div>
 
-      
+        {/* Laptop Base */}
+        <div className="relative">
+          <div className="relative h-2 sm:h-3 md:h-4 bg-gradient-to-b from-neutral-700 to-neutral-800 rounded-b-lg sm:rounded-b-xl md:rounded-b-2xl">
+            <div className="absolute left-1/2 top-0 -translate-x-1/2 w-12 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-neutral-500 to-transparent rounded-b" />
+          </div>
+        </div>
       </div>
-    </section>
-  );
+    </div>
+  </div>
+</section>  );
 };
 
 
@@ -4404,222 +4416,226 @@ const Hero = () => {
 
 
         
-
-        <div className="flex items-center gap-2 md:hidden">
-      {/* Modern pill-style theme toggle */}
-      <button
-        onClick={toggleTheme}
-        className="relative flex h-9 w-10 items-center rounded-full border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 px-1 transition-all duration-300 hover:border-gray-300 dark:hover:border-white/20 hover:shadow-md transition-all duration-300 active:scale-95"
-        aria-label="Toggle theme"
-      >
-        <span className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-100/20 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
-        <span
-          className="flex h-7 w-7 items-center justify-center rounded-full bg-white dark:bg-black shadow-sm group-hover:shadow-md transition-all duration-300"
-          style={{ marginLeft: isLight ? 0 : "auto" }}
-        >
-          {isLight ? (
-            <Sun className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-45" />
-          ) : (
-            <Moon className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-[-15deg]" />
-          )}
-        </span>
-      </button>
-
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/50 dark:hover:bg-white/10"
-              >
-                <Menu className="h-4 w-4 text-black dark:text-white" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-
-            {/* Theme-aware mobile menu */}
-            <SheetContent
-              side="right"
-              className="
-                flex w-72 flex-col p-0
-                bg-white/95 dark:bg-black/95
-                backdrop-blur-2xl
-                border-l border-gray-200 dark:border-white/10
-              "
-            >
-              {/* Brand header — logo + title */}
-              <div className="flex items-center gap-2.5 border-b border-gray-200 dark:border-white/10 px-5 py-4">
-    <img 
-      src={TammatLogoWhite} 
-      alt="Tammat logo" 
-      width={30} 
-      height={30} 
-      className="h-15 w-10 dark:brightness-0 dark:invert" 
-    />   
-                <span className="text-base  tracking-tight text-black dark:text-white">
-                  TMMT
-                </span>
-              </div>
-
-              {/* Modern Premium Navigation */}
-              <nav className="mt-4 flex flex-col gap-2 px-3">
-                {links.map((l) => (
-                  <Link
-                    key={l.href}
-                    to={l.href}
-                    className="
-                      group relative overflow-hidden
-                      flex items-center gap-4
-                      rounded-2xl
-                      px-5 py-4
-                      border border-transparent
-                      bg-transparent
-                      transition-all duration-500
-                      hover:border-black/20 dark:hover:border-white/20
-                      hover:bg-gray-50 dark:hover:bg-white/5
-                      hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/5
-                      hover:-translate-y-0.5
-                    "
-                  >
-                    <span className="absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5" />
-                    
-                    <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 transition-all duration-500 group-hover:bg-black dark:group-hover:bg-white group-hover:border-black dark:group-hover:border-white group-hover:rotate-6 group-hover:scale-110">
-                      <l.icon className="h-5 w-5 text-black dark:text-white transition-all duration-300 group-hover:text-white dark:group-hover:text-black" />
-                    </div>
-
-                    <div className="relative z-10 flex flex-col">
-                      <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-black dark:group-hover:text-white">
-                        {l.label}
-                      </span>
-                      <span className="text-xs text-black/45 dark:text-white/40">
-                        Quick access
-                      </span>
-                    </div>
-
-                    <div className="ml-auto relative z-10 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
-                      <ChevronRight className="h-5 w-5 text-black dark:text-white" />
-                    </div>
-                  </Link>
-                ))}
-
-    {/* Dashboard Link - Mobile */}
-    <Link
-      to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
-      className="
-        group relative overflow-hidden
-        flex items-center gap-4
-        rounded-2xl
-        px-5 py-4
-        border border-transparent
-        transition-all duration-500
-        hover:border-black/20 dark:hover:border-white/20
-        hover:bg-gray-50 dark:hover:bg-white/5
-        hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/5
-        hover:-translate-y-0.5
-      "
+<div className="flex items-center gap-2 md:hidden">
+  {/* Modern pill-style theme toggle */}
+  <button
+    onClick={toggleTheme}
+    className="relative flex h-9 w-10 items-center rounded-full border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 px-1 transition-all duration-300 hover:border-gray-300 dark:hover:border-white/20 hover:shadow-md active:scale-95"
+    aria-label="Toggle theme"
+  >
+    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-100/20 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    
+    <span
+      className="flex h-7 w-7 items-center justify-center rounded-full bg-white dark:bg-black shadow-sm group-hover:shadow-md transition-all duration-300"
+      style={{ marginLeft: isLight ? 0 : "auto" }}
     >
-      <span className="absolute inset-0 opacity-0 transition-all duration-500 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5" />
-
-      <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 transition-all duration-500 group-hover:bg-black dark:group-hover:bg-white group-hover:border-black dark:group-hover:border-white group-hover:rotate-6 group-hover:scale-110">
-        <LayoutDashboard className="h-5 w-5 text-black dark:text-white transition-all duration-300 group-hover:text-white dark:group-hover:text-black" strokeWidth={1.8} />
-      </div>
-
-      <div className="relative z-10 flex flex-col">
-        <span className="text-[15px] font-semibold text-black dark:text-white">
-          Dashboard
-        </span>
-        <span className="text-xs text-black/45 dark:text-white/40">
-          Manage your account
-        </span>
-      </div>
-
-      <ChevronRight className="ml-auto h-5 w-5 text-black dark:text-white opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
-    </Link>
-              </nav>
-
-    {/* CTA buttons — bottom of sheet */}
-    <div className="mt-auto border-t border-gray-200 dark:border-white/10 p-4 space-y-2.5">
-    {/* ─── Primary CTA Button ────────────────────────────────────────────── */}
-    <button
-      onClick={() => setShowStartApplication(true)}
-      className="
-        group relative overflow-hidden rounded-full
-        w-full sm:w-auto
-        bg-[#0A3269] dark:bg-white
-        px-6 sm:px-8 py-3 sm:py-3.5 font-semibold text-sm sm:text-base
-        text-white dark:text-[#0A3269]
-        shadow-lg shadow-[#0A3269]/25 dark:shadow-white/10
-        transition-all duration-300
-        hover:shadow-xl hover:shadow-[#0A3269]/35 dark:hover:shadow-white/20
-        hover:bg-[#1a4a7a] dark:hover:bg-gray-100
-        flex items-center justify-center gap-2.5
-        hover:scale-105 active:scale-95
-      "
-    >
-      {/* Shine Effect */}
-      <span
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%)",
-        }}
-      />
-      
-      {/* Hover Slide Effect */}
-      <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
-      
-      <span className="relative z-10 flex items-center gap-2.5">
-        <Rocket className="h-4 w-4 sm:h-5 sm:w-5 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        <span>{t('hero.cta', 'Apply Now')}</span>
-      </span>
-    </button>
-      {/* ─── Secondary CTA Button ──────────────────────────────────── */}
-      {user ? (
-        <button
-          onClick={() => signOut()}
-          className="
-            w-full rounded-full px-6 py-3 font-medium text-sm sm:text-base
-            border border-gray-200 dark:border-white/10
-            bg-white dark:bg-black
-            text-black dark:text-white
-            hover:bg-red-50 dark:hover:bg-red-900/20
-            hover:border-red-300 dark:hover:border-red-500/30
-            transition-all duration-300
-            active:scale-95
-            hover:scale-105
-          "
-        >
-          {t('header.signOut')}
-        </button>
+      {isLight ? (
+        <Sun className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-45" />
       ) : (
-        <button
-          onClick={() => navigate('/auth')}
-          className="
-            w-full rounded-full px-6 py-3 font-semibold text-sm sm:text-base
-            bg-white dark:bg-black
-            text-black dark:text-white
-            border border-gray-200 dark:border-white/10
-            flex items-center justify-center gap-2.5
-            transition-all duration-300
-            hover:bg-gray-50 dark:hover:bg-white/5
-            hover:border-gray-300 dark:hover:border-white/20
-            active:scale-95
-            shadow-sm hover:shadow-md
-            hover:scale-105
-          "
-        >
-          <LogIn className="h-4 w-4 sm:h-5 sm:w-5 text-black dark:text-white" />
-          {t('header.signIn')}
-        </button>
+        <Moon className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-[-15deg]" />
       )}
-    </div>
+    </span>
+  </button>
 
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button
+        variant="outline"
+        size="icon"
+        className="rounded-full border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/50 dark:hover:bg-white/10"
+      >
+        <Menu className="h-4 w-4 text-black dark:text-white" />
+        <span className="sr-only">Open menu</span>
+      </Button>
+    </SheetTrigger>
 
-
-            </SheetContent>
-          </Sheet>
+    {/* Theme-aware mobile menu - Modern Premium */}
+    <SheetContent
+      side="right"
+      className="
+        flex w-80 flex-col p-0
+        bg-white/98 dark:bg-black/98
+        backdrop-blur-2xl
+        border-l border-gray-100 dark:border-white/5
+        shadow-2xl shadow-black/5 dark:shadow-white/5
+      "
+    >
+      {/* Brand header — logo + title */}
+      <div className="flex items-center gap-3 border-b border-gray-100 dark:border-white/5 px-6 py-5">
+        <div className="relative">
+          <div className="absolute inset-0 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 rounded-full blur-lg" />
+          <img 
+            src={TammatLogoWhite} 
+            alt="Tammat logo" 
+            width={32} 
+            height={32} 
+            className="relative h-10 w-10 dark:brightness-0 dark:invert" 
+          />
+        </div>
+        <div>
+          <span className="text-lg font-bold tracking-tight text-black dark:text-white">
+            TMMT
+          </span>
+          <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-black/30 dark:text-white/30">
+            Premium Services
+          </p>
         </div>
       </div>
+
+      {/* Modern Premium Navigation */}
+      <nav className="mt-4 flex flex-col gap-1.5 px-4">
+        {links.map((l) => (
+          <Link
+            key={l.href}
+            to={l.href}
+            className="
+              group relative overflow-hidden
+              flex items-center gap-4
+              rounded-2xl
+              px-4 py-3.5
+              transition-all duration-300
+              hover:bg-gray-50 dark:hover:bg-white/5
+              hover:shadow-md hover:shadow-black/5 dark:hover:shadow-white/5
+              active:scale-[0.98]
+            "
+          >
+            {/* Hover Background Effect */}
+            <span className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5 rounded-2xl" />
+            
+            {/* Icon Container */}
+            <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105 group-hover:rotate-3">
+              <l.icon className="h-5 w-5 text-black/70 dark:text-white/70 transition-all duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+            </div>
+
+            {/* Label */}
+            <div className="relative z-10 flex flex-col">
+              <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
+                {l.label}
+              </span>
+              <span className="text-[11px] text-black/40 dark:text-white/40">
+                Quick access
+              </span>
+            </div>
+
+            {/* Arrow Icon */}
+            <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
+          </Link>
+        ))}
+
+        {/* Dashboard Link - Mobile */}
+        <Link
+          to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
+          className="
+            group relative overflow-hidden
+            flex items-center gap-4
+            rounded-2xl
+            px-4 py-3.5
+            transition-all duration-300
+            hover:bg-gray-50 dark:hover:bg-white/5
+            hover:shadow-md hover:shadow-black/5 dark:hover:shadow-white/5
+            active:scale-[0.98]
+          "
+        >
+          <span className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5 rounded-2xl" />
+
+          <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105 group-hover:rotate-3">
+            <LayoutDashboard className="h-5 w-5 text-black/70 dark:text-white/70 transition-all duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+          </div>
+
+          <div className="relative z-10 flex flex-col">
+            <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
+              Dashboard
+            </span>
+            <span className="text-[11px] text-black/40 dark:text-white/40">
+              Manage your account
+            </span>
+          </div>
+
+          <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
+        </Link>
+      </nav>
+
+      {/* CTA buttons — bottom of sheet */}
+      <div className="mt-auto border-t border-gray-100 dark:border-white/5 p-5 space-y-3">
+        {/* ─── Primary CTA Button ────────────────────────────────────────────── */}
+        <button
+          onClick={() => setShowStartApplication(true)}
+          className="
+            group relative overflow-hidden rounded-2xl
+            w-full
+            bg-[#0A3269] dark:bg-white
+            px-6 py-3.5 font-semibold text-sm
+            text-white dark:text-[#0A3269]
+            shadow-lg shadow-[#0A3269]/20 dark:shadow-white/10
+            transition-all duration-300
+            hover:shadow-xl hover:shadow-[#0A3269]/30 dark:hover:shadow-white/20
+            hover:bg-[#1a4a7a] dark:hover:bg-gray-100
+            flex items-center justify-center gap-3
+            hover:scale-[1.02] active:scale-[0.97]
+          "
+        >
+          {/* Shine Effect */}
+          <span
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%)",
+            }}
+          />
+          
+          {/* Hover Slide Effect */}
+          <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
+          
+          <span className="relative z-10 flex items-center gap-2.5">
+            <Rocket className="h-4 w-4 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
+            <span>{t('hero.cta', 'Apply Now')}</span>
+          </span>
+        </button>
+
+        {/* ─── Secondary CTA Button ──────────────────────────────────── */}
+        {user ? (
+          <button
+            onClick={() => signOut()}
+            className="
+              w-full rounded-2xl px-6 py-3 font-medium text-sm
+              border border-gray-200 dark:border-white/10
+              bg-white dark:bg-black
+              text-black dark:text-white
+              hover:bg-red-50 dark:hover:bg-red-900/20
+              hover:border-red-300 dark:hover:border-red-500/30
+              transition-all duration-300
+              active:scale-[0.97]
+              hover:scale-[1.02]
+              flex items-center justify-center gap-2
+            "
+          >
+            <LogOut className="h-4 w-4" strokeWidth={1.8} />
+            {t('header.signOut')}
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate('/auth')}
+            className="
+              w-full rounded-2xl px-6 py-3 font-semibold text-sm
+              bg-white dark:bg-black
+              text-black dark:text-white
+              border border-gray-200 dark:border-white/10
+              flex items-center justify-center gap-2.5
+              transition-all duration-300
+              hover:bg-gray-50 dark:hover:bg-white/5
+              hover:border-gray-300 dark:hover:border-white/20
+              active:scale-[0.97]
+              shadow-sm hover:shadow-md
+              hover:scale-[1.02]
+            "
+          >
+            <LogIn className="h-4 w-4" strokeWidth={1.8} />
+            {t('header.signIn')}
+          </button>
+        )}
+      </div>
+    </SheetContent>
+  </Sheet>
+</div>      </div>
     </div>
 
     {showStartApplication && (

@@ -129,7 +129,7 @@ const WhySubscribeSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.08, duration: 0.5 }}
             whileHover={{ y: -4 }}
-            className="group relative rounded-xl sm:rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-black/50 p-3 sm:p-4 md:p-5 text-center hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-xl hover:shadow-[#0A3269]/8 dark:hover:shadow-[#4A8ABF]/8 transition-all duration-300"
+            className="group relative rounded-xl sm:rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-black p-3 sm:p-4 md:p-5 text-center hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-xl hover:shadow-[#0A3269]/8 dark:hover:shadow-[#4A8ABF]/8 transition-all duration-300"
           >
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             
@@ -139,7 +139,7 @@ const WhySubscribeSection = () => {
             <h4 className="font-normal text-black dark:text-white text-sm sm:text-base md:text-lg group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
               {benefit.title}
             </h4>
-            <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/40 mt-1 leading-relaxed font-light">
+            <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50 mt-1 leading-relaxed font-light">
               {benefit.desc}
             </p>
           </motion.div>
@@ -156,45 +156,43 @@ const GoldenGuaranteeCard = () => {
   const isArabic = language === 'ar';
 
   return (
- <motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5, delay: 0.3 }}
-  className="mt-6 sm:mt-8 max-w-3xl mx-auto"
->
-  <div className="relative rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/40 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5">
-    <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
-      {/* Icon */}
-      <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-        <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.3 }}
+      className="mt-6 sm:mt-8 max-w-3xl mx-auto"
+    >
+      <div className="relative rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/70 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5">
+        <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
+          <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+            <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
+          </div>
+          
+          <div className="flex-1 min-w-0">
+            <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
+              {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
+              <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
+                ✓ Trusted
+              </Badge>
+            </h4>
+            <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 leading-relaxed mt-0.5 max-w-2xl font-light">
+              {isArabic 
+                ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
+                : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
+            </p>
+            <a
+              href="/legal#guarantee"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-light transition-all duration-300 group/link hover:gap-1.5"
+            >
+              {isArabic ? 'اقرأ المزيد' : 'Read more'}
+              <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover/link:translate-x-0.5" />
+            </a>
+          </div>
+        </div>
       </div>
-      
-      {/* Content */}
-      <div className="flex-1 min-w-0">
-        <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
-          {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-          <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
-            ✓ Trusted
-          </Badge>
-        </h4>
-        <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 leading-relaxed mt-0.5 max-w-2xl font-light">
-          {isArabic 
-            ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
-            : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
-        </p>
-        <a
-          href="/legal#guarantee"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-light transition-all duration-300 group/link hover:gap-1.5"
-        >
-          {isArabic ? 'اقرأ المزيد' : 'Read more'}
-          <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover/link:translate-x-0.5" />
-        </a>
-      </div>
-    </div>
-  </div>
-</motion.div>
+    </motion.div>
   );
 };
 
@@ -241,26 +239,23 @@ const HowItWorksSection = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 + idx * 0.08, duration: 0.5 }}
-            className="group relative text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-[#4A8ABF]/5 border border-black/5 dark:border-[#4A8ABF]/20 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 hover:shadow-md transition-all duration-300"
+            className="group relative text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-black/80 border border-black/5 dark:border-zinc-800 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 hover:shadow-md transition-all duration-300"
           >
-            {/* Top Accent Line */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF] rounded-full group-hover:w-8 transition-all duration-500" />
             
             <div className="flex flex-col items-center">
               <div className="relative">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/20 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-300">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-[#0A3269]/10 dark:bg-zinc-800 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-300">
                   <step.icon 
                     className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#0A3269] dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" 
                     strokeWidth={1.75} 
                   />
                 </div>
                 
-                {/* Connecting Line - Modern */}
                 {idx < steps.length - 1 && (
                   <div className="hidden md:block absolute top-1/2 left-full w-[calc(100%+0.5rem)] h-px bg-gradient-to-r from-[#0A3269]/20 to-transparent dark:from-[#4A8ABF]/20 -translate-y-1/2" />
                 )}
                 
-                {/* Step Number - Modern */}
                 <div className="absolute -top-1.5 -right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black text-[7px] sm:text-[9px] font-medium flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
                   {idx + 1}
                 </div>
@@ -300,7 +295,7 @@ const TrustSection = () => {
     >
       {trustItems.map((item, idx) => (
         <div key={idx} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50">
-          <div className="p-1 sm:p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+          <div className="p-1 sm:p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-zinc-800">
             <item.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.75} />
           </div>
           <span className="font-light text-[8px] sm:text-[10px] md:text-xs">{item.label}</span>
@@ -413,10 +408,10 @@ export function PlanSelectionSection({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.5 }}
-            className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#0A3269]/30 dark:border-[#4A8ABF]/20 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 max-w-3xl mx-auto"
+            className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#0A3269]/30 dark:border-[#4A8ABF]/20 bg-[#0A3269]/5 dark:bg-black max-w-3xl mx-auto"
           >
             <div className="relative p-3 sm:p-4 md:p-5 flex items-center gap-2 sm:gap-3 md:gap-4">
-              <div className="hidden md:flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-[#0A3269]/20 dark:bg-[#4A8ABF]/20 border border-[#0A3269]/30 dark:border-[#4A8ABF]/30">
+              <div className="hidden md:flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-[#0A3269]/20 dark:bg-zinc-800 border border-[#0A3269]/30 dark:border-[#4A8ABF]/30">
                 <Gift className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.5} />
               </div>
               <div className="flex-1 min-w-0">
@@ -456,211 +451,229 @@ export function PlanSelectionSection({
             ];
 
             return (
-              <motion.button
-                key={plan.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.1 }}
-                transition={{ delay: 0.1 + idx * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                onClick={() => setSelectedPlan(plan)}
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.985 }}
-                className={cn(
-                  'relative flex flex-col text-left rounded-[26px] p-7 md:p-7 transition-all duration-300',
-                  'border bg-white dark:bg-black',
-                  'h-auto min-h-[520px] md:min-h-[560px]',
-                  isPopular
-                    ? [
-                        'border-[#0A3269]/60 dark:border-[#4A8ABF]/40',
-                        'shadow-[0_24px_60px_-16px_rgba(10,50,105,0.12)] dark:shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]',
-                        'md:-translate-y-3 z-10',
-                        'min-h-[540px] md:min-h-[590px]',
-                      ]
-                    : [
-                        'border-black/10 dark:border-white/10',
-                        'hover:border-black/20 dark:hover:border-white/20',
-                      ],
-                  isSelected && !isPopular && 'ring-2 ring-[#0A3269]/60 dark:ring-[#4A8ABF]/50 border-transparent'
-                )}
-              >
-                <div className="flex flex-wrap items-center justify-center gap-1 absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  {isPopular && (
-                    <span className="flex items-center gap-1 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] px-3.5 py-1.5 text-[10px] font-light uppercase tracking-wider text-white dark:text-black">
-                      <Star className="h-2.5 w-2.5" strokeWidth={3} />
-                      Most popular
-                    </span>
-                  )}
-                </div>
+         <motion.button
+  key={plan.id}
+  initial={{ opacity: 0, y: 24 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: false, amount: 0.1 }}
+  transition={{ delay: 0.1 + idx * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+  onClick={() => setSelectedPlan(plan)}
+  whileHover={{ y: -4 }}
+  whileTap={{ scale: 0.985 }}
+  className={cn(
+    'relative flex flex-col text-left rounded-[26px] p-7 md:p-7 transition-all duration-300',
+    'border bg-white dark:bg-black',
+    'h-auto min-h-[520px] md:min-h-[560px]',
+    isPopular
+      ? [
+          'border-[#0A3269]/60 dark:border-[#4A8ABF]/40',
+          'shadow-[0_24px_60px_-16px_rgba(10,50,105,0.12)] dark:shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]',
+          'md:-translate-y-3 z-10',
+          'min-h-[540px] md:min-h-[590px]',
+        ]
+      : [
+          'border-zinc-200 dark:border-zinc-800',
+          'hover:border-zinc-300 dark:hover:border-zinc-700',
+        ],
+    isSelected && !isPopular && 'ring-2 ring-[#0A3269]/60 dark:ring-[#4A8ABF]/50 border-transparent'
+  )}
+>
+  <div className="flex flex-wrap items-center justify-center gap-1 absolute -top-3.5 left-1/2 -translate-x-1/2">
+    {isPopular && (
+      <span className="flex items-center gap-1 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] px-3.5 py-1.5 text-[10px] font-light uppercase tracking-wider text-white dark:text-black shadow-lg shadow-[#0A3269]/30 dark:shadow-[#4A8ABF]/30">
+        <Star className="h-2.5 w-2.5" strokeWidth={3} />
+        Most popular
+      </span>
+    )}
+  </div>
 
-                <div className="relative flex items-center gap-3">
-                  <div
-                    className={cn(
-                      'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border',
-                      isPopular
-                        ? 'bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 border-[#0A3269]/30 dark:border-[#4A8ABF]/30'
-                        : 'bg-black/[0.04] dark:bg-white/[0.06] border-black/10 dark:border-white/10'
-                    )}
-                  >
-                    <PlanIcon
-                      className={cn('h-5 w-5', isPopular ? 'text-[#0A3269] dark:text-[#4A8ABF]' : 'text-black/55 dark:text-white/55')}
-                      strokeWidth={1.75}
-                    />
-                  </div>
-                  <h3
-                    className="text-xl md:text-[22px] font-light text-black dark:text-white leading-tight"
-                    style={{ fontFamily: "'Inter', sans-serif" }}
-                  >
-                    {plan.label}
-                  </h3>
-                </div>
+  <div className="relative flex items-center gap-3">
+    <div
+      className={cn(
+        'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-300',
+        isPopular
+          ? 'bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 border-[#0A3269]/30 dark:border-[#4A8ABF]/30'
+          : 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-800'
+      )}
+    >
+      <PlanIcon
+        className={cn('h-5 w-5', isPopular ? 'text-[#0A3269] dark:text-[#4A8ABF]' : 'text-zinc-600 dark:text-white/60')}
+        strokeWidth={1.75}
+      />
+    </div>
+    <h3
+      className="text-xl md:text-[22px] font-light text-black dark:text-white leading-tight"
+      style={{ fontFamily: "'Inter', sans-serif" }}
+    >
+      {plan.label}
+    </h3>
+  </div>
 
-                <p className="relative mt-3 text-sm italic text-black/50 dark:text-white/40 font-light">
-                  {plan.headline}
-                </p>
+  <p className="relative mt-3 text-sm italic text-black/50 dark:text-white/40 font-light">
+    {plan.headline}
+  </p>
 
-                <div className="relative mt-6 mb-1">
-                  {eff.isOffer && (
-                    <span className="block text-sm line-through text-black/30 dark:text-white/30 font-light">
-                      AED {eff.regularAmount}
-                    </span>
-                  )}
-                  <div className="flex items-baseline gap-2">
-                    <span
-                      className="text-4xl md:text-[42px] font-bold text-black dark:text-white tracking-tight [font-variant-numeric:tabular-nums]"
-                      style={{ 
-                        fontFamily: "'Fraunces', serif",
-                        fontWeight: 700,
-                        fontVariationSettings: "'opsz' 144",
-                        letterSpacing: '-0.02em'
-                      }}
-                    >
-                      AED {eff.amount}
-                    </span>
-                    <span className="text-sm font-light text-black/40 dark:text-white/40">
-                      /{plan.intervalLabel}
-                    </span>
-                  </div>
+  <div className="relative mt-6 mb-1">
+    {eff.isOffer && (
+      <span className="block text-sm line-through text-black/30 dark:text-white/30 font-light">
+        AED {eff.regularAmount}
+      </span>
+    )}
+    <div className="flex items-baseline gap-2">
+      <span
+        className="text-4xl md:text-[42px] font-bold text-black dark:text-white tracking-tight [font-variant-numeric:tabular-nums]"
+        style={{ 
+          fontFamily: "'Fraunces', serif",
+          fontWeight: 700,
+          fontVariationSettings: "'opsz' 144",
+          letterSpacing: '-0.02em'
+        }}
+      >
+        AED {eff.amount}
+      </span>
+      <span className="text-sm font-light text-black/40 dark:text-white/40">
+        /{plan.intervalLabel}
+      </span>
+    </div>
 
-                  {eff.isOffer && (
-                    <span className="inline-block mt-2 text-[10px] font-light px-1.5 py-0.5 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 text-[#0A3269] dark:text-[#4A8ABF] border border-[#0A3269]/30 dark:border-[#4A8ABF]/30 tracking-wide">
-                      SAVE {eff.savings}
-                    </span>
-                  )}
+    {eff.isOffer && (
+      <span className="inline-block mt-2 text-[10px] font-light px-1.5 py-0.5 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 text-[#0A3269] dark:text-[#4A8ABF] border border-[#0A3269]/30 dark:border-[#4A8ABF]/30 tracking-wide">
+        SAVE {eff.savings}
+      </span>
+    )}
 
-                  {plan.interval !== 'month' && (
-                    <p className="text-xs mt-2 font-light text-[#0A3269] dark:text-[#4A8ABF]">
-                      ≈ AED {perMonth}/month
-                      {savingsPercentage && savingsPercentage > 0 && (
-                        <span className="ml-1 text-[10px] font-light bg-[#0A3269] dark:bg-[#4A8ABF] px-1.5 py-0.5 rounded-full text-white dark:text-black">
-                          Save {savingsPercentage}%
-                        </span>
-                      )}
-                    </p>
-                  )}
-                </div>
+    {plan.interval !== 'month' && (
+      <p className="text-xs mt-2 font-light text-[#0A3269] dark:text-[#4A8ABF]">
+        ≈ AED {perMonth}/month
+        {savingsPercentage && savingsPercentage > 0 && (
+          <span className="ml-1 text-[10px] font-light bg-[#0A3269] dark:bg-[#4A8ABF] px-1.5 py-0.5 rounded-full text-white dark:text-black">
+            Save {savingsPercentage}%
+          </span>
+        )}
+      </p>
+    )}
+  </div>
 
-                <div className="relative flex items-center gap-3 my-3">
-                  <span className="h-px flex-1 bg-black/10 dark:bg-white/10" />
-                  <span className="text-[10px] font-light uppercase tracking-widest text-black/35 dark:text-white/30">
-                    What's included
-                  </span>
-                  <span className="h-px flex-1 bg-black/10 dark:bg-white/10" />
-                </div>
+  <div className="relative flex items-center gap-3 my-3">
+    <span className="h-px flex-1 bg-black/10 dark:bg-zinc-800" />
+    <span className="text-[10px] font-light uppercase tracking-widest text-black/35 dark:text-white/30">
+      What's included
+    </span>
+    <span className="h-px flex-1 bg-black/10 dark:bg-zinc-800" />
+  </div>
 
-                <ul className="relative space-y-3 flex-1">
-                  <li className="flex items-start gap-2.5 text-[13px]">
-                    <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px]', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-black/[0.06] dark:bg-white/[0.08]')}>
-                      <Check className={cn('h-3 w-3', isPopular ? 'text-white dark:text-black' : 'text-black/45 dark:text-white/45')} strokeWidth={3} />
-                    </span>
-                    <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-                      {plan.planDetails.serviceLimit} Service Requests
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2.5 text-[13px]">
-                    <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px]', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-black/[0.06] dark:bg-white/[0.08]')}>
-                      <Check className={cn('h-3 w-3', isPopular ? 'text-white dark:text-black' : 'text-black/45 dark:text-white/45')} strokeWidth={3} />
-                    </span>
-                    <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-                      {plan.planDetails.questionsPerMonth} Status Checks
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2.5 text-[13px]">
-                    <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px]', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-black/[0.06] dark:bg-white/[0.08]')}>
-                      <Check className={cn('h-3 w-3', isPopular ? 'text-white dark:text-black' : 'text-black/45 dark:text-white/45')} strokeWidth={3} />
-                    </span>
-                    <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-                      {plan.planDetails.aiLevel} AI Level
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2.5 text-[13px]">
-                    <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px]', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-black/[0.06] dark:bg-white/[0.08]')}>
-                      <Check className={cn('h-3 w-3', isPopular ? 'text-white dark:text-black' : 'text-black/45 dark:text-white/45')} strokeWidth={3} />
-                    </span>
-                    <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-                      {plan.planDetails.discountRate} Discount
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2.5 text-[13px]">
-                    <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px]', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-black/[0.06] dark:bg-white/[0.08]')}>
-                      <Check className={cn('h-3 w-3', isPopular ? 'text-white dark:text-black' : 'text-black/45 dark:text-white/45')} strokeWidth={3} />
-                    </span>
-                    <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-                      {plan.planDetails.priority} Priority
-                    </span>
-                  </li>
-                </ul>
+  <ul className="relative space-y-3 flex-1">
+    <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      </span>
+      <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
+        {plan.planDetails.serviceLimit} Service Requests
+      </span>
+    </li>
+    <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      </span>
+      <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
+        {plan.planDetails.questionsPerMonth} Status Checks
+      </span>
+    </li>
+    <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      </span>
+      <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
+        {plan.planDetails.aiLevel} AI Level
+      </span>
+    </li>
+    <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      </span>
+      <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
+        {plan.planDetails.discountRate} Discount
+      </span>
+    </li>
+    <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      </span>
+      <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
+        {plan.planDetails.priority} Priority
+      </span>
+    </li>
+  </ul>
 
-                <div className="mt-3 mb-2">
-                  <p className="text-[10px] text-gray-400 dark:text-white/30 uppercase tracking-wider mb-1.5 font-light">Services included</p>
-                  <div className="flex flex-wrap gap-1">
-                    {serviceExamples.slice(0, isMonthly ? 3 : 5).map((service, i) => (
-                      <span key={i} className="flex items-center gap-0.5 text-[10px] bg-gray-100 dark:bg-white/5 px-2 py-0.5 rounded-full font-light">
-                        <service.icon className="h-2.5 w-2.5 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.5} />
-                        <span className="text-black/70 dark:text-white/60">{service.label}</span>
-                      </span>
-                    ))}
-                    {!isMonthly && (
-                      <span className="text-[10px] text-[#0A3269] dark:text-[#4A8ABF] font-light">+ more</span>
-                    )}
-                  </div>
-                </div>
+  <div className="mt-3 mb-2">
+    <p className="text-[10px] text-gray-400 dark:text-white/30 uppercase tracking-wider mb-1.5 font-light">Services included</p>
+    <div className="flex flex-wrap gap-1">
+      {serviceExamples.slice(0, isMonthly ? 3 : 5).map((service, i) => (
+        <span key={i} className="flex items-center gap-0.5 text-[10px] bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full font-light transition-all duration-200 hover:scale-105 hover:shadow-sm">
+          <service.icon className="h-2.5 w-2.5 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.5} />
+          <span className="text-black/70 dark:text-white/60">{service.label}</span>
+        </span>
+      ))}
+      {!isMonthly && (
+        <span className="text-[10px] text-[#0A3269] dark:text-[#4A8ABF] font-light">+ more</span>
+      )}
+    </div>
+  </div>
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/membership-details/${plan.id}`);
-                    setTimeout(() => {
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="mt-2 text-xs font-light text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center gap-1 self-start group"
-                >
-                  View Full Details
-                  <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5" />
-                </button>
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      navigate(`/membership-details/${plan.id}`);
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }}
+    className="mt-2 text-xs font-light text-gray-600 dark:text-white/50 hover:text-[#0A3269] dark:hover:text-[#4A8ABF] transition-colors flex items-center gap-1 self-start group"
+  >
+    View Full Details
+    <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
+  </button>
 
-                <div
-                  role="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedPlan(plan);
-                    handleSubscribe();
-                  }}
-                  className={cn(
-                    'relative mt-5 flex items-center justify-center gap-2 h-12 rounded-full text-sm font-light',
-                    'transition-all duration-300 cursor-pointer select-none overflow-hidden group/btn',
-                    isPopular
-                      ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black shadow-[0_8px_25px_-6px_rgba(10,50,105,0.55)] dark:shadow-[0_8px_25px_-6px_rgba(74,138,191,0.55)] hover:shadow-[0_10px_32px_-6px_rgba(10,50,105,0.7)] dark:hover:shadow-[0_10px_32px_-6px_rgba(74,138,191,0.7)] hover:-translate-y-0.5'
-                      : 'bg-black text-white dark:bg-white dark:text-black border border-black dark:border-white hover:bg-black/85 dark:hover:bg-white/90'
-                  )}
-                >
-                  <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-                  <span className="relative flex items-center gap-2">
-                    {isPopular ? 'Get Started' : isMonthly ? 'Subscribe Now' : 'Start Your Membership'}
-                    <ArrowRight className="relative h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                  </span>
-                </div>
-              </motion.button>
+  {/* Subscribe Button - Effects Only */}
+  <div
+    role="button"
+    onClick={(e) => {
+      e.stopPropagation();
+      setSelectedPlan(plan);
+      handleSubscribe();
+    }}
+    className={cn(
+      'relative mt-5 flex items-center justify-center gap-2.5 h-12 rounded-full text-sm font-medium',
+      'transition-all duration-300 cursor-pointer select-none overflow-hidden group/btn',
+      isPopular
+        ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black shadow-[0_8px_25px_-6px_rgba(10,50,105,0.55)] dark:shadow-[0_8px_25px_-6px_rgba(74,138,191,0.55)]'
+        : 'bg-black text-white dark:bg-white dark:text-black border border-black dark:border-white'
+    )}
+  >
+    {/* Shimmer Effect - Always visible on hover */}
+    <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+    
+    {/* Hover Glow Effect */}
+    <span className={cn(
+      'absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 blur-xl',
+      isPopular ? 'bg-[#0A3269]/30 dark:bg-[#4A8ABF]/30' : 'bg-black/30 dark:bg-white/30'
+    )} />
+
+    {/* Hover Scale Effect - Only on the button itself, not color */}
+    <span className="absolute inset-0 group-hover/btn:scale-105 transition-transform duration-300 opacity-0 group-hover/btn:opacity-100 bg-white/5 dark:bg-black/5 rounded-full" />
+    
+    <span className="relative z-10 flex items-center gap-2">
+      <span>{isPopular ? 'Get Started' : isMonthly ? 'Subscribe Now' : 'Start Your Membership'}</span>
+      <motion.span
+        className="flex items-center justify-center rounded-full bg-white/20 dark:bg-black/20 w-7 h-7"
+        whileHover={{ x: 4 }}
+        transition={{ duration: 0.3 }}
+      >
+        <ArrowRight className="relative h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+      </motion.span>
+    </span>
+  </div>
+</motion.button>
             );
           })}
         </div>
@@ -671,9 +684,9 @@ export function PlanSelectionSection({
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mt-4 max-w-3xl mx-auto"
         >
-          <div className="relative rounded-lg sm:rounded-xl border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 p-2.5 sm:p-3 md:p-4">
+          <div className="relative rounded-lg sm:rounded-xl border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-[#0A3269]/5 dark:bg-black p-2.5 sm:p-3 md:p-4">
             <div className="flex items-start gap-2">
-              <div className="p-0.5 sm:p-1 rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 mt-0.5 flex-shrink-0">
+              <div className="p-0.5 sm:p-1 rounded-full bg-[#0A3269]/10 dark:bg-zinc-800 mt-0.5 flex-shrink-0">
                 <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={2.5} />
               </div>
               <div>
@@ -695,14 +708,12 @@ export function PlanSelectionSection({
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true }}
   transition={{ delay: 0.55, duration: 0.5 }}
-  className="mt-6 sm:mt-8 relative overflow-hidden rounded-xl bg-white/70 dark:bg-black/40 backdrop-blur-sm p-4 sm:p-6 lg:p-8 border border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 transition-all duration-500 group"
+  className="mt-6 sm:mt-8 relative overflow-hidden rounded-xl bg-white/70 dark:bg-black/80 backdrop-blur-sm p-4 sm:p-6 lg:p-8 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-500 group"
 >
-  {/* ─── Subtle Background Decorations (reduced size) ────────────────── */}
   <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-amber-400/5 dark:bg-amber-500/3 blur-2xl group-hover:bg-amber-400/8 transition-all duration-700" />
   <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-orange-400/5 dark:bg-orange-500/3 blur-2xl group-hover:bg-orange-400/8 transition-all duration-700" />
 
   <div className="relative">
-    {/* ─── Header Row ───────────────────────────────────────────────────── */}
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
       <div className="flex items-center gap-3">
         <div className="relative p-2 rounded-lg bg-amber-400/10 dark:bg-amber-500/10 border border-amber-200/20 dark:border-amber-400/10">
@@ -743,7 +754,6 @@ export function PlanSelectionSection({
       </Button>
     </div>
 
-    {/* ─── Description ──────────────────────────────────────────────────── */}
     <p className="text-[11px] sm:text-sm text-black/60 dark:text-white/50 max-w-3xl leading-relaxed mt-2 sm:mt-3 font-light">
       {isArabic 
         ? 'انضم إلى النخبة الأولى من الأعضاء المؤسسين واستمتع بمزايا حصرية لا تتوفر للآخرين. كن جزءاً من تاريخ TMMT من البداية.'
@@ -751,7 +761,6 @@ export function PlanSelectionSection({
       }
     </p>
 
-    {/* ─── Benefits Grid ────────────────────────────────────────────────── */}
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-4 sm:mt-5">
       {[
         { icon: BadgeCheck, title: isArabic ? 'شارة العضو المؤسس' : 'Founding Badge', desc: isArabic ? 'شارة حصرية على حسابك تظهر وضعك كعضو مؤسس.' : 'Exclusive badge on your account showing your founding status.' },
@@ -764,7 +773,7 @@ export function PlanSelectionSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 + idx * 0.1, duration: 0.4 }}
-          className="group/item relative overflow-hidden rounded-lg bg-white/50 dark:bg-black/30 border border-black/5 dark:border-white/5 p-3 sm:p-4 hover:border-amber-200/30 dark:hover:border-amber-400/10 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
+          className="group/item relative overflow-hidden rounded-lg bg-white/50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 hover:border-amber-200/30 dark:hover:border-amber-400/10 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
         >
           <div className="absolute -top-10 -right-10 w-16 h-16 rounded-full bg-amber-400/5 blur-xl group-hover/item:bg-amber-400/10 transition-all duration-500" />
           <div className="relative flex items-start gap-2.5">
@@ -784,7 +793,6 @@ export function PlanSelectionSection({
       ))}
     </div>
 
-    {/* ─── Urgency Banner ────────────────────────────────────────────────── */}
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       whileInView={{ opacity: 1, scale: 1 }}
@@ -803,7 +811,7 @@ export function PlanSelectionSection({
           </p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          <div className="w-px h-3 bg-black/10 dark:bg-white/10" />
+          <div className="w-px h-3 bg-black/10 dark:bg-zinc-800" />
           <span className="text-[8px] sm:text-[10px] font-light text-black/40 dark:text-white/40">
             {isArabic ? 'عرض حصري' : 'Exclusive'}
           </span>
@@ -826,22 +834,22 @@ export function PlanSelectionSection({
   whileTap={{ scale: 0.97 }}
   className={cn(
     "group relative flex items-center justify-center gap-2 sm:gap-3",
-    "h-11 sm:h-14",
-    "w-full sm:w-auto min-w-[230px] sm:min-w-[340px] px-4 sm:px-10 rounded-full", // ← changed px-6 to px-4 on mobile and w-full
-    "text-[12px] sm:text-[15px] font-medium",
+    "h-12 sm:h-14 md:h-15",
+    "w-full sm:w-auto min-w-[200px] sm:min-w-[280px] px-5 sm:px-10 rounded-full",
+    "text-[13px] sm:text-[15px] md:text-[16px] font-semibold",
     "transition-all duration-300 cursor-pointer select-none",
-    "bg-[#0A3269] dark:bg-black",
-    "border border-[#0A3269]/20 dark:border-[#4A4A4A]",
-    "text-white",
-    "hover:shadow-lg hover:shadow-[#0A3269]/25 dark:hover:shadow-black/50",
-    "hover:border-[#0A3269]/40 dark:hover:border-[#6A6A6A]",
+    "bg-[#0A3269] dark:bg-white",
+    "border border-[#0A3269]/30 dark:border-zinc-700",
+    "text-white dark:text-black",
+    "hover:shadow-xl hover:shadow-[#0A3269]/30 dark:hover:shadow-zinc-800",
+    "hover:border-[#0A3269]/50 dark:hover:border-zinc-600",
+    "hover:scale-105 active:scale-95",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     "overflow-hidden"
   )}
 >
-  {/* Auto Shimmer Effect - Always running */}
   <motion.span 
-    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"
+    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
     animate={{ 
       x: ['-100%', '100%'] 
     }}
@@ -853,11 +861,10 @@ export function PlanSelectionSection({
     }}
   />
   
-  {/* Auto Pulse Glow Effect */}
   <motion.span 
-    className="absolute inset-0 rounded-full bg-white/5 blur-xl"
+    className="absolute inset-0 rounded-full bg-white/10 dark:bg-black/10 blur-xl"
     animate={{ 
-      opacity: [0.3, 0.6, 0.3]
+      opacity: [0.3, 0.7, 0.3]
     }}
     transition={{ 
       duration: 2,
@@ -868,8 +875,8 @@ export function PlanSelectionSection({
 
   {isRedirecting ? (
     <span className="relative z-10 flex items-center gap-2">
-      <Loader2 className="h-4 w-4 animate-spin text-white" />
-      <span className="text-sm text-white">Loading...</span>
+      <Loader2 className="h-4.5 w-4.5 animate-spin text-white dark:text-black" />
+      <span className="text-sm sm:text-base text-white dark:text-black font-medium">Loading...</span>
     </span>
   ) : (
     <motion.span 
@@ -884,12 +891,12 @@ export function PlanSelectionSection({
         repeatDelay: 0.5
       }}
     >
-      <span className="text-[11px] sm:text-base text-white">
+      <span className="text-[12px] sm:text-[14px] md:text-[15px] text-white dark:text-black font-semibold">
         {language === 'ar' ? 'ابدأ عضويتك' : 'Start Your Membership'}
       </span>
       
       <motion.span 
-        className="flex items-center rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-[11px] bg-white/20 text-white"
+        className="flex items-center rounded-full px-2.5 sm:px-3.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] bg-white/25 dark:bg-black/25 text-white dark:text-black font-medium"
         animate={{ 
           scale: [1, 1.08, 1]
         }}
@@ -903,9 +910,8 @@ export function PlanSelectionSection({
         AED {effectivePlan.amount}
       </motion.span>
       
-      {/* Arrow */}
       <motion.div
-        className="flex items-center justify-center rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] w-6 h-6 sm:w-7 sm:h-7"
+        className="flex items-center justify-center rounded-full bg-white/20 dark:bg-black/20 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9"
         animate={{ 
           x: [0, 4, 0]
         }}
@@ -916,22 +922,22 @@ export function PlanSelectionSection({
           repeatDelay: 0.5
         }}
       >
-        <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white dark:text-black" />
+        <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 text-white dark:text-black" strokeWidth={2.5} />
       </motion.div>
     </motion.span>
   )}
 </motion.button>
 
           <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-2">
-            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.04]">
+            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-black">
               <ShieldCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
               <span className="text-[6px] sm:text-[8px] md:text-[10px] text-center text-black/70 dark:text-white/70 leading-tight font-light">PCI-DSS Secure</span>
             </div>
-            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.04]">
+            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-black">
               <LockIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
               <span className="text-[6px] sm:text-[8px] md:text-[10px] text-center text-black/70 dark:text-white/70 leading-tight font-light">256-bit Encryption</span>
             </div>
-            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.04]">
+            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-black">
               <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
               <span className="text-[6px] sm:text-[8px] md:text-[10px] text-center text-black/70 dark:text-white/70 leading-tight font-light">Cancel Anytime</span>
             </div>
@@ -939,13 +945,13 @@ export function PlanSelectionSection({
 
           <TrustSection />
 
-          <div className="relative mt-2 overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] backdrop-blur-2xl px-3 sm:px-4 md:px-5 py-2 sm:py-3 md:py-4 max-w-2xl mx-auto w-full">
+          <div className="relative mt-2 overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-black/70 backdrop-blur-2xl px-3 sm:px-4 md:px-5 py-2 sm:py-3 md:py-4 max-w-2xl mx-auto w-full">
             <div className="relative flex flex-col items-center text-center gap-0.5 sm:gap-1">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <span className="text-[8px] sm:text-[10px] uppercase tracking-[0.15em] font-light text-black/40 dark:text-white/40">Powered by</span>
                 <span className="text-[10px] sm:text-xs md:text-sm font-light text-black dark:text-white">TMMT</span>
               </div>
-              <p className="max-w-lg text-[8px] sm:text-[10px] md:text-[11px] leading-4 sm:leading-5 text-black/50 dark:text-white/45 font-light">
+              <p className="max-w-lg text-[8px] sm:text-[10px] md:text-[11px] leading-4 sm:leading-5 text-black/50 dark:text-white/50 font-light">
                 <span className="font-normal">7-day refund guarantee</span> when no service has been used
                 <span className="mx-1.5 sm:mx-2 text-[#0A3269] dark:text-[#4A8ABF]">•</span>
                 End-to-end encrypted payments
@@ -1112,7 +1118,7 @@ export function SubscriptionPageInner() {
 
   if (loadingCurrent) {
     return (
-      <div className="flex items-center justify-center py-24 bg-white dark:bg-black text-black/50 dark:text-white/50 gap-2 transition-colors duration-300">
+      <div className="flex items-center justify-center py-24 bg-white dark:bg-black text-zinc-500 dark:text-white/50 gap-2 transition-colors duration-300">
         <Loader2 className="h-5 w-5 animate-spin text-[#0A3269] dark:text-[#4A8ABF]" />
         <span>Loading…</span>
       </div>
@@ -1303,7 +1309,7 @@ function ElementsPaymentForm({
         </p>
       </div>
 
-      <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] p-4">
+      <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black p-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-light text-black dark:text-white">Tammat {plan.label}</p>
@@ -1328,14 +1334,14 @@ function ElementsPaymentForm({
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
             placeholder="Name on card"
-            className="h-11 rounded-xl bg-black/[0.02] dark:bg-white/[0.04] border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus-visible:ring-[#0A3269] dark:focus-visible:ring-[#4A8ABF] font-light"
+            className="h-11 rounded-xl bg-zinc-100/50 dark:bg-black border-zinc-200 dark:border-zinc-800 text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-white/30 focus-visible:ring-[#0A3269] dark:focus-visible:ring-[#4A8ABF] font-light"
             autoComplete="cc-name"
           />
         </div>
 
         <div className="space-y-2">
           <Label className="text-black/70 dark:text-white/70 font-light">Card Number</Label>
-          <div className="flex items-center h-11 px-3 rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
+          <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
             <CreditCard className="h-4 w-4 text-black/40 dark:text-white/40 mr-2 shrink-0" />
             <div className="flex-1">
               <CardNumberElement
@@ -1349,7 +1355,7 @@ function ElementsPaymentForm({
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
             <Label className="text-black/70 dark:text-white/70 font-light">Expiry</Label>
-            <div className="flex items-center h-11 px-3 rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
+            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
               <div className="flex-1">
                 <CardExpiryElement
                   options={{ ...cardElementOptions, placeholder: 'MM / YY' }}
@@ -1360,7 +1366,7 @@ function ElementsPaymentForm({
           </div>
           <div className="space-y-2">
             <Label className="text-black/70 dark:text-white/70 font-light">CVC</Label>
-            <div className="flex items-center h-11 px-3 rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
+            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
               <div className="flex-1">
                 <CardCvcElement
                   options={{ ...cardElementOptions, placeholder: 'CVC' }}
@@ -1408,11 +1414,11 @@ function ElementsPaymentForm({
         <div className="flex items-center gap-1.5">
           <Lock className="h-3 w-3" />SSL
         </div>
-        <div className="h-3 w-px bg-black/15 dark:bg-white/15" />
+        <div className="h-3 w-px bg-black/15 dark:bg-zinc-800" />
         <div className="flex items-center gap-1.5">
           <Shield className="h-3 w-3" />PCI-DSS
         </div>
-        <div className="h-3 w-px bg-black/15 dark:bg-white/15" />
+        <div className="h-3 w-px bg-black/15 dark:bg-zinc-800" />
         <span>Powered by Stripe</span>
       </div>
     </div>
@@ -1443,7 +1449,7 @@ function ManageSubscriptionView({
         <p className="text-black/50 dark:text-white/50 mt-1 font-light">Manage your Tammat membership</p>
       </div>
 
-      <div className="relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] p-6 space-y-4">
+      <div className="relative overflow-hidden rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black p-6 space-y-4">
         <div className="relative flex items-center justify-between">
           <div>
             <p className="text-sm text-black/50 dark:text-white/50 font-light">Current plan</p>
@@ -1460,7 +1466,7 @@ function ManageSubscriptionView({
           )}
         </div>
 
-        <div className="relative pt-4 border-t border-black/10 dark:border-white/10 space-y-2 text-sm">
+        <div className="relative pt-4 border-t border-zinc-200 dark:border-zinc-800 space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-black/50 dark:text-white/50 font-light">Amount</span>
             <span className="font-light text-black dark:text-white">

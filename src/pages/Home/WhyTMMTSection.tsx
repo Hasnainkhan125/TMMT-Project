@@ -1,6 +1,5 @@
 // src/components/Home/WhyTMMTSection.jsx
 import { useRef, useState, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
 import {
   Clock,
   Shield,
@@ -9,16 +8,35 @@ import {
   Sparkles,
   Headphones,
   Award,
-  Crown,
 } from 'lucide-react';
 
 const WhyTMMTSection = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
-  
-  // ─── Detect language manually ──────────────────────────────────────────
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isArabic, setIsArabic] = useState(false);
   
+  // ─── Detect dark mode ──────────────────────────────────────────
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkMode(isDark);
+    };
+    
+    checkDarkMode();
+    
+    const observer = new MutationObserver(() => {
+      checkDarkMode();
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  // ─── Detect language manually ──────────────────────────────────────────
   useEffect(() => {
     const checkLanguage = () => {
       const lang = localStorage.getItem('i18nextLng');
@@ -118,79 +136,220 @@ const WhyTMMTSection = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="relative bg-white dark:bg-black overflow-hidden py-12 sm:py-16 md:py-20 lg:py-12 w-full">
-      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-14"
-        >
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#0A3269]/20 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-sm px-3 py-1.5 mb-4">
-            <Award className="h-3.5 w-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
-            <span className="text-[10px] font-light uppercase tracking-[0.2em] text-[#0A3269] dark:text-white/60">
-              {isArabic ? 'لماذا TMMT؟' : 'Why TMMT?'}
+    <section 
+      ref={sectionRef} 
+      className={`relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-28 w-full ${
+        isDarkMode ? 'bg-black' : 'bg-white'
+      }`}
+    >
+      {/* Premium Background Effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className={`absolute top-0 -right-20 w-[500px] h-[500px] rounded-full blur-3xl animate-float-slow ${
+          isDarkMode ? 'bg-white/3' : 'bg-black/3'
+        }`} />
+        <div className={`absolute bottom-0 -left-20 w-[500px] h-[500px] rounded-full blur-3xl animate-float-medium ${
+          isDarkMode ? 'bg-white/3' : 'bg-black/3'
+        }`} />
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl animate-float-fast ${
+          isDarkMode ? 'bg-white/2' : 'bg-black/2'
+        }`} />
+        
+        <div 
+          className={`absolute inset-0 ${
+            isDarkMode ? 'opacity-[0.03]' : 'opacity-[0.03]'
+          }`}
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${
+              isDarkMode ? '#ffffff' : '#000000'
+            } 1px, transparent 0)`,
+            backgroundSize: '40px 40px',
+          }}
+        />
+      </div>
+
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 relative z-10 max-w-7xl mx-auto">
+        {/* ─── Header ──────────────────────────────────────────────── */}
+        <div className="text-center max-w-4xl mx-auto mb-14 md:mb-16">
+          {/* Premium Badge */}
+          <div 
+            className={`inline-flex items-center gap-2 rounded-full border backdrop-blur-sm px-4 py-2 mb-5 transition-all duration-300 hover:scale-105 ${
+              isDarkMode 
+                ? 'border-white/10 bg-black/40' 
+                : 'border-[#0A3269]/10 bg-white/80'
+            }`}
+          >
+            <Award className={`h-4 w-4 ${
+              isDarkMode ? 'text-[#4A8ABF]' : 'text-[#0A3269]'
+            }`} />
+            <span className={`text-xs font-semibold tracking-wider ${
+              isDarkMode ? 'text-white/60' : 'text-[#0A3269]'
+            }`}>
+              {isArabic ? 'لماذا TMMT؟' : 'WHY TMMT?'}
             </span>
           </div>
           
-        <h2 
-  className="font-bold text-black dark:text-white leading-tight whitespace-normal break-words"
-  style={{
-    fontFamily: "'Inter', sans-serif",
-    fontWeight: 700,
-    fontSize: 'clamp(2rem, 8vw, 3.2rem)'
-  }}
->
-  {isArabic ? (
-    <>
-      شريكك الموثوق لـ
-      <br className="hidden md:block" />
-      <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal" style={{ fontSize: 'clamp(1.6rem, 7vw, 2.4rem)' }}>
-        الخدمات الحكومية
-      </span>
-    </>
-  ) : (
-    <>
-      <span className="font-bold">Your Trusted Partner for</span>
-      <br className="hidden md:block" />
-      <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal" style={{ fontSize: 'clamp(1.6rem, 7vw, 2.4rem)' }}>
-        Government Services
-      </span>
-    </>
-  )}
-</h2>
-        </motion.div>
+          <h2 
+            className={`font-bold leading-[1.1] ${
+              isDarkMode ? 'text-white' : 'text-black'
+            }`}
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 'clamp(2.2rem, 8vw, 3.5rem)'
+            }}
+          >
+            {isArabic ? (
+              <>
+                شريكك الموثوق لـ
+                <br className="hidden md:block" />
+                <span className={`font-light ${
+                  isDarkMode ? 'text-[#4A8ABF]' : 'text-[#0A3269]'
+                }`} style={{ fontSize: 'clamp(1.8rem, 7vw, 2.8rem)' }}>
+                  الخدمات الحكومية
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="font-bold">Your Trusted Partner for</span>
+                <br className="hidden md:block" />
+                <span className={`font-light ${
+                  isDarkMode ? 'text-[#4A8ABF]' : 'text-[#0A3269]'
+                }`} style={{ fontSize: 'clamp(1.8rem, 7vw, 2.8rem)' }}>
+                  Government Services
+                </span>
+              </>
+            )}
+          </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-7xl mx-auto w-full">
+          <p className={`text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed ${
+            isDarkMode ? 'text-white/50' : 'text-gray-600'
+          }`}>
+            {isArabic 
+              ? 'نحن نعيد تعريف تجربة الخدمات الحكومية في الإمارات من خلال الجمع بين التكنولوجيا المتطورة والخبرة البشرية.'
+              : 'We are redefining the UAE government service experience by combining cutting-edge technology with human expertise.'
+            }
+          </p>
+
+  
+        </div>
+
+        {/* ─── Benefits Grid ───────────────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-7xl mx-auto w-full">
           {benefits.map((benefit, idx) => {
+            const Icon = benefit.icon;
             return (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.05 + (idx * 0.05), duration: 0.5 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="group relative bg-white dark:bg-black/50 rounded-2xl border border-gray-100 dark:border-white/10 p-5 md:p-6 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30 hover:shadow-md hover:shadow-[#0A3269]/5 dark:hover:shadow-[#4A8ABF]/5 transition-all duration-300 w-full"
+                className={`group relative rounded-2xl border p-6 md:p-7 transition-all duration-500 ease-out
+                  hover:-translate-y-2 hover:scale-[1.01]
+                  ${isDarkMode 
+                    ? 'bg-zinc-950/80 border-zinc-800 hover:border-[#4A8ABF]/40' 
+                    : 'bg-white/80 border-zinc-200 hover:border-[#0A3269]/30'
+                  } hover:shadow-2xl ${
+                  isDarkMode 
+                    ? 'hover:shadow-[#4A8ABF]/10' 
+                    : 'hover:shadow-[#0A3269]/15'
+                }`}
+                style={{ 
+                  animation: `fade-up-stagger ${0.4 + (idx * 0.1)}s cubic-bezier(0.22, 1, 0.36, 1) both`
+                }}
               >
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="p-2.5 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 w-fit mb-3 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-300">
-                  <benefit.icon className="h-5 w-5 sm:h-6 sm:w-6 text-[#0A3269] dark:text-[#4A8ABF] group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
+                {/* Animated Line - Center Expand */}
+                <div className={`absolute top-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full transition-all duration-700 ease-out group-hover:w-full ${
+                  isDarkMode ? 'bg-[#4A8ABF]' : 'bg-[#0A3269]'
+                }`} />
+
+                {/* Glass Reflection Overlay */}
+                <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-br from-white/10 to-transparent' 
+                    : 'bg-gradient-to-br from-[#0A3269]/5 to-transparent'
+                }`} />
+
+                {/* Icon Container */}
+                <div 
+                  className={`relative p-3 rounded-xl w-fit mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-[-3deg] ${
+                    isDarkMode 
+                      ? 'bg-zinc-800 group-hover:bg-zinc-700' 
+                      : 'bg-zinc-100 group-hover:bg-zinc-200'
+                  }`}
+                >
+                  <Icon className={`h-5 w-5 sm:h-6 sm:w-6 transition-colors duration-300 ${
+                    isDarkMode 
+                      ? 'text-[#4A8ABF]' 
+                      : 'text-[#0A3269]'
+                  }`} strokeWidth={1.75} />
                 </div>
                 
-                <h3 className="text-base sm:text-lg font-normal text-black dark:text-white mb-1.5 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                {/* Title */}
+                <h3 className={`text-base sm:text-lg font-semibold mb-2 transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'text-white group-hover:text-[#4A8ABF]' 
+                    : 'text-black group-hover:text-[#0A3269]'
+                }`}>
                   {benefit.text}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-white/40 leading-relaxed font-light">
+                
+                {/* Description */}
+                <p className={`text-sm leading-relaxed ${
+                  isDarkMode ? 'text-zinc-400' : 'text-gray-500'
+                }`}>
                   {benefit.description}
                 </p>
 
-                <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              </motion.div>
+                {/* Subtle Glow Effect */}
+                <div className={`absolute -bottom-16 -right-16 w-32 h-32 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${
+                  isDarkMode ? 'bg-[#4A8ABF]/5' : 'bg-[#0A3269]/5'
+                }`} />
+
+                {/* Corner Accent - REMOVED */}
+              </div>
             );
           })}
         </div>
       </div>
+
+      {/* ─── INJECT PREMIUM CSS KEYFRAMES ───────────────────────────── */}
+      <style>{`
+        @keyframes fade-up-stagger {
+          0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        @keyframes float-slow {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+          33% { transform: translate(30px, -20px) scale(1.1); opacity: 0.5; }
+          66% { transform: translate(-20px, 10px) scale(0.9); opacity: 0.2; }
+        }
+        @keyframes float-medium {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+          33% { transform: translate(-20px, 30px) scale(1.2); opacity: 0.4; }
+          66% { transform: translate(20px, -10px) scale(0.85); opacity: 0.1; }
+        }
+        @keyframes float-fast {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
+          33% { transform: translate(-40%, -60%) scale(1.3); opacity: 0.4; }
+          66% { transform: translate(-60%, -40%) scale(0.8); opacity: 0.1; }
+        }
+        
+        @keyframes line-expand {
+          0% { width: 0%; opacity: 0; }
+          50% { width: 80%; opacity: 1; }
+          100% { width: 100%; opacity: 1; }
+        }
+
+        .animate-float-slow {
+          animation: float-slow 12s ease-in-out infinite;
+        }
+        .animate-float-medium {
+          animation: float-medium 10s ease-in-out infinite;
+        }
+        .animate-float-fast {
+          animation: float-fast 8s ease-in-out infinite;
+        }
+        .animate-line-expand {
+          animation: line-expand 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+      `}</style>
     </section>
   );
 };

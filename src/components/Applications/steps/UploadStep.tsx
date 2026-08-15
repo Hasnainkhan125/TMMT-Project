@@ -1,7 +1,8 @@
 /**
  * UploadStep — Document upload (advanced)
- *
+ * 
  * Features:
+ *   - Premium, modern card design with horizontal layout
  *   - Category color-coding (Identity / Legal / Financial / Business / Property)
  *   - Per-card drag & drop, not just the global dropzone
  *   - Live thumbnail preview (image) or type glyph (pdf)
@@ -13,7 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Upload, Camera, CheckCircle2, AlertTriangle,
   Loader2, FileText, X, ArrowRight, Sparkles, RotateCcw, PartyPopper,
-  SkipForward, FileUp, Clock, Shield,
+  FileUp, Clock, Shield, Zap,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -52,20 +53,20 @@ interface UploadStepProps {
 
 // ─── Category color system ───────────────────────────────────────────────────
 const CATEGORIES: [string, { name: string; c: string; bg: string; ring: string }][] = [
-  ['passport',        { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.35)' }],
-  ['emirates id',      { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.35)' }],
-  ['national id',      { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.35)' }],
-  ['visa',             { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.35)' }],
-  ['personal photo',   { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.35)' }],
-  ['marriage certif',  { name: 'Legal',     c: '#0EA5E9', bg: '#F0F9FF', ring: 'rgba(14,165,233,0.35)' }],
-  ['birth certif',     { name: 'Legal',     c: '#0EA5E9', bg: '#F0F9FF', ring: 'rgba(14,165,233,0.35)' }],
-  ['memorandum',       { name: 'Legal',     c: '#0EA5E9', bg: '#F0F9FF', ring: 'rgba(14,165,233,0.35)' }],
-  ['trade license',    { name: 'Business',  c: '#F59E0B', bg: '#FFFBEB', ring: 'rgba(245,158,11,0.35)' }],
-  ['salary certif',    { name: 'Financial', c: '#10B981', bg: '#ECFDF5', ring: 'rgba(16,185,129,0.35)' }],
-  ['bank statement',   { name: 'Financial', c: '#10B981', bg: '#ECFDF5', ring: 'rgba(16,185,129,0.35)' }],
-  ['ejari',            { name: 'Property',  c: '#F43F5E', bg: '#FFF1F2', ring: 'rgba(244,63,94,0.35)' }],
+  ['passport',        { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.25)' }],
+  ['emirates id',     { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.25)' }],
+  ['national id',     { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.25)' }],
+  ['visa',            { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.25)' }],
+  ['personal photo',  { name: 'Identity',  c: '#8B5CF6', bg: '#F5F3FF', ring: 'rgba(139,92,246,0.25)' }],
+  ['marriage certif', { name: 'Legal',     c: '#0891B2', bg: '#ECFEFF', ring: 'rgba(8,145,178,0.25)' }],
+  ['birth certif',    { name: 'Legal',     c: '#0891B2', bg: '#ECFEFF', ring: 'rgba(8,145,178,0.25)' }],
+  ['memorandum',      { name: 'Legal',     c: '#0891B2', bg: '#ECFEFF', ring: 'rgba(8,145,178,0.25)' }],
+  ['trade license',   { name: 'Business',  c: '#D97706', bg: '#FFFBEB', ring: 'rgba(217,119,6,0.25)' }],
+  ['salary certif',   { name: 'Financial', c: '#059669', bg: '#ECFDF5', ring: 'rgba(5,150,105,0.25)' }],
+  ['bank statement',  { name: 'Financial', c: '#059669', bg: '#ECFDF5', ring: 'rgba(5,150,105,0.25)' }],
+  ['ejari',           { name: 'Property',  c: '#DC2626', bg: '#FEF2F2', ring: 'rgba(220,38,38,0.25)' }],
 ]
-const DEFAULT_CAT = { name: 'Document', c: '#64748B', bg: '#F8FAFC', ring: 'rgba(100,116,139,0.3)' }
+const DEFAULT_CAT = { name: 'Document', c: '#64748B', bg: '#F8FAFC', ring: 'rgba(100,116,139,0.2)' }
 
 const getCategory = (label: string) => {
   const l = label.toLowerCase()
@@ -129,7 +130,7 @@ const validateFile = (file: File, doc: DocDef): string | null => {
 }
 
 // ─── Confetti particle burst ─────────────────────────────────────────────────
-const CONFETTI_COLORS = ['#BBF451', '#8B5CF6', '#0EA5E9', '#F59E0B', '#F43F5E', '#10B981']
+const CONFETTI_COLORS = ['#BBF451', '#7C3AED', '#06B6D4', '#F59E0B', '#F43F5E', '#10B981']
 const ConfettiBurst = ({ active }: { active: boolean }) => {
   const particles = useMemo(() => Array.from({ length: 14 }, (_, i) => ({
     id: i,
@@ -170,6 +171,7 @@ const ConfettiBurst = ({ active }: { active: boolean }) => {
     </AnimatePresence>
   )
 }
+
 // ─── Skip Confirmation Dialog ──────────────────────────────────────────────
 function SkipConfirmDialog({ 
   open, 
@@ -184,87 +186,79 @@ function SkipConfirmDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md p-0 gap-0 overflow-hidden rounded-3xl border-0 shadow-2xl bg-white dark:bg-black">
+      <DialogContent className="max-w-md p-0 gap-0 overflow-hidden rounded-3xl border-0 shadow-2xl bg-white dark:bg-zinc-950">
         <div className="relative p-8 sm:p-10">
-          {/* Simple gradient orbs */}
-          <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-gray-100/30 dark:bg-white/5 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-gray-100/20 dark:bg-white/5 blur-3xl pointer-events-none" />
+          <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-indigo-500/10 dark:bg-indigo-500/5 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 blur-3xl pointer-events-none" />
 
-          <div className="relative">
-            {/* Icon with premium animation - Document Icon */}
+          <div className="relative z-10">
             <div className="relative w-20 h-20 mx-auto">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                className="relative z-10 w-20 h-20 rounded-2xl bg-black dark:bg-white flex items-center justify-center shadow-2xl shadow-black/20 dark:shadow-white/10"
+                className="relative z-10 w-20 h-20 rounded-2xl bg-zinc-900 dark:bg-white flex items-center justify-center shadow-2xl shadow-zinc-900/30 dark:shadow-white/10"
               >
-                <FileUp className="w-10 h-10 text-white dark:text-black" strokeWidth={1.5} />
+                <FileUp className="w-10 h-10 text-white dark:text-zinc-900" strokeWidth={1.5} />
               </motion.div>
               
-              {/* Premium pulse rings */}
               <motion.div
                 animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute inset-0 rounded-2xl border-2 border-black/10 dark:border-white/10"
+                className="absolute inset-0 rounded-2xl border-2 border-zinc-900/10 dark:border-white/10"
               />
               <motion.div
                 animate={{ scale: [1, 1.6, 1], opacity: [0.25, 0, 0.25] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                className="absolute inset-0 rounded-2xl border border-black/5 dark:border-white/5"
+                className="absolute inset-0 rounded-2xl border border-zinc-900/5 dark:border-white/5"
               />
             </div>
 
-            {/* Title with premium styling */}
             <motion.h3 
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mt-6 text-2xl font-bold text-center text-black dark:text-white"
-              style={{ fontFamily: "'Fraunces', serif" }}
+              className="mt-6 text-2xl font-bold text-center text-zinc-900 dark:text-white tracking-tight"
             >
               Skip Document Upload?
             </motion.h3>
 
-            {/* Description */}
             <motion.p 
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="mt-2 text-sm text-center text-gray-500 dark:text-gray-400 leading-relaxed max-w-sm mx-auto"
+              className="mt-2 text-sm text-center text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-sm mx-auto"
             >
               No documents handy? No problem — you can upload them later. 
               Your application will stay on track.
             </motion.p>
 
-            {/* Premium feature badges - Simple */}
             <motion.div 
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               className="mt-6 grid grid-cols-2 gap-3"
             >
-              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 group hover:border-black dark:hover:border-white/30 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Clock className="w-5 h-5 text-black dark:text-white" strokeWidth={1.5} />
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 group hover:border-zinc-900 dark:hover:border-white/30 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <Clock className="w-5 h-5 text-zinc-900 dark:text-white" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="text-[12px] font-semibold text-black dark:text-white">Upload Anytime</p>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400">No rush at all</p>
+                  <p className="text-[12px] font-semibold text-zinc-900 dark:text-white">Upload Anytime</p>
+                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400">No rush at all</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 group hover:border-black dark:hover:border-white/30 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Shield className="w-5 h-5 text-black dark:text-white" strokeWidth={1.5} />
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 group hover:border-zinc-900 dark:hover:border-white/30 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <Shield className="w-5 h-5 text-zinc-900 dark:text-white" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="text-[12px] font-semibold text-black dark:text-white">Stay on Track</p>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400">Process continues</p>
+                  <p className="text-[12px] font-semibold text-zinc-900 dark:text-white">Stay on Track</p>
+                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400">Process continues</p>
                 </div>
               </div>
             </motion.div>
 
-            {/* Premium Buttons - Simple */}
             <motion.div 
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -274,39 +268,37 @@ function SkipConfirmDialog({
               <Button
                 onClick={onClose}
                 variant="outline"
-                className="flex-1 h-12 rounded-xl font-semibold text-sm border-2 border-gray-200 dark:border-white/10 text-black dark:text-white hover:border-black dark:hover:border-white/30 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="flex-1 h-12 rounded-xl font-semibold text-sm border-2 border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-white hover:border-zinc-900 dark:hover:border-white/30 hover:bg-zinc-50 dark:hover:bg-white/5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Cancel
               </Button>
               <Button
                 onClick={onConfirm}
-                className="flex-1 h-12 rounded-xl font-semibold text-sm bg-black dark:bg-white text-white dark:text-black shadow-xl shadow-black/20 dark:shadow-white/10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
+                className="flex-1 h-12 rounded-xl font-semibold text-sm bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-xl shadow-zinc-900/20 dark:shadow-white/10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
               >
                 <FileUp className="w-4 h-4 mr-2 group-hover:translate-y-[-2px] transition-transform duration-300" strokeWidth={2} />
                 Upload Later
               </Button>
             </motion.div>
 
-            {/* Premium divider with text */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.35 }}
               className="mt-6 flex items-center gap-4"
             >
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-white/10 to-transparent" />
-              <span className="text-[10px] font-medium text-gray-400 dark:text-white/20 tracking-wider uppercase">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-zinc-300 dark:via-white/10 to-transparent" />
+              <span className="text-[10px] font-medium text-zinc-400 dark:text-white/20 tracking-wider uppercase">
                 Secure & Encrypted
               </span>
-              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gray-300 dark:via-white/10 to-transparent" />
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-zinc-300 dark:via-white/10 to-transparent" />
             </motion.div>
 
-            {/* Premium footnote */}
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="mt-3 text-[10px] text-center text-gray-400 dark:text-white/20 leading-relaxed"
+              className="mt-3 text-[10px] text-center text-zinc-400 dark:text-white/20 leading-relaxed"
             >
               You can always upload documents later from your dashboard
             </motion.p>
@@ -458,190 +450,58 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
           const f = e.dataTransfer.files?.[0]
           if (f) processFileForSlot(f, doc.id, doc.label, doc)
         }}
-        style={{
-          boxShadow: done ? `0 1px 2px rgba(15,42,68,0.04)` : undefined,
-        }}
         className={`
-          group relative flex flex-col rounded-[20px] overflow-hidden
+          group relative flex flex-col rounded-2xl overflow-hidden
+          border border-zinc-200 dark:border-white/10
+          bg-white dark:bg-zinc-900
           transition-all duration-300 ease-out
+          p-5 gap-4
+          hover:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.10)] dark:hover:shadow-[0_16px_48px_-12px_rgba(0,0,0,0.5)]
           ${isDragTarget
-            ? 'ring-2 scale-[1.01]'
+            ? 'scale-[1.01] shadow-xl ring-2 ring-zinc-900/10 dark:ring-white/10'
             : errored
-            ? 'ring-1 ring-red-200 bg-red-50/60'
+            ? 'ring-1 ring-red-200 bg-red-50/60 dark:bg-red-900/10'
             : done
-            ? 'ring-1 ring-[#BBF451]/50 bg-[#F7FEE7]'
+            ? 'ring-1 ring-emerald-200 bg-emerald-50/40 dark:bg-emerald-900/10'
             : busy
-            ? 'ring-1 ring-[#EAEEF3] bg-[#FAFBFC]'
-            : 'ring-1 ring-[#EEF1F5] bg-white hover:shadow-[0_8px_24px_-8px_rgba(15,42,68,0.10)] hover:-translate-y-[2px]'
+            ? 'bg-zinc-50 dark:bg-zinc-800/50'
+            : ''
           }
         `}
       >
         {isDragTarget && (
           <div
-            className="absolute inset-0 pointer-events-none rounded-[20px] z-10"
+            className="absolute inset-0 pointer-events-none rounded-2xl z-10"
             style={{ boxShadow: `0 0 0 2px ${cat.c}`, background: `${cat.c}0D` }}
           />
         )}
 
         {/* Category strip */}
-        <div className="h-[3px] w-full" style={{ background: `linear-gradient(90deg, ${cat.c}, ${cat.c}55)` }} />
+        <div className="h-[3px] w-full -mt-5 -mx-5 mb-2 px-5" style={{ background: `linear-gradient(90deg, ${cat.c}, ${cat.c}55)` }} />
 
         <ConfettiBurst active={pingId === doc.id} />
 
-        {/* ── Top section ── */}
-        <div className="flex items-start gap-3 px-4 pt-3.5 pb-3">
-          <div className={`
-            shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5 transition-colors duration-300
-          `} style={{
-            background: errored ? '#FEE2E2' : slot?.status === 'ok' ? '#BBF45140' : slot?.status === 'warn' ? '#FEF3C7' : busy ? `${cat.c}22` : `${cat.c}14`,
-          }}>
-            {busy
-              ? <Loader2 className="w-4 h-4 animate-spin" style={{ color: cat.c }} />
-              : slot?.status === 'ok'
-              ? <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 400, damping: 15 }}>
-                  <CheckCircle2 className="w-4 h-4 text-[#4D7C0F]" />
-                </motion.div>
-              : slot?.status === 'warn'
-              ? <AlertTriangle className="w-4 h-4 text-amber-500" />
-              : errored
-              ? <AlertTriangle className="w-4 h-4 text-red-500" />
-              : <div className="w-3 h-3 rounded-full border-2" style={{ borderColor: `${cat.c}55` }} />
-            }
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <p className={`font-semibold text-[14px] leading-snug tracking-[-0.01em] ${
-                slot?.status === 'ok' ? 'text-[#3F6512]' :
-                slot?.status === 'warn' ? 'text-amber-700' :
-                errored ? 'text-red-700' : 'text-[#0F2A44]'
-              }`}>
-                {doc.label}
-              </p>
-              {!done && (
-                <Badge
-                  className="h-[16px] px-1.5 text-[9px] font-bold border-0 rounded-full leading-none tracking-wide"
-                  style={{ background: `${cat.c}16`, color: cat.c }}
-                >
-                  {cat.name}
-                </Badge>
-              )}
-              {doc.required && !done && (
-                <Badge className="h-[16px] px-1.5 text-[9px] font-bold bg-[#0F2A44]/[0.05] text-[#8A96A3] border-0 rounded-full leading-none tracking-wide">
-                  {t('upload.required_label', 'required')}
-                </Badge>
-              )}
-            </div>
-
-            {slot && (
-              <p className="text-[11px] text-[#7B8794] mt-0.5 truncate">
-                {slot.name} <span className="text-[#B9C2CC]">· {formatBytes(slot.size)}</span>
-              </p>
-            )}
-
-            {slot?.status === 'uploading' && (
-              <div className="mt-2 max-w-[180px]">
-                <div className="h-[3px] w-full rounded-full bg-[#E7ECF1] overflow-hidden">
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ width: `${slot.progress}%`, background: `linear-gradient(90deg, ${cat.c}, #BBF451)` }}
-                  />
-                </div>
-                <p className="text-[10px] text-[#9AA5B1] mt-1">Uploading… {Math.round(slot.progress)}%</p>
-              </div>
-            )}
-            {slot?.status === 'checking' && (
-              <p className="text-[11px] text-[#7B8794] mt-1 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-[#BBF451]" />
-                {t('upload.aiChecking', 'Checking your document...')}
-              </p>
-            )}
-            <AnimatePresence>
-              {slot?.feedback && (
-                <motion.p
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className={`text-[11px] mt-1 leading-snug ${
-                    slot.status === 'ok' ? 'text-[#4D7C0F]' :
-                    slot.status === 'warn' ? 'text-amber-700' : 'text-red-600'
-                  }`}
-                >
-                  {slot.feedback}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <div className="shrink-0">
-            {errored ? (
-              <button
-                onClick={() => slotFileRefs.current[doc.id]?.click()}
-                className="flex items-center gap-1 text-[11px] font-semibold text-red-600 hover:text-red-700 px-2 py-1.5 rounded-lg hover:bg-white transition-colors"
-              >
-                <RotateCcw className="w-3 h-3" /> Retry
-              </button>
-            ) : done ? (
-              <div className="flex gap-1">
-                <button
-                  onClick={() => slotFileRefs.current[doc.id]?.click()}
-                  className="text-[11px] font-medium text-[#5C6773] hover:text-[#0F2A44] px-2 py-1 rounded-lg hover:bg-white transition-colors"
-                >
-                  {t('upload.reupload', 'Replace')}
-                </button>
-                <button
-                  onClick={() => removeSlot(doc.id)}
-                  className="text-[#B9C2CC] hover:text-red-400 transition-colors p-1 rounded-lg hover:bg-white"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : !busy ? (
-              <div className="flex gap-1.5">
-                <button
-                  onClick={() => slotFileRefs.current[doc.id]?.click()}
-                  title={t('upload.uploadFile', 'Upload file')}
-                  className="w-9 h-9 rounded-xl bg-[#F6F8FA] flex items-center justify-center text-[#5C6773] transition-all duration-200"
-                  onMouseEnter={e => { e.currentTarget.style.background = cat.c; e.currentTarget.style.color = 'white' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = ''; e.currentTarget.style.color = '' }}
-                >
-                  <Upload className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => slotCamRefs.current[doc.id]?.click()}
-                  title={t('upload.takePhoto', 'Take photo')}
-                  className="w-9 h-9 rounded-xl bg-[#F6F8FA] flex items-center justify-center text-[#5C6773] transition-all duration-200"
-                  onMouseEnter={e => { e.currentTarget.style.background = cat.c; e.currentTarget.style.color = 'white' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = ''; e.currentTarget.style.color = '' }}
-                >
-                  <Camera className="w-4 h-4" />
-                </button>
-              </div>
-            ) : null}
-          </div>
-        </div>
-
-        {/* ── Thumbnail with scanning sweep while checking ── */}
-        {slot && !errored && (
-          <div className="px-4 pb-4">
-            <div className="relative h-28 rounded-xl overflow-hidden bg-[#0F2A44]/[0.03] ring-1 ring-black/[0.04]">
+        {/* ── Card Layout ── */}
+        <div className="flex flex-col sm:flex-row items-start gap-5 w-full">
+          
+          {/* Left: Thumbnail (Big Size) */}
+          {slot && !errored && (
+            <div className="w-full sm:w-32 h-32 shrink-0 rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 ring-1 ring-zinc-200 dark:ring-zinc-700">
               {slot.previewUrl ? (
                 <img src={slot.previewUrl} alt={slot.name} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-[#8A96A3]">
-                  <FileText className="w-6 h-6" />
-                  <span className="text-[10px] font-medium">PDF document</span>
+                <div className="w-full h-full flex flex-col items-center justify-center gap-1 text-zinc-400 dark:text-zinc-500">
+                  <FileText className="w-8 h-8" />
+                  <span className="text-[10px] font-medium">PDF</span>
                 </div>
               )}
-              {slot.status === 'uploading' && (
-                <div className="absolute inset-0 bg-white/40" />
-              )}
+              {slot.status === 'uploading' && <div className="absolute inset-0 bg-white/60 dark:bg-black/60" />}
               {slot.status === 'checking' && (
                 <div className="absolute inset-0 overflow-hidden">
-                  <div className="absolute inset-0 bg-[#0F2A44]/10 backdrop-blur-[0.5px]" />
+                  <div className="absolute inset-0 bg-zinc-900/5 dark:bg-white/5 backdrop-blur-[0.5px]" />
                   <motion.div
                     className="absolute left-0 right-0 h-8"
-                    style={{ background: 'linear-gradient(180deg, transparent, rgba(187,244,81,0.55), transparent)' }}
+                    style={{ background: 'linear-gradient(180deg, transparent, rgba(187,244,81,0.4), transparent)' }}
                     initial={{ top: '-20%' }}
                     animate={{ top: '110%' }}
                     transition={{ duration: 1.1, repeat: Infinity, ease: 'linear' }}
@@ -649,44 +509,123 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
                 </div>
               )}
             </div>
-          </div>
-        )}
+          )}
 
-        {errored && slot?.previewUrl && (
-          <div className="px-4 pb-4">
-            <div className="relative h-20 rounded-xl overflow-hidden ring-1 ring-red-200 opacity-60">
-              <img src={slot.previewUrl} alt={slot.name} className="w-full h-full object-cover grayscale" />
+          {/* Middle: Info (Large spacing & fonts) */}
+          <div className="flex-1 min-w-0 space-y-2.5">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <p className={`font-semibold text-[17px] leading-tight tracking-tight ${
+                slot?.status === 'ok' ? 'text-emerald-700 dark:text-emerald-400' :
+                slot?.status === 'warn' ? 'text-amber-700 dark:text-amber-400' :
+                errored ? 'text-red-700 dark:text-red-400' : 'text-zinc-900 dark:text-white'
+              }`}>
+                {doc.label}
+              </p>
+              {!done && (
+                <Badge variant="secondary" className="h-6 px-2.5 text-[10px] font-medium border-0 rounded-full" style={{ background: `${cat.c}20`, color: cat.c }}>
+                  {cat.name}
+                </Badge>
+              )}
+              {doc.required && !done && (
+                <Badge variant="secondary" className="h-6 px-2.5 text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border-0 rounded-full">
+                  {t('upload.required_label', 'Required')}
+                </Badge>
+              )}
             </div>
-          </div>
-        )}
 
-        {/* ── Sample reference (only before upload) ── */}
-        {!slot && (
-          <div className="mx-4 mb-4 rounded-xl overflow-hidden" style={{ background: cat.bg }}>
-            <div className="relative px-3.5 pt-3 pb-3">
-              <span
-                aria-hidden="true"
-                className="absolute -right-2 -top-1 font-black select-none pointer-events-none"
-                style={{ fontSize: '2.2rem', opacity: 0.06, letterSpacing: '0.05em', color: cat.c }}
-              >
-                SAMPLE
-              </span>
-              <div className="relative z-10 space-y-1.5">
-                <p className="text-[11.5px] font-medium text-[#3D4A57] leading-snug">
-                  {sample.what}
+            {slot ? (
+              <div className="space-y-1.5">
+                <p className="text-[13px] text-zinc-600 dark:text-zinc-400 truncate flex items-center gap-2">
+                  <span className="font-medium">{slot.name}</span>
+                  <span className="text-zinc-400 dark:text-zinc-500 text-[11px]">· {formatBytes(slot.size)}</span>
                 </p>
-                <ul className="space-y-1 pt-0.5">
-                  {sample.tips.map((tip, i) => (
-                    <li key={i} className="flex items-start gap-1.5 text-[11px] text-[#7B8794]">
-                      <span className="w-1 h-1 rounded-full mt-[5px] shrink-0" style={{ background: cat.c }} />
-                      {tip}
-                    </li>
-                  ))}
-                </ul>
+                
+                {/* Status Updates */}
+                {slot.status === 'uploading' && (
+                  <div className="flex items-center gap-3 pt-1">
+                    <div className="h-1.5 w-32 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full bg-zinc-900 dark:bg-white"
+                        style={{ width: `${slot.progress}%` }}
+                      />
+                    </div>
+                    <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">{Math.round(slot.progress)}%</span>
+                  </div>
+                )}
+                {slot.status === 'checking' && (
+                  <p className="text-[12px] text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 pt-1">
+                    <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
+                    {t('upload.aiChecking', 'Checking your document...')}
+                  </p>
+                )}
+                <AnimatePresence>
+                  {slot.feedback && (
+                    <motion.p
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className={`text-[12px] leading-relaxed pt-1 ${
+                        slot.status === 'ok' ? 'text-emerald-600 dark:text-emerald-400' :
+                        slot.status === 'warn' ? 'text-amber-600 dark:text-amber-400' : 'text-red-500 dark:text-red-400'
+                      }`}
+                    >
+                      {slot.feedback}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
-            </div>
+            ) : (
+              <div className="space-y-2 pt-1">
+                <div className="relative rounded-xl overflow-hidden bg-zinc-50 dark:bg-zinc-800/50 px-4 py-3 border border-zinc-200 dark:border-zinc-700">
+                  <span className="absolute -right-1 -top-1 font-black select-none pointer-events-none text-[2.2rem] opacity-[0.04] text-zinc-900 dark:text-white tracking-wider">SAMPLE</span>
+                  <div className="relative z-10">
+                    <p className="text-[13px] font-medium text-zinc-700 dark:text-zinc-300 leading-snug">{sample.what}</p>
+                    <ul className="mt-1.5 space-y-0.5">
+                      {sample.tips.map((tip, i) => (
+                        <li key={i} className="flex items-start gap-1.5 text-[11px] text-zinc-500 dark:text-zinc-500">
+                          <span className="w-1 h-1 rounded-full mt-[5px] shrink-0" style={{ background: cat.c }} />
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+
+          {/* Right: Actions (Larger spacing) */}
+          <div className="shrink-0 flex flex-row sm:flex-col items-center sm:items-end gap-2 pt-1 sm:pt-0">
+            {errored ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => slotFileRefs.current[doc.id]?.click()}
+                className="h-9 px-4 rounded-lg text-xs font-medium text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Retry
+              </Button>
+            ) : done ? (
+              <div className="flex gap-1">
+                <Button variant="ghost" size="sm" className="h-9 px-3 rounded-lg text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white" onClick={() => slotFileRefs.current[doc.id]?.click()}>
+                  {t('upload.reupload', 'Replace')}
+                </Button>
+                <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-lg text-zinc-400 hover:text-red-500 dark:hover:text-red-400" onClick={() => removeSlot(doc.id)}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : !busy ? (
+              <div className="flex gap-2">
+                <Button variant="secondary" size="sm" className="h-10 w-10 p-0 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition-all duration-200" onClick={() => slotFileRefs.current[doc.id]?.click()}>
+                  <Upload className="w-4 h-4" />
+                </Button>
+                <Button variant="secondary" size="sm" className="h-10 w-10 p-0 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition-all duration-200" onClick={() => slotCamRefs.current[doc.id]?.click()}>
+                  <Camera className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : null}
+          </div>
+        </div>
 
         <input
           ref={el => { slotFileRefs.current[doc.id] = el }}
@@ -701,7 +640,7 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
 
         {pingId === doc.id && (
           <motion.div
-            className="absolute inset-0 rounded-[20px] ring-2 ring-[#BBF451]/60 pointer-events-none"
+            className="absolute inset-0 rounded-2xl ring-2 ring-emerald-400/60 pointer-events-none"
             initial={{ opacity: 0.9, scale: 1 }}
             animate={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.6 }}
@@ -713,37 +652,35 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-6">
+      <div className="w-full flex flex-col gap-8 max-w-4xl mx-auto py-6">
         {/* ── Header with Skip Button ── */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-6 w-1 rounded-full bg-gradient-to-b from-[#0A3269] to-[#0A3269]" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#64748B] dark:text-white/40">
+              <div className="h-7 w-1 rounded-full bg-gradient-to-b from-zinc-800 to-zinc-600 dark:from-white dark:to-zinc-400" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500 dark:text-white/40">
                 {t('upload.step', 'Upload documents')}
               </p>
             </div>
             
-            {/* Skip Button with Document Icon */}
             <button
               onClick={() => setShowSkipConfirm(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-medium 
-                bg-white hover:bg-gray-50 dark:bg-black dark:hover:bg-gray-900
-                text-[#1a365d] dark:text-white
-                border border-[#1a365d]/20 dark:border-white/20
-                shadow-sm shadow-[#1a365d]/5 dark:shadow-black/20
-                hover:shadow-[#1a365d]/10 dark:hover:shadow-black/30
+              className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium 
+                bg-white hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800
+                text-zinc-800 dark:text-white
+                border border-zinc-200 dark:border-white/10
+                shadow-sm shadow-zinc-900/5 dark:shadow-black/20
                 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <FileUp className="w-4 h-4 text-[#1a365d] dark:text-white" strokeWidth={1.75} />
-              <span>Skip </span>  
+              <FileUp className="w-4 h-4 text-zinc-500 dark:text-white/60" strokeWidth={1.75} />
+              <span>Skip</span>  
             </button>
           </div>
           
-          <h2 className="font-bold leading-tight tracking-[-0.02em] text-[#0F2A44] dark:text-white" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}>
+          <h2 className="font-bold leading-tight tracking-[-0.02em] text-zinc-900 dark:text-white" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.2rem)' }}>
             {t('upload.title', 'Upload your documents')}
           </h2>
-          <p className="text-[#7B8794] dark:text-white/60 text-[14px] leading-relaxed">
+          <p className="text-zinc-500 dark:text-white/60 text-[15px] leading-relaxed">
             {t('upload.subtitle', 'Upload at least one document to continue or skip for later')}
           </p>
         </div>
@@ -753,23 +690,16 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
           <motion.div
             layout
             className={`
-              relative rounded-2xl px-5 py-4 flex items-center gap-4 overflow-hidden
+              relative rounded-2xl px-6 py-5 flex items-center gap-4 overflow-hidden
               border transition-all duration-300
               ${allRequiredDone
-                ? 'bg-gradient-to-r from-[#F7FEE7] to-white dark:from-[#1A2A1A] dark:to-[#0F2A44] border-[#BBF451]/40 dark:border-[#BBF451]/20'
-                : 'bg-white dark:bg-[#1A1A1F] border-[#E2E8F0] dark:border-white/10'
+                ? 'bg-gradient-to-r from-emerald-50 to-white dark:from-emerald-900/20 dark:to-zinc-950 border-emerald-400/40 dark:border-emerald-500/20'
+                : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/10'
               }
             `}
           >
-            {/* Ambient glow */}
-            <div
-              className="pointer-events-none absolute inset-0 opacity-0 dark:opacity-40"
-              style={{
-                background: 'radial-gradient(120% 100% at 0% 0%, rgba(255,255,255,0.10), transparent 55%)',
-              }}
-            />
+            <div className="pointer-events-none absolute inset-0 opacity-0 dark:opacity-40" style={{ background: 'radial-gradient(120% 100% at 0% 0%, rgba(255,255,255,0.10), transparent 55%)' }} />
 
-            {/* Success glow pulse - New design */}
             <AnimatePresence>
               {allRequiredDone && (
                 <>
@@ -778,53 +708,42 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.5 }}
-                    className="absolute inset-0 bg-gradient-to-r from-[#BBF451]/20 via-transparent to-transparent dark:from-[#BBF451]/10 dark:via-transparent"
+                    className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-transparent to-transparent dark:from-emerald-500/10 dark:via-transparent"
                   />
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: [0, 0.6, 0] }}
                     transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
                     className="absolute -inset-8 rounded-full blur-2xl"
-                    style={{ background: 'radial-gradient(circle at 30% 50%, rgba(187,244,81,0.3), transparent 70%)' }}
+                    style={{ background: 'radial-gradient(circle at 30% 50%, rgba(16,185,129,0.3), transparent 70%)' }}
                   />
                 </>
               )}
             </AnimatePresence>
 
-            {/* Progress ring with glow */}
-            <div className="relative w-14 h-14 shrink-0 z-10">
-              <div className={`
-                absolute inset-0 rounded-full blur-md transition-opacity duration-500
-                ${allRequiredDone ? 'opacity-100 bg-[#BBF451]/30' : 'opacity-0'}
-              `} />
-              <svg viewBox="0 0 40 40" className="w-14 h-14 -rotate-90 relative z-10">
-                <circle
-                  cx="20" cy="20" r="16.5" fill="none" strokeWidth="3.5"
-                  stroke="currentColor"
-                  className="text-[#0F2A44]/10 dark:text-white/14"
-                />
+            <div className="relative w-16 h-16 shrink-0 z-10">
+              <div className={`absolute inset-0 rounded-full blur-md transition-opacity duration-500 ${allRequiredDone ? 'opacity-100 bg-emerald-400/30' : 'opacity-0'}`} />
+              <svg viewBox="0 0 40 40" className="w-16 h-16 -rotate-90 relative z-10">
+                <circle cx="20" cy="20" r="16.5" fill="none" strokeWidth="3.5" stroke="currentColor" className="text-zinc-200 dark:text-white/10" />
                 <defs>
                   <linearGradient id="progressRingGradLight" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor={allRequiredDone ? '#4D7C0F' : '#0F2A44'} />
-                    <stop offset="100%" stopColor={allRequiredDone ? '#8AA82E' : '#B08A4E'} />
+                    <stop offset="0%" stopColor={allRequiredDone ? '#10B981' : '#0F2A44'} />
+                    <stop offset="100%" stopColor={allRequiredDone ? '#059669' : '#64748B'} />
                   </linearGradient>
                   <linearGradient id="progressRingGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor={allRequiredDone ? '#BBF451' : '#DCC08E'} />
-                    <stop offset="100%" stopColor={allRequiredDone ? '#4ADE80' : '#BBF451'} />
+                    <stop offset="0%" stopColor={allRequiredDone ? '#34D399' : '#94A3B8'} />
+                    <stop offset="100%" stopColor={allRequiredDone ? '#10B981' : '#64748B'} />
                   </linearGradient>
                 </defs>
-
                 <motion.circle
                   cx="20" cy="20" r="16.5" fill="none" stroke="url(#progressRingGradLight)" strokeWidth="3.5" strokeLinecap="round"
-                  className="dark:hidden"
-                  strokeDasharray={2 * Math.PI * 16.5}
+                  className="dark:hidden" strokeDasharray={2 * Math.PI * 16.5}
                   animate={{ strokeDashoffset: 2 * Math.PI * 16.5 * (1 - totalProgress / 100) }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 />
                 <motion.circle
                   cx="20" cy="20" r="16.5" fill="none" stroke="url(#progressRingGradDark)" strokeWidth="3.5" strokeLinecap="round"
-                  className="hidden dark:block"
-                  strokeDasharray={2 * Math.PI * 16.5}
+                  className="hidden dark:block" strokeDasharray={2 * Math.PI * 16.5}
                   animate={{ strokeDashoffset: 2 * Math.PI * 16.5 * (1 - totalProgress / 100) }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 />
@@ -832,21 +751,11 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
               <span className="absolute inset-0 flex items-center justify-center z-20">
                 <AnimatePresence mode="wait">
                   {allRequiredDone ? (
-                    <motion.span
-                      key="done"
-                      initial={{ scale: 0, rotate: -20 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 16 }}
-                    >
-                      <PartyPopper className="w-5 h-5 text-[#4D7C0F] dark:text-[#BBF451]" />
+                    <motion.span key="done" initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 400, damping: 16 }}>
+                      <PartyPopper className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                     </motion.span>
                   ) : (
-                    <motion.span
-                      key="pct"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-[11px] font-bold text-[#0F2A44] dark:text-white tabular-nums"
-                    >
+                    <motion.span key="pct" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[12px] font-bold text-zinc-700 dark:text-white tabular-nums">
                       {totalProgress}%
                     </motion.span>
                   )}
@@ -854,56 +763,38 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
               </span>
             </div>
 
-            {/* Copy */}
             <div className="flex-1 min-w-0 z-10">
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-[14px] font-semibold text-[#0F2A44] dark:text-white">
+                <p className="text-[15px] font-semibold text-zinc-800 dark:text-white">
                   {allRequiredDone
                     ? t('upload.allSetTitle', '✅ All required documents uploaded!')
                     : `${doneCount} ${t('upload.of', 'of')} ${totalRequired} ${t('upload.uploaded', 'uploaded')}`}
                 </p>
                 {!allRequiredDone && errorCount > 0 && (
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-red-600 dark:text-[#FCA5A5] bg-red-50 dark:bg-red-500/15 rounded-full px-2.5 py-0.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wide text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-500/15 rounded-full px-2.5 py-0.5">
                     {errorCount} {errorCount > 1 ? 'need attention' : 'needs attention'}
                   </span>
                 )}
               </div>
-
-              <p className="text-[11px] text-[#64748B] dark:text-white/55 mt-0.5">
+              <p className="text-[12px] text-zinc-500 dark:text-white/55 mt-0.5">
                 {allRequiredDone
                   ? t('upload.allSet', 'Review and continue whenever you’re ready')
                   : errorCount > 0
                   ? t('upload.fixIssues', 'Fix the flagged files to continue')
                   : t('upload.keepGoing', 'Keep going — almost there')}
               </p>
-
-              {/* Stepped segments */}
-              {!allRequiredDone && totalRequired > 0 && totalRequired <= 12 && (
-                <div className="flex gap-1 mt-2.5">
-                  {Array.from({ length: totalRequired }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={`h-[3px] flex-1 rounded-full transition-all duration-500 ${
-                        i < doneCount
-                          ? 'bg-gradient-to-r from-[#BBF451] to-[#8BC34A] dark:from-[#BBF451] dark:to-[#4ADE80]'
-                          : 'bg-[#0F2A44]/10 dark:bg-white/16'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
             </div>
           </motion.div>
         )}
 
         {/* ── Document grid ── */}
         {hasDefs ? (
-          <div className="space-y-3.5">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-[#9AA5B1]">
+          <div className="space-y-4">
+            <p className="text-[12px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
               {t('upload.required', 'Required documents')}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 gap-4">
               {docDefs.map((doc, i) => <DocCard key={doc.id} doc={doc} index={i} />)}
             </div>
 
@@ -913,17 +804,17 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
               onDrop={e => { e.preventDefault(); setDragOver(false); processGlobalFiles(Array.from(e.dataTransfer.files)) }}
               onClick={() => globalFileRef.current?.click()}
               className={`
-                rounded-2xl border-2 border-dashed px-5 py-4 cursor-pointer
+                rounded-2xl border-2 border-dashed px-6 py-5 cursor-pointer
                 flex items-center gap-4 transition-all duration-200
-                ${isDragOver ? 'border-[#BBF451] bg-[#F7FEE7] scale-[1.005]' : 'border-[#E3E8EE] bg-white hover:border-[#BBF451]/60 hover:bg-[#FAFFF0]'}
+                ${isDragOver ? 'border-emerald-400 bg-emerald-50/50 dark:bg-emerald-900/20 scale-[1.005]' : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-emerald-400/60 hover:bg-emerald-50/30 dark:hover:bg-emerald-900/10'}
               `}
             >
-              <div className="w-10 h-10 rounded-xl bg-[#F6F8FA] flex items-center justify-center shrink-0">
-                <FileText className="w-5 h-5 text-[#B9C2CC]" />
+              <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                <Zap className="w-6 h-6 text-zinc-400 dark:text-zinc-500" />
               </div>
               <div>
-                <p className="font-semibold text-[#0F2A44] text-[14px]">{t('upload.additionalDocs', 'Add additional documents')}</p>
-                <p className="text-[11px] text-[#9AA5B1] mt-0.5">{t('upload.dropzone', 'Drag & drop or tap — PDF, JPG, PNG up to 10 MB')}</p>
+                <p className="font-semibold text-zinc-800 dark:text-white text-[15px]">{t('upload.additionalDocs', 'Add additional documents')}</p>
+                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mt-0.5">{t('upload.dropzone', 'Drag & drop or tap — PDF, JPG, PNG up to 10 MB')}</p>
               </div>
               <input ref={globalFileRef} type="file" multiple accept="image/*,.pdf" className="hidden"
                 onChange={e => { processGlobalFiles(Array.from(e.target.files || [])); e.target.value = '' }} />
@@ -935,39 +826,37 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
             onDragLeave={() => setDragOver(false)}
             onDrop={e => { e.preventDefault(); setDragOver(false); processGlobalFiles(Array.from(e.dataTransfer.files)) }}
             onClick={() => globalFileRef.current?.click()}
-            className={`rounded-2xl border-2 border-dashed py-12 text-center cursor-pointer transition-all duration-200 ${isDragOver ? 'border-[#BBF451] bg-[#F7FEE7]' : 'border-[#E3E8EE] bg-white hover:border-[#BBF451]/60'}`}
+            className={`rounded-2xl border-2 border-dashed py-14 text-center cursor-pointer transition-all duration-200 ${isDragOver ? 'border-emerald-400 bg-emerald-50/50 dark:bg-emerald-900/20' : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-emerald-400/60'}`}
           >
-            <Upload className="w-8 h-8 mx-auto mb-3 text-[#B9C2CC]" />
-            <p className="font-semibold text-[#0F2A44]">{t('upload.tapOrDrag', 'Tap or drag files here')}</p>
-            <p className="text-[12px] text-[#9AA5B1] mt-1">{t('upload.formats', 'PDF, JPG, PNG — up to 10 MB')}</p>
+            <Upload className="w-10 h-10 mx-auto mb-4 text-zinc-400 dark:text-zinc-500" />
+            <p className="font-semibold text-zinc-800 dark:text-white text-[16px]">{t('upload.tapOrDrag', 'Tap or drag files here')}</p>
+            <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-1">{t('upload.formats', 'PDF, JPG, PNG — up to 10 MB')}</p>
             <input ref={globalFileRef} type="file" multiple accept="image/*,.pdf" className="hidden"
               onChange={e => { processGlobalFiles(Array.from(e.target.files || [])); e.target.value = '' }} />
           </div>
         )}
 
-        <p className="text-[12px] text-[#9AA5B1] text-center">
+        <p className="text-[13px] text-zinc-400 dark:text-zinc-500 text-center">
           {t('upload.reassurance', "Don't worry — we'll review everything before submission")}
         </p>
 
-        {/* ── Continue Button ── */}
         <Button
           onClick={handleContinueClick}
           disabled={!canContinue}
-          className={`w-full h-14 rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
+          className={`w-full h-14 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
             canContinue
-              ? 'bg-[#0F2A44] hover:bg-[#16385A] text-white shadow-[0_10px_30px_-12px_rgba(15,42,68,0.55)] active:scale-[0.97] cursor-pointer'
-              : 'bg-[#E8ECF0] text-[#9AA5B1] cursor-not-allowed'
+              ? 'bg-zinc-900 hover:bg-zinc-800 text-white shadow-lg shadow-zinc-900/30 dark:shadow-white/10 active:scale-[0.97] cursor-pointer'
+              : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 cursor-not-allowed'
           }`}
           style={{ fontSize: '17px' }}
         >
           {canContinue
-            ? <><CheckCircle2 className="w-4 h-4" />{t('common.continue', 'Continue')}<ArrowRight className="w-4 h-4" /></>
-            : <><Upload className="w-4 h-4" />{t('upload.uploadAtLeastOne', 'Upload at least one document')}</>
+            ? <><CheckCircle2 className="w-5 h-5" />{t('common.continue', 'Continue')}<ArrowRight className="w-5 h-5" /></>
+            : <><Upload className="w-5 h-5" />{t('upload.uploadAtLeastOne', 'Upload at least one document')}</>
           }
         </Button>
       </div>
 
-      {/* ── Skip Confirmation Dialog ── */}
       <SkipConfirmDialog
         open={showSkipConfirm}
         onClose={() => setShowSkipConfirm(false)}

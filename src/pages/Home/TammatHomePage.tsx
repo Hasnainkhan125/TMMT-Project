@@ -724,8 +724,8 @@ return (
                   py-2.5 sm:py-2
                   text-[17px] sm:text-[19px]
                   font-medium tracking-tight
-                  bg-white dark:bg-white
-                  text-[#000] dark:text-[#000]
+                  bg-[#0a3269] dark:bg-white
+                  text-[#fff] dark:text-[#000]
                   border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20
                   transition-all duration-300
                   mt-3
@@ -746,13 +746,13 @@ return (
                     flex h-7 w-7 sm:h-8 sm:w-8
                     items-center justify-center
                     rounded-full
-                    bg-[#0A3269] dark:bg-[#000]/60  
+                    bg-[#fff] dark:bg-[#000]/60  
                     transition-transform duration-300
                     group-hover/btn:translate-x-1
                     hover:scale-110
                   "
                 >
-                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white dark:text-[#fff]" />
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#000] dark:text-[#fff]" />
                 </div>
               </button>
 

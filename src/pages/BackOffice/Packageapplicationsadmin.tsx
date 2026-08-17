@@ -444,22 +444,29 @@ export default function PackageApplicationsAdmin() {
   return (
     <div className="space-y-2">
       {/* ─── Header ────────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h4 className="text-xl font-light tracking-tight text-foreground flex items-center gap-2">
-            <Package className="h-10 w-10 sm:h-12 sm:w-14 text-[#0A3269] dark:text-[#0A3269]" strokeWidth={1.5} />
-            Package Applications
-          </h4>
-          <p className="text-sm text-muted-foreground">Manage all package applications from customers</p>
-        </div>
-        <button
-          onClick={() => fetchApplications()}
-          className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-muted/50 transition-colors"
-        >
-          <RefreshCw className="h-4 w-4" />
-          Refresh
-        </button>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-50 dark:from-slate-900 dark:via-[#0a3269]/20 dark:to-slate-900 p-2 border border-slate-200/50 dark:border-slate-700/30">
+<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+  <div>
+    <h4 className="text-xl font-light tracking-tight text-foreground flex items-center gap-2">
+      <div className="rounded-2xl bg-[#0a3269] p-2.5 sm:p-3 shadow-lg shadow-[#0a3269]/20">
+        <Package className="h-6 w-6 sm:h-7 sm:w-7 text-white" strokeWidth={1.5} />
       </div>
+      Package Applications
+    </h4>
+    <p className="text-[9px] p-2 sm:text-sm text-slate-600 dark:text-slate-300 truncate">
+      Manage all package applications from customers
+    </p>
+  </div>
+  
+  <button
+    onClick={() => fetchApplications()}
+    className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-muted/50 transition-colors whitespace-nowrap"
+  >
+    <RefreshCw className="h-4 w-4" />
+    Refresh
+  </button>
+</div>
+</div>
 
       {/* ─── Filters ──────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">

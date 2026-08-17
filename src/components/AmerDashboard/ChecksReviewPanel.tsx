@@ -1168,7 +1168,7 @@ const ChecksReviewPanel: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* ─── Modern Header with Stats ──────────────────────────────────────── */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-50 dark:from-slate-900 dark:via-[#0a3269]/20 dark:to-slate-900 p-4 sm:p-6 md:p-8 border border-slate-200/50 dark:border-slate-700/30">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-50 dark:from-slate-900 dark:via-[#0a3269]/20 dark:to-slate-900 p-2 border border-slate-200/50 dark:border-slate-700/30">
         <div className="relative z-10 flex flex-col gap-4 md:gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="rounded-2xl bg-[#0a3269] p-2.5 sm:p-3 shadow-lg shadow-[#0a3269]/20">

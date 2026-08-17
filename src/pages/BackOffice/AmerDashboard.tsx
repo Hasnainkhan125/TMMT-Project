@@ -3092,7 +3092,7 @@ const filteredStats = useMemo(() => {
 {/* ─── Tabs ────────────────────────────────────────────────────────── */}
 <Tabs defaultValue="applications" className="w-full">
  <TabsList className={cn(
-  "relative bg-white dark:bg-black/40 border border-gray-200/60 dark:border-white/5 p-1 rounded-xl shadow-sm w-full",
+  "relative bg-white dark:bg-black/10 border border-gray-200/60 dark:border-white/5 p-1 rounded-xl shadow-sm w-full",
   isTablet ? "flex-wrap gap-1" : ""
 )}>
   {[
@@ -3156,17 +3156,17 @@ const filteredStats = useMemo(() => {
             placeholder="Search applications..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 pr-3 py-2 bg-white dark:bg-black/40 border-gray-200/60 dark:border-white/10 rounded-lg focus:ring-1 focus:ring-[#0A3269]/30 dark:focus:ring-white/20 focus:border-[#0A3269] dark:focus:border-white transition-all text-sm font-light text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 h-9"
+            className="pl-9 pr-3 py-2 bg-white dark:bg-black/10 border-gray-200/60 dark:border-white/10 rounded-lg focus:ring-1 focus:ring-[#0A3269]/30 dark:focus:ring-white/20 focus:border-[#0A3269] dark:focus:border-white transition-all text-sm font-light text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 h-9"
           />
         </div>
       </div>
       
       <div className="flex items-center gap-2">
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[160px] bg-white dark:bg-black/40 border-gray-200/60 dark:border-white/10 rounded-lg text-sm font-light text-gray-900 dark:text-white h-9">
+          <SelectTrigger className="w-[160px] bg-white dark:bg-black/10 border-gray-200/60 dark:border-white/10 rounded-lg text-sm font-light text-gray-900 dark:text-white h-9">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
-          <SelectContent className="rounded-lg bg-white dark:bg-black/95 border-gray-200/60 dark:border-white/10">
+          <SelectContent className="rounded-lg bg-white dark:bg-black/15 border-gray-200/60 dark:border-white/10">
             <SelectItem value="all">
               <span className="flex items-center gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
                 <FileText className="w-3.5 h-3.5" />

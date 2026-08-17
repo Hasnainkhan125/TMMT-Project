@@ -147,19 +147,19 @@ export default function TammatVoiceAgent({
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className={`
               bg-white dark:bg-slate-950 
-              border border-[#0A3269]/20 dark:border-[#4A8ABF]/20
+              border border-[#0A3269]/20 dark:border-[#0A3269]/20
               rounded-2xl shadow-2xl shadow-[#0A3269]/20 dark:shadow-[#4A8ABF]/20
               overflow-hidden ${sizeClasses[size].panel}
             `}
           >
             {/* ─── Header ─────────────────────────────────────────────── */}
-            <div className="bg-gradient-to-br from-[#0A3269] via-[#0A3269] to-[#1a4a7a] dark:from-[#4A8ABF] dark:via-[#4A8ABF] dark:to-[#4A8ABF]/80 px-5 py-4 relative">
+            <div className="bg-gradient-to-br from-[#0A3269] via-[#0A3269] to-[#1a4a7a] dark:from-[#0A3269] dark:via-[#0A3269] dark:to-[#0A3269]/80 px-5 py-4 relative">
               <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-gradient-to-br from-white to-white/80 flex items-center justify-center shadow-lg shadow-white/20">
-                    <Sparkles className="w-4 h-4 text-[#0A3269] dark:text-white" />
+                    <Sparkles className="w-4 h-4 text-[#0A3269] dark:text-[#0A3269]" />
                   </div>
                   <div>
                     <p className="font-semibold text-sm text-white dark:text-white">Voice Assistant</p>
@@ -301,8 +301,8 @@ export default function TammatVoiceAgent({
             rounded-full p-0 shadow-xl transition-all
             flex items-center justify-center
             ${isConnected 
-              ? 'bg-[#0A3269] dark:bg-[#4A8ABF] hover:bg-[#1a4a7a] dark:hover:bg-[#4A8ABF]/80 shadow-[#0A3269]/30 dark:shadow-[#4A8ABF]/30' 
-              : 'bg-gradient-to-br from-[#0A3269] to-[#1a4a7a] dark:from-[#4A8ABF] dark:to-[#4A8ABF]/80 hover:shadow-2xl hover:shadow-[#0A3269]/40 dark:hover:shadow-[#4A8ABF]/40'
+              ? 'bg-[#0A3269] dark:bg-[#0A3269] hover:bg-[#1a4a7a] dark:hover:bg-[#0A3269]/80 shadow-[#0A3269]/30 dark:shadow-[#0A3269]/30' 
+              : 'bg-gradient-to-br from-[#0A3269] to-[#1a4a7a] dark:from-[#0A3269] dark:to-[#0A3269]/80 hover:shadow-2xl hover:shadow-[#0A3269]/40 dark:hover:shadow-[#4A8ABF]/40'
             }
             ${isSpeaking ? 'ring-4 ring-[#0A3269]/40 dark:ring-[#4A8ABF]/40 animate-pulse' : ''}
             ${state.isVoiceConnecting ? 'opacity-70 cursor-not-allowed' : ''}

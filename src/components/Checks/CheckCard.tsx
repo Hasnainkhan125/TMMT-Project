@@ -726,44 +726,76 @@ const isAdminComment = (comment: Comment): boolean => {
 };
 
 // ─── Chat Message Component ──────────────────────────────────────────────────
+// ─── Chat Message Component ──────────────────────────────────────────────────
 
 interface ChatMessageProps {
   message: Comment;
-  isAdmin: boolean;
+  isFromUser: boolean;
+  userName?: string;
 }
 
-function ChatMessage({ message, isAdmin }: ChatMessageProps) {
-  const senderName = isAdmin ? 'Admin' : 'You';
+function ChatMessage({ message, isFromUser, userName }: ChatMessageProps) {
+  const senderName = isFromUser ? (userName || 'You') : 'TMMT Support';
   const time = new Date(message.createdAt || message.at || Date.now()).toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
   });
 
   return (
-    <div className={cn("flex items-start gap-2 mb-1.5", isAdmin ? "justify-start" : "justify-end")}>
-      {isAdmin && (
-        <div className="flex-shrink-0 mt-0.5">
-          <div className="h-6 w-6 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-300 text-[8px] font-bold">A</div>
-        </div>
-      )}
+    <motion.div
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      className={cn("flex items-start gap-2", isFromUser ? "justify-end" : "justify-start")}
+    >
+      {/* Avatar - User on right, Support on left */}
       <div className={cn(
-        "max-w-[80%] rounded-xl px-2.5 py-1.5 text-xs",
-        isAdmin
-          ? "bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700"
-          : "bg-blue-50 dark:bg-blue-950/40 text-gray-800 dark:text-gray-200"
+        "flex-shrink-0 mt-0.5",
+        isFromUser ? "order-2" : "order-1"
       )}>
-        <div className="flex items-center gap-1.5 mb-0.5">
-          <span className="font-medium text-[9px]">{senderName}</span>
-          <span className="text-[7px] text-gray-400">{time}</span>
+        <div className={cn(
+          "h-6 w-6 rounded-full flex items-center justify-center text-[8px] font-bold shadow-sm",
+          isFromUser
+            ? "bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-purple-500/30"
+            : "bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-blue-500/30"
+        )}>
+          {isFromUser ? 'Y' : 'T'}
         </div>
-        <p className="leading-relaxed text-[11px]">{message.text || message.message}</p>
       </div>
-      {!isAdmin && (
-        <div className="flex-shrink-0 mt-0.5">
-          <div className="h-6 w-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 text-[8px] font-bold">Y</div>
+
+      {/* Message Bubble */}
+      <div className={cn(
+        "max-w-[80%] rounded-xl px-2.5 py-1.5",
+        isFromUser ? "order-1" : "order-2"
+      )}>
+        <div className={cn(
+          "rounded-xl px-3 py-1.5 text-xs shadow-sm",
+          isFromUser
+            ? "bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-blue-500/20"
+            : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300"
+        )}>
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <span className={cn(
+              "font-medium text-[9px]",
+              isFromUser ? "text-white/90" : "text-gray-500 dark:text-gray-400"
+            )}>
+              {senderName}
+            </span>
+            <span className={cn(
+              "text-[7px]",
+              isFromUser ? "text-white/60" : "text-gray-400"
+            )}>
+              {time}
+            </span>
+          </div>
+          <p className={cn(
+            "leading-relaxed text-[11px]",
+            isFromUser ? "text-white" : "text-gray-700 dark:text-gray-300"
+          )}>
+            {message.text || message.message}
+          </p>
         </div>
-      )}
-    </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -1631,135 +1663,149 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
                       )}
                     </div>
 
-                    {/* ─── MODERN CHAT SECTION ──────────────────────────────────────── */}
-                    <div className="space-y-2 sm:space-y-3">
-                      <button
-                        type="button"
-                        onClick={() => setShowComments(!showComments)}
-                        className="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50 dark:border-blue-800/30 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-300 group"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="p-1.5 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400">
-                            <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                          </div>
-                          <div className="text-left">
-                            <p className="text-[10px] sm:text-xs font-medium text-slate-700 dark:text-slate-300">
-                              Conversation
-                            </p>
-                            <p className="text-[8px] sm:text-[10px] text-slate-400 dark:text-slate-500">
-                              {comments.length} messages
-                            </p>
-                          </div>
-                        </div>
-                        <motion.div
-                          animate={{ rotate: showComments ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="p-1 rounded-lg bg-white/50 dark:bg-slate-800/50 group-hover:bg-white/70 dark:group-hover:bg-slate-700/50"
-                        >
-                          <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 dark:text-slate-400" />
-                        </motion.div>
-                      </button>
+                   {/* ─── MODERN CHAT SECTION ──────────────────────────────────────── */}
+<div className="space-y-2 sm:space-y-3">
+  <button
+    type="button"
+    onClick={() => setShowComments(!showComments)}
+    className="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200/50 dark:border-blue-800/30 hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-950/40 dark:hover:to-indigo-950/40 transition-all duration-300 group shadow-sm hover:shadow-md"
+  >
+    <div className="flex items-center gap-2.5">
+      <div className="relative">
+        <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-md shadow-blue-500/20">
+          <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+        </div>
+        {comments.length > 0 && (
+          <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[8px] font-bold text-white flex items-center justify-center shadow-lg shadow-red-500/30">
+            {comments.length}
+          </span>
+        )}
+      </div>
+      <div className="text-left">
+        <p className="text-[10px] sm:text-xs font-semibold text-slate-700 dark:text-slate-300">
+          Conversation
+        </p>
+        <p className="text-[8px] sm:text-[10px] text-slate-400 dark:text-slate-500">
+          {comments.length} message{comments.length !== 1 ? 's' : ''}
+        </p>
+      </div>
+    </div>
+    <motion.div
+      animate={{ rotate: showComments ? 180 : 0 }}
+      transition={{ duration: 0.3 }}
+      className="p-1 rounded-lg bg-white/50 dark:bg-slate-800/50 group-hover:bg-white/70 dark:group-hover:bg-slate-700/50"
+    >
+      <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 dark:text-slate-400" />
+    </motion.div>
+  </button>
 
-                      <AnimatePresence>
-                        {showComments && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                            className="overflow-hidden"
-                          >
-                            <div className="space-y-2 sm:space-y-3 pt-1">
-                              <div className="rounded-xl bg-gray-50/80 dark:bg-gray-800/30 border border-gray-200/50 dark:border-white/5 overflow-hidden">
-                                {/* ─── Chat Header ───────────────────────────────────── */}
-                                <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100/80 dark:bg-gray-800/80 border-b border-gray-200/50 dark:border-white/5">
-                                  <div className="flex items-center gap-2">
-                                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-[10px] sm:text-xs shadow-md">
-                                      A
-                                    </div>
-                                    <div>
-                                      <p className="text-[11px] sm:text-sm font-medium text-gray-700 dark:text-gray-300">Admin</p>
-                                      <p className="text-[8px] text-emerald-500 dark:text-emerald-400 flex items-center gap-1">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        Online
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <Badge className="bg-gray-200/50 text-gray-600 dark:bg-gray-700/50 dark:text-gray-300 border-0 text-[8px] sm:text-[10px]">
-                                    {comments.length} messages
-                                  </Badge>
-                                </div>
+  <AnimatePresence>
+    {showComments && (
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: 'auto', opacity: 1 }}
+        exit={{ height: 0, opacity: 0 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="overflow-hidden"
+      >
+        <div className="space-y-2 sm:space-y-3 pt-1">
+          <div className="rounded-xl bg-white dark:bg-gray-900/50 border border-gray-200/50 dark:border-white/5 shadow-lg shadow-gray-200/20 dark:shadow-gray-800/20 overflow-hidden">
+            {/* ─── Chat Header ───────────────────────────────────── */}
+            <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-gray-50 to-gray-100/80 dark:from-gray-800/80 dark:to-gray-900/80 border-b border-gray-200/50 dark:border-white/5">
+              <div className="flex items-center gap-2">
+                <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-[10px] sm:text-xs shadow-md shadow-blue-500/30">
+                  T
+                </div>
+                <div>
+                  <p className="text-[11px] sm:text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    TMMT Support
+                  </p>
+                  <p className="text-[8px] text-emerald-500 dark:text-emerald-400 flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Online
+                  </p>
+                </div>
+              </div>
+              <Badge className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-gray-600 dark:text-gray-300 border-0 text-[8px] sm:text-[10px] px-2 py-0.5">
+                {comments.length} messages
+              </Badge>
+            </div>
 
-                                {/* ─── Messages ──────────────────────────────────────── */}
-                                <div className="max-h-48 sm:max-h-64 overflow-y-auto p-2 sm:p-3 space-y-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                                  {sortedComments.length > 0 ? (
-                                    sortedComments.map((c, idx) => {
-                                      const isAdmin = isAdminComment(c);
-                                      return (
-                                        <ChatMessage
-                                          key={c._id || idx}
-                                          message={c}
-                                          isAdmin={isAdmin}
-                                        />
-                                      );
-                                    })
-                                  ) : (
-                                    <div className="flex flex-col items-center justify-center py-6 text-center">
-                                      <div className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 mb-2">
-                                        <MessageSquare className="h-6 w-6 text-gray-400 dark:text-gray-600" />
-                                      </div>
-                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">No messages yet</p>
-                                      <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">Start a conversation with the admin</p>
-                                    </div>
-                                  )}
-                                </div>
+            {/* ─── Messages ──────────────────────────────────────── */}
+            <div className="max-h-48 sm:max-h-64 overflow-y-auto p-2 sm:p-3 space-y-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent bg-gradient-to-b from-gray-50/30 to-white/50 dark:from-gray-900/20 dark:to-gray-900/30">
+              {sortedComments.length > 0 ? (
+                sortedComments.map((c, idx) => {
+                  const isFromUser = c.by === 'customer' || c.role === 'customer' || c.sender === 'user';
+                  return (
+                    <ChatMessage
+                      key={c._id || idx}
+                      message={c}
+                      isFromUser={isFromUser}
+                      userName={isFromUser ? 'You' : 'TMMT Support'}
+                    />
+                  );
+                })
+              ) : (
+                <div className="flex flex-col items-center justify-center py-6 text-center">
+                  <div className="p-3 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 mb-2">
+                    <MessageSquare className="h-6 w-6 text-blue-400 dark:text-blue-500" />
+                  </div>
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400">No messages yet</p>
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">Start a conversation with support</p>
+                </div>
+              )}
+            </div>
 
-                                {/* ─── Message Input ────────────────────────────────── */}
-                                <div className="border-t border-gray-200/50 dark:border-white/5 p-2 bg-white dark:bg-gray-900/50">
-                                  {showMessageInput ? (
-                                    <div className="flex items-center gap-1.5">
-                                      <Textarea
-                                        placeholder="Type a message..."
-                                        value={messageText}
-                                        onChange={(e) => setMessageText(e.target.value)}
-                                        className="flex-1 min-h-[32px] sm:min-h-[36px] max-h-[60px] resize-none border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
-                                        disabled={sendingMessage}
-                                        onKeyDown={(e) => {
-                                          if (e.key === 'Enter' && !e.shiftKey) {
-                                            e.preventDefault();
-                                            handleSendMessage();
-                                          }
-                                        }}
-                                      />
-                                      <button
-                                        onClick={handleSendMessage}
-                                        disabled={sendingMessage || !messageText.trim()}
-                                        className="h-8 w-8 sm:h-9 sm:w-9 p-0 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:shadow-lg transition-all disabled:opacity-50 shrink-0 flex items-center justify-center"
-                                      >
-                                        {sendingMessage ? (
-                                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                        ) : (
-                                          <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                                        )}
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <button
-                                      type="button"
-                                      onClick={() => setShowMessageInput(true)}
-                                      className="w-full flex items-center gap-1.5 text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors p-1.5"
-                                    >
-                                      <Send className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
-                                      <span>Type a message...</span>
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
+            {/* ─── Message Input - SMALLER HEIGHT ────────────────── */}
+            <div className="border-t border-gray-200/50 dark:border-white/5 p-1.5 sm:p-2 bg-white dark:bg-gray-900/80 backdrop-blur-sm">
+              {showMessageInput ? (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="text"
+                    placeholder="Type a message..."
+                    value={messageText}
+                    onChange={(e) => setMessageText(e.target.value)}
+                    className="flex-1 h-7 sm:h-8 rounded-full px-3 sm:px-3.5 py-1 text-xs sm:text-sm border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
+                    disabled={sendingMessage}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={sendingMessage || !messageText.trim()}
+                    className="h-7 w-7 sm:h-8 sm:w-8 p-0 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:shadow-lg hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 shrink-0 flex items-center justify-center"
+                  >
+                    {sendingMessage ? (
+                      <div className="h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Send className="h-3.5 w-3.5" />
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowMessageInput(true)}
+                  className="w-full flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors py-1 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                >
+                  <div className="p-0.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                    <Send className="h-3 w-3" />
+                  </div>
+                  <span className="font-medium">Type a message...</span>
+                  <span className="ml-auto text-[8px] text-gray-400 dark:text-gray-500">Enter to send</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
 
                     {/* ─── Actions ──────────────────────────────────────────────────── */}
                     <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 pt-2 border-t border-gray-200/50 dark:border-white/5">

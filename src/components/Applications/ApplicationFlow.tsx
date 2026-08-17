@@ -1238,18 +1238,18 @@ export default function ApplicationFlow({
 
       {/* ── Floating help bubble ── */}
       {!isDone && (
-        <motion.button
-          onClick={() => setChatOpen(v => !v)}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 2, type: 'spring', stiffness: 260, damping: 22 }}
-          className="fixed bottom-6 right-4 z-50 flex items-center gap-2 pl-4 pr-5 h-12 rounded-full text-[13px] font-medium shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all"
-          style={{ backgroundColor: theme.primary, color: theme.buttonText }}
-          aria-label={t('flow.chat.helpBtn')}
-        >
-          <MessageCircle className="w-4 h-4 shrink-0" />
-          {t('flow.chat.helpBtn', 'Need help?')}
-        </motion.button>
+   <motion.button
+  onClick={() => setChatOpen(v => !v)}
+  initial={{ scale: 0, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  transition={{ delay: 2, type: 'spring', stiffness: 260, damping: 22 }}
+  className="fixed bottom-6 right-4 z-50 flex items-center gap-2 pl-4 pr-5 h-12 rounded-full text-[13px] font-medium shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all text-white dark:text-white"
+  style={{ backgroundColor: theme.primary }}
+  aria-label={t('flow.chat.helpBtn')}
+>
+  <MessageCircle className="w-4 h-4 shrink-0" />
+  {t('flow.chat.helpBtn', 'Need help?')}
+</motion.button>
       )}
 
       {/* ── Login gate overlay ── */}

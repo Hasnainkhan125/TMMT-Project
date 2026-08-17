@@ -340,26 +340,30 @@ const CompliancePage = () => {
       title: 'Compliance Score',
       value: `${complianceData?.complianceScore || 0}%`,
       icon: Shield,
-      color: '#0A3269',
+      color: 'bg-[#0A3269] dark:bg-[#4A8ABF]',
+      textColor: 'text-white',
       progress: complianceData?.complianceScore || 0,
     },
     {
       title: 'Valid Documents',
       value: `${(complianceData?.totalDocuments || 0) - (complianceData?.expiredCount || 0) - (complianceData?.expiringSoonCount || 0)}`,
       icon: CheckCircle,
-      color: '#2563EB',
+      color: 'bg-blue-600 dark:bg-blue-500',
+      textColor: 'text-white',
     },
     {
       title: 'Expiring Soon',
       value: `${complianceData?.expiringSoonCount || 0}`,
       icon: AlertTriangle,
-      color: '#D97706',
+      color: 'bg-amber-600 dark:bg-amber-500',
+      textColor: 'text-white',
     },
     {
       title: 'Expired',
       value: `${complianceData?.expiredCount || 0}`,
       icon: XCircle,
-      color: '#DC2626',
+      color: 'bg-red-600 dark:bg-red-500',
+      textColor: 'text-white',
     },
   ]
 
@@ -373,15 +377,20 @@ const CompliancePage = () => {
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
     <Layout>
-      <div className="min-h-screen bg-white dark:bg-black p-4 md:p-6 transition-colors duration-200">
-        <div className="max-w-7xl mx-auto space-y-5">
+      <div className="min-h-screen bg-gray-50 dark:bg-black/20 transition-colors duration-200 p-2">
+        <div className="space-y-5">
           {/* ─── Header ──────────────────────────────────────────────────── */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl md:text-3xl font-light text-black dark:text-white tracking-tight">
-                Compliance Dashboard
-              </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400 font-light mt-0.5">
+              <div className="flex items-center gap-2.5 mb-0.5">
+                <div className="p-1.5 rounded-lg bg-[#0A3269] dark:bg-[#4A8ABF]">
+                  <Shield className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-light text-gray-900 dark:text-white tracking-tight">
+                  Compliance Dashboard
+                </h3>
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 font-light ml-1">
                 Monitor your documents and regulatory compliance
               </p>
             </div>
@@ -397,7 +406,7 @@ const CompliancePage = () => {
               </Button>
               <Button 
                 onClick={() => setShowUploadDialog(true)}
-                className="bg-[#0A3269] hover:bg-[#1A4A8A] text-white rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
+                className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
               >
                 <Upload className="mr-2 h-3.5 w-3.5" />
                 Upload Document
@@ -413,7 +422,7 @@ const CompliancePage = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="relative overflow-hidden rounded-xl border border-gray-100/60 dark:border-white/5 bg-white dark:bg-black/40 shadow-sm hover:shadow-md transition-all duration-300 group"
+                className="relative overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40 shadow-sm hover:shadow-md transition-all duration-300 group"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#0A3269]/5 to-transparent dark:from-[#4A8ABF]/5 pointer-events-none" />
                 <div className="p-3 sm:p-4 relative z-10">
@@ -426,8 +435,8 @@ const CompliancePage = () => {
                         {stat.value}
                       </p>
                     </div>
-                    <div className={`flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg shadow-sm`} style={{ backgroundColor: stat.color }}>
-                      <stat.icon className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-white" />
+                    <div className={`flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg ${stat.color} ${stat.textColor} shadow-sm`}>
+                      <stat.icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                     </div>
                   </div>
                   {stat.progress !== undefined && (
@@ -465,9 +474,9 @@ const CompliancePage = () => {
           </AnimatePresence>
 
           {/* ─── Main Card ───────────────────────────────────────────────────── */}
-          <div className="rounded-xl border border-gray-100/60 dark:border-white/5 bg-white dark:bg-black/40 duration-300 overflow-hidden shadow-sm">
+          <div className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40 duration-300 overflow-hidden shadow-sm">
             {/* ─── Tabs ──────────────────────────────────────────────────────── */}
-            <div className="border-b border-gray-100/50 dark:border-white/5 px-3 py-2.5 relative">
+            <div className="border-b border-gray-200/50 dark:border-white/5 px-3 py-2.5 relative">
               <div className="flex items-center gap-1.5">
                 {showLeftArrow && (
                   <button
@@ -498,7 +507,7 @@ const CompliancePage = () => {
                             shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-light
                             transition-all duration-300 whitespace-nowrap
                             ${isActive
-                              ? 'bg-[#0A3269] text-white shadow-sm'
+                              ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white shadow-sm'
                               : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
                             }
                           `}
@@ -537,7 +546,7 @@ const CompliancePage = () => {
                     <div className="space-y-4">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <div>
-                          <h3 className="text-sm font-light text-black dark:text-white">Document Status</h3>
+                          <h3 className="text-sm font-light text-gray-900 dark:text-white">Document Status</h3>
                           <p className="text-xs text-gray-500 dark:text-gray-400 font-light">Track expiration dates and renewal requirements</p>
                         </div>
                         <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -545,13 +554,13 @@ const CompliancePage = () => {
                             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
                             <Input
                               placeholder="Search documents..."
-                              className="pl-8 h-9 w-full sm:w-44 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/40 text-xs focus:ring-[#0A3269] dark:focus:ring-white"
+                              className="pl-8 h-9 w-full sm:w-44 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/10 text-xs focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
                             />
                           </div>
                           <Select value={statusFilter} onValueChange={setStatusFilter}>
-                            <SelectTrigger className="h-9 w-32 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/40 text-xs focus:ring-[#0A3269] dark:focus:ring-white">
+                            <SelectTrigger className="h-9 w-32 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/10 text-xs focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]">
                               <SelectValue placeholder="All status" />
                             </SelectTrigger>
                             <SelectContent>
@@ -600,7 +609,7 @@ const CompliancePage = () => {
                                         </div>
                                         <div className="flex-1 min-w-0">
                                           <div className="flex flex-wrap items-center gap-2">
-                                            <h4 className="text-sm font-light text-black dark:text-white capitalize">
+                                            <h4 className="text-sm font-light text-gray-900 dark:text-white capitalize">
                                               {doc.type.replace(/_/g, ' ')}
                                             </h4>
                                             <Badge className={`${
@@ -617,13 +626,13 @@ const CompliancePage = () => {
                                             {doc.documentNumber && (
                                               <div className="flex items-center gap-1">
                                                 <span className="text-gray-500 dark:text-gray-400 font-light">#</span>
-                                                <span className="font-light text-black dark:text-white truncate">{doc.documentNumber}</span>
+                                                <span className="font-light text-gray-900 dark:text-white truncate">{doc.documentNumber}</span>
                                               </div>
                                             )}
                                             <div className="flex items-center gap-1">
                                               <Calendar className="h-3 w-3 text-gray-400 dark:text-gray-500" />
                                               <span className="text-gray-500 dark:text-gray-400 font-light">Uploaded:</span>
-                                              <span className="font-light text-black dark:text-white">{new Date(doc.uploadDate).toLocaleDateString()}</span>
+                                              <span className="font-light text-gray-900 dark:text-white">{new Date(doc.uploadDate).toLocaleDateString()}</span>
                                             </div>
                                             {expiryDate && (
                                               <div className="flex items-center gap-1">
@@ -632,7 +641,7 @@ const CompliancePage = () => {
                                                 <span className={`font-light ${
                                                   daysRemaining && daysRemaining < 30 ? 'text-amber-600 dark:text-amber-400' : 
                                                   daysRemaining && daysRemaining < 0 ? 'text-red-600 dark:text-red-400' : 
-                                                  'text-black dark:text-white'
+                                                  'text-gray-900 dark:text-white'
                                                 }`}>
                                                   {expiryDate.toLocaleDateString()}
                                                   {daysRemaining !== null && (
@@ -737,7 +746,7 @@ const CompliancePage = () => {
                               <p className="text-sm text-gray-500 dark:text-gray-400 font-light mb-3">No documents match your search</p>
                               <Button 
                                 onClick={() => setShowUploadDialog(true)} 
-                                className="bg-[#0A3269] hover:bg-[#1A4A8A] text-white rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
+                                className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
                               >
                                 <Upload className="w-3.5 h-3.5 mr-2" />
                                 Upload Your First Document
@@ -761,7 +770,7 @@ const CompliancePage = () => {
                     <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="text-sm font-light text-black dark:text-white">Business Setup in UAE</h3>
+                          <h3 className="text-sm font-light text-gray-900 dark:text-white">Business Setup in UAE</h3>
                           <p className="text-xs text-gray-500 dark:text-gray-400 font-light">Manage your company information and trade license</p>
                         </div>
                         <Button 
@@ -787,20 +796,20 @@ const CompliancePage = () => {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="p-3 rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/30">
                               <Label className="text-[10px] text-gray-500 dark:text-gray-400 font-light uppercase tracking-wider">Company Name</Label>
-                              <p className="font-light text-black dark:text-white mt-0.5 text-sm">{businessData.companyName || 'Not set'}</p>
+                              <p className="font-light text-gray-900 dark:text-white mt-0.5 text-sm">{businessData.companyName || 'Not set'}</p>
                             </div>
                             <div className="p-3 rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/30">
                               <Label className="text-[10px] text-gray-500 dark:text-gray-400 font-light uppercase tracking-wider">Establishment Type</Label>
-                              <p className="font-light text-black dark:text-white capitalize mt-0.5 text-sm">{businessData.establishmentType || 'Not set'}</p>
+                              <p className="font-light text-gray-900 dark:text-white capitalize mt-0.5 text-sm">{businessData.establishmentType || 'Not set'}</p>
                             </div>
                             <div className="p-3 rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/30">
                               <Label className="text-[10px] text-gray-500 dark:text-gray-400 font-light uppercase tracking-wider">Business Activity</Label>
-                              <p className="font-light text-black dark:text-white mt-0.5 text-sm">{businessData.businessActivity || 'Not set'}</p>
+                              <p className="font-light text-gray-900 dark:text-white mt-0.5 text-sm">{businessData.businessActivity || 'Not set'}</p>
                             </div>
                             {businessData.tradeLicenseNumber && (
                               <div className="p-3 rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/30">
                                 <Label className="text-[10px] text-gray-500 dark:text-gray-400 font-light uppercase tracking-wider">Trade License Number</Label>
-                                <p className="font-light text-black dark:text-white mt-0.5 text-sm">{businessData.tradeLicenseNumber}</p>
+                                <p className="font-light text-gray-900 dark:text-white mt-0.5 text-sm">{businessData.tradeLicenseNumber}</p>
                               </div>
                             )}
                           </div>
@@ -808,8 +817,8 @@ const CompliancePage = () => {
                           {businessData.tradeLicenseExpiry && (
                             <div className="rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/30 p-3">
                               <div className="flex items-center gap-2">
-                                <Calendar className="h-4 w-4 text-black dark:text-white" />
-                                <span className="text-sm font-light text-black dark:text-white">
+                                <Calendar className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                                <span className="text-sm font-light text-gray-900 dark:text-white">
                                   Trade License expires on {new Date(businessData.tradeLicenseExpiry).toLocaleDateString()}
                                 </span>
                               </div>
@@ -821,11 +830,11 @@ const CompliancePage = () => {
                           <div className="mx-auto w-14 h-14 rounded-full bg-gray-100/50 dark:bg-gray-800/50 flex items-center justify-center mb-3">
                             <Building2 className="h-7 w-7 text-gray-400 dark:text-gray-500" />
                           </div>
-                          <h3 className="text-base font-light text-black dark:text-white mb-1">Setup Your Business</h3>
+                          <h3 className="text-base font-light text-gray-900 dark:text-white mb-1">Setup Your Business</h3>
                           <p className="text-sm text-gray-500 dark:text-gray-400 font-light mb-3 max-w-md mx-auto">
                             Add your company information to track trade license and establishment requirements
                           </p>
-                          <Button onClick={() => setShowBusinessDialog(true)} className="bg-[#0A3269] hover:bg-[#1A4A8A] text-white rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
+                          <Button onClick={() => setShowBusinessDialog(true)} className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
                             <Plus className="w-3.5 h-3.5 mr-2" />
                             Add Business Information
                           </Button>
@@ -861,12 +870,12 @@ const CompliancePage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.08 }}
                           >
-                            <div className="rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white dark:bg-black/20 hover:border-[#0A3269]/30 dark:hover:border-white/20 transition-all duration-300 overflow-hidden">
-                              <div className="h-0.5 bg-[#0A3269] dark:bg-white"></div>
+                            <div className="rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white dark:bg-black/20 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30 transition-all duration-300 overflow-hidden">
+                              <div className="h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF]"></div>
                               <div className="p-4">
                                 <div className="flex items-center gap-2 mb-3">
-                                  <item.icon className="h-4 w-4 text-[#0A3269] dark:text-white" />
-                                  <h4 className="text-sm font-light text-black dark:text-white">{item.title}</h4>
+                                  <item.icon className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                                  <h4 className="text-sm font-light text-gray-900 dark:text-white">{item.title}</h4>
                                 </div>
                                 <ul className="space-y-1.5 text-xs">
                                   {item.features.map((feature, i) => (
@@ -895,8 +904,8 @@ const CompliancePage = () => {
                   >
                     <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
-                          <Gavel className="h-5 w-5 text-[#0A3269] dark:text-white" />
+                        <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+                          <Gavel className="h-5 w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
                         </div>
                         <div>
                           <h3 className="text-base font-light text-gray-900 dark:text-white">
@@ -1024,8 +1033,8 @@ const CompliancePage = () => {
                   >
                     <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
-                          <Bell className="h-5 w-5 text-[#0A3269] dark:text-white" />
+                        <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+                          <Bell className="h-5 w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
                         </div>
                         <div>
                           <h3 className="text-base font-light text-gray-900 dark:text-white">
@@ -1158,11 +1167,11 @@ const CompliancePage = () => {
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
         <DialogContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 max-w-md rounded-xl shadow-xl p-0 overflow-hidden backdrop-blur-sm">
           <div className="relative">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-white" />
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF]" />
             <DialogHeader className="p-5 pb-2">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
-                  <Upload className="h-4 w-4 text-[#0A3269] dark:text-white" />
+                <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+                  <Upload className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                 </div>
                 <div>
                   <DialogTitle className="text-lg font-light text-gray-900 dark:text-white">
@@ -1183,7 +1192,7 @@ const CompliancePage = () => {
                 Document Type
               </Label>
               <Select value={uploadDocType} onValueChange={setUploadDocType}>
-                <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white">
+                <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]">
                   <SelectValue placeholder="Select document type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 rounded-lg">
@@ -1209,7 +1218,7 @@ const CompliancePage = () => {
                   type="file"
                   onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
                   accept=".pdf,.jpg,.jpeg,.png"
-                  className="bg-white dark:bg-black border-2 border-dashed border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-light file:bg-[#0A3269] dark:file:bg-white file:text-white dark:file:text-[#0A3269] hover:file:bg-[#1A4A8A] dark:hover:file:bg-gray-200 transition-all duration-300"
+                  className="bg-white dark:bg-black border-2 border-dashed border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-light file:bg-[#0A3269] dark:file:bg-[#4A8ABF] file:text-white hover:file:bg-[#1A4A8A] dark:hover:file:bg-[#3a7aaf] transition-all duration-300"
                 />
               </div>
             </div>
@@ -1223,7 +1232,7 @@ const CompliancePage = () => {
                 value={uploadDocNumber}
                 onChange={(e) => setUploadDocNumber(e.target.value)}
                 placeholder="e.g., 784-1234-5678901-2"
-                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white"
+                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
               />
             </div>
 
@@ -1236,7 +1245,7 @@ const CompliancePage = () => {
                 type="date"
                 value={uploadExpiryDate}
                 onChange={(e) => setUploadExpiryDate(e.target.value)}
-                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white"
+                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
               />
             </div>
 
@@ -1244,7 +1253,7 @@ const CompliancePage = () => {
               <Button 
                 onClick={handleUploadDocument} 
                 disabled={isLoading} 
-                className="flex-1 bg-[#0A3269] hover:bg-[#1A4A8A] text-white rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
+                className="flex-1 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
               >
                 {isLoading ? (
                   <>
@@ -1274,11 +1283,11 @@ const CompliancePage = () => {
       <Dialog open={showBusinessDialog} onOpenChange={setShowBusinessDialog}>
         <DialogContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 max-w-2xl rounded-xl shadow-xl p-0 overflow-hidden">
           <div className="relative">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-white" />
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF]" />
             <DialogHeader className="p-5 pb-2">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
-                  <Building2 className="h-4 w-4 text-[#0A3269] dark:text-white" />
+                <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+                  <Building2 className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                 </div>
                 <div>
                   <DialogTitle className="text-lg font-light text-gray-900 dark:text-white">
@@ -1300,7 +1309,7 @@ const CompliancePage = () => {
                 onChange={(e) => setBusinessData({ ...businessData, hasCompany: e.target.checked })}
                 className="rounded border-gray-300 dark:border-gray-700 h-4 w-4 accent-[#0A3269]"
               />
-              <Label className="text-sm font-light text-black dark:text-white">I have a company in UAE</Label>
+              <Label className="text-sm font-light text-gray-900 dark:text-white">I have a company in UAE</Label>
             </div>
 
             {businessData.hasCompany && (
@@ -1312,22 +1321,22 @@ const CompliancePage = () => {
                   className="space-y-3 overflow-hidden"
                 >
                   <div>
-                    <Label className="text-xs font-light text-black dark:text-white">Company Name</Label>
+                    <Label className="text-xs font-light text-gray-700 dark:text-gray-300">Company Name</Label>
                     <Input
                       value={businessData.companyName}
                       onChange={(e) => setBusinessData({ ...businessData, companyName: e.target.value })}
                       placeholder="Enter company name"
-                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white"
+                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
                     />
                   </div>
 
                   <div>
-                    <Label className="text-xs font-light text-black dark:text-white">Establishment Type</Label>
+                    <Label className="text-xs font-light text-gray-700 dark:text-gray-300">Establishment Type</Label>
                     <Select 
                       value={businessData.establishmentType} 
                       onValueChange={(value) => setBusinessData({ ...businessData, establishmentType: value })}
                     >
-                      <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-black dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white">
+                      <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 rounded-lg">
@@ -1339,32 +1348,32 @@ const CompliancePage = () => {
                   </div>
 
                   <div>
-                    <Label className="text-xs font-light text-black dark:text-white">Business Activity</Label>
+                    <Label className="text-xs font-light text-gray-700 dark:text-gray-300">Business Activity</Label>
                     <Input
                       value={businessData.businessActivity}
                       onChange={(e) => setBusinessData({ ...businessData, businessActivity: e.target.value })}
                       placeholder="e.g., Trading, Consulting, etc."
-                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white"
+                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <Label className="text-xs font-light text-black dark:text-white">Trade License Number</Label>
+                      <Label className="text-xs font-light text-gray-700 dark:text-gray-300">Trade License Number</Label>
                       <Input
                         value={businessData.tradeLicenseNumber}
                         onChange={(e) => setBusinessData({ ...businessData, tradeLicenseNumber: e.target.value })}
                         placeholder="License number"
-                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white"
+                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
                       />
                     </div>
                     <div>
-                      <Label className="text-xs font-light text-black dark:text-white">License Expiry Date</Label>
+                      <Label className="text-xs font-light text-gray-700 dark:text-gray-300">License Expiry Date</Label>
                       <Input
                         type="date"
                         value={businessData.tradeLicenseExpiry}
                         onChange={(e) => setBusinessData({ ...businessData, tradeLicenseExpiry: e.target.value })}
-                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-black dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-white"
+                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
                       />
                     </div>
                   </div>
@@ -1373,7 +1382,7 @@ const CompliancePage = () => {
             )}
 
             <div className="flex gap-2 pt-1">
-              <Button onClick={handleUpdateBusiness} disabled={isLoading} className="flex-1 bg-[#0A3269] hover:bg-[#1A4A8A] text-white rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
+              <Button onClick={handleUpdateBusiness} disabled={isLoading} className="flex-1 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
                 {isLoading ? 'Saving...' : 'Save Changes'}
               </Button>
               <Button 

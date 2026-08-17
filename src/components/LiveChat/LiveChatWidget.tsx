@@ -181,11 +181,11 @@ const LiveChatWidget = () => {
   const getSenderColor = (sender: string) => {
     switch (sender) {
       case 'ai':
-        return 'bg-gradient-to-r from-violet-500 to-purple-500';
+        return 'bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] dark:from-[#4A8ABF] dark:to-[#3a7aaf]';
       case 'officer':
         return 'bg-gradient-to-r from-emerald-500 to-teal-500';
       default:
-        return 'bg-gradient-to-r from-blue-500 to-indigo-500';
+        return 'bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] dark:from-[#4A8ABF] dark:to-[#3a7aaf]';
     }
   };
 
@@ -202,11 +202,11 @@ const LiveChatWidget = () => {
           >
             <Button
               onClick={() => setIsOpen(true)}
-              className="h-10 w-10 sm:h-16 sm:w-16 md:h-[72px] md:w-[72px] rounded-full shadow-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 hover:shadow-[0_0_50px_rgba(139,92,246,0.5)] hover:scale-105 transition-all duration-300 relative group border-2 border-white/20"
+              className="h-10 w-10 sm:h-16 sm:w-16 md:h-[72px] md:w-[72px] rounded-full shadow-2xl bg-[#0A3269] dark:bg-[#4A8ABF] hover:shadow-[0_0_50px_rgba(10,50,105,0.5)] dark:hover:shadow-[0_0_50px_rgba(74,138,191,0.5)] hover:scale-105 transition-all duration-300 relative group border-2 border-white/20"
               size="icon"
             >
               {/* Glow effect */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-300" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0A3269] via-[#0A3269] to-[#0A3269] dark:from-[#4A8ABF] dark:via-[#4A8ABF] dark:to-[#4A8ABF] blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-300" />
               
               {/* Inner ring animation */}
               <div className="absolute inset-1 rounded-full border-2 border-white/10 animate-pulse" />
@@ -247,7 +247,7 @@ const LiveChatWidget = () => {
               flex flex-col overflow-hidden backdrop-blur-xl bg-white/95 dark:bg-gray-900/95"
           >
             {/* Header */}
-            <div className="relative bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 p-3 sm:p-4 md:p-5 flex items-center justify-between overflow-hidden">
+            <div className="relative bg-[#0A3269] dark:bg-[#4A8ABF] p-3 sm:p-4 md:p-5 flex items-center justify-between overflow-hidden">
               
               <div className="flex items-center gap-2 sm:gap-3 md:gap-4 relative z-10 min-w-0 flex-1">
                 <div className="relative shrink-0">
@@ -306,16 +306,16 @@ const LiveChatWidget = () => {
             {!isMinimized && (
               <>
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-5 space-y-3 sm:space-y-4 bg-gradient-to-b from-violet-50/30 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-5 space-y-3 sm:space-y-4 bg-gradient-to-b from-[#0A3269]/5 via-white to-[#0A3269]/5 dark:from-[#4A8ABF]/10 dark:via-gray-900 dark:to-[#4A8ABF]/10">
                   {/* Status Bar */}
                   <div className="flex flex-wrap items-center justify-between gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/60 dark:bg-gray-800/60 rounded-lg sm:rounded-xl border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm">
                     <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
-                      <Shield className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-violet-500" />
+                      <Shield className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
                       <span className="hidden xs:inline">End-to-end encrypted</span>
                       <span className="xs:hidden">Encrypted</span>
                     </div>
                     <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
-                      <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-violet-500" />
+                      <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
                       <span className="hidden xs:inline">Response time: ~30s</span>
                       <span className="xs:hidden">~30s</span>
                     </div>
@@ -337,7 +337,7 @@ const LiveChatWidget = () => {
                       <div
                         className={`max-w-[75%] sm:max-w-[80%] rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 shadow-sm ${
                           message.sender === 'user'
-                            ? 'bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 text-white shadow-violet-500/25'
+                            ? 'bg-gradient-to-br from-[#0A3269] via-[#1a4a7a] to-[#2a5a8a] dark:from-[#4A8ABF] dark:via-[#3a7aaf] dark:to-[#2a6a9a] text-white shadow-[#0A3269]/25 dark:shadow-[#4A8ABF]/25'
                             : 'bg-white dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 shadow-gray-200/50 dark:shadow-gray-800/50'
                         }`}
                       >
@@ -346,12 +346,12 @@ const LiveChatWidget = () => {
                             <Badge className={`text-[7px] sm:text-[8px] px-1 sm:px-1.5 py-0 h-3 sm:h-4 ${
                               message.sender === 'officer' 
                                 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0' 
-                                : 'bg-violet-500/10 text-violet-600 dark:text-violet-400 border-0'
+                                : 'bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF] border-0'
                             }`}>
                               {message.sender === 'officer' ? 'Officer' : 'AI'}
                             </Badge>
                             {message.sender === 'ai' && (
-                              <Sparkles className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-violet-400" />
+                              <Sparkles className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-[#0A3269] dark:text-[#4A8ABF]" />
                             )}
                           </div>
                         )}
@@ -381,7 +381,7 @@ const LiveChatWidget = () => {
                       className="flex gap-2 sm:gap-3"
                     >
                       <Avatar className={`h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 shadow-md ${
-                        officerOnline ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 'bg-gradient-to-r from-violet-500 to-purple-500'
+                        officerOnline ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 'bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] dark:from-[#4A8ABF] dark:to-[#3a7aaf]'
                       }`}>
                         <AvatarFallback className="text-white text-[10px] sm:text-xs">
                           {officerOnline ? <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
@@ -392,17 +392,17 @@ const LiveChatWidget = () => {
                           <motion.div
                             animate={{ y: [0, -5, 0] }}
                             transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                            className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-violet-400"
+                            className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF]"
                           />
                           <motion.div
                             animate={{ y: [0, -5, 0] }}
                             transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-                            className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-violet-500"
+                            className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#1a4a7a] dark:bg-[#3a7aaf]"
                           />
                           <motion.div
                             animate={{ y: [0, -5, 0] }}
                             transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-                            className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-violet-600"
+                            className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#2a5a8a] dark:bg-[#2a6a9a]"
                           />
                         </div>
                         <span className="text-[11px] sm:text-sm text-gray-500 dark:text-gray-400 ml-0.5 sm:ml-1">
@@ -421,7 +421,7 @@ const LiveChatWidget = () => {
                       variant="ghost"
                       size="icon"
                       onClick={handleFileAttach}
-                      className="shrink-0 h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 rounded-lg sm:rounded-xl hover:bg-violet-50 dark:hover:bg-violet-500/10 text-gray-500 hover:text-violet-500"
+                      className="shrink-0 h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 rounded-lg sm:rounded-xl hover:bg-[#0A3269]/10 dark:hover:bg-[#4A8ABF]/10 text-gray-500 dark:text-gray-400 hover:text-[#0A3269] dark:hover:text-[#4A8ABF]"
                     >
                       <Paperclip className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                     </Button>
@@ -432,13 +432,13 @@ const LiveChatWidget = () => {
                         onChange={(e) => setInputMessage(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                         placeholder="Type a message..."
-                        className="flex-1 text-xs sm:text-sm md:text-base rounded-lg sm:rounded-xl border-gray-200/50 dark:border-gray-700/50 focus:border-violet-500 focus:ring-violet-500/20 pr-3 sm:pr-4 py-1.5 sm:py-2 md:py-2.5 h-9 sm:h-10 md:h-11"
+                        className="flex-1 text-xs sm:text-sm md:text-base rounded-lg sm:rounded-xl border-gray-200/50 dark:border-gray-700/50 focus:border-[#0A3269] dark:focus:border-[#4A8ABF] focus:ring-[#0A3269]/20 dark:focus:ring-[#4A8ABF]/20 pr-3 sm:pr-4 py-1.5 sm:py-2 md:py-2.5 h-9 sm:h-10 md:h-11"
                       />
                     </div>
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="shrink-0 h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 rounded-lg sm:rounded-xl bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
+                      className="shrink-0 h-9 w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 rounded-lg sm:rounded-xl bg-[#0A3269] dark:bg-[#4A8ABF] hover:shadow-[0_0_30px_rgba(10,50,105,0.4)] dark:hover:shadow-[0_0_30px_rgba(74,138,191,0.4)] hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
                       size="icon"
                     >
                       <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white" />
@@ -446,7 +446,7 @@ const LiveChatWidget = () => {
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-2">
                     <div className="flex items-center gap-1">
-                      <Shield className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-violet-400" />
+                      <Shield className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#0A3269] dark:text-[#4A8ABF]" />
                       <span className="text-[8px] sm:text-[10px] text-gray-400 dark:text-gray-500">Secure</span>
                     </div>
                     <div className="w-px h-3 bg-gray-200 dark:bg-gray-700" />

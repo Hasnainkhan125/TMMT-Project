@@ -214,32 +214,31 @@ const MobileHeader: React.FC<{
   onMenuToggle: () => void;
   notifications: number;
 }> = ({ user, onMenuToggle, notifications }) => (
-  <div className="sticky top-0 z-40 bg-white dark:bg-[#000] border-b border-gray-200/80 dark:border-[#0A3269]/30 shadow-sm dark:shadow-[#0A3269]/20">
-    <div className="flex items-center justify-between px-4 py-3">
-      <div className="flex items-center gap-3">
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={onMenuToggle}
-          className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-        >
-          <Menu className="w-5 h-5 text-gray-700 dark:text-white" />
-        </motion.button>
-        
-        <div className="flex items-center gap-2">
-          <div className="relative">
-         <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-black shadow-lg shadow-black/25 dark:bg-white dark:shadow-white/20">
-  <Crown className="h-4 w-4 text-white dark:text-black" />
-</div>
-          </div>
-          <div>
-          <span className="bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent text-base font-medium">
-  TMMT Portal
-</span>
-            <p className="text-[10px] text-gray-500 dark:text-white/70">Government Services</p>
+<div className="sticky top-0 z-40 bg-white dark:bg-[#0A1628] border-b border-gray-200/80 dark:border-[#0A3269]/30 shadow-sm dark:shadow-[#0A3269]/20">
+  <div className="flex items-center justify-between px-4 py-3">
+    <div className="flex items-center gap-3">
+      <motion.button
+        whileTap={{ scale: 0.9 }}
+        onClick={onMenuToggle}
+        className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-[#0A3269]/20 transition-colors"
+      >
+        <Menu className="w-5 h-5 text-gray-700 dark:text-white" />
+      </motion.button>
+      
+      <div className="flex items-center gap-2">
+        <div className="relative">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#0A3269] shadow-lg shadow-[#0A3269]/25 dark:bg-white dark:shadow-white/20">
+            <Crown className="h-4 w-4 text-white dark:text-[#0A3269]" />
           </div>
         </div>
+        <div>
+          <span className="text-[#0A3269] dark:text-white text-base font-medium">
+            TMMT Portal
+          </span>
+          <p className="text-[10px] text-gray-500 dark:text-white/70">Government Services</p>
+        </div>
       </div>
-
+    </div>
       <div className="flex items-center gap-2">
         <motion.button
           whileTap={{ scale: 0.9 }}
@@ -254,8 +253,8 @@ const MobileHeader: React.FC<{
         </motion.button>
         
         <div className="relative">
-       <Avatar className="w-8 h-8 ring-2 ring-gray-200 dark:ring-white/20">
-  <AvatarFallback className="bg-black dark:bg-white text-white dark:text-black text-xs font-medium">
+   <Avatar className="w-8 h-8 ring-2 ring-[#0A3269]/20 dark:ring-white/20">
+  <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] text-xs font-medium">
     {(user as any)?.firstName?.[0] || ''}{(user as any)?.lastName?.[0] || ''}
   </AvatarFallback>
 </Avatar>
@@ -320,7 +319,7 @@ const MobileSidebar: React.FC<{
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{(user as any)?.email || ''}</p>
                     <Badge className="mt-1 bg-[#0A3269]/10 text-[#0A3269] dark:bg-[#0A3269]/30 dark:text-[#1a4a7a] border-0 text-[10px]">
-                      Amer Officer
+                      TMMT Portal
                     </Badge>
                   </div>
                 </div>
@@ -1629,10 +1628,10 @@ const filteredStats = useMemo(() => {
 >
   <div className="flex items-center gap-3">
     <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#0A3269] to-[#1A4A8A]" />
-    <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-      <FileText className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
-      Applications
-    </h2>
+  <h2 className="text-lg font-bold text-[#0A3269] dark:text-white flex items-center gap-2">
+  <FileText className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+  Applications
+</h2>
  
   </div>
   <span className="text-xs text-gray-400 dark:text-gray-500">
@@ -2830,24 +2829,26 @@ const filteredStats = useMemo(() => {
   initial={{ opacity: 0, y: -10 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.3 }}
-  className="sticky top-0 z-40 bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/5 shadow-sm"
+  className="sticky top-0 z-40 bg-white/90 dark:bg-black/10 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/5 shadow-sm"
 >
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex items-center justify-between h-14 sm:h-16">
-      {/* Logo Section */}
-      <div className="flex items-center gap-2 sm:gap-3">
-  <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 flex items-center justify-center shadow-lg shadow-gray-900/25 dark:shadow-white/25">
-  <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-gray-900" strokeWidth={1.8} />
-</div>
-        <div>
-          <h1 className="text-sm sm:text-lg font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-1.5">
-<span className="bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent text-base font-medium">
-  TMMT Portal
-</span>
-          </h1>
-          <p className="text-[9px] sm:text-[11px] text-gray-500 dark:text-gray-400 font-medium hidden xs:block">Government Services</p>
-        </div>
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="flex items-center justify-between h-14 sm:h-16">
+    {/* Logo Section */}
+    <div className="flex items-center gap-2 sm:gap-3">
+      <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0A3269] dark:bg-white flex items-center justify-center shadow-lg shadow-[#0A3269]/25 dark:shadow-white/25">
+        <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-[#0A3269]" strokeWidth={1.8} />
       </div>
+      <div>
+        <h1 className="text-sm sm:text-lg font-bold text-[#0A3269] dark:text-white tracking-tight flex items-center gap-1.5">
+          <span className="text-[#0A3269] dark:text-white text-base font-medium">
+            TMMT Portal
+          </span>
+        </h1>
+        <p className="text-[9px] sm:text-[11px] text-[#0A3269]/60 dark:text-white/60 font-medium hidden xs:block">
+          Government Services
+        </p>
+      </div>
+    </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-1.5 sm:gap-3">
@@ -2880,9 +2881,9 @@ const filteredStats = useMemo(() => {
             <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium">Amer Officer</p>
           </div>
           <div className="relative">
-     <Avatar className="w-8 h-8 sm:w-10 sm:h-10 ring-2 ring-black/10 dark:ring-white/10 group-hover:ring-black/30 dark:group-hover:ring-white/30 transition-all duration-300 ring-offset-2 shadow-sm">
+ <Avatar className="w-8 h-8 sm:w-10 sm:h-10 ring-2 ring-[#0A3269]/20 dark:ring-white/10 group-hover:ring-[#0A3269]/40 dark:group-hover:ring-white/30 transition-all duration-300 ring-offset-2 shadow-sm">
   <AvatarImage src={(user as any)?.avatar} />
-  <AvatarFallback className="bg-black dark:bg-white text-white dark:text-black font-medium text-xs sm:text-sm">
+  <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] font-medium text-xs sm:text-sm">
     {(user as any)?.firstName?.[0]}{(user as any)?.lastName?.[0]}
   </AvatarFallback>
 </Avatar>

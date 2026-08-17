@@ -1449,98 +1449,145 @@ export function PackageCard({
                       )}
                     </div>
 
-                    {/* ─── CONVERSATION SECTION ─────────────────────────────────────── */}
-                    <div className="space-y-1.5 sm:space-y-2">
-                      <div 
-                        className="flex items-center justify-between cursor-pointer hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors rounded-lg p-1.5 sm:p-2"
-                        onClick={() => setShowConversation(!showConversation)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <MessageSquare className="h-4 w-4 text-blue-500" />
-                          <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                            Conversation ({comments.length})
-                          </span>
-                        </div>
-                        <ChevronDown className={cn(
-                          "h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-300",
-                          showConversation && "rotate-180"
-                        )} />
-                      </div>
+                  {/* ─── CONVERSATION SECTION ─────────────────────────────────────── */}
+<div className="space-y-1.5 sm:space-y-2">
+  <div 
+    className="flex items-center justify-between cursor-pointer hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 dark:hover:from-blue-950/20 dark:hover:to-indigo-950/20 transition-all duration-300 rounded-xl p-2 sm:p-2.5 group border border-transparent hover:border-blue-200/50 dark:hover:border-blue-800/30"
+    onClick={() => setShowConversation(!showConversation)}
+  >
+    <div className="flex items-center gap-2.5">
+      <div className="relative">
+        <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-md shadow-blue-500/20">
+          <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+        </div>
+        {comments.length > 0 && (
+          <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[8px] font-bold text-white flex items-center justify-center shadow-lg shadow-red-500/30">
+            {comments.length}
+          </span>
+        )}
+      </div>
+      <div>
+        <p className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">
+          Conversation
+        </p>
+        <p className="text-[8px] sm:text-[10px] text-gray-400 dark:text-gray-500">
+          {comments.length} message{comments.length !== 1 ? 's' : ''}
+        </p>
+      </div>
+    </div>
+    <motion.div
+      animate={{ rotate: showConversation ? 180 : 0 }}
+      transition={{ duration: 0.3 }}
+      className="p-1 rounded-lg bg-white/50 dark:bg-slate-800/50 group-hover:bg-white/70 dark:group-hover:bg-slate-700/50"
+    >
+      <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 dark:text-slate-400" />
+    </motion.div>
+  </div>
 
-                      <AnimatePresence>
-                        {showConversation && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                          >
-                            <div className="bg-gray-50/50 dark:bg-gray-800/30 rounded-xl p-3 sm:p-4">
-                              {/* Messages */}
-                              <div className="max-h-64 overflow-y-auto pr-1 space-y-1.5 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                                {sortedComments.length === 0 ? (
-                                  <div className="text-center py-6 text-gray-400 dark:text-gray-500">
-                                    <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-30" />
-                                    <p className="text-xs">No messages yet</p>
-                                    <p className="text-[8px]">Start the conversation by sending a message</p>
-                                  </div>
-                                ) : (
-                                  sortedComments.map((comment) => (
-                                    <ChatMessage
-                                      key={comment._id}
-                                      message={comment}
-                                      isAdmin={comment.isAdmin || false}
-                                    />
-                                  ))
-                                )}
-                                <div ref={messagesEndRef} />
-                              </div>
+  <AnimatePresence>
+    {showConversation && (
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: 'auto', opacity: 1 }}
+        exit={{ height: 0, opacity: 0 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="overflow-hidden"
+      >
+        <div className="bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200/50 dark:border-white/5 shadow-lg shadow-gray-200/20 dark:shadow-gray-800/20 overflow-hidden">
+          {/* Chat Header */}
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-gray-50 to-gray-100/80 dark:from-gray-800/80 dark:to-gray-900/80 border-b border-gray-200/50 dark:border-white/5">
+            <div className="flex items-center gap-2">
+              <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-[10px] sm:text-xs shadow-md shadow-blue-500/30">
+                T
+              </div>
+              <div>
+                <p className="text-[11px] sm:text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  TMMT Support
+                </p>
+                <p className="text-[8px] text-emerald-500 dark:text-emerald-400 flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Online
+                </p>
+              </div>
+            </div>
+            <Badge className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-gray-600 dark:text-gray-300 border-0 text-[8px] sm:text-[10px] px-2 py-0.5">
+              {comments.length} messages
+            </Badge>
+          </div>
 
-                              {/* Message Input */}
-                              <div className="mt-3 flex items-end gap-2">
-                                <div className="flex-1 relative">
-                                  <textarea
-                                    ref={inputRef}
-                                    value={newMessage}
-                                    onChange={(e) => setNewMessage(e.target.value)}
-                                    onKeyDown={handleKeyDown}
-                                    placeholder="Type your message..."
-                                    className={cn(
-                                      "w-full min-h-[36px] max-h-[80px] rounded-xl border border-gray-200 dark:border-gray-700",
-                                      "bg-white dark:bg-gray-900 px-3 py-1.5 text-xs",
-                                      "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                                      "resize-none transition-all duration-200",
-                                      "placeholder:text-gray-400 dark:placeholder:text-gray-500",
-                                      "disabled:opacity-50 disabled:cursor-not-allowed"
-                                    )}
-                                    rows={1}
-                                    disabled={sendingMessage}
-                                  />
-                                </div>
-                                <Button
-                                  type="button"
-                                  onClick={handleSendMessage}
-                                  disabled={!newMessage.trim() || sendingMessage}
-                                  className={cn(
-                                    "h-8 w-8 sm:h-9 sm:w-9 p-0 rounded-full shrink-0",
-                                    "bg-gradient-to-r from-blue-500 to-indigo-500 text-white",
-                                    "hover:shadow-lg hover:scale-105 transition-all duration-300",
-                                    "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                                  )}
-                                >
-                                  {sendingMessage ? (
-                                    <div className="h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                  ) : (
-                                    <Send className="h-3.5 w-3.5" />
-                                  )}
-                                </Button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
+          {/* Messages */}
+          <div className="max-h-48 sm:max-h-64 overflow-y-auto p-2 sm:p-3 space-y-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent bg-gradient-to-b from-gray-50/30 to-white/50 dark:from-gray-900/20 dark:to-gray-900/30">
+            {sortedComments.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-6 text-center">
+                <div className="p-3 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 mb-2">
+                  <MessageSquare className="h-6 w-6 text-blue-400 dark:text-blue-500" />
+                </div>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">No messages yet</p>
+                <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">Start the conversation by sending a message</p>
+              </div>
+            ) : (
+              sortedComments.map((comment) => {
+                const isFromUser = comment.by === 'customer' || comment.role === 'customer' || comment.sender === 'user';
+                return (
+                  <ChatMessage
+                    key={comment._id || comment.id}
+                    message={comment}
+                    isFromUser={isFromUser}
+                    userName={isFromUser ? 'You' : 'TMMT Support'}
+                  />
+                );
+              })
+            )}
+            <div ref={messagesEndRef} />
+          </div>
 
+          {/* Message Input - SMALLER HEIGHT */}
+          <div className="border-t border-gray-200/50 dark:border-white/5 p-1.5 sm:p-2 bg-white dark:bg-gray-900/80 backdrop-blur-sm">
+            <div className="flex items-center gap-1.5">
+              <input
+                ref={inputRef}
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Type your message..."
+                className={cn(
+                  "flex-1 h-7 sm:h-8 rounded-full px-3 sm:px-3.5 py-1 text-xs sm:text-sm",
+                  "border-gray-200 dark:border-gray-700",
+                  "bg-gray-50 dark:bg-gray-800",
+                  "text-gray-900 dark:text-white",
+                  "placeholder:text-gray-400 dark:placeholder:text-gray-500",
+                  "focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none",
+                  "transition-all duration-200",
+                  "disabled:opacity-50 disabled:cursor-not-allowed"
+                )}
+                disabled={sendingMessage}
+              />
+              <button
+                type="button"
+                onClick={handleSendMessage}
+                disabled={!newMessage.trim() || sendingMessage}
+                className={cn(
+                  "h-7 w-7 sm:h-8 sm:w-8 p-0 rounded-full shrink-0",
+                  "bg-gradient-to-r from-blue-500 to-indigo-500 text-white",
+                  "shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
+                  "transition-all duration-300",
+                  "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                )}
+              >
+                {sendingMessage ? (
+                  <div className="h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Send className="h-3.5 w-3.5" />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
                     {/* ─── PAYMENT ──────────────────────────────────────────────────── */}
                     {pkg.payment && (
                       <div className="space-y-1.5 sm:space-y-2">

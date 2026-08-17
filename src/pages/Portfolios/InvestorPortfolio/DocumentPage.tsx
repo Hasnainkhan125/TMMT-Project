@@ -25,6 +25,12 @@ import {
   Search,
   X,
   Upload,
+  Sparkles,
+  TrendingUp,
+  Shield,
+  User,
+  Calendar,
+  ChevronRight,
 } from 'lucide-react'
 import { toast } from "sonner"
 import { Layout } from "../../Dashboards/InvestorDashboard/Layout"
@@ -49,7 +55,7 @@ const DocumentsPage = () => {
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const [selectedAppIdForUpload, setSelectedAppIdForUpload] = useState<string | null>(null)
 
-  // ─── Role check (replace with your actual auth context) ──────────────
+  // ─── Role check ────────────────────────────────────────────────────────
   const userRole = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null
   const isAmer = userRole === 'amer' || userRole === 'admin'
 
@@ -143,22 +149,22 @@ const DocumentsPage = () => {
   const statusPill = (status: string) => {
     const map: Record<string, { bg: string; text: string; icon: any; border: string }> = {
       approved: {
-        bg: 'bg-emerald-50/70 dark:bg-emerald-950/20',
+        bg: 'bg-emerald-50 dark:bg-emerald-950/30',
         text: 'text-emerald-700 dark:text-emerald-400',
         icon: CheckCircle2,
-        border: 'border-emerald-200/50 dark:border-emerald-800/30',
+        border: 'border-emerald-200 dark:border-emerald-800/30',
       },
       pending: {
-        bg: 'bg-amber-50/70 dark:bg-amber-950/20',
+        bg: 'bg-amber-50 dark:bg-amber-950/30',
         text: 'text-amber-700 dark:text-amber-400',
         icon: Clock,
-        border: 'border-amber-200/50 dark:border-amber-800/30',
+        border: 'border-amber-200 dark:border-amber-800/30',
       },
       rejected: {
-        bg: 'bg-red-50/70 dark:bg-red-950/20',
+        bg: 'bg-red-50 dark:bg-red-950/30',
         text: 'text-red-700 dark:text-red-400',
         icon: AlertTriangle,
-        border: 'border-red-200/50 dark:border-red-800/30',
+        border: 'border-red-200 dark:border-red-800/30',
       },
     }
     const cfg = map[status]
@@ -187,9 +193,9 @@ const DocumentsPage = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="flex min-h-screen items-center justify-center bg-white dark:bg-black">
+        <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-black">
           <div className="text-center">
-            <div className="rounded-full h-12 w-12 border-2 border-[#0A3269] dark:border-white border-t-transparent animate-spin mx-auto mb-4" />
+            <div className="rounded-full h-12 w-12 border-2 border-[#0A3269] dark:border-[#4A8ABF] border-t-transparent animate-spin mx-auto mb-4" />
             <p className="text-gray-500 dark:text-gray-400 font-light">Loading documents...</p>
           </div>
         </div>
@@ -213,25 +219,33 @@ const DocumentsPage = () => {
       label: 'Total Documents',
       value: submittedCount + resultCount,
       icon: FileText,
-      color: '#0A3269',
+      color: 'bg-[#0A3269] dark:bg-[#4A8ABF]',
+      textColor: 'text-white',
+      sub: 'All documents',
     },
     {
       label: 'Submitted',
       value: submittedCount,
       icon: FolderOpen,
-      color: '#2563EB',
+      color: 'bg-[#1a4a7a] dark:bg-[#4A8ABF]/80',
+      textColor: 'text-white',
+      sub: 'Uploaded by you',
     },
     {
       label: 'Results',
       value: resultCount,
       icon: CheckCircle2,
-      color: '#059669',
+      color: 'bg-emerald-600 dark:bg-emerald-500',
+      textColor: 'text-white',
+      sub: 'From Amer',
     },
     {
       label: 'Pending Review',
       value: pendingCount,
       icon: Clock,
-      color: '#D97706',
+      color: 'bg-amber-600 dark:bg-amber-500',
+      textColor: 'text-white',
+      sub: 'Awaiting approval',
     },
   ]
 
@@ -239,25 +253,24 @@ const DocumentsPage = () => {
   const DocRow = ({ doc, app, variant, index }: { doc: any; app: any; variant: 'submitted' | 'result'; index: number }) => {
     const isResult = variant === 'result'
     const fileUrl = getFileUrl(doc, app)
-    const isImageDoc = isImage(doc, fileUrl)
 
     return (
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.03 }}
-        className={`flex items-center justify-between gap-3 p-3 rounded-lg border transition-all duration-300 
+        className={`flex items-center justify-between gap-3 p-3 rounded-lg border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md
           ${isResult
-            ? 'bg-emerald-50/40 dark:bg-emerald-950/10 border-emerald-200/40 dark:border-emerald-800/20 hover:border-emerald-300/60 dark:hover:border-emerald-700/40'
-            : 'bg-white dark:bg-black/20 border-gray-200/60 dark:border-white/5 hover:border-[#0A3269]/20 dark:hover:border-white/20'}
-          hover:-translate-y-0.5 transition-all duration-300`}
+            ? 'bg-emerald-50/60 dark:bg-emerald-950/10 border-emerald-200/60 dark:border-emerald-800/30 hover:border-emerald-300 dark:hover:border-emerald-700/50'
+            : 'bg-white dark:bg-black/20 border-gray-200/60 dark:border-white/5 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30'}
+          `}
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div
             className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 transition-all duration-300
               ${isResult
-                ? 'bg-emerald-100/60 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
-                : 'bg-[#0A3269]/10 dark:bg-white/10 text-[#0A3269] dark:text-white'}`}
+                ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
+                : 'bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF]'}`}
           >
             {isResult ? <Zap className="w-3.5 h-3.5" /> : <FileText className="w-3.5 h-3.5" />}
           </div>
@@ -288,8 +301,8 @@ const DocumentsPage = () => {
             size="sm"
             className={`h-8 w-8 rounded-lg p-0 transition-all duration-300 ${
               isResult
-                ? 'text-gray-500 hover:bg-emerald-100 dark:text-gray-400 dark:hover:bg-emerald-900/30'
-                : 'text-gray-500 hover:bg-[#0A3269]/10 dark:text-gray-400 dark:hover:bg-white/10'
+                ? 'text-gray-500 dark:text-gray-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30'
+                : 'text-gray-500 dark:text-gray-400 hover:bg-[#0A3269]/10 dark:hover:bg-[#4A8ABF]/10'
             }`}
             onClick={() => handleViewDocument(doc, app)}
             title="View"
@@ -301,8 +314,8 @@ const DocumentsPage = () => {
             size="sm"
             className={`h-8 w-8 rounded-lg p-0 transition-all duration-300 ${
               isResult
-                ? 'text-gray-500 hover:bg-emerald-100 dark:text-gray-400 dark:hover:bg-emerald-900/30'
-                : 'text-gray-500 hover:bg-[#0A3269]/10 dark:text-gray-400 dark:hover:bg-white/10'
+                ? 'text-gray-500 dark:text-gray-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30'
+                : 'text-gray-500 dark:text-gray-400 hover:bg-[#0A3269]/10 dark:hover:bg-[#4A8ABF]/10'
             }`}
             onClick={() => handleDownloadDocument(doc, app)}
             title="Download"
@@ -348,7 +361,7 @@ const DocumentsPage = () => {
               <p>Failed to load image</p>
               <Button
                 onClick={() => window.open(fileUrl, '_blank')}
-                className="mt-4 bg-[#0A3269] text-white hover:bg-[#1A4A8A]"
+                className="mt-4 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf]"
               >
                 Open in new tab
               </Button>
@@ -370,11 +383,11 @@ const DocumentsPage = () => {
 
     return (
       <div className="text-center text-gray-500 dark:text-gray-400 p-8">
-        <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+        <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
         <p>Preview not available for this file type</p>
         <Button
           onClick={() => window.open(fileUrl, '_blank')}
-          className="mt-4 bg-[#0A3269] text-white hover:bg-[#1A4A8A]"
+          className="mt-4 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf]"
         >
           Open in new tab
         </Button>
@@ -387,8 +400,8 @@ const DocumentsPage = () => {
     <Card className="border border-dashed border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-black/20 rounded-xl">
       <CardContent className="pt-6">
         <div className="text-center py-12">
-          <div className="mx-auto mb-4 w-16 h-16 rounded-xl bg-[#0A3269]/10 dark:bg-white/5 flex items-center justify-center">
-            <Icon className="h-8 w-8 text-[#0A3269]/40 dark:text-white/30" />
+          <div className="mx-auto mb-4 w-16 h-16 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 flex items-center justify-center">
+            <Icon className="h-8 w-8 text-[#0A3269]/40 dark:text-[#4A8ABF]/40" />
           </div>
           <p className="text-base font-light text-gray-900 dark:text-white">{title}</p>
           {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 font-light mt-1">{subtitle}</p>}
@@ -400,18 +413,18 @@ const DocumentsPage = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-white dark:bg-black transition-colors duration-200">
-        <div className="space-y-5 p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-black/20 transition-colors duration-200 p-2">
+        <div className="space-y-5">
           {/* ─── Header ────────────────────────────────────────────────── */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="flex items-center gap-2.5 mb-0.5">
-                <div className="p-1.5 rounded-lg bg-[#0A3269]">
+                <div className="p-1.5 rounded-lg bg-[#0A3269] dark:bg-[#4A8ABF]">
                   <FolderOpen className="h-4 w-4 text-white" />
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-white tracking-tight">
+                <h3 className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-white tracking-tight">
                   Documents
-                </h1>
+                </h3>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 font-light ml-1">
                 Manage all your application documents and results in one place
@@ -420,7 +433,7 @@ const DocumentsPage = () => {
             {isAmer && applications.length > 0 && (
               <Button
                 onClick={() => openUploadDialog(getAppId(applications[0]))}
-                className="bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] text-white rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300"
+                className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Upload Results
@@ -431,7 +444,7 @@ const DocumentsPage = () => {
           {/* ─── Stats Cards ──────────────────────────────────────────── */}
           <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
             {stats.map((stat) => (
-              <Card key={stat.label} className="rounded-xl border border-gray-100/60 dark:border-white/5 bg-white dark:bg-black/40">
+              <Card key={stat.label} className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40">
                 <CardContent className="p-3 sm:p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
@@ -441,9 +454,10 @@ const DocumentsPage = () => {
                       <p className="text-xl sm:text-2xl font-light text-gray-900 dark:text-white mt-0.5">
                         {stat.value}
                       </p>
+                      <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light mt-0.5">{stat.sub}</p>
                     </div>
-                    <div className={`flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg`} style={{ backgroundColor: stat.color }}>
-                      <stat.icon className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-white" />
+                    <div className={`flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg ${stat.color} ${stat.textColor} shadow-sm`}>
+                      <stat.icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                     </div>
                   </div>
                 </CardContent>
@@ -461,29 +475,29 @@ const DocumentsPage = () => {
               placeholder="Search documents..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-black/40 border border-gray-200/60 dark:border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#0A3269]/30 dark:focus:ring-white/20 focus:border-transparent text-gray-900 dark:text-white text-sm font-light placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-300"
+              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-black/10 border border-gray-200/60 dark:border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#0A3269]/30 dark:focus:ring-[#4A8ABF]/30 focus:border-transparent text-gray-900 dark:text-white text-sm font-light placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-300"
             />
           </div>
 
           {/* ─── Tabs ───────────────────────────────────────────────────── */}
           <Tabs defaultValue="all" className="space-y-4" onValueChange={setSelectedTab}>
-            <TabsList className="bg-white dark:bg-black/40 border border-gray-200/60 dark:border-white/5 p-1 rounded-lg backdrop-blur-sm">
+            <TabsList className="bg-white dark:bg-black/10 border border-gray-200/60 dark:border-white/5 p-1 rounded-lg backdrop-blur-sm">
               <TabsTrigger 
                 value="all" 
-                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-white data-[state=active]:text-white dark:data-[state=active]:text-black data-[state=active]:text-white dark:data-[state=active]:text-black text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
+                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-[#4A8ABF] data-[state=active]:text-white dark:data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
               >
                 All Documents
               </TabsTrigger>
               <TabsTrigger 
                 value="submitted" 
-                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-white data-[state=active]:text-white dark:data-[state=active]:text-black text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
+                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-[#4A8ABF] data-[state=active]:text-white dark:data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
               >
                 <FileText className="h-3 w-3 mr-1.5" />
                 Submitted
               </TabsTrigger>
               <TabsTrigger 
                 value="results" 
-                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-white data-[state=active]:text-white dark:data-[state=active]:text-black text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
+                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-[#4A8ABF] data-[state=active]:text-white dark:data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
               >
                 <CheckCircle2 className="h-3 w-3 mr-1.5" />
                 Results
@@ -505,12 +519,12 @@ const DocumentsPage = () => {
                   if (!hasSubmitted && !hasResults) return null
 
                   return (
-                    <Card key={getAppId(app)} className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40 transition-shadow duration-300 overflow-hidden">
+                    <Card key={getAppId(app)} className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/10 transition-shadow duration-300 overflow-hidden hover:shadow-sm dark:hover:shadow-white/5">
                       <CardHeader className="border-b border-gray-100/50 dark:border-white/5 pb-3 px-4 pt-4 sm:px-5 sm:pt-5">
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-[#0A3269]/10 dark:bg-white/10 flex items-center justify-center">
-                              <FolderOpen className="w-4 h-4 text-[#0A3269] dark:text-white" />
+                            <div className="w-8 h-8 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 flex items-center justify-center">
+                              <FolderOpen className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                             </div>
                             <div>
                               <CardTitle className="text-sm sm:text-base font-light text-gray-900 dark:text-white">
@@ -521,7 +535,7 @@ const DocumentsPage = () => {
                               </CardDescription>
                             </div>
                           </div>
-                          <Badge className="rounded-full px-3 py-0.5 font-light bg-[#0A3269]/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-gray-200/50 dark:border-white/5 text-[10px]">
+                          <Badge className="rounded-full px-3 py-0.5 font-light bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 text-gray-600 dark:text-gray-400 border border-gray-200/50 dark:border-white/5 text-[10px]">
                             {hasSubmitted ? app.attachments.length : 0} submitted · {hasResults ? (app as any).resultDocuments.length : 0} results
                           </Badge>
                           {isAmer && (
@@ -529,7 +543,7 @@ const DocumentsPage = () => {
                               variant="outline"
                               size="sm"
                               onClick={() => openUploadDialog(getAppId(app))}
-                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] hover:text-[#0A3269]"
+                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] dark:hover:border-[#4A8ABF] hover:text-[#0A3269] dark:hover:text-[#4A8ABF]"
                             >
                               <Upload className="w-3 h-3 mr-1" />
                               Upload Results
@@ -537,35 +551,75 @@ const DocumentsPage = () => {
                           )}
                         </div>
                       </CardHeader>
-                      <CardContent className="pt-3 pb-3 px-4 sm:px-5 space-y-4">
-                        {hasSubmitted && (
-                          <div>
-                            <h4 className="text-[10px] font-light text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                              <FileText className="w-3 h-3" />
-                              Submitted Documents ({app.attachments.length})
-                            </h4>
-                            <div className="space-y-1.5">
-                              {app.attachments.map((doc: any, idx: number) => (
-                                <DocRow key={getDocId(doc) || idx} doc={doc} app={app} variant="submitted" index={idx} />
-                              ))}
-                            </div>
-                          </div>
-                        )}
+                  <CardContent className="pt-4 pb-4 px-4 sm:px-6 space-y-5">
+  {hasSubmitted && (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <div className="p-1 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
+            <FileText className="w-3.5 h-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
+          </div>
+          <span>Submitted Documents</span>
+          <Badge className="bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF] border-0 text-[10px] font-light px-2 py-0 rounded-full">
+            {app.attachments.length}
+          </Badge>
+        </h4>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-7 text-[10px] text-gray-400 hover:text-[#0A3269] dark:hover:text-[#4A8ABF] hover:bg-[#0A3269]/5 dark:hover:bg-[#4A8ABF]/10 rounded-lg px-2"
+        >
+          View All
+          <ChevronRight className="w-3 h-3 ml-0.5" />
+        </Button>
+      </div>
+      <div className="space-y-2">
+        {app.attachments.slice(0, 3).map((doc: any, idx: number) => (
+          <DocRow key={getDocId(doc) || idx} doc={doc} app={app} variant="submitted" index={idx} />
+        ))}
+        {app.attachments.length > 3 && (
+          <button className="w-full text-center text-[10px] text-gray-400 hover:text-[#0A3269] dark:hover:text-[#4A8ABF] py-1.5 transition-colors duration-200 font-light">
+            + {app.attachments.length - 3} more documents
+          </button>
+        )}
+      </div>
+    </div>
+  )}
 
-                        {hasResults && (
-                          <div>
-                            <h4 className="text-[10px] font-light text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                              <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                              Result Documents ({(app as any).resultDocuments.length})
-                            </h4>
-                            <div className="space-y-1.5">
-                              {(app as any).resultDocuments.map((doc: any, idx: number) => (
-                                <DocRow key={getDocId(doc) || idx} doc={doc} app={app} variant="result" index={idx} />
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </CardContent>
+  {hasResults && (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <div className="p-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/30">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          </div>
+          <span>Result Documents</span>
+          <Badge className="bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border-0 text-[10px] font-light px-2 py-0 rounded-full">
+            {(app as any).resultDocuments.length}
+          </Badge>
+        </h4>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-7 text-[10px] text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 rounded-lg px-2"
+        >
+          View All
+          <ChevronRight className="w-3 h-3 ml-0.5" />
+        </Button>
+      </div>
+      <div className="space-y-2">
+        {(app as any).resultDocuments.slice(0, 3).map((doc: any, idx: number) => (
+          <DocRow key={getDocId(doc) || idx} doc={doc} app={app} variant="result" index={idx} />
+        ))}
+        {(app as any).resultDocuments.length > 3 && (
+          <button className="w-full text-center text-[10px] text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 py-1.5 transition-colors duration-200 font-light">
+            + {(app as any).resultDocuments.length - 3} more results
+          </button>
+        )}
+      </div>
+    </div>
+  )}
+</CardContent>
                     </Card>
                   )
                 })
@@ -579,10 +633,10 @@ const DocumentsPage = () => {
                 applications
                   .filter((app) => app.attachments && app.attachments.length > 0)
                   .map((app) => (
-                    <Card key={getAppId(app)} className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40 transition-shadow duration-300 overflow-hidden">
+                    <Card key={getAppId(app)} className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40 transition-shadow duration-300 overflow-hidden hover:shadow-sm dark:hover:shadow-white/5">
                       <CardHeader className="border-b border-gray-100/50 dark:border-white/5 pb-3 px-4 pt-4 sm:px-5 sm:pt-5">
                         <CardTitle className="text-sm sm:text-base font-light text-gray-900 dark:text-white flex items-center gap-2">
-                          <FileText className="w-4 h-4 text-[#0A3269] dark:text-white" />
+                          <FileText className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
                           {titleCase(app.applicationType)}
                         </CardTitle>
                       </CardHeader>
@@ -608,7 +662,7 @@ const DocumentsPage = () => {
                     isAmer && applications.length > 0 && (
                       <Button
                         onClick={() => openUploadDialog(getAppId(applications[0]))}
-                        className="bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] text-white rounded-xl px-4 py-2 text-sm font-medium"
+                        className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-xl px-4 py-2 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300"
                       >
                         <Upload className="w-4 h-4 mr-2" />
                         Upload Results Now
@@ -620,7 +674,7 @@ const DocumentsPage = () => {
                 applications
                   .filter((app) => (app as any).resultDocuments && (app as any).resultDocuments.length > 0)
                   .map((app) => (
-                    <Card key={getAppId(app)} className="rounded-xl border border-emerald-200/40 dark:border-emerald-800/20 bg-emerald-50/20 dark:bg-emerald-950/5 transition-shadow duration-300 overflow-hidden">
+                    <Card key={getAppId(app)} className="rounded-xl border border-emerald-200/60 dark:border-emerald-800/20 bg-emerald-50/30 dark:bg-emerald-950/5 transition-shadow duration-300 overflow-hidden hover:shadow-sm">
                       <CardHeader className="border-b border-emerald-100/40 dark:border-emerald-800/15 pb-3 px-4 pt-4 sm:px-5 sm:pt-5">
                         <div className="flex items-center justify-between">
                           <CardTitle className="text-sm sm:text-base font-light flex items-center gap-2 text-gray-900 dark:text-white">
@@ -632,7 +686,7 @@ const DocumentsPage = () => {
                               variant="outline"
                               size="sm"
                               onClick={() => openUploadDialog(getAppId(app))}
-                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] hover:text-[#0A3269]"
+                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] dark:hover:border-[#4A8ABF] hover:text-[#0A3269] dark:hover:text-[#4A8ABF]"
                             >
                               <Upload className="w-3 h-3 mr-1" />
                               More Results
@@ -655,12 +709,12 @@ const DocumentsPage = () => {
         </div>
       </div>
 
-      {/* ─── Preview Modal (no shadows) ─────────────────────────────────── */}
+      {/* ─── Preview Modal ─────────────────────────────────────────────────── */}
       <Dialog open={isPreviewOpen} onOpenChange={closePreview}>
         <DialogContent className="max-w-5xl max-h-[100vh] w-[95vw] bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl">
           <DialogHeader className="flex flex-row items-center justify-between p-4 border-b border-gray-200/50 dark:border-white/10">
             <DialogTitle className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white truncate">
-              <FileText className="h-4 w-4 text-[#0A3269] dark:text-white" />
+              <FileText className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
               {previewDoc?.originalName || previewDoc?.filename || 'Document'}
             </DialogTitle>
             <Button
@@ -700,7 +754,7 @@ const DocumentsPage = () => {
                 <Button
                   size="sm"
                   onClick={() => handleDownloadDocument(previewDoc, previewApp)}
-                  className="h-8 text-xs bg-[#0A3269] hover:bg-[#1A4A8A] text-white rounded-lg px-3"
+                  className="h-8 text-xs bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg px-3"
                 >
                   <Download className="w-3.5 h-3.5 mr-1.5" />
                   Download

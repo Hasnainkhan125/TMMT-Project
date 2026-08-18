@@ -232,10 +232,11 @@ const AIChatPanel = memo(function AIChatPanel({
   service?: FlowService
   stepIndex?: number
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isArabic = i18n.language === 'ar'
   const { theme } = useContext(ThemeContext)
   const [msgs, setMsgs]     = useState<ChatMessage[]>([
-    { role: 'assistant', text: t('flow.chat.welcome') },
+    { role: 'assistant', text: isArabic ? 'مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك في طلبك؟' : t('flow.chat.welcome') },
   ])
   const [input, setInput]   = useState('')
   const [busy, setBusy]     = useState(false)
@@ -271,10 +272,10 @@ const AIChatPanel = memo(function AIChatPanel({
         }),
       })
       const d = await res.json()
-      const reply = d?.response || d?.data?.response || d?.data?.reply || t('flow.chat.thinking')
+      const reply = d?.response || d?.data?.response || d?.data?.reply || (isArabic ? 'جاري التفكير...' : t('flow.chat.thinking'))
       setMsgs(prev => [...prev, { role: 'assistant', text: reply }])
     } catch {
-      setMsgs(prev => [...prev, { role: 'assistant', text: t('flow.chat.thinking') }])
+      setMsgs(prev => [...prev, { role: 'assistant', text: isArabic ? 'جاري التفكير...' : t('flow.chat.thinking') }])
     } finally {
       setBusy(false)
     }
@@ -295,16 +296,17 @@ const AIChatPanel = memo(function AIChatPanel({
             borderColor: theme.border,
             maxHeight: 'min(520px, calc(100dvh - 8rem))',
           }}
+          dir={isArabic ? 'rtl' : 'ltr'}
         >
           {/* Header */}
           <div className="shrink-0 flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor: theme.border, backgroundColor: theme.primary }}>
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
               <Bot className="w-4 h-4 text-white" />
             </div>
-            <span className="font-semibold text-white text-[14px] flex-1">{t('flow.chat.title')}</span>
+            <span className="font-semibold text-white text-[14px] flex-1">{isArabic ? 'المساعد الذكي' : t('flow.chat.title')}</span>
             <button
               onClick={onClose}
-              aria-label={t('flow.chat.close')}
+              aria-label={isArabic ? 'إغلاق المحادثة' : t('flow.chat.close')}
               className="w-7 h-7 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"
             >
               <XCircle className="w-4 h-4" />
@@ -314,12 +316,12 @@ const AIChatPanel = memo(function AIChatPanel({
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3" style={{ backgroundColor: theme.background }}>
             {msgs.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={i} className={`flex ${m.role === 'user' ? (isArabic ? 'justify-start' : 'justify-end') : (isArabic ? 'justify-end' : 'justify-start')}`}>
                 <div
                   className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed ${
                     m.role === 'user'
-                      ? 'rounded-br-sm'
-                      : 'rounded-bl-sm border'
+                      ? isArabic ? 'rounded-bl-sm' : 'rounded-br-sm'
+                      : isArabic ? 'rounded-br-sm' : 'rounded-bl-sm border'
                   }`}
                   style={{
                     backgroundColor: m.role === 'user' ? theme.primary : theme.surface,
@@ -354,7 +356,7 @@ const AIChatPanel = memo(function AIChatPanel({
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
-              placeholder={t('flow.chat.placeholder')}
+              placeholder={isArabic ? 'اسألني أي شيء...' : t('flow.chat.placeholder')}
               className="flex-1 text-[14px] border rounded-xl px-3 py-2 outline-none transition-colors placeholder:text-[#94A3B8]"
               style={{
                 backgroundColor: theme.surface,
@@ -381,7 +383,8 @@ const AIChatPanel = memo(function AIChatPanel({
 // Login Gate (shown inline when not authed)
 // ─────────────────────────────────────────
 const LoginGate = memo(function LoginGate({ onDismiss }: { onDismiss: () => void }) {
-  const { t }      = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isArabic = i18n.language === 'ar'
   const navigate   = useNavigate()
   const { theme }  = useContext(ThemeContext)
 
@@ -390,6 +393,7 @@ const LoginGate = memo(function LoginGate({ onDismiss }: { onDismiss: () => void
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
       className="fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-black/30 backdrop-blur-sm px-4 pb-6 sm:pb-0"
+      dir={isArabic ? 'rtl' : 'ltr'}
     >
       <motion.div
         initial={{ y: 32 }}
@@ -401,8 +405,8 @@ const LoginGate = memo(function LoginGate({ onDismiss }: { onDismiss: () => void
           <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto" style={{ backgroundColor: theme.primary + '20', border: `1px solid ${theme.primary}30` }}>
             <LogIn className="w-5 h-5" style={{ color: theme.primary }} />
           </div>
-          <h3 className="font-bold text-[20px]" style={{ color: theme.text }}>{t('flow.loginRequired')}</h3>
-          <p className="text-[14px] leading-relaxed" style={{ color: theme.textSecondary }}>{t('flow.loginDesc')}</p>
+          <h3 className="font-bold text-[20px]" style={{ color: theme.text }}>{isArabic ? 'تسجيل الدخول مطلوب' : t('flow.loginRequired')}</h3>
+          <p className="text-[14px] leading-relaxed" style={{ color: theme.textSecondary }}>{isArabic ? 'يرجى تسجيل الدخول للمتابعة مع طلبك.' : t('flow.loginDesc')}</p>
         </div>
 
         <div className="space-y-2.5">
@@ -412,7 +416,7 @@ const LoginGate = memo(function LoginGate({ onDismiss }: { onDismiss: () => void
             style={{ backgroundColor: theme.primary, color: theme.buttonText }}
           >
             <LogIn className="w-4 h-4" />
-            {t('flow.loginBtn')}
+            {isArabic ? 'تسجيل الدخول' : t('flow.loginBtn')}
           </Button>
           <Button
             onClick={() => navigate('/auth?mode=signup&redirect=/apply')}
@@ -421,14 +425,14 @@ const LoginGate = memo(function LoginGate({ onDismiss }: { onDismiss: () => void
             style={{ borderColor: theme.border, color: theme.text }}
           >
             <UserPlus className="w-4 h-4" />
-            {t('flow.signUpBtn')}
+            {isArabic ? 'إنشاء حساب' : t('flow.signUpBtn')}
           </Button>
           <button
             onClick={onDismiss}
             className="w-full text-[13px] py-1 transition-colors"
             style={{ color: theme.textSecondary }}
           >
-            {t('common.cancel')}
+            {isArabic ? 'إلغاء' : t('common.cancel')}
           </button>
         </div>
       </motion.div>
@@ -441,7 +445,8 @@ const LoginGate = memo(function LoginGate({ onDismiss }: { onDismiss: () => void
 // ─────────────────────────────────────────
 function UserInfoStep({ onNext }: { onNext: () => void }) {
   const { user } = useAuth()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isArabic = i18n.language === 'ar'
   const { theme } = useContext(ThemeContext)
   const navigate = useNavigate()
   const [isFetching, setIsFetching] = useState(false)
@@ -492,26 +497,26 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
   const infoItems = [
     { 
       icon: User, 
-      label: t('userInfo.fullName', 'Full Name'), 
-      value: userData.name || t('userInfo.notProvided', 'Not provided'),
+      label: isArabic ? 'الاسم الكامل' : t('userInfo.fullName', 'Full Name'), 
+      value: userData.name || (isArabic ? 'غير متوفر' : t('userInfo.notProvided', 'Not provided')),
       key: 'name'
     },
     { 
       icon: Mail, 
-      label: t('userInfo.email', 'Email Address'), 
-      value: userData.email || t('userInfo.notProvided', 'Not provided'),
+      label: isArabic ? 'البريد الإلكتروني' : t('userInfo.email', 'Email Address'), 
+      value: userData.email || (isArabic ? 'غير متوفر' : t('userInfo.notProvided', 'Not provided')),
       key: 'email'
     },
     { 
       icon: Phone, 
-      label: t('userInfo.phone', 'Phone Number'), 
-      value: phoneValue || t('userInfo.notProvided', 'Not provided'),
+      label: isArabic ? 'رقم الهاتف' : t('userInfo.phone', 'Phone Number'), 
+      value: phoneValue || (isArabic ? 'غير متوفر' : t('userInfo.notProvided', 'Not provided')),
       key: 'phone'
     },
   ]
 
-  const hasAllInfo = infoItems.every(item => item.value !== t('userInfo.notProvided', 'Not provided'))
-  const missingFields = infoItems.filter(item => item.value === t('userInfo.notProvided', 'Not provided'))
+  const hasAllInfo = infoItems.every(item => item.value !== (isArabic ? 'غير متوفر' : t('userInfo.notProvided', 'Not provided')))
+  const missingFields = infoItems.filter(item => item.value === (isArabic ? 'غير متوفر' : t('userInfo.notProvided', 'Not provided')))
 
   const fetchUserProfile = async () => {
     setIsFetching(true)
@@ -539,7 +544,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
       }
     } catch (error) {
       console.error('Failed to fetch user profile:', error)
-      setFetchError(t('userInfo.fetchError', 'Could not fetch phone number'))
+      setFetchError(isArabic ? 'تعذر الحصول على رقم الهاتف' : t('userInfo.fetchError', 'Could not fetch phone number'))
     } finally {
       setIsFetching(false)
     }
@@ -555,6 +560,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="max-w-lg mx-auto w-full"
+      dir={isArabic ? 'rtl' : 'ltr'}
     >
       <div className="space-y-6 md:space-y-8">
         {/* Header */}
@@ -571,21 +577,21 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
             className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight"
             style={{ color: theme.text, fontFamily: "'Fraunces', serif" }}
           >
-            {t('userInfo.title', 'Your Information')}
+            {isArabic ? 'معلوماتك' : t('userInfo.title', 'Your Information')}
           </h2>
           <p className="text-sm md:text-base" style={{ color: theme.textSecondary }}>
-            {t('userInfo.subtitle', "We'll use this information from your account")}
+            {isArabic ? 'سنستخدم هذه المعلومات من حسابك' : t('userInfo.subtitle', "We'll use this information from your account")}
           </p>
         </div>
 
         {/* Info Cards */}
         <div className="space-y-2.5 sm:space-y-3">
           {infoItems.map((item, index) => {
-            const hasValue = item.value !== t('userInfo.notProvided', 'Not provided')
+            const hasValue = item.value !== (isArabic ? 'غير متوفر' : t('userInfo.notProvided', 'Not provided'))
             return (
               <motion.div
                 key={item.key}
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: isArabic ? 20 : -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 + index * 0.08, duration: 0.4 }}
                 className={`
@@ -602,10 +608,10 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
                     : '1px solid rgba(251, 191, 36, 0.25)',
                 }}
               >
-                {/* Left Accent Line */}
+                {/* Accent Line */}
                 <div 
                   className={`
-                    absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full
+                    absolute ${isArabic ? 'right-0 rounded-l-full' : 'left-0 rounded-r-full'} top-1/2 -translate-y-1/2 w-1 h-8
                     transition-all duration-300 group-hover:h-10
                     ${hasValue ? 'bg-[var(--primary)]' : 'bg-amber-500'}
                     opacity-0 group-hover:opacity-100
@@ -655,7 +661,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
                     </motion.div>
                   ) : (
                     <span className="text-[9px] sm:text-[10px] font-medium text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">
-                      {t('userInfo.missing', 'Missing')}
+                      {isArabic ? 'مفقود' : t('userInfo.missing', 'Missing')}
                     </span>
                   )}
                 </div>
@@ -685,11 +691,11 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium" style={{ color: theme.text }}>
-                  {t('userInfo.missingInfoTitle', 'Missing Information')}
+                  {isArabic ? 'معلومات مفقودة' : t('userInfo.missingInfoTitle', 'Missing Information')}
                 </p>
                 <p className="text-xs mt-0.5 leading-relaxed" style={{ color: theme.textSecondary }}>
-                  {missingFields.map(f => f.label).join(', ')} {missingFields.length === 1 ? t('userInfo.isMissing', 'is') : t('userInfo.areMissing', 'are')} {t('userInfo.missingFromProfile', 'missing from your profile.')}
-                  {phoneValue ? '' : t('userInfo.phoneRequired', ' Please add your phone number to continue.')}
+                  {missingFields.map(f => f.label).join(', ')} {missingFields.length === 1 ? (isArabic ? 'مفقود' : t('userInfo.isMissing', 'is')) : (isArabic ? 'مفقودة' : t('userInfo.areMissing', 'are'))} {isArabic ? 'من ملفك الشخصي.' : t('userInfo.missingFromProfile', 'missing from your profile.')}
+                  {phoneValue ? '' : (isArabic ? ' يرجى إضافة رقم هاتفك للمتابعة.' : t('userInfo.phoneRequired', ' Please add your phone number to continue.'))}
                 </p>
               </div>
             </div>
@@ -706,7 +712,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
                 }}
               >
                 <User className="w-4 h-4 mr-2" />
-                {t('userInfo.updateProfile', 'Update Profile')}
+                {isArabic ? 'تحديث الملف الشخصي' : t('userInfo.updateProfile', 'Update Profile')}
               </Button>
               {!phoneValue && (
                 <Button
@@ -719,7 +725,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
                   ) : (
                     <RefreshCw className="w-4 h-4 mr-2" />
                   )}
-                  {isFetching ? t('userInfo.fetching', 'Fetching...') : t('userInfo.refresh', 'Refresh')}
+                  {isFetching ? (isArabic ? 'جاري التحميل...' : t('userInfo.fetching', 'Fetching...')) : (isArabic ? 'تحديث' : t('userInfo.refresh', 'Refresh'))}
                 </Button>
               )}
             </div>
@@ -746,8 +752,12 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
             {/* Shine Effect */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             
-            <span className="relative z-10">{t('common.continue', 'Continue')}</span>
-            <ArrowRight className="w-4 h-4 ml-2 relative z-10 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2} />
+            <span className="relative z-10">{isArabic ? 'متابعة' : t('common.continue', 'Continue')}</span>
+            {isArabic ? (
+              <ArrowRight className="w-4 h-4 mr-2 relative z-10 group-hover:-translate-x-1 transition-transform duration-300 rotate-180" strokeWidth={2} />
+            ) : (
+              <ArrowRight className="w-4 h-4 ml-2 relative z-10 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2} />
+            )}
           </Button>
         </motion.div>
 
@@ -761,21 +771,21 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
           <div className="flex items-center gap-1.5">
             <Shield className="w-3.5 h-3.5" style={{ color: theme.textSecondary }} />
             <span className="text-[9px] sm:text-[10px]" style={{ color: theme.textSecondary }}>
-              {t('userInfo.secure', 'Secure & Encrypted')}
+              {isArabic ? 'آمن ومشفر' : t('userInfo.secure', 'Secure & Encrypted')}
             </span>
           </div>
           <span className="w-px h-4" style={{ backgroundColor: theme.border }} />
           <div className="flex items-center gap-1.5">
             <Lock className="w-3.5 h-3.5" style={{ color: theme.textSecondary }} />
             <span className="text-[9px] sm:text-[10px]" style={{ color: theme.textSecondary }}>
-              {t('userInfo.privacy', 'Privacy Protected')}
+              {isArabic ? 'خصوصية محمية' : t('userInfo.privacy', 'Privacy Protected')}
             </span>
           </div>
           <span className="w-px h-4" style={{ backgroundColor: theme.border }} />
           <div className="flex items-center gap-1.5">
             <Check className="w-3.5 h-3.5" style={{ color: theme.textSecondary }} />
             <span className="text-[9px] sm:text-[10px]" style={{ color: theme.textSecondary }}>
-              {t('userInfo.verified', 'Verified Account')}
+              {isArabic ? 'حساب موثق' : t('userInfo.verified', 'Verified Account')}
             </span>
           </div>
         </motion.div>
@@ -794,7 +804,8 @@ export default function ApplicationFlow({
   queryParams,
   initialService,
 }: ApplicationFlowProps) {
-  const { t }    = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isArabic = i18n.language === 'ar'
   const { user } = useAuth()
   const { theme } = useContext(ThemeContext)
   const navigate = useNavigate()
@@ -924,8 +935,8 @@ export default function ApplicationFlow({
     setChatOpen(false)
     setShowLogin(false)
     // Optional: show a toast notification
-    toast.info(t('flow.reset', 'Flow reset successfully'))
-  }, [t])
+    toast.info(isArabic ? 'تم إعادة تعيين التدفق بنجاح' : t('flow.reset', 'Flow reset successfully'))
+  }, [t, isArabic])
 
   // ── Create application ───────────────────
   const createApplication = useCallback(async (merged: FlowData): Promise<string | undefined> => {
@@ -960,7 +971,7 @@ export default function ApplicationFlow({
         }),
       })
       const d = await res.json()
-      if (!res.ok) { toast.error(d?.message || 'Failed to create application'); return undefined }
+      if (!res.ok) { toast.error(d?.message || (isArabic ? 'فشل إنشاء الطلب' : 'Failed to create application')); return undefined }
 
       const appId: string = d?.data?.application?._id
       if (!appId) return undefined
@@ -981,12 +992,12 @@ export default function ApplicationFlow({
       }
       return appId
     } catch {
-      toast.error('Network error — please try again')
+      toast.error(isArabic ? 'خطأ في الشبكة — يرجى المحاولة مرة أخرى' : 'Network error — please try again')
       return undefined
     } finally {
       setCreating(false)
     }
-  }, [token, user])
+  }, [token, user, isArabic])
 
   // ── Doc defs from selected service ───────
   const docDefs = (() => {
@@ -1034,7 +1045,7 @@ export default function ApplicationFlow({
       return (
         <div className="flex flex-col items-center justify-center gap-5 h-64">
           <div className="w-14 h-14 rounded-full border-4 border-[#BBF451] border-t-transparent animate-spin" />
-          <p className="text-[#64748B] text-sm">{t('flow.creating')}</p>
+          <p className="text-[#64748B] text-sm">{isArabic ? 'جاري إنشاء طلبك...' : t('flow.creating')}</p>
         </div>
       )
     }
@@ -1046,13 +1057,13 @@ export default function ApplicationFlow({
       case 'sponsorType':
         return (
           <InputStep
-            label={t('flow.sponsorLabel', 'Who will sponsor this visa?')}
+            label={isArabic ? 'من سيرعى هذه التأشيرة؟' : t('flow.sponsorLabel', 'Who will sponsor this visa?')}
             fieldKey="sponsorType"
             type="options"
             options={[
-              { value: 'employee', label: t('flow.sponsor.employee', 'I work for a company'),      description: t('flow.sponsor.employeeDesc', 'Your employer is sponsoring you') },
-              { value: 'investor', label: t('flow.sponsor.investor', 'I own a business'),          description: t('flow.sponsor.investorDesc', 'You are an investor or owner') },
-              { value: 'partner',  label: t('flow.sponsor.partner',  'I am a business partner'),   description: t('flow.sponsor.partnerDesc',  'You co-own a business') },
+              { value: 'employee', label: isArabic ? 'أعمل في شركة' : t('flow.sponsor.employee', 'I work for a company'),      description: isArabic ? 'جهة عملك هي الراعي' : t('flow.sponsor.employeeDesc', 'Your employer is sponsoring you') },
+              { value: 'investor', label: isArabic ? 'أمتلك شركة' : t('flow.sponsor.investor', 'I own a business'),          description: isArabic ? 'أنت مستثمر أو مالك' : t('flow.sponsor.investorDesc', 'You are an investor or owner') },
+              { value: 'partner',  label: isArabic ? 'أنا شريك في شركة' : t('flow.sponsor.partner',  'I am a business partner'),   description: isArabic ? 'أنت شريك في الشركة' : t('flow.sponsor.partnerDesc',  'You co-own a business') },
             ]}
             onNext={d => advance(d)}
           />
@@ -1061,12 +1072,12 @@ export default function ApplicationFlow({
       case 'location':
         return (
           <InputStep
-            label={t('flow.locationLabel', 'Where are you applying from?')}
+            label={isArabic ? 'من أين تتقدم بالطلب؟' : t('flow.locationLabel', 'Where are you applying from?')}
             fieldKey="location"
             type="options"
             options={[
-              { value: 'inside',  label: t('flow.location.inside',  'Inside UAE'),  description: t('flow.location.insideDesc',  'Already in the country') },
-              { value: 'outside', label: t('flow.location.outside', 'Outside UAE'), description: t('flow.location.outsideDesc', 'Applying from abroad') },
+              { value: 'inside',  label: isArabic ? 'داخل الإمارات' : t('flow.location.inside',  'Inside UAE'),  description: isArabic ? 'أنت بالفعل في الدولة' : t('flow.location.insideDesc',  'Already in the country') },
+              { value: 'outside', label: isArabic ? 'خارج الإمارات' : t('flow.location.outside', 'Outside UAE'), description: isArabic ? 'تتقدم من الخارج' : t('flow.location.outsideDesc', 'Applying from abroad') },
             ]}
             onNext={d => advance(d)}
           />
@@ -1105,17 +1116,17 @@ export default function ApplicationFlow({
             onSuccess={() => {
               // Clear localStorage on successful payment
               localStorage.removeItem(LS_KEY)
-              toast.success(t('payment.success', 'Payment successful!'))
+              toast.success(isArabic ? 'تم الدفع بنجاح!' : t('payment.success', 'Payment successful!'))
               advance()
             }}
-            onError={err => toast.error(`${t('payment.failed', 'Payment failed')}: ${err}`)}
+            onError={err => toast.error(`${isArabic ? 'فشل الدفع' : t('payment.failed', 'Payment failed')}: ${err}`)}
           />
         )
 
       case 'success':
         return (
           <SuccessStep
-            serviceName={data.service?.name || 'Visa Service'}
+            serviceName={data.service?.name || (isArabic ? 'خدمة التأشيرة' : 'Visa Service')}
             applicationId={data.applicationId}
             onClose={() => {
               localStorage.removeItem(LS_KEY)
@@ -1141,6 +1152,7 @@ export default function ApplicationFlow({
         backgroundColor: theme.background,
         color: theme.text,
       }}
+      dir={isArabic ? 'rtl' : 'ltr'}
     >
 
       {/* ── Top bar ── */}
@@ -1153,20 +1165,34 @@ export default function ApplicationFlow({
           size="icon"
           onClick={back}
           disabled={isDone}
-          aria-label={t('flow.back')}
+          aria-label={isArabic ? 'رجوع' : t('flow.back')}
           className="w-9 h-9 rounded-full disabled:opacity-0 disabled:pointer-events-none shrink-0"
           style={{ color: theme.textSecondary }}
         >
-          <ChevronLeft className="w-5 h-5" />
+          {isArabic ? (
+            <ChevronLeft className="w-5 h-5 rotate-180" />
+          ) : (
+            <ChevronLeft className="w-5 h-5" />
+          )}
         </Button>
 
         <div className="flex-1 min-w-0 space-y-1">
           <div className="flex items-center justify-between text-[11px]">
             <span className="font-semibold uppercase tracking-widest" style={{ color: theme.textSecondary }}>
-              {t(STEP_GROUP[step], STEP_GROUP[step])}
+              {isArabic ? (
+                step === 'service' ? 'اختيار الخدمة' :
+                step === 'sponsorType' || step === 'location' || step === 'userInfo' ? 'معلوماتك' :
+                step === 'upload' ? 'رفع المستندات' :
+                step === 'review' ? 'مراجعة وتقديم' :
+                step === 'payment' ? 'الدفع' :
+                step === 'success' ? 'اكتمل!' :
+                STEP_GROUP[step]
+              ) : (
+                t(STEP_GROUP[step], STEP_GROUP[step])
+              )}
             </span>
             <span className="tabular-nums" style={{ color: theme.textSecondary }}>
-              {t('flow.step', '{{current}} of {{total}}', { current: stepIndex + 1, total: STEPS.length })}
+              {isArabic ? `${stepIndex + 1} من ${STEPS.length}` : t('flow.step', '{{current}} of {{total}}', { current: stepIndex + 1, total: STEPS.length })}
             </span>
           </div>
           <Progress
@@ -1182,7 +1208,7 @@ export default function ApplicationFlow({
             variant="ghost"
             size="icon"
             onClick={resetFlow}
-            aria-label={t('flow.reset', 'Reset flow')}
+            aria-label={isArabic ? 'إعادة تعيين التدفق' : t('flow.reset', 'Reset flow')}
             className="w-9 h-9 rounded-full shrink-0"
             style={{ color: theme.textSecondary }}
           >
@@ -1194,7 +1220,7 @@ export default function ApplicationFlow({
               variant="ghost"
               size="icon"
               onClick={close}
-              aria-label={t('flow.close')}
+              aria-label={isArabic ? 'إغلاق' : t('flow.close')}
               className="w-9 h-9 rounded-full shrink-0"
               style={{ color: theme.textSecondary }}
             >
@@ -1238,18 +1264,18 @@ export default function ApplicationFlow({
 
       {/* ── Floating help bubble ── */}
       {!isDone && (
-   <motion.button
-  onClick={() => setChatOpen(v => !v)}
-  initial={{ scale: 0, opacity: 0 }}
-  animate={{ scale: 1, opacity: 1 }}
-  transition={{ delay: 2, type: 'spring', stiffness: 260, damping: 22 }}
-  className="fixed bottom-6 right-4 z-50 flex items-center gap-2 pl-4 pr-5 h-12 rounded-full text-[13px] font-medium shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all text-white dark:text-white"
-  style={{ backgroundColor: theme.primary }}
-  aria-label={t('flow.chat.helpBtn')}
->
-  <MessageCircle className="w-4 h-4 shrink-0" />
-  {t('flow.chat.helpBtn', 'Need help?')}
-</motion.button>
+        <motion.button
+          onClick={() => setChatOpen(v => !v)}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 2, type: 'spring', stiffness: 260, damping: 22 }}
+          className="fixed bottom-6 right-4 z-50 flex items-center gap-2 pl-4 pr-5 h-12 rounded-full text-[13px] font-medium shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all text-white dark:text-white"
+          style={{ backgroundColor: theme.primary }}
+          aria-label={isArabic ? 'هل تحتاج مساعدة؟' : t('flow.chat.helpBtn')}
+        >
+          <MessageCircle className="w-4 h-4 shrink-0" />
+          {isArabic ? 'هل تحتاج مساعدة؟' : t('flow.chat.helpBtn', 'Need help?')}
+        </motion.button>
       )}
 
       {/* ── Login gate overlay ── */}

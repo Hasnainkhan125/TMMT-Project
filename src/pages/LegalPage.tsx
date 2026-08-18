@@ -195,13 +195,11 @@ const LegalPage = () => {
                         whitespace-nowrap
                         transition-all duration-300
                         ${isActive 
-                          ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white shadow-lg shadow-[#0A3269]/25 dark:shadow-[#4A8ABF]/30' 
+                          ? 'bg-[#0A3269] text-white shadow-lg shadow-[#0A3269]/25' 
                           : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                         }
                       `}
                     >
-              
-                      
                       <Icon 
                         className={`h-4 w-4 sm:h-4.5 sm:w-4.5 transition-colors duration-300 ${
                           isActive 
@@ -220,7 +218,7 @@ const LegalPage = () => {
                       
                       {/* Hover Underline */}
                       {!isActive && (
-                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF] rounded-full transition-all duration-300 group-hover:w-1/2" />
+                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] rounded-full transition-all duration-300 group-hover:w-1/2" />
                       )}
                     </button>
                   );
@@ -235,8 +233,8 @@ const LegalPage = () => {
           {/* ─── SECTION 1: ABOUT TMMT ────────────────────────────────── */}
           <section id="about" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
-                <Shield className="h-5 w-5 text-[#0A3269]" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <Shield className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'عن TMMT' : 'About TMMT'}
@@ -291,7 +289,7 @@ const LegalPage = () => {
                 </div>
                 <div>
                   <p className="text-xs text-black/40 dark:text-white/40">{isArabic ? 'البريد الإلكتروني للدعم' : 'Support Email'}</p>
-                  <p className="text-sm font-medium text-[#0A3269] dark:text-[#4A8ABF]">support@tmmt.ae</p>
+                  <p className="text-sm font-medium text-[#0A3269]">support@tmmt.ae</p>
                 </div>
               </div>
             </div>
@@ -325,8 +323,8 @@ const LegalPage = () => {
           {/* ─── SECTION 2: TERMS & CONDITIONS ────────────────────────── */}
           <section id="terms" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
-                <FileText className="h-5 w-5 text-[#0A3269]" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <FileText className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'الشروط والأحكام' : 'Terms & Conditions'}
@@ -413,8 +411,8 @@ const LegalPage = () => {
           {/* ─── SECTION 3: PRIVACY POLICY ────────────────────────────── */}
           <section id="privacy" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
-                <Lock className="h-5 w-5 text-[#0A3269]" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <Lock className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'سياسة الخصوصية' : 'Privacy Policy'}
@@ -549,8 +547,8 @@ const LegalPage = () => {
           {/* ─── SECTION 4: REFUND POLICY ────────────────────────────── */}
           <section id="refund" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
-                <RefreshCw className="h-5 w-5 text-[#0A3269]" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <RefreshCw className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'سياسة الاسترداد' : 'Refund Policy'}
@@ -647,8 +645,8 @@ const LegalPage = () => {
           {/* ─── SECTION 5: GOLDEN GUARANTEE ───────────────────────────── */}
           <section id="guarantee" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-amber-500/20 dark:bg-amber-500/30">
-                <Award className="h-5 w-5 text-amber-600 dark:text-amber-400" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <Award className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'الضمان الذهبي' : 'TMMT Golden Guarantee'}
@@ -731,8 +729,8 @@ const LegalPage = () => {
           {/* ─── SECTION 6: AI POLICY ──────────────────────────────────── */}
           <section id="ai" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-purple-500/10 dark:bg-purple-500/20">
-                <MessageSquare className="h-5 w-5 text-purple-600 dark:text-purple-400" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <MessageSquare className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'سياسة الذكاء الاصطناعي' : 'AI Policy'}
@@ -798,8 +796,8 @@ const LegalPage = () => {
           {/* ─── SECTION 7: COOKIE POLICY ────────────────────────────── */}
           <section id="cookie" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-blue-500/10 dark:bg-blue-500/20">
-                <Cookie className="h-5 w-5 text-blue-600 dark:text-blue-400" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <Cookie className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'سياسة الكوكيز' : 'Cookie Policy'}
@@ -836,8 +834,8 @@ const LegalPage = () => {
           {/* ─── SECTION 8: COMPLAINTS ─────────────────────────────────── */}
           <section id="complaints" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-green-500/10 dark:bg-green-500/20">
-                <Headphones className="h-5 w-5 text-green-600 dark:text-green-400" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <Headphones className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'سياسة الشكاوى' : 'Complaints Policy'}
@@ -889,8 +887,8 @@ const LegalPage = () => {
           {/* ─── SECTION 9: FINAL DISCLAIMER ──────────────────────────── */}
           <section id="disclaimer" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-red-500/10 dark:bg-red-500/20">
-                <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" strokeWidth={1.75} />
+              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+                <AlertCircle className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
                 {isArabic ? 'إخلاء المسؤولية النهائي' : 'Disclaimer'}
@@ -921,7 +919,7 @@ const LegalPage = () => {
                     isArabic ? 'دور TMMT هو المساعدة، وليس ضمان النتائج.' : "TMMT's role is to assist, not to guarantee results."
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0A3269]/10 text-[#0A3269] text-xs font-bold">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0A3269] text-white text-xs font-bold">
                         {idx + 1}
                       </span>
                       <span className="leading-relaxed">{item}</span>

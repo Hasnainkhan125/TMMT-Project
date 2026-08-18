@@ -102,6 +102,21 @@ const getServiceImage = (serviceName: string): string => {
   return serviceImages.default
 }
 
+const getServiceIcon = (serviceName: string) => {
+  const name = serviceName.toLowerCase()
+  if (name.includes('spouse') || name.includes('wife') || name.includes('husband')) return Handshake
+  if (name.includes('family') || name.includes('child') || name.includes('son') || name.includes('daughter')) return Users
+  if (name.includes('parent') || name.includes('mother') || name.includes('father')) return Home
+  if (name.includes('investor') || name.includes('partner')) return TrendingUp
+  if (name.includes('employ') || name.includes('work')) return Briefcase
+  if (name.includes('golden')) return Crown
+  if (name.includes('emirates') || name.includes('id')) return IdCard
+  if (name.includes('medical') || name.includes('health')) return Shield
+  if (name.includes('business') || name.includes('license') || name.includes('establishment')) return Building2
+  if (name.includes('cancel')) return X
+  return FileText
+}
+
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -1539,28 +1554,25 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="max-w-[95vw] h-[94dvh] max-h-[94dvh] flex flex-col overflow-hidden p-0 bg-white dark:bg-[#0A0A0F] border-0 rounded-3xl"
+        className="max-w-[95vw] h-[94dvh] max-h-[94dvh] flex flex-col overflow-hidden p-0 bg-[#fff] dark:bg-[#07090F] border-0 rounded-3xl shadow-[0_30px_80px_-20px_rgba(10,50,105,0.35)]"
         dir={isRTL ? 'rtl' : 'ltr'}
         hideCloseButton // Add this to hide the default close button
       >
         {/* Custom Close Button - Only one X */}
         <button
           onClick={handleClose}
-          className="absolute top-0 right-0 z-50 p-2 rounded-full hover:bg-[#0A3269]/10 dark:hover:bg-white/10 transition-all duration-300 text-[#0A3269] dark:text-white/60 hover:scale-110"
+          className="absolute top-3 right-3 z-50 p- rounded-full bg-white/70 dark:bg-white/5 backdrop-blur-sm border border-[#0A3269]/10 dark:border-white/10 hover:bg-[#0A3269] hover:border-[#0A3269] group transition-all duration-300 text-[#0A3269] dark:text-white/60 hover:scale-105"
           aria-label="Close dialog"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 group-hover:text-white transition-colors duration-300" />
         </button>
 
-        {/* Minimal Background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#0A3269]/5 dark:bg-[#0A3269]/10 rounded-full blur-[120px]" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#0A3269]/3 dark:bg-[#0A3269]/8 rounded-full blur-[120px]" />
-        </div>
         <div className="flex-1 min-h-0 flex flex-col p-3 sm:p-4 lg:p-5 overflow-hidden relative z-10">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex flex-col min-h-0 flex-1">
-            {/* Clean Stepper */}
-            <div className="shrink-0 mb-4 sm:mb-6 px-1">
+            {/* Stepper */}
+            <div className="shrink-0 mb-4 sm:mb-6 px-1 pr-12">
+              <div className="flex items-center justify-between mb-2 px-1">
+              </div>
               <div className="flex items-center gap-2 sm:gap-3">
                 {(() => {
                   const steps = [
@@ -1581,30 +1593,35 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                             <button
                               onClick={() => !isDisabled && setActiveTab(s.id)}
                               disabled={isDisabled}
-                              className={`group flex items-center gap-2 sm:gap-3 flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-300 disabled:cursor-not-allowed ${
+                              className={`group relative flex items-center gap-2 sm:gap-3 flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-300 disabled:cursor-not-allowed overflow-hidden ${
                                 isActive 
-                                  ? 'bg-[#0A3269] text-white' 
+                                  ? 'bg-[#0A3269] text-white shadow-[0_8px_20px_-8px_rgba(10,50,105,0.55)]' 
                                   : isComplete
-                                    ? 'bg-[#0A3269]/10 text-[#0A3269]'
+                                    ? 'bg-[#0A3269]/10 text-[#0A3269] hover:bg-[#0A3269]/[0.14]'
                                     : 'bg-[#0A3269]/5 text-[#0A3269]/40 hover:bg-[#0A3269]/10'
                               }`}
                             >
-                              <Icon className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
+                              {isActive && (
+                                <span className="absolute inset-x-0 bottom-0 h-[2px] bg-[#0A3269]" />
+                              )}
+                              <span className={`hidden sm:flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold shrink-0 transition-all duration-300 ${
+                                isActive ? 'bg-white/15 text-white' : isComplete ? 'bg-[#0A3269]/15 text-[#0A3269]' : 'bg-[#0A3269]/10 text-[#0A3269]/40'
+                              }`}>
+                                {isComplete ? <CheckCircle className="w-3.5 h-3.5" strokeWidth={2.5} /> : idx + 1}
+                              </span>
+                              <Icon className={`w-4 h-4 sm:hidden transition-all duration-300 ${
                                 isActive ? 'text-white' : isComplete ? 'text-[#0A3269]' : 'text-inherit'
                               }`} strokeWidth={isActive ? 2.5 : 2} />
-                              <span className={`text-[10px] sm:text-xs font-medium transition-all duration-300 ${
+                              <span className={`text-[10px] sm:text-xs font-semibold tracking-wide transition-all duration-300 ${
                                 isActive ? 'text-white' : isComplete ? 'text-[#0A3269]' : 'text-inherit'
                               }`}>
                                 {s.label}
                               </span>
-                              {isComplete && (
-                                <CheckCircle className="w-3 h-3 text-[#0A3269]" strokeWidth={2.5} />
-                              )}
                             </button>
                             {idx < steps.length - 1 && (
                               <div className="flex-1 h-[2px] min-w-[12px] rounded-full bg-[#0A3269]/10 overflow-hidden">
                                 <div 
-                                  className={`h-full rounded-full bg-[#0A3269] transition-all duration-500 ${
+                                  className={`h-full rounded-full bg-gradient-to-r from-[#0A3269] to-[#0A3269 ] transition-all duration-500 ${
                                     idx < currentIdx ? 'w-full' : 'w-0'
                                   }`}
                                 />
@@ -1643,14 +1660,17 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                         <div className="relative flex flex-col min-h-0 flex-1 p-3 sm:p-4 lg:p-5 pt-4 sm:pt-5 overflow-hidden">
                           {/* Search Bar */}
                           <div className="relative mb-3 sm:mb-4">
-                            <div className="relative flex items-center gap-2 sm:gap-3 rounded-xl bg-[#0A3269]/5 dark:bg-[#0A3269]/10 border border-[#0A3269]/10 dark:border-white/5 px-3 sm:px-4 py-2 transition-all duration-300 focus-within:border-[#0A3269]/30">
-                              <Search className="w-4 h-4 text-[#0A3269]/40 dark:text-white/30" strokeWidth={2} />
+                            <div className="relative flex items-center gap-2 sm:gap-3 rounded-xl bg-white dark:bg-[#0A3269]/10 border border-[#0A3269]/12 dark:border-white/5 px-3 sm:px-4 py-2 shadow-sm transition-all duration-300 focus-within:border-[#0A3269]/40 focus-within:shadow-[0_0_0_3px_rgba(10,50,105,0.08)]">
+                              <Search className="w-4 h-4 text-[#0A3269]/50 dark:text-white/30" strokeWidth={2} />
                               <Input
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 placeholder={t("startApplication.serviceSelection.searchPlaceholder")}
                                 className="flex-1 h-8 bg-transparent border-0 px-0 text-xs sm:text-sm font-medium text-foreground/90 dark:text-white/90 placeholder:text-[#0A3269]/40 dark:placeholder:text-white/30 shadow-none ring-0 outline-none"
                               />
+                              <span className="hidden sm:inline text-[9px] font-semibold tracking-wide uppercase text-[#0A3269]/30 border border-[#0A3269]/15 rounded-md px-1.5 py-0.5">
+                                {filtered.length}
+                              </span>
                             </div>
                           </div>
 
@@ -1658,6 +1678,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 flex-1 overflow-y-auto pr-1 min-h-0">
                             {filtered.map((service, index) => {
                               const isSelected = selected?.id === service.id
+                              const ServiceIcon = getServiceIcon(service.name)
                               return (
                                 <div
                                   key={service.id}
@@ -1670,17 +1691,32 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                                       setTimeout(() => setActiveTab('sponsor-info'), 300)
                                     }
                                   }}
-                                  className={`relative cursor-pointer rounded-xl transition-all duration-300 p-3 sm:p-4 border ${
+                                  className={`group relative cursor-pointer rounded-xl transition-all duration-300 p-3 sm:p-4 border ${
                                     isSelected
-                                      ? 'border-[#0A3269] bg-[#0A3269]/5 dark:bg-[#0A3269]/10'
-                                      : 'border-[#0A3269]/10 dark:border-white/5 hover:border-[#0A3269]/30 hover:bg-[#0A3269]/5'
+                                      ? 'border-[#0A3269] bg-[#0A3269]/[0.04] dark:bg-[#0A3269]/10 shadow-[0_10px_24px_-12px_rgba(10,50,105,0.4)] -translate-y-0.5'
+                                      : 'border-[#0A3269]/10 dark:border-white/5 bg-white dark:bg-transparent hover:border-[#0A3269]/25 hover:shadow-[0_10px_24px_-14px_rgba(10,50,105,0.3)] hover:-translate-y-0.5'
                                   }`}
                                 >
-                                  <div className="flex items-start justify-between gap-2">
+                                  {isSelected && (
+                                    <span className="absolute -top-px -right-px w-8 h-8 overflow-hidden rounded-tr-xl">
+                                      <span className="absolute top-0 right-0 w-11 h-11 bg-[#0A3269] rotate-45 translate-x-[15px] -translate-y-[15px]" />
+                                    </span>
+                                  )}
+                                  <div className="flex items-start gap-2.5">
+                                    <div className={`shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-colors duration-300 ${
+                                      isSelected ? 'bg-[#0A3269] text-white' : 'bg-[#0A3269]/8 text-[#0A3269]/70 group-hover:bg-[#0A3269]/14'
+                                    }`}>
+                                      <ServiceIcon className="w-4 h-4" strokeWidth={2} />
+                                    </div>
                                     <div className="flex-1 min-w-0">
-                                      <h3 className="text-sm sm:text-base font-semibold text-foreground/90 dark:text-white/90">
-                                        {service.name}
-                                      </h3>
+                                      <div className="flex items-start justify-between gap-2">
+                                        <h3 className="text-sm sm:text-base font-semibold text-foreground/90 dark:text-white/90 leading-snug">
+                                          {service.name}
+                                        </h3>
+                                        {!isSelected && (
+                                          <ChevronRight className="w-4 h-4 text-[#0A3269]/25 dark:text-white/20 shrink-0 mt-0.5 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={2} />
+                                        )}
+                                      </div>
                                       <p className="text-[10px] sm:text-xs text-foreground/50 dark:text-white/40 mt-0.5 line-clamp-2">
                                         {service.description}
                                       </p>
@@ -1699,11 +1735,6 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                                         </div>
                                       </div>
                                     </div>
-                                    {isSelected ? (
-                                      <CheckCircle className="w-5 h-5 text-[#0A3269] shrink-0" strokeWidth={2.5} />
-                                    ) : (
-                                      <ChevronRight className="w-5 h-5 text-[#0A3269]/30 dark:text-white/20 shrink-0" strokeWidth={2} />
-                                    )}
                                   </div>
                                 </div>
                               )
@@ -1730,21 +1761,28 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                       <div className="relative bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/10 dark:border-white/5 rounded-2xl flex flex-col min-h-0 flex-1 overflow-hidden">
                         <div className="shrink-0 px-4 sm:px-5 pt-4 pb-3 border-b border-[#0A3269]/10 dark:border-white/5">
                           <div className="flex items-center gap-2.5">
-                            <User className="w-4 h-4 text-[#0A3269] dark:text-white/60" strokeWidth={2} />
-                            <span className="text-sm sm:text-base font-semibold text-foreground/90 dark:text-white/90">
-                              {t('startApplication.sponsorInfo.title')}
-                            </span>
+                            <div className="w-7 h-7 rounded-lg bg-[#0A3269] flex items-center justify-center">
+                              <User className="w-3.5 h-3.5 text-white" strokeWidth={2} />
+                            </div>
+                            <div>
+                              <span className="block text-sm sm:text-base font-semibold text-foreground/90 dark:text-white/90">
+                                {t('startApplication.sponsorInfo.title')}
+                              </span>
+                              {selected?.name && (
+                                <span className="block text-[10px] text-foreground/40 dark:text-white/30">{selected.name}</span>
+                              )}
+                            </div>
                           </div>
                         </div>
 
                         <div className="flex-1 overflow-y-auto min-h-0 p-4 sm:p-5 space-y-4 sm:space-y-5">
                           {/* Sponsor Type */}
                           <div className="space-y-2">
-                            <Label className="text-xs sm:text-sm font-semibold text-foreground/80 dark:text-white/70 flex items-center gap-2">
-                              <Users className="w-4 h-4 text-[#0A3269]/60 dark:text-white/40" strokeWidth={2} />
+                            <Label className="text-[9px] sm:text-[10px] font-semibold tracking-[0.14em] uppercase text-foreground/50 dark:text-white/40 flex items-center gap-1.5">
+                              <Users className="w-3.5 h-3.5 text-[#0A3269]/60 dark:text-white/40" strokeWidth={2} />
                               {t('startApplication.sponsorInfo.sponsorType')}
                             </Label>
-                            <div className="grid grid-cols-3 gap-2">
+                            <div className="grid grid-cols-3 gap-2 p-1 rounded-xl bg-[#0A3269]/5 dark:bg-[#0A3269]/10">
                               {[
                                 { value: 'employee', label: t('startApplication.sponsorInfo.employee'), icon: Users },
                                 { value: 'investor', label: t('startApplication.sponsorInfo.investor'), icon: TrendingUp },
@@ -1757,13 +1795,13 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                                     key={type.value}
                                     type="button"
                                     onClick={() => setSponsorInfo(prev => ({ ...prev, sponsorType: type.value as any }))}
-                                    className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
+                                    className={`flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 px-2 sm:px-3 rounded-lg text-[11px] sm:text-sm font-medium transition-all duration-300 ${
                                       isActive
-                                        ? 'bg-[#0A3269] text-white'
-                                        : 'bg-[#0A3269]/5 dark:bg-[#0A3269]/10 text-foreground/60 dark:text-white/50 hover:bg-[#0A3269]/10'
+                                        ? 'bg-[#0A3269] text-white shadow-sm'
+                                        : 'text-foreground/60 dark:text-white/50 hover:bg-white/60 dark:hover:bg-white/5'
                                     }`}
                                   >
-                                    <Icon className={`w-4 h-4 ${isActive ? 'text-white/90' : 'text-[#0A3269]/40 dark:text-white/40'}`} strokeWidth={2} />
+                                    <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isActive ? 'text-white/90' : 'text-[#0A3269]/40 dark:text-white/40'}`} strokeWidth={2} />
                                     <span>{type.label}</span>
                                   </button>
                                 )
@@ -1773,11 +1811,11 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
 
                           {/* Location */}
                           <div className="space-y-2">
-                            <Label className="text-xs sm:text-sm font-semibold text-foreground/80 dark:text-white/70 flex items-center gap-2">
-                              <MapPin className="w-4 h-4 text-[#0A3269]/60 dark:text-white/40" strokeWidth={2} />
+                            <Label className="text-[9px] sm:text-[10px] font-semibold tracking-[0.14em] uppercase text-foreground/50 dark:text-white/40 flex items-center gap-1.5">
+                              <MapPin className="w-3.5 h-3.5 text-[#0A3269]/60 dark:text-white/40" strokeWidth={2} />
                               {t('startApplication.sponsorInfo.location')}
                             </Label>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-[#0A3269]/5 dark:bg-[#0A3269]/10">
                               {[
                                 { value: 'inside', label: t('startApplication.sponsorInfo.insideUae'), icon: Home },
                                 { value: 'outside', label: t('startApplication.sponsorInfo.outsideUae'), icon: Globe },
@@ -1789,10 +1827,10 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                                     key={loc.value}
                                     type="button"
                                     onClick={() => setSponsorInfo(prev => ({ ...prev, location: loc.value as any }))}
-                                    className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
+                                    className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${
                                       isActive
-                                        ? 'bg-[#0A3269] text-white'
-                                        : 'bg-[#0A3269]/5 dark:bg-[#0A3269]/10 text-foreground/60 dark:text-white/50 hover:bg-[#0A3269]/10'
+                                        ? 'bg-[#0A3269] text-white shadow-sm'
+                                        : 'text-foreground/60 dark:text-white/50 hover:bg-white/60 dark:hover:bg-white/5'
                                     }`}
                                   >
                                     <Icon className={`w-4 h-4 ${isActive ? 'text-white/90' : 'text-[#0A3269]/40 dark:text-white/40'}`} strokeWidth={2} />
@@ -1806,32 +1844,36 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                           {/* Contact Info */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="space-y-1.5">
-                              <Label htmlFor="sponsor-email" className="text-[10px] sm:text-xs font-semibold text-foreground/70 dark:text-white/60 flex items-center gap-1.5">
-                                <Mail className="w-3.5 h-3.5 text-[#0A3269]/40" strokeWidth={2} />
-                                {t('startApplication.sponsorInfo.emailAddress')} <span className="text-red-500">*</span>
+                              <Label htmlFor="sponsor-email" className="text-[9px] sm:text-[10px] font-semibold tracking-[0.1em] uppercase text-foreground/50 dark:text-white/40 flex items-center gap-1.5">
+                                {t('startApplication.sponsorInfo.emailAddress')} <span className="text-[#0A3269]">*</span>
                               </Label>
-                              <Input
-                                id="sponsor-email"
-                                type="email"
-                                placeholder="sponsor@example.com"
-                                value={sponsorInfo.email}
-                                onChange={(e) => setSponsorInfo(prev => ({ ...prev, email: e.target.value }))}
-                                className="bg-[#0A3269]/5 dark:bg-[#0A3269]/10 border-[#0A3269]/15 focus:border-[#0A3269]/40 rounded-xl h-10 text-sm"
-                              />
+                              <div className="relative">
+                                <Mail className="w-3.5 h-3.5 text-[#0A3269]/35 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" strokeWidth={2} />
+                                <Input
+                                  id="sponsor-email"
+                                  type="email"
+                                  placeholder="sponsor@example.com"
+                                  value={sponsorInfo.email}
+                                  onChange={(e) => setSponsorInfo(prev => ({ ...prev, email: e.target.value }))}
+                                  className="bg-white dark:bg-[#0A3269]/10 border-[#0A3269]/15 focus:border-[#0A3269]/50 focus-visible:ring-[#0A3269]/10 rounded-xl h-10 text-sm pl-9"
+                                />
+                              </div>
                             </div>
                             <div className="space-y-1.5">
-                              <Label htmlFor="sponsor-phone" className="text-[10px] sm:text-xs font-semibold text-foreground/70 dark:text-white/60 flex items-center gap-1.5">
-                                <Phone className="w-3.5 h-3.5 text-[#0A3269]/40" strokeWidth={2} />
-                                {t('startApplication.sponsorInfo.phoneNumber')} <span className="text-red-500">*</span>
+                              <Label htmlFor="sponsor-phone" className="text-[9px] sm:text-[10px] font-semibold tracking-[0.1em] uppercase text-foreground/50 dark:text-white/40 flex items-center gap-1.5">
+                                {t('startApplication.sponsorInfo.phoneNumber')} <span className="text-[#0A3269]">*</span>
                               </Label>
-                              <Input
-                                id="sponsor-phone"
-                                type="tel"
-                                placeholder="+971 50 123 4567"
-                                value={sponsorInfo.phone}
-                                onChange={(e) => setSponsorInfo(prev => ({ ...prev, phone: e.target.value }))}
-                                className="bg-[#0A3269]/5 dark:bg-[#0A3269]/10 border-[#0A3269]/15 focus:border-[#0A3269]/40 rounded-xl h-10 text-sm"
-                              />
+                              <div className="relative">
+                                <Phone className="w-3.5 h-3.5 text-[#0A3269]/35 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" strokeWidth={2} />
+                                <Input
+                                  id="sponsor-phone"
+                                  type="tel"
+                                  placeholder="+971 50 123 4567"
+                                  value={sponsorInfo.phone}
+                                  onChange={(e) => setSponsorInfo(prev => ({ ...prev, phone: e.target.value }))}
+                                  className="bg-white dark:bg-[#0A3269]/10 border-[#0A3269]/15 focus:border-[#0A3269]/50 focus-visible:ring-[#0A3269]/10 rounded-xl h-10 text-sm pl-9"
+                                />
+                              </div>
                             </div>
                           </div>
 
@@ -1845,7 +1887,11 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                                     {t('applications.requiredDocuments')}
                                   </Label>
                                 </div>
-                                <Badge className="bg-[#0A3269]/10 text-[#0A3269] dark:text-white/60 border-0 text-[9px] font-medium rounded-full px-2.5 py-0.5">
+                                <Badge className={`border-0 text-[9px] font-bold rounded-full px-2.5 py-0.5 ${
+                                  Object.values(uploadedDocuments).filter(doc => doc.status === 'uploaded').length >= docDefs.filter(d => d.required).length && docDefs.filter(d => d.required).length > 0
+                                    ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+                                    : 'bg-[#0A3269]/10 text-[#0A3269] dark:text-white/60'
+                                }`}>
                                   {Object.values(uploadedDocuments).filter(doc => doc.status === 'uploaded').length}/{docDefs.filter(d => d.required).length}
                                 </Badge>
                               </div>
@@ -1861,7 +1907,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                           )}
 
                           {/* Navigation */}
-                          <div className="pt-3 space-y-2.5 sticky bottom-0 bg-gradient-to-t from-white/95 dark:from-[#0A0A0F]/95 to-transparent -mx-4 sm:-mx-5 px-4 sm:px-5 py-3 border-t border-[#0A3269]/10 dark:border-white/5">
+                          <div className="pt-3 space-y-2.5 sticky bottom-0 bg-gradient-to-t from-[#FBFAF7]/95 dark:from-[#0A0A0F]/95 to-transparent -mx-4 sm:-mx-5 px-4 sm:px-5 py-3 border-t border-[#0A3269]/10 dark:border-white/5">
                             <button
                               onClick={() => {
                                 setProgress(80)
@@ -1870,8 +1916,8 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                               disabled={!canNavigateToNext()}
                               className={`relative w-full flex items-center justify-center gap-2 rounded-xl h-10 sm:h-12 font-semibold text-sm sm:text-base transition-all duration-300 ${
                                 canNavigateToNext()
-                                  ? 'bg-[#0A3269] text-white hover:bg-[#1a4a7a] active:scale-[0.97]'
-                                  : 'bg-[#0A3269]/20 text-white/50 cursor-not-allowed'
+                                  ? 'bg-[#0A3269] text-white hover:bg-[#0d3d80] shadow-[0_10px_24px_-10px_rgba(10,50,105,0.6)] active:scale-[0.97]'
+                                  : 'bg-[#0A3269]/15 text-[#0A3269]/40 dark:text-white/30 cursor-not-allowed'
                               }`}
                             >
                               <span className="flex items-center gap-2">
@@ -1904,47 +1950,66 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                     <div className="relative bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/10 dark:border-white/5 rounded-2xl flex flex-col min-h-0 flex-1 overflow-hidden">
                       <div className="shrink-0 px-4 sm:px-5 pt-4 pb-3 border-b border-[#0A3269]/10 dark:border-white/5">
                         <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-2.5">
-                            <Rocket className="w-4 h-4 text-[#0A3269] dark:text-white/60" strokeWidth={2} />
-                            <span className="text-sm sm:text-base font-semibold text-foreground/90 dark:text-white/90">
-                              {t('startApplication.reviewSubmit.title') || 'Review & Submit'}
-                            </span>
-                          </div>
-                          <Badge className="flex items-center gap-1.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 text-[9px] font-semibold px-2.5 py-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            {t('startApplication.reviewSubmit.readyToSubmit') || 'Ready to Submit'}
-                          </Badge>
-                        </div>
+                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-2.5">
+  {/* Left side - Icon & Title */}
+  <div className="flex items-center gap-2.5">
+    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#0A3269] flex items-center justify-center shrink-0">
+      <Rocket className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" strokeWidth={2} />
+    </div>
+    <span className="text-sm sm:text-base font-semibold text-foreground/90 dark:text-white/90">
+      {t('startApplication.reviewSubmit.title') || 'Review & Submit'}
+    </span>
+  </div>
+  
+  {/* Right side - Badge */}
+  <Badge className="flex items-center gap-1.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 w-full sm:w-fit justify-center sm:justify-start">
+    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+    {t('startApplication.reviewSubmit.readyToSubmit') || 'Ready to Submit'}
+  </Badge>
+</div>
+</div>
                       </div>
 
                       <div className="flex-1 overflow-y-auto min-h-0 p-4 sm:p-5 space-y-4">
                         {/* Summary Grid */}
-                        <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
-                          {[
-                            { label: 'Service', value: selected?.name || 'Not selected', icon: Briefcase },
-                            { label: 'Sponsor Type', value: sponsorInfo.sponsorType?.charAt(0).toUpperCase() + sponsorInfo.sponsorType?.slice(1) || 'Not selected', icon: Users },
-                            { label: 'Documents', value: `${Object.values(uploadedDocuments).filter(doc => doc.status === 'uploaded').length}/${docDefs.filter(doc => doc.required).length}`, icon: FileText },
-                            { label: 'Processing', value: '1-3 business days', icon: Clock },
-                          ].map((item, idx) => {
-                            const Icon = item.icon
-                            return (
-                              <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-[#0A3269]/5 dark:bg-[#0A3269]/10 border border-[#0A3269]/10 dark:border-white/5">
-                                <Icon className="w-4 h-4 text-[#0A3269]/60 dark:text-white/40" strokeWidth={2} />
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-[10px] font-medium text-foreground/40 dark:text-white/30">{item.label}</p>
-                                  <p className="text-sm font-semibold text-foreground/80 dark:text-white/70 truncate">{item.value}</p>
+                        <div className="rounded-xl border border-[#0A3269]/10 dark:border-white/5 overflow-hidden">
+                          <div className="px-3.5 py-2 bg-[#0A3269]/5 dark:bg-[#0A3269]/10 border-b border-[#0A3269]/10 dark:border-white/5">
+                            <span className="text-[9px] font-semibold tracking-[0.14em] uppercase text-foreground/45 dark:text-white/35">Application Summary</span>
+                          </div>
+                          <div className="grid grid-cols-1 xs:grid-cols-2 divide-y xs:divide-y-0 divide-[#0A3269]/8 dark:divide-white/5">
+                            {[
+                              { label: 'Service', value: selected?.name || 'Not selected', icon: Briefcase },
+                              { label: 'Sponsor Type', value: sponsorInfo.sponsorType?.charAt(0).toUpperCase() + sponsorInfo.sponsorType?.slice(1) || 'Not selected', icon: Users },
+                              { label: 'Documents', value: `${Object.values(uploadedDocuments).filter(doc => doc.status === 'uploaded').length}/${docDefs.filter(doc => doc.required).length}`, icon: FileText },
+                              { label: 'Processing', value: '1-3 business days', icon: Clock },
+                            ].map((item, idx) => {
+                              const Icon = item.icon
+                              return (
+                                <div key={idx} className="flex items-center gap-3 p-3 xs:border-l xs:border-[#0A3269]/8 dark:xs:border-white/5 xs:first:border-l-0 xs:[&:nth-child(2)]:border-l-0">
+                                  <div className="w-8 h-8 rounded-lg bg-[#0A3269]/8 flex items-center justify-center shrink-0">
+                                    <Icon className="w-4 h-4 text-[#0A3269]/70 dark:text-white/50" strokeWidth={2} />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-[9px] font-semibold tracking-wide uppercase text-foreground/35 dark:text-white/25">{item.label}</p>
+                                    <p className="text-sm font-semibold text-foreground/85 dark:text-white/75 truncate">{item.value}</p>
+                                  </div>
                                 </div>
-                              </div>
-                            )
-                          })}
+                              )
+                            })}
+                          </div>
                         </div>
 
                         {/* Payment */}
                         {!paymentCompleted ? (
-                          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
-                            <div className="flex items-center gap-2.5 mb-3">
-                              <CreditCard className="w-4 h-4 text-amber-500" strokeWidth={2} />
-                              <h3 className="text-sm font-bold text-foreground/80 dark:text-white/80">Complete Payment</h3>
+                          <div className="bg-white dark:bg-[#0A3269]/10 border border-[#0A3269]/12 dark:border-white/10 rounded-xl p-3 shadow-sm">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-7 h-7 rounded-lg bg-[#C9A227]/15 flex items-center justify-center">
+                                  <CreditCard className="w-3.5 h-3.5 text-[#C9A227]" strokeWidth={2} />
+                                </div>
+                                <h4 className="text-sm font-bold text-foreground/80 dark:text-white/80">Complete Payment</h4>
+                              </div>
+                              <span className="text-sm font-bold tabular-nums text-[#0A3269] dark:text-white/80">AED {applicationFee}</span>
                             </div>
                             <StripePaymentForm
                               amount={applicationFee}
@@ -1962,9 +2027,11 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                             />
                           </div>
                         ) : (
-                          <div className="bg-emerald-500/15 border border-emerald-500/25 rounded-xl p-4">
+                          <div className="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-4">
                             <div className="flex items-center gap-3">
-                              <CheckCircle className="w-5 h-5 text-emerald-500" strokeWidth={2.5} />
+                              <div className="w-9 h-9 rounded-full bg-emerald-500/15 flex items-center justify-center shrink-0">
+                                <CheckCircle className="w-5 h-5 text-emerald-500" strokeWidth={2.5} />
+                              </div>
                               <div>
                                 <p className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">Payment Completed</p>
                                 <p className="text-xs text-emerald-600/70 dark:text-emerald-400/70">AED {applicationFee} processed successfully</p>
@@ -1985,12 +2052,15 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                             }, 2000)
                           }}
                           disabled={!paymentCompleted}
-                          className={`relative w-full h-11 sm:h-12 rounded-xl font-bold text-sm sm:text-[15px] transition-all duration-300 ${
+                          className={`group relative w-full h-11 sm:h-12 rounded-xl font-bold text-sm sm:text-[15px] overflow-hidden transition-all duration-300 ${
                             paymentCompleted
-                              ? 'bg-[#0A3269] text-white hover:bg-[#1a4a7a] active:scale-[0.97]'
-                              : 'bg-[#E8ECF0] dark:bg-white/10 text-[#9AA5B1] dark:text-white/30 cursor-not-allowed'
+                              ? 'bg-[#0A3269] text-white hover:bg-[#0d3d80] shadow-[0_14px_28px_-12px_rgba(10,50,105,0.65)] active:scale-[0.97]'
+                              : 'bg-[#0A3269]/10 dark:bg-white/10 text-[#0A3269]/35 dark:text-white/30 cursor-not-allowed'
                           }`}
                         >
+                          {paymentCompleted && (
+                            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                          )}
                           <span className="flex items-center justify-center gap-2">
                             {paymentCompleted ? (
                               <>
@@ -2021,13 +2091,24 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
 
               {/* Chat Panel */}
               {!isChatCollapsed && (
-                <div className="lg:col-span-4 flex flex-col bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/10 dark:border-white/5 rounded-2xl overflow-hidden min-h-[280px] lg:min-h-0">
+                <div className="lg:col-span-4 flex flex-col bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/10 dark:border-white/5 rounded-2xl overflow-hidden min-h-[280px] lg:min-h-0 shadow-sm">
                   {/* Chat Header */}
-                  <div className="shrink-0 px-4 py-3 border-b border-[#0A3269]/10 dark:border-white/5">
+                  <div className="shrink-0 px-4 py-3 border-b border-[#0A3269]/10 dark:border-white/5 bg-gradient-to-b from-[#0A3269]/[0.03] to-transparent dark:from-white/[0.02]">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <Sparkles className="w-4 h-4 text-[#0A3269] dark:text-white/60" strokeWidth={2} />
-                        <div>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="relative shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-[#0A3269] flex items-center justify-center ring-2 ring-[#0A3269]/40">
+                            {connectionStatus === 'connected' ? (
+                              <User className="w-4 h-4 text-white" strokeWidth={2} />
+                            ) : (
+                              <Sparkles className="w-4 h-4 text-white" strokeWidth={2} />
+                            )}
+                          </div>
+                          <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-[#0A0A0F] ${
+                            connectionStatus === 'connected' ? 'bg-emerald-500' : connectionStatus === 'pending' || connectionStatus === 'requesting' ? 'bg-amber-400' : 'bg-[#0A3269]/50'
+                          }`} />
+                        </div>
+                        <div className="min-w-0">
                           <div className="text-xs sm:text-sm font-semibold text-foreground/90 dark:text-white/90 truncate">
                             {connectionStatus === 'connected' && officerInfo ? officerInfo.name : 'Assistant'}
                           </div>
@@ -2045,7 +2126,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                           variant="ghost"
                           onClick={requestUaePass}
                           disabled={!user || uaePassStatus === 'requesting'}
-                          className={`h-7 px-2 rounded-lg text-[10px] ${
+                          className={`h-7 px-2 rounded-lg text-[10px] font-medium ${
                             uaePassStatus === 'authorized' 
                               ? 'text-emerald-600 bg-emerald-500/10' 
                               : 'text-foreground/50 hover:text-foreground hover:bg-[#0A3269]/10'
@@ -2066,7 +2147,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                     </div>
                     
                     {/* Chat Mode Buttons */}
-                    <div className="flex items-center gap-1.5 mt-2.5">
+                    <div className="flex items-center gap-1 mt-2.5 p-1 rounded-lg bg-[#0A3269]/5 dark:bg-white/5">
                       {[
                         { id: 'ai', label: 'AI', icon: Brain },
                         { id: 'amer', label: connectionStatus === 'connected' ? 'Officer' : 'Agent', icon: User },
@@ -2090,10 +2171,10 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                               }
                             }}
                             disabled={mode.id === 'amer' && (connectionStatus === 'requesting' || connectionStatus === 'pending')}
-                            className={`flex-1 h-7 text-[10px] sm:text-xs font-medium rounded-lg transition-all duration-300 ${
+                            className={`flex-1 h-7 text-[10px] sm:text-xs font-medium rounded-md transition-all duration-300 ${
                               isActive
-                                ? 'bg-[#0A3269] text-white'
-                                : 'bg-[#0A3269]/5 text-foreground/60 hover:bg-[#0A3269]/10'
+                                ? 'bg-[#0A3269] text-white shadow-sm'
+                                : 'bg-transparent text-foreground/55 hover:bg-white/60 dark:hover:bg-white/5'
                             }`}
                           >
                             <Icon className="w-3 h-3 mr-1" />
@@ -2110,10 +2191,12 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                     className="flex-1 overflow-y-auto p-3 space-y-2.5 bg-[#0A3269]/3 dark:bg-[#0A3269]/5 min-h-0"
                   >
                     {getCurrentChat().length === 0 && (
-                      <div className="bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/10 rounded-xl p-4">
+                      <div className="bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/10 rounded-xl p-4 shadow-sm">
                         <div className="flex items-center gap-2 mb-2">
-                          <Sparkles className="w-3.5 h-3.5 text-[#0A3269] dark:text-white/60" />
-                          <span className="text-xs font-medium text-[#0A3269] dark:text-white/80">Assistant Active</span>
+                          <div className="w-5 h-5 rounded-full bg-[#0A3269]/10 flex items-center justify-center">
+                            <Sparkles className="w-3 h-3 text-[#0A3269] dark:text-white/60" />
+                          </div>
+                          <span className="text-xs font-semibold text-[#0A3269] dark:text-white/80">Assistant Active</span>
                         </div>
                         <p className="text-xs text-foreground/60 dark:text-white/50 leading-relaxed">
                           {t('startApplication.chat.welcomeMessage')} {selected?.name || t('startApplication.title')}
@@ -2128,7 +2211,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
                             <button
                               key={suggestion}
                               onClick={() => setInput(suggestion)}
-                              className="text-[9px] sm:text-[10px] px-3 py-1.5 rounded-full bg-[#0A3269]/5 text-foreground/60 hover:bg-[#0A3269] hover:text-white transition-all duration-300"
+                              className="text-[9px] sm:text-[10px] px-3 py-1.5 rounded-full border border-[#0A3269]/10 bg-[#0A3269]/[0.03] text-foreground/60 hover:bg-[#0A3269] hover:border-[#0A3269] hover:text-white transition-all duration-300"
                             >
                               {suggestion}
                             </button>
@@ -2169,7 +2252,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
 
                   {/* Chat Input */}
                   <div className="shrink-0 p-3 border-t border-[#0A3269]/10 dark:border-white/5 bg-white/50 dark:bg-[#0A0A0F]/50">
-                    <div className="relative flex items-center gap-2 bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/15 dark:border-white/10 rounded-xl px-3 py-1.5 focus-within:border-[#0A3269]/40 transition-all duration-300">
+                    <div className="relative flex items-center gap-2 bg-white dark:bg-[#0A0A0F] border border-[#0A3269]/15 dark:border-white/10 rounded-xl px-3 py-1.5 focus-within:border-[#0A3269]/50 focus-within:shadow-[0_0_0_3px_rgba(10,50,105,0.08)] transition-all duration-300">
                       <input
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -2233,7 +2316,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
           >
             <Button
               onClick={() => setIsChatCollapsed(false)}
-              className="bg-[#0A3269] text-white hover:bg-[#1a4a7a] rounded-full w-14 h-14 p-0 transition-all duration-300 hover:scale-105 active:scale-95"
+              className="bg-[#0A3269] text-white hover:bg-[#0d3d80] rounded-full w-14 h-14 p-0 shadow-[0_14px_30px_-10px_rgba(10,50,105,0.6)] ring-2 ring-[#C9A227]/30 transition-all duration-300 hover:scale-105 active:scale-95"
             >
               <MessageSquare className="w-6 h-6" />
             </Button>

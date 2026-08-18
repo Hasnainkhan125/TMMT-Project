@@ -59,6 +59,9 @@ const DocumentsPage = () => {
   const userRole = typeof window !== 'undefined' ? localStorage.getItem('userRole') : null
   const isAmer = userRole === 'amer' || userRole === 'admin'
 
+  // ─── Brand Color ──────────────────────────────────────────────────────────
+  const primaryColor = '#0A3269'
+
   const getAppId = (app: any) => app?._id || app?.id
   const getDocId = (doc: any) => doc?._id || doc?.id
 
@@ -195,7 +198,7 @@ const DocumentsPage = () => {
       <Layout>
         <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-black">
           <div className="text-center">
-            <div className="rounded-full h-12 w-12 border-2 border-[#0A3269] dark:border-[#4A8ABF] border-t-transparent animate-spin mx-auto mb-4" />
+            <div className="rounded-full h-12 w-12 border-2 border-[#0A3269] border-t-transparent animate-spin mx-auto mb-4" />
             <p className="text-gray-500 dark:text-gray-400 font-light">Loading documents...</p>
           </div>
         </div>
@@ -219,7 +222,7 @@ const DocumentsPage = () => {
       label: 'Total Documents',
       value: submittedCount + resultCount,
       icon: FileText,
-      color: 'bg-[#0A3269] dark:bg-[#4A8ABF]',
+      color: 'bg-[#0A3269]',
       textColor: 'text-white',
       sub: 'All documents',
     },
@@ -227,7 +230,7 @@ const DocumentsPage = () => {
       label: 'Submitted',
       value: submittedCount,
       icon: FolderOpen,
-      color: 'bg-[#1a4a7a] dark:bg-[#4A8ABF]/80',
+      color: 'bg-[#1a4a7a]',
       textColor: 'text-white',
       sub: 'Uploaded by you',
     },
@@ -235,7 +238,7 @@ const DocumentsPage = () => {
       label: 'Results',
       value: resultCount,
       icon: CheckCircle2,
-      color: 'bg-emerald-600 dark:bg-emerald-500',
+      color: 'bg-emerald-600',
       textColor: 'text-white',
       sub: 'From Amer',
     },
@@ -243,7 +246,7 @@ const DocumentsPage = () => {
       label: 'Pending Review',
       value: pendingCount,
       icon: Clock,
-      color: 'bg-amber-600 dark:bg-amber-500',
+      color: 'bg-amber-600',
       textColor: 'text-white',
       sub: 'Awaiting approval',
     },
@@ -262,7 +265,7 @@ const DocumentsPage = () => {
         className={`flex items-center justify-between gap-3 p-3 rounded-lg border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md
           ${isResult
             ? 'bg-emerald-50/60 dark:bg-emerald-950/10 border-emerald-200/60 dark:border-emerald-800/30 hover:border-emerald-300 dark:hover:border-emerald-700/50'
-            : 'bg-white dark:bg-black/20 border-gray-200/60 dark:border-white/5 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30'}
+            : 'bg-white dark:bg-black/20 border-gray-200/60 dark:border-white/5 hover:border-[#0A3269]/30'}
           `}
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -270,7 +273,7 @@ const DocumentsPage = () => {
             className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 transition-all duration-300
               ${isResult
                 ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
-                : 'bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF]'}`}
+                : 'bg-[#0A3269]/10 text-[#0A3269]'}`}
           >
             {isResult ? <Zap className="w-3.5 h-3.5" /> : <FileText className="w-3.5 h-3.5" />}
           </div>
@@ -302,7 +305,7 @@ const DocumentsPage = () => {
             className={`h-8 w-8 rounded-lg p-0 transition-all duration-300 ${
               isResult
                 ? 'text-gray-500 dark:text-gray-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30'
-                : 'text-gray-500 dark:text-gray-400 hover:bg-[#0A3269]/10 dark:hover:bg-[#4A8ABF]/10'
+                : 'text-gray-500 dark:text-gray-400 hover:bg-[#0A3269]/10'
             }`}
             onClick={() => handleViewDocument(doc, app)}
             title="View"
@@ -315,7 +318,7 @@ const DocumentsPage = () => {
             className={`h-8 w-8 rounded-lg p-0 transition-all duration-300 ${
               isResult
                 ? 'text-gray-500 dark:text-gray-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30'
-                : 'text-gray-500 dark:text-gray-400 hover:bg-[#0A3269]/10 dark:hover:bg-[#4A8ABF]/10'
+                : 'text-gray-500 dark:text-gray-400 hover:bg-[#0A3269]/10'
             }`}
             onClick={() => handleDownloadDocument(doc, app)}
             title="Download"
@@ -361,7 +364,7 @@ const DocumentsPage = () => {
               <p>Failed to load image</p>
               <Button
                 onClick={() => window.open(fileUrl, '_blank')}
-                className="mt-4 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf]"
+                className="mt-4 bg-[#0A3269] text-white hover:bg-[#1A4A8A]"
               >
                 Open in new tab
               </Button>
@@ -387,7 +390,7 @@ const DocumentsPage = () => {
         <p>Preview not available for this file type</p>
         <Button
           onClick={() => window.open(fileUrl, '_blank')}
-          className="mt-4 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf]"
+          className="mt-4 bg-[#0A3269] text-white hover:bg-[#1A4A8A]"
         >
           Open in new tab
         </Button>
@@ -400,8 +403,8 @@ const DocumentsPage = () => {
     <Card className="border border-dashed border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-black/20 rounded-xl">
       <CardContent className="pt-6">
         <div className="text-center py-12">
-          <div className="mx-auto mb-4 w-16 h-16 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 flex items-center justify-center">
-            <Icon className="h-8 w-8 text-[#0A3269]/40 dark:text-[#4A8ABF]/40" />
+          <div className="mx-auto mb-4 w-16 h-16 rounded-xl bg-[#0A3269]/10 flex items-center justify-center">
+            <Icon className="h-8 w-8 text-[#0A3269]/40" />
           </div>
           <p className="text-base font-light text-gray-900 dark:text-white">{title}</p>
           {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 font-light mt-1">{subtitle}</p>}
@@ -419,7 +422,7 @@ const DocumentsPage = () => {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="flex items-center gap-2.5 mb-0.5">
-                <div className="p-1.5 rounded-lg bg-[#0A3269] dark:bg-[#4A8ABF]">
+                <div className="p-1.5 rounded-lg bg-[#0A3269]">
                   <FolderOpen className="h-4 w-4 text-white" />
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-white tracking-tight">
@@ -433,7 +436,7 @@ const DocumentsPage = () => {
             {isAmer && applications.length > 0 && (
               <Button
                 onClick={() => openUploadDialog(getAppId(applications[0]))}
-                className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md"
+                className="bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Upload Results
@@ -475,7 +478,7 @@ const DocumentsPage = () => {
               placeholder="Search documents..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-black/10 border border-gray-200/60 dark:border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#0A3269]/30 dark:focus:ring-[#4A8ABF]/30 focus:border-transparent text-gray-900 dark:text-white text-sm font-light placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-300"
+              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-black/10 border border-gray-200/60 dark:border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#0A3269]/30 focus:border-transparent text-gray-900 dark:text-white text-sm font-light placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-300"
             />
           </div>
 
@@ -484,20 +487,20 @@ const DocumentsPage = () => {
             <TabsList className="bg-white dark:bg-black/10 border border-gray-200/60 dark:border-white/5 p-1 rounded-lg backdrop-blur-sm">
               <TabsTrigger 
                 value="all" 
-                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-[#4A8ABF] data-[state=active]:text-white dark:data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
+                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
               >
                 All Documents
               </TabsTrigger>
               <TabsTrigger 
                 value="submitted" 
-                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-[#4A8ABF] data-[state=active]:text-white dark:data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
+                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
               >
                 <FileText className="h-3 w-3 mr-1.5" />
                 Submitted
               </TabsTrigger>
               <TabsTrigger 
                 value="results" 
-                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-[#4A8ABF] data-[state=active]:text-white dark:data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
+                className="rounded-md text-xs font-light data-[state=active]:bg-[#0A3269] data-[state=active]:text-white text-gray-600 dark:text-gray-400 transition-all duration-300 px-3 py-1.5"
               >
                 <CheckCircle2 className="h-3 w-3 mr-1.5" />
                 Results
@@ -523,8 +526,8 @@ const DocumentsPage = () => {
                       <CardHeader className="border-b border-gray-100/50 dark:border-white/5 pb-3 px-4 pt-4 sm:px-5 sm:pt-5">
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 flex items-center justify-center">
-                              <FolderOpen className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                            <div className="w-8 h-8 rounded-lg bg-[#0A3269]/10 flex items-center justify-center">
+                              <FolderOpen className="w-4 h-4 text-[#0A3269]" />
                             </div>
                             <div>
                               <CardTitle className="text-sm sm:text-base font-light text-gray-900 dark:text-white">
@@ -535,7 +538,7 @@ const DocumentsPage = () => {
                               </CardDescription>
                             </div>
                           </div>
-                          <Badge className="rounded-full px-3 py-0.5 font-light bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 text-gray-600 dark:text-gray-400 border border-gray-200/50 dark:border-white/5 text-[10px]">
+                          <Badge className="rounded-full px-3 py-0.5 font-light bg-[#0A3269]/5 text-gray-600 dark:text-gray-400 border border-gray-200/50 dark:border-white/5 text-[10px]">
                             {hasSubmitted ? app.attachments.length : 0} submitted · {hasResults ? (app as any).resultDocuments.length : 0} results
                           </Badge>
                           {isAmer && (
@@ -543,7 +546,7 @@ const DocumentsPage = () => {
                               variant="outline"
                               size="sm"
                               onClick={() => openUploadDialog(getAppId(app))}
-                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] dark:hover:border-[#4A8ABF] hover:text-[#0A3269] dark:hover:text-[#4A8ABF]"
+                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] hover:text-[#0A3269]"
                             >
                               <Upload className="w-3 h-3 mr-1" />
                               Upload Results
@@ -556,18 +559,18 @@ const DocumentsPage = () => {
     <div>
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
-          <div className="p-1 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-            <FileText className="w-3.5 h-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
+          <div className="p-1 rounded-lg bg-[#0A3269]/10">
+            <FileText className="w-3.5 h-3.5 text-[#0A3269]" />
           </div>
           <span>Submitted Documents</span>
-          <Badge className="bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF] border-0 text-[10px] font-light px-2 py-0 rounded-full">
+          <Badge className="bg-[#0A3269]/5 text-[#0A3269] border-0 text-[10px] font-light px-2 py-0 rounded-full">
             {app.attachments.length}
           </Badge>
         </h4>
         <Button 
           variant="ghost" 
           size="sm" 
-          className="h-7 text-[10px] text-gray-400 hover:text-[#0A3269] dark:hover:text-[#4A8ABF] hover:bg-[#0A3269]/5 dark:hover:bg-[#4A8ABF]/10 rounded-lg px-2"
+          className="h-7 text-[10px] text-gray-400 hover:text-[#0A3269] hover:bg-[#0A3269]/5 rounded-lg px-2"
         >
           View All
           <ChevronRight className="w-3 h-3 ml-0.5" />
@@ -578,7 +581,7 @@ const DocumentsPage = () => {
           <DocRow key={getDocId(doc) || idx} doc={doc} app={app} variant="submitted" index={idx} />
         ))}
         {app.attachments.length > 3 && (
-          <button className="w-full text-center text-[10px] text-gray-400 hover:text-[#0A3269] dark:hover:text-[#4A8ABF] py-1.5 transition-colors duration-200 font-light">
+          <button className="w-full text-center text-[10px] text-gray-400 hover:text-[#0A3269] py-1.5 transition-colors duration-200 font-light">
             + {app.attachments.length - 3} more documents
           </button>
         )}
@@ -636,7 +639,7 @@ const DocumentsPage = () => {
                     <Card key={getAppId(app)} className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40 transition-shadow duration-300 overflow-hidden hover:shadow-sm dark:hover:shadow-white/5">
                       <CardHeader className="border-b border-gray-100/50 dark:border-white/5 pb-3 px-4 pt-4 sm:px-5 sm:pt-5">
                         <CardTitle className="text-sm sm:text-base font-light text-gray-900 dark:text-white flex items-center gap-2">
-                          <FileText className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                          <FileText className="w-4 h-4 text-[#0A3269]" />
                           {titleCase(app.applicationType)}
                         </CardTitle>
                       </CardHeader>
@@ -662,7 +665,7 @@ const DocumentsPage = () => {
                     isAmer && applications.length > 0 && (
                       <Button
                         onClick={() => openUploadDialog(getAppId(applications[0]))}
-                        className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-xl px-4 py-2 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300"
+                        className="bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-xl px-4 py-2 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300"
                       >
                         <Upload className="w-4 h-4 mr-2" />
                         Upload Results Now
@@ -686,7 +689,7 @@ const DocumentsPage = () => {
                               variant="outline"
                               size="sm"
                               onClick={() => openUploadDialog(getAppId(app))}
-                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] dark:hover:border-[#4A8ABF] hover:text-[#0A3269] dark:hover:text-[#4A8ABF]"
+                              className="text-[10px] rounded-lg border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0A3269] hover:text-[#0A3269]"
                             >
                               <Upload className="w-3 h-3 mr-1" />
                               More Results
@@ -714,7 +717,7 @@ const DocumentsPage = () => {
         <DialogContent className="max-w-5xl max-h-[100vh] w-[95vw] bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl">
           <DialogHeader className="flex flex-row items-center justify-between p-4 border-b border-gray-200/50 dark:border-white/10">
             <DialogTitle className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white truncate">
-              <FileText className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+              <FileText className="h-4 w-4 text-[#0A3269]" />
               {previewDoc?.originalName || previewDoc?.filename || 'Document'}
             </DialogTitle>
             <Button
@@ -754,7 +757,7 @@ const DocumentsPage = () => {
                 <Button
                   size="sm"
                   onClick={() => handleDownloadDocument(previewDoc, previewApp)}
-                  className="h-8 text-xs bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg px-3"
+                  className="h-8 text-xs bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg px-3"
                 >
                   <Download className="w-3.5 h-3.5 mr-1.5" />
                   Download

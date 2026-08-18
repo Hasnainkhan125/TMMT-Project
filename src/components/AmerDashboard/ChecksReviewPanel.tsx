@@ -1682,7 +1682,6 @@ const ChecksReviewPanel: React.FC = () => {
                                             A
                                           </div>
                                           <div>
-                                            <p className="text-sm font-medium text-slate-900 dark:text-white">Admin</p>
                                             <p className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                                               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                                               Online

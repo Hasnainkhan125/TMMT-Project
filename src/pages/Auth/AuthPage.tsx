@@ -216,7 +216,7 @@ const AuthPage: React.FC = () => {
               >
                 <span className="text-white">Your Visa</span>
                 <br />
-                <span className="inline-block font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#4A8ABF] to-[#4A8ABF] drop-shadow-[0_0_40px_rgba(10,50,105,0.3)]">
+                <span className="inline-block font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#0a3269] to-[#0a3269]">
                   Journey Starts Here
                 </span>
               </motion.h1>

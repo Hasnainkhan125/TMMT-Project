@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from 'react';
 import {
   CalendarClock,
   Plane,
@@ -15,16 +16,13 @@ import {
   Timer,
   Users,
   Shield,
-  Gem,
   TrendingUp,
-  CheckCircle,
   Zap,
-  Crown,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Service } from '@/lib/services';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 // Primary accent color - #0A3269 (Deep Navy)
 const PRIMARY_COLOR = '#0A3269';
@@ -69,10 +67,63 @@ interface ServiceCardProps {
   index: number;
 }
 
+/** Counts up from 0 to `value` on mount. */
+function AnimatedPrice({ value }: { value: number | string }) {
+  const numeric = typeof value === 'number' ? value : parseFloat(String(value).replace(/,/g, ''));
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!Number.isFinite(numeric)) return;
+    let frame: number;
+    const duration = 700;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(numeric * eased));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [numeric]);
+
+  if (!Number.isFinite(numeric)) return <>{value}</>;
+  return <>{display.toLocaleString()}</>;
+}
+
 export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
   const Icon = iconMap[service.icon] || FileSearch;
   const gradient = GRADIENT_MAP[service.icon] || 'from-[#0A3269] to-[#1A4A8A]';
   const shadow = SHADOW_MAP[service.icon] || 'shadow-[#0A3269]/20';
+
+  // Optional trust signals — only render if the data actually carries them,
+  // so cards without this data fall back to today's layout untouched.
+  const rating = (service as any).rating as number | undefined;
+  const reviewCount = (service as any).reviewCount as number | undefined;
+
+  // Subtle 3D tilt that follows the cursor — the one signature flourish,
+  // kept quiet (max ~4deg) so it reads as polish, not a gimmick.
+  const cardRef = useRef<HTMLButtonElement>(null);
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const springX = useSpring(tiltX, { stiffness: 200, damping: 20 });
+  const springY = useSpring(tiltY, { stiffness: 200, damping: 20 });
+  const rotateX = useTransform(springY, [-0.5, 0.5], [4, -4]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], [-4, 4]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    tiltX.set((e.clientX - rect.left) / rect.width - 0.5);
+    tiltY.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+  };
 
   // Card variants for animation
   const cardVariants = {
@@ -114,12 +165,21 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
 
   return (
     <motion.button
+      ref={cardRef}
       variants={cardVariants}
       initial="initial"
       animate="animate"
       whileHover="hover"
       whileTap={{ scale: 0.97 }}
       onClick={() => onSelect(service)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        '--primary': PRIMARY_COLOR,
+        rotateX,
+        rotateY,
+        transformPerspective: 1000,
+      } as React.CSSProperties}
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-[2rem]",
         "bg-white dark:bg-zinc-950",
@@ -130,7 +190,6 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2",
         "text-left w-full"
       )}
-      style={{ '--primary': PRIMARY_COLOR } as React.CSSProperties}
     >
       {/* Premium Glass Shimmer - subtle */}
       <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
@@ -202,6 +261,17 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
               </span>
             </div>
           </div>
+
+          {/* Rating chip — only shown when the service data actually has it */}
+          {rating !== undefined && (
+            <div className="flex items-center gap-1 rounded-full bg-black/40 backdrop-blur-md px-2.5 py-1 border border-white/10">
+              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <span className="text-[11px] font-semibold text-white">{rating.toFixed(1)}</span>
+              {reviewCount !== undefined && (
+                <span className="text-[10px] text-white/60">({reviewCount.toLocaleString()})</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -233,6 +303,12 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
               {service.docs} docs
             </span>
           )}
+          {service.popular && (
+            <span className="flex items-center gap-1.5 text-[10px] font-medium rounded-full px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+              <TrendingUp className="h-3 w-3" />
+              High demand
+            </span>
+          )}
         </div>
 
         {/* Footer */}
@@ -247,7 +323,7 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
             <div className="flex items-baseline gap-1">
               <span className="text-sm font-bold text-zinc-400 dark:text-zinc-500">AED</span>
               <p className="text-2xl font-extrabold tracking-tight tabular-nums transition-all duration-300 bg-gradient-to-br from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent group-hover:from-[var(--primary)] group-hover:to-[var(--primary)]">
-                {service.priceStandard}
+                <AnimatedPrice value={service.priceStandard} />
               </p>
             </div>
           </div>

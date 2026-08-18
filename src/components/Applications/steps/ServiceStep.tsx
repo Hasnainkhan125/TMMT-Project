@@ -280,6 +280,8 @@ const GoldenGuaranteeCard = () => {
   const { t, i18n } = useTranslation()
   const language = i18n.language
   const isArabic = language === 'ar'
+  const { theme } = useSafeTheme()
+  const isDark = theme.isDark ?? false
 
   return (
     <motion.div
@@ -289,26 +291,26 @@ const GoldenGuaranteeCard = () => {
       className="mt-6 sm:mt-8 max-w-3xl mx-auto"
     >
       <a href="/legal#guarantee" target="_blank" rel="noopener noreferrer" className="block">
-        <div className="relative rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/40 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5 cursor-pointer">
-          <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
-            <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-              <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
+        <div className="relative rounded-2xl border border-amber-500/25 dark:border-amber-500/20 bg-amber-50/40 dark:bg-amber-500/[0.04] p-4 sm:p-5 transition-all duration-300 group hover:border-amber-500/40 cursor-pointer">
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-amber-500 flex-shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-sm">
+              <Award className="h-5 w-5 sm:h-6 sm:w-6 text-white" strokeWidth={1.75} />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <h4 className="font-semibold text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
+                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[9px] px-2 py-0.5 rounded-full font-semibold">
                   ✓ Trusted
                 </Badge>
               </h4>
-              <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 leading-relaxed mt-0.5 max-w-2xl font-light">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-white/50 leading-relaxed mt-1 max-w-2xl">
                 {isArabic
                   ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
                   : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
               </p>
-              <span className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 dark:text-amber-400 font-light transition-all duration-300 group-hover:gap-1.5">
+              <span className="inline-flex items-center gap-1 mt-2 text-xs sm:text-sm text-amber-600 dark:text-amber-400 font-medium transition-all duration-300 group-hover:gap-1.5">
                 <span>{isArabic ? 'اقرأ المزيد عن الضمان' : 'Read more about the guarantee'}</span>
-                <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
               </span>
             </div>
           </div>
@@ -320,16 +322,15 @@ const GoldenGuaranteeCard = () => {
 
 export default function ServiceStep({ services, loading, onSelect, onRetry }: ServiceStepProps) {
   const { t } = useTranslation()
-  const { theme } = useSafeTheme() // safe – never throws
+  const { theme } = useSafeTheme()
   const [tapped, setTapped] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [catFilter, setCatFilter] = useState('')
   const [inputFocused, setInputFocused] = useState(false)
-  const [isMobile, setIsMobile] = useState(false) // hydration-safe
+  const [isMobile, setIsMobile] = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  // Hydration-safe mobile detection
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640)
     check()
@@ -342,7 +343,6 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
     return () => clearTimeout(t)
   }, [])
 
-  // ─── Use mock data as fallback ───────────────────────────────────────
   const effectiveServices = useMemo(() => {
     if (services && services.length > 0 && services.some(s => s && s.name)) {
       return services
@@ -373,6 +373,9 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
 
   const isDark = theme.isDark ?? (typeof document !== 'undefined' && document.documentElement.classList.contains('dark'))
 
+  // Use #0A3269 for both light and dark mode
+  const accent = '#0A3269'
+
   const hasNoServices = !loading && (!effectiveServices || effectiveServices.length === 0)
 
   const handleRetry = () => {
@@ -396,11 +399,12 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
 
   return (
     <div className="w-full flex flex-col gap-5 sm:gap-7 transition-colors duration-300 relative">
-      {/* ─── Background Glows ────────────────────────────────────────────── */}
+      {/* ─── Background ──────────────────────────────────────────────────── */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute -top-48 -right-48 w-80 sm:w-[400px] h-80 sm:h-[400px] rounded-full bg-[var(--primary)]/10 dark:bg-[var(--primary)]/15 blur-[120px]" />
-        <div className="absolute -bottom-48 -left-48 w-80 sm:w-[400px] h-80 sm:h-[400px] rounded-full bg-violet-500/8 dark:bg-violet-500/15 blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[700px] h-[500px] sm:h-[700px] rounded-full bg-[var(--primary)]/5 dark:bg-[var(--primary)]/8 blur-[150px]" />
+        <div
+          className="absolute -top-48 -right-48 w-80 sm:w-[480px] h-80 sm:h-[480px] rounded-full blur-[130px]"
+          style={{ backgroundColor: accent, opacity: isDark ? 0.08 : 0.06 }}
+        />
       </div>
 
       {/* ─── Header ──────────────────────────────────────────────────────── */}
@@ -410,16 +414,21 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
         transition={{ duration: 0.4 }}
         className="space-y-3 sm:space-y-4 relative"
       >
-        <div className="flex items-center gap-3 sm:gap-4">
-          <div className="h-7 sm:h-9 w-1 rounded-full bg-gradient-to-b from-[var(--primary)] via-[var(--primary)]/60 to-transparent" />
-          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[var(#fff)]">
+        <div className="flex items-center gap-2.5">
+          <span
+            className="text-[11px] font-semibold tracking-[0.2em] uppercase"
+            style={{ color: accent }}
+          >
             {t('upload.step', 'Choose your service')}
-          </p>
+          </span>
           {!hasNoServices && !loading && (
-            <Badge className="bg-[var(--primary)]/15 text-[var(#fff)] border-[var(--primary)]/25 text-[8px] sm:text-[9px] font-semibold rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 backdrop-blur-sm">
-              <Sparkles className="w-2.5 sm:w-3 h-2.5 sm:h-3 mr-1" />
-              {filtered.length} services
-            </Badge>
+            <span
+              className="inline-flex items-center gap-1 text-[10px] font-semibold rounded-full px-2.5 py-1 text-white"
+              style={{ backgroundColor: accent }}
+            >
+              <Sparkles className="w-2.5 h-2.5" />
+              {filtered.length}
+            </span>
           )}
         </div>
         <h1
@@ -431,10 +440,10 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
           }}
         >
           {hasNoServices
-            ? t('service.noDataTitle', 'We’re having trouble loading services')
+            ? t('service.noDataTitle', 'We\'re having trouble loading services')
             : t('service.title', 'What do you want to get done today?')}
         </h1>
-        <p className="text-sm sm:text-base leading-relaxed max-w-[95%] sm:max-w-none font-light" style={{ color: isDark ? '#94a3b8' : '#64748b' }}>
+        <p className="text-sm sm:text-base leading-relaxed max-w-[95%] sm:max-w-none" style={{ color: isDark ? '#94a3b8' : '#64748b' }}>
           {hasNoServices
             ? t('service.noDataSubtitle', 'Please check your connection or try again later.')
             : t('service.subtitle', 'Choose a service — we handle everything for you')}
@@ -450,22 +459,15 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
           className="relative"
         >
           <div
-            className={`
-              relative flex items-center gap-2 sm:gap-3 h-12 sm:h-14 rounded-2xl sm:rounded-3xl px-4 sm:px-6
-              backdrop-blur-xl border-2 transition-all duration-300
-              ${inputFocused
-                ? 'border-[var(--primary)]'
-                : 'border-slate-200/60 dark:border-slate-700/50 hover:border-slate-300/80 dark:hover:border-slate-600/80'
-              }
-            `}
+            className="relative flex items-center gap-2 sm:gap-3 h-12 sm:h-14 rounded-2xl px-4 sm:px-5 border transition-all duration-300"
             style={{
-              backgroundColor: inputFocused
-                ? (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.95)')
-                : (isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.85)'),
+              borderColor: inputFocused ? accent : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'),
+              backgroundColor: isDark ? 'rgba(255,255,255,0.04)' : '#f8fafc',
             }}
           >
             <Search
-              className={`w-4 sm:w-5 h-4 sm:h-5 shrink-0 transition-colors duration-200 ${inputFocused ? 'text-[var(--primary)]' : 'text-slate-400 dark:text-slate-500'}`}
+              className="w-4 sm:w-5 h-4 sm:h-5 shrink-0 transition-colors duration-200"
+              style={{ color: inputFocused ? accent : (isDark ? '#64748b' : '#94a3b8') }}
             />
             <input
               ref={searchRef}
@@ -490,14 +492,18 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   onClick={() => setQuery('')}
-                  className="shrink-0 text-slate-400 hover:text-[var(--primary)] transition-colors p-1 rounded-full hover:bg-[var(--primary)]/10"
+                  className="shrink-0 text-slate-400 p-1 rounded-full transition-colors"
+                  style={{ color: isDark ? '#64748b' : '#94a3b8' }}
                 >
                   <XIcon className="w-4 h-4" />
                 </motion.button>
               )}
             </AnimatePresence>
             {!query && (
-              <div className="shrink-0 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-[9px] sm:text-[10px] font-medium border border-[var(--primary)]/20 hidden sm:flex items-center gap-1">
+              <div
+                className="shrink-0 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-medium hidden sm:flex items-center gap-1"
+                style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', color: isDark ? '#94a3b8' : '#64748b' }}
+              >
                 <Command className="w-3 h-3" /> K
               </div>
             )}
@@ -529,18 +535,10 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                     onClick={() => setCatFilter(cat.key)}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.94 }}
-                    className={`
-                      shrink-0 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs font-medium 
-                      border-2 transition-all duration-300 whitespace-nowrap flex items-center gap-1.5 sm:gap-2
-                      ${isActive ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-transparent hover:border-slate-200 dark:hover:border-slate-700'}
-                    `}
+                    className="shrink-0 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap flex items-center gap-1.5 sm:gap-2"
                     style={{
-                      backgroundColor: isActive
-                        ? (isDark ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)')
-                        : 'transparent',
-                      color: isActive
-                        ? (isDark ? '#ffffff' : 'var(--primary)')
-                        : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)'),
+                      backgroundColor: isActive ? accent : (isDark ? 'rgba(255,255,255,0.05)' : '#f1f5f9'),
+                      color: isActive ? '#ffffff' : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.55)'),
                     }}
                   >
                     <Icon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
@@ -556,7 +554,6 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
 
       {/* ─── Content Area ────────────────────────────────────────────────── */}
       {loading ? (
-        // ─── Loading Skeletons ─────────────────────────────────────────────
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div
@@ -570,7 +567,6 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
           ))}
         </div>
       ) : hasNoServices ? (
-        // ─── No Data State (Backend Issue) ───────────────────────────────
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -580,16 +576,17 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
           <div className="mx-auto w-20 h-20 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-5 border border-amber-200/50 dark:border-amber-800/30">
             <WifiOff className="w-10 h-10 text-amber-500 dark:text-amber-400" strokeWidth={1.5} />
           </div>
-          <h3 className="text-xl sm:text-2xl font-light text-black dark:text-white mb-2">
+          <h3 className="text-xl sm:text-2xl font-semibold text-black dark:text-white mb-2">
             {t('service.noDataTitle', 'No services available at the moment')}
           </h3>
-          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 font-light max-w-md mx-auto">
-            {t('service.noDataDesc', 'We’re having trouble connecting to our service catalog. Please check your internet connection or try again later.')}
+          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+            {t('service.noDataDesc', 'We\'re having trouble connecting to our service catalog. Please check your internet connection or try again later.')}
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={handleRetry}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--primary)] text-white text-sm font-medium hover:bg-[var(--primary)]/80 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: accent }}
             >
               <RefreshCw className="w-4 h-4" />
               {t('service.retry', 'Retry')}
@@ -604,7 +601,6 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
           </div>
         </motion.div>
       ) : filtered.length === 0 ? (
-        // ─── No Search Results ────────────────────────────────────────────
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -613,20 +609,18 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
           <div className="mx-auto w-16 h-16 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-4">
             <Search className="w-8 h-8 text-slate-400 dark:text-slate-600" strokeWidth={1.2} />
           </div>
-          <h3 className="text-lg font-light text-black dark:text-white mb-1">
+          <h3 className="text-lg font-semibold text-black dark:text-white mb-1">
             {t('service.noResults', 'No results found')}
           </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400 font-light">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             {t('service.tryAdjusting', 'Try adjusting your search or filter.')}
           </p>
         </motion.div>
       ) : (
-        // ─── Services Grid ──────────────────────────────────────────────────
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {filtered.map((svc, index) => {
-            const { sub, Icon, gradient } = getMeta(svc?.name || '')
+            const { sub, Icon } = getMeta(svc?.name || '')
             const active = tapped === String(svc?.id)
-            const chosen = isMostChosen(svc?.name || '')
             const priceLabel = getPriceLabel(svc)
             const imageUrl = getImageUrl(svc?.name || '')
 
@@ -636,31 +630,17 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                 initial="initial"
                 animate="animate"
                 whileHover="hover"
-                whileTap={{ scale: 0.97 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleSelect(svc)}
                 disabled={tapped !== null}
-                className={`
-                  group relative flex flex-col overflow-hidden rounded-3xl
-                  bg-white dark:bg-zinc-950 /* ✅ UPDATED: True Dark Charcoal */
-                  border-2 transition-all duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)]
-                  shadow-[0_4px_20px_-8px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_20px_-8px_rgba(0,0,0,0.4)]
-                  hover:shadow-[0_20px_60px_-15px_rgba(10,50,105,0.2)] dark:hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]
-                  focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2
-                  text-left w-full
-                  ${active ? 'border-[var(--primary)]' : 'border-slate-200/60 dark:border-zinc-800'}
-                `}
+                className="group relative flex flex-col overflow-hidden rounded-3xl bg-white dark:bg-zinc-950 border transition-all duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-left w-full"
+                style={{
+                  borderColor: active ? accent : (isDark ? '#27272a' : 'rgba(0,0,0,0.06)'),
+                  boxShadow: isDark
+                    ? '0 1px 0 rgba(255,255,255,0.05) inset, 0 24px 48px -28px rgba(0,0,0,0.7)'
+                    : '0 1px 0 rgba(0,0,0,0.02) inset, 0 24px 48px -28px rgba(10,50,105,0.25)',
+                }}
               >
-                {/* Glass Shimmer */}
-                <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 dark:from-white/3 dark:to-white/3" />
-                </div>
-
-                {/* Background Glow */}
-                <div className="absolute -inset-px pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                  <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-[var(--primary)]/5 blur-2xl" />
-                  <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-blue-500/5 blur-2xl" />
-                </div>
-
                 {/* Image Section */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-zinc-800 dark:to-zinc-900">
                   <img
@@ -668,25 +648,16 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                     alt={svc.name || 'Service'}
                     className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                   />
-                  {/* Shine sweep */}
-                  <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent group-hover:translate-x-full transition-transform duration-[1100ms] ease-out" />
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
-                  {/* Bottom overlay with icon */}
                   <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <motion.div
                         variants={iconVariants}
-                        className={cn(
-                          "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl",
-                          "bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md", /* ✅ UPDATED: True Dark Charcoal */
-                          "border border-white/20 dark:border-zinc-800", /* ✅ UPDATED: Dark border */
-                          "shadow-[0_8px_24px_-8px_rgba(0,0,0,0.15)]",
-                          "transition-all duration-300"
-                        )}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg"
+                        style={{ backgroundColor: accent }}
                       >
-                        <Icon className="h-5 w-5 text-[var(--primary)] dark:text-white" strokeWidth={1.8} />
+                        <Icon className="h-5 w-5 text-white" strokeWidth={1.8} />
                       </motion.div>
                       <div className="flex flex-col">
                         <span className="text-[10px] font-medium text-white/70 uppercase tracking-wider">
@@ -703,11 +674,9 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
 
                 {/* Content Section */}
                 <div className="relative flex flex-col flex-1 p-5 sm:p-6">
-                  <div className="mb-2">
-                    <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground dark:text-white leading-snug transition-colors duration-300 group-hover:text-[var(--primary)]">
-                      {svc.name || 'Service'}
-                    </h3>
-                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground dark:text-white leading-snug mb-2 transition-colors duration-300">
+                    {svc.name || 'Service'}
+                  </h3>
 
                   <p className="text-sm text-muted-foreground dark:text-zinc-400 mb-4 line-clamp-2 flex-1 leading-relaxed">
                     {sub}
@@ -716,27 +685,31 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                   {/* Tags */}
                   <div className="flex flex-wrap items-center gap-2 mb-4">
                     {svc.processingTime && (
-                      <span className="flex items-center gap-1.5 text-[10px] font-medium text-[var(--primary)] bg-[var(--primary)]/10 rounded-full px-2.5 py-1 border border-[var(--primary)]/20">
+                      <span
+                        className="flex items-center gap-1.5 text-[10px] font-medium rounded-full px-2.5 py-1"
+                        style={{ color: accent, backgroundColor: isDark ? 'rgba(10,50,105,0.2)' : 'rgba(10,50,105,0.08)' }}
+                      >
                         <Timer className="h-3 w-3" />
                         {svc.processingTime}
                       </span>
                     )}
                     {(svc.requiredDocuments?.length ?? 0) > 0 && (
-                      <span className="flex items-center gap-1.5 text-[10px] font-medium rounded-full px-2.5 py-1 bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 border border-slate-200/50 dark:border-zinc-800">
+                      <span className="flex items-center gap-1.5 text-[10px] font-medium rounded-full px-2.5 py-1 bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400">
                         <FileSearch className="h-3 w-3" />
                         {svc.requiredDocuments!.length} docs
                       </span>
                     )}
-                    <span className="flex items-center gap-1.5 text-[10px] font-medium rounded-full px-2.5 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border border-amber-200/50 dark:border-amber-800/30">
+                    <span className="flex items-center gap-1.5 text-[10px] font-medium rounded-full px-2.5 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400">
                       <Star className="h-3 w-3 fill-current" />
                       4.9
                     </span>
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-200/60 dark:border-zinc-800">
-                    <span className="pointer-events-none absolute -top-px left-0 h-px w-0 bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]/30 transition-all duration-500 ease-out group-hover:w-full" />
-
+                  <div
+                    className="flex items-center justify-between pt-4 border-t"
+                    style={{ borderColor: isDark ? '#27272a' : 'rgba(0,0,0,0.06)' }}
+                  >
                     <div className="flex flex-col gap-0.5">
                       <span className="text-[0.6rem] font-medium uppercase tracking-wider text-muted-foreground/60 dark:text-zinc-500">
                         Starting from
@@ -744,7 +717,7 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                       {priceLabel ? (
                         <div className="flex items-baseline gap-1">
                           <span className="text-sm font-bold text-muted-foreground/60 dark:text-zinc-500">AED</span>
-                          <p className="text-2xl font-extrabold tracking-tight tabular-nums transition-all duration-300 bg-gradient-to-br from-foreground to-foreground/70 dark:from-white dark:to-white/70 bg-clip-text text-transparent group-hover:from-[var(--primary)] group-hover:to-[var(--primary)]">
+                          <p className="text-2xl font-extrabold tracking-tight tabular-nums text-foreground dark:text-white">
                             {priceLabel}
                           </p>
                         </div>
@@ -755,27 +728,15 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                       )}
                     </div>
 
-                    {/* ─── START BUTTON ─────────────────────────────────── */}
                     <motion.div
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
-                      className={cn(
-                        "flex items-center gap-2 px-5 py-2.5 rounded-full font-light text-xs sm:text-sm tracking-wide",
-                        "transition-all duration-300 ease-out",
-                        "bg-[#0A3269] dark:bg-white",
-                        "text-white dark:text-[#000]",
-                        "border border-[#0A3269]/20 dark:border-white/20",
-                        "hover:bg-[#1A4A8A] dark:hover:bg-gray-100",
-                        "hover:scale-[1.02]",
-                        "active:scale-[0.98]",
-                        "shadow-[0_4px_16px_-4px_rgba(10,50,105,0.2)] dark:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.1)]",
-                        "hover:shadow-[0_8px_24px_-6px_rgba(10,50,105,0.3)] dark:hover:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.2)]",
-                        active ? "bg-[#1A4A8A] dark:bg-gray-200" : ""
-                      )}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-xs sm:text-sm text-white transition-transform duration-300"
+                      style={{ backgroundColor: accent }}
                     >
-                      <span className="font-light tracking-wide">{active ? 'Selected' : 'Get Start'}</span>
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.5} />
+                      <span>{active ? 'Selected' : 'Get Start'}</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.75} />
                     </motion.div>
                   </div>
                 </div>
@@ -783,7 +744,10 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
                 {/* Selection Indicator */}
                 {active && (
                   <div className="absolute top-4 left-4 z-20">
-                    <div className="w-6 h-6 rounded-full bg-[var(--primary)] text-white flex items-center justify-center shadow-[0_4px_16px_-4px_rgba(10,50,105,0.4)]">
+                    <div
+                      className="w-6 h-6 rounded-full text-white flex items-center justify-center shadow-lg"
+                      style={{ backgroundColor: accent }}
+                    >
                       <CheckCircle className="w-4 h-4" strokeWidth={2.5} />
                     </div>
                   </div>
@@ -794,10 +758,10 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
         </div>
       )}
 
-      {/* ✅ Golden Guarantee Card - always shown */}
+      {/* Golden Guarantee Card */}
       <GoldenGuaranteeCard />
 
-      {/* Trust Footer - only if data exists */}
+      {/* Trust Footer */}
       {!hasNoServices && !loading && filtered.length > 0 && (
         <AnimatePresence>
           <motion.div
@@ -808,11 +772,11 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
             style={{ color: isDark ? '#94a3b8' : '#64748b' }}
           >
             <span className="flex items-center gap-2">
-              <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[var(--primary)]" />
+              <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full" style={{ backgroundColor: accent }} />
               10,000+ applications
             </span>
             <span className="h-4 w-px bg-slate-200/60 dark:bg-zinc-700/60" />
-            <span className=" flex items-center gap-2">
+            <span className="flex items-center gap-2">
               <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-emerald-500" />
               97% approval rate
             </span>

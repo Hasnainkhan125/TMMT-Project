@@ -27,7 +27,9 @@ const slide = {
   exit: (d) => ({ x: d > 0 ? -28 : 28, opacity: 0 }),
 };
 
-const NoScrollbarStyle = () => (
+// Shared chrome: hidden scrollbars + the ticket/boarding-pass perforation motif
+// that runs through the header rail and the success stub.
+const ChromeStyle = () => (
   <style>{`
     .no-scrollbar {
       -ms-overflow-style: none;
@@ -37,6 +39,32 @@ const NoScrollbarStyle = () => (
       display: none;
       width: 0;
       height: 0;
+    }
+    .perforation {
+      position: relative;
+      height: 1px;
+      background-image: linear-gradient(to right, var(--border) 55%, transparent 45%);
+      background-size: 9px 1px;
+      background-repeat: repeat-x;
+    }
+    .perforation::before,
+    .perforation::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      border-radius: 9999px;
+      background: var(--background);
+      transform: translateY(-50%);
+    }
+    .perforation::before { left: -22px; }
+    .perforation::after { right: -22px; }
+    .stub-barcode {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 26px;
     }
   `}</style>
 );
@@ -210,7 +238,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
 
   return (
     <>
-      <NoScrollbarStyle />
+      <ChromeStyle />
       <Dialog open={open} onOpenChange={(o) => { if (!o) reset(); onOpenChange(o); }}>
         <DialogContent 
           className="
@@ -225,11 +253,25 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
           "
         >
           {done ? (
-            <SuccessScreen refId={refId} onClose={close} accent={accent} />
+            <SuccessScreen refId={refId} cfg={cfg} onClose={close} accent={accent} />
           ) : (
             <div className="flex flex-col">
-              {/* Progress rail */}
-              <div className="px-6 pt-7 pb-1">
+              {/* Ticket header: eyebrow + step rail */}
+              <div className="px-6 pt-6 pb-4">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                    Application · Step {step + 1} of {STEP_COUNT}
+                  </p>
+                  {cfg && (
+                    <p
+                      className="text-[10px] font-bold uppercase tracking-[0.1em] px-2 py-1 rounded-full"
+                      style={{ color: accent, background: `${accent}14` }}
+                    >
+                      {cfg.name}
+                    </p>
+                  )}
+                </div>
+
                 <div className="relative flex items-center justify-between">
                   <div className="absolute left-4 right-4 top-4 h-[2px] bg-border rounded-full -z-0" />
                   <motion.div
@@ -246,7 +288,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                       <div key={i} className="relative z-10 flex flex-col items-center gap-1.5" style={{ flex: i === 0 || i === STEP_COUNT - 1 ? '0 0 auto' : '1' }}>
                         <motion.div
                           animate={{
-                            scale: isActive ? 1.12 : 1,
+                            scale: isActive ? 1.14 : 1,
                             backgroundColor: isDone || isActive ? accent : 'var(--background)',
                             borderColor: isDone || isActive ? accent : 'var(--border)',
                           }}
@@ -278,9 +320,11 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                 </div>
               </div>
 
+              <div className="mx-6 perforation" />
+
               {/* ─── UPLOAD PROGRESS BAR ──────────────────────────────────── */}
               {uploading && (
-                <div className="px-6 pt-3">
+                <div className="px-6 pt-4">
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/30">
                     <Loader2 className="h-4 w-4 animate-spin text-blue-500 shrink-0" />
                     <div className="flex-1">
@@ -303,7 +347,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
 
               {/* ─── UPLOAD ERRORS ─────────────────────────────────────────── */}
               {uploadErrors.length > 0 && !uploading && (
-                <div className="px-6 pt-3">
+                <div className="px-6 pt-4">
                   <div className="flex items-start gap-2 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/30">
                     <AlertCircle className="h-4 w-4 text-rose-500 shrink-0 mt-0.5" />
                     <div className="flex-1">
@@ -370,7 +414,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
                 <div className="flex items-center gap-3 ml-auto">
                   {cfg && step > 0 && (
                     <div className="text-right">
-                      <p className="text-[10px] text-muted-foreground leading-none">total</p>
+                      <p className="text-[10px] text-muted-foreground leading-none tracking-wide uppercase">total</p>
                       <p className="text-[16px] font-bold leading-tight mt-0.5" style={{ color: accent }}>
                         {fmtAED(price)}
                       </p>
@@ -410,10 +454,18 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
 
 /* ─── Step Components ──────────────────────────────────────────────────────── */
 
+function Eyebrow({ children }) {
+  return (
+    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground mb-1.5">
+      {children}
+    </p>
+  );
+}
+
 function StepPackage({ cards, onPick, selected }) {
   return (
     <>
-      <h3 className="text-xl font-bold tracking-tight">Choose your package</h3>
+      <Eyebrow>01 · Choose a package</Eyebrow>
       <p className="mt-1 mb-4 text-[13px] text-muted-foreground">Every package bundles the full government process end to end.</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[380px] overflow-y-auto no-scrollbar -mr-2 pr-2">
         {cards.map((c) => {
@@ -434,29 +486,30 @@ function StepPackage({ cards, onPick, selected }) {
                   : '0 1px 3px rgba(0,0,0,0.05)',
               }}
             >
+              {/* Selection "stamp" — riffs on a visa entry stamp */}
               <AnimatePresence>
                 {isSel && (
                   <motion.span
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
+                    initial={{ scale: 0, opacity: 0, rotate: -18 }}
+                    animate={{ scale: 1, opacity: 1, rotate: -12 }}
                     exit={{ scale: 0, opacity: 0 }}
                     transition={{ type: 'spring', stiffness: 320, damping: 18 }}
-                    className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full shadow-sm"
-                    style={{ background: c.accent }}
+                    className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full"
+                    style={{ border: `1.5px dashed ${c.accent}`, color: c.accent }}
                   >
-                    <Check className="h-3 w-3 text-white" strokeWidth={3} />
+                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
                   </motion.span>
                 )}
               </AnimatePresence>
 
               <div
-                className="flex h-12 w-12 items-center justify-center rounded-2xl shrink-0 mb-3 transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl shrink-0 mb-3 transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3"
                 style={{ background: `linear-gradient(135deg, ${c.accent}26, ${c.accent}0d)` }}
               >
                 <Icon className="h-5 w-5" style={{ color: c.accent }} />
               </div>
 
-              <p className="text-[15px] font-semibold leading-tight pr-6">{c.name}</p>
+              <p className="text-[15px] font-semibold leading-tight pr-9">{c.name}</p>
               <p className="mt-1 text-xs text-muted-foreground leading-snug line-clamp-2">{c.tagline}</p>
 
               <div className="mt-3.5 flex items-center justify-between">
@@ -484,6 +537,7 @@ function StepPlan({ cfg, slug, applicantType, setApplicantType }) {
   const Icon = iconFor(slug);
   return (
     <>
+      <Eyebrow>02 · Confirm y our plan</Eyebrow>
       <div className="flex items-center gap-3.5 mb-5">
         <div
           className="flex h-[54px] w-[54px] items-center justify-center rounded-2xl shrink-0"
@@ -498,7 +552,7 @@ function StepPlan({ cfg, slug, applicantType, setApplicantType }) {
       </div>
 
       <div className="flex rounded-2xl border border-border overflow-hidden mb-5 bg-muted/40">
-        <Meta label="processing" value={cfg.processingTime} border />
+        <Meta label="processing" value={cfg.processingTime} dashed />
         <Meta label="documents" value={`${cfg.docs.length} needed`} />
       </div>
 
@@ -549,10 +603,13 @@ function StepPlan({ cfg, slug, applicantType, setApplicantType }) {
   );
 }
 
-function Meta({ label, value, border }) {
+function Meta({ label, value, dashed }) {
   return (
-    <div className={`flex-1 px-3.5 py-3 ${border ? 'border-r border-border' : ''}`}>
-      <p className="text-[10px] text-muted-foreground">{label}</p>
+    <div
+      className="flex-1 px-3.5 py-3"
+      style={dashed ? { borderRight: '1px dashed var(--border)' } : undefined}
+    >
+      <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className="mt-0.5 text-[13px] font-semibold">{value}</p>
     </div>
   );
@@ -563,7 +620,8 @@ function StepDetails({ cfg, contact, setContact, applicantType, price }) {
   const set = (k) => (v) => setContact({ ...contact, [k]: v });
   return (
     <>
-      <h3 className="text-xl font-bold tracking-tight">Your details</h3>
+      <Eyebrow>03 · Passenger details</Eyebrow>
+      <h3 className="text-2xl font-black tracking-tight">Your details</h3>
       <p className="mt-1 mb-5 text-[13px] text-muted-foreground">Our team calls you to confirm and process everything — no payment needed yet.</p>
       <div className="grid grid-cols-2 gap-3">
         <Field id="fullName" label="Full name" required value={contact.fullName} onChange={set('fullName')} placeholder="As per passport" full focused={focused} setFocused={setFocused} />
@@ -625,8 +683,9 @@ function StepDocuments({ cfg, files, setFiles, uploading = false }) {
   
   return (
     <>
+      <Eyebrow>04 · Boarding documents</Eyebrow>
       <div className="flex items-end justify-between mb-1">
-        <h3 className="text-xl font-bold tracking-tight">Upload documents</h3>
+        <h3 className="text-2xl font-black tracking-tight">Upload documents</h3>
         <div className="flex items-center gap-2 pb-0.5">
           <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
             <motion.div
@@ -736,46 +795,92 @@ function DocRow({ doc, accent, file, onSet, onClear, uploading = false }) {
 }
 
 /* ─── Success Screen ───────────────────────────────────────────────────────── */
+// Styled as a torn boarding-pass stub: the confirmation, a perforated tear line,
+// then a stub carrying the reference code and a decorative barcode.
 
-function SuccessScreen({ refId, onClose, accent }) {
+function Barcode({ accent }) {
+  const bars = useMemo(
+    () => Array.from({ length: 28 }, () => 2 + Math.round(Math.random() * 10)),
+    []
+  );
   return (
-    <div className="flex flex-col items-center justify-center text-center px-6 py-16">
-      <motion.div
-        initial={{ scale: 0, rotate: -12, opacity: 0 }}
-        animate={{ scale: 1, rotate: 0, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 220, damping: 16 }}
-        className="relative flex h-[72px] w-[72px] items-center justify-center rounded-full mb-5"
-        style={{ background: `linear-gradient(135deg, ${accent}26, ${accent}0d)` }}
-      >
-        <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full" style={{ background: `${accent}26` }}>
-          <Check className="h-9 w-9" strokeWidth={2.5} style={{ color: accent }} />
-        </div>
-        <motion.span
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.25, type: 'spring', stiffness: 260, damping: 14 }}
-          className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-background shadow-md"
+    <div className="stub-barcode" aria-hidden="true">
+      {bars.map((h, i) => (
+        <span
+          key={i}
+          style={{ width: 2, height: `${h + 8}px`, background: accent, opacity: 0.35 + (i % 3) * 0.15 }}
+          className="rounded-[1px]"
+        />
+      ))}
+    </div>
+  );
+}
+
+function SuccessScreen({ refId, cfg, onClose, accent }) {
+  return (
+    <div className="flex flex-col">
+      <div className="flex flex-col items-center justify-center text-center px-6 pt-14 pb-8">
+        <motion.div
+          initial={{ scale: 0, rotate: -12, opacity: 0 }}
+          animate={{ scale: 1, rotate: 0, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 220, damping: 16 }}
+          className="relative flex h-[72px] w-[72px] items-center justify-center rounded-full mb-5"
+          style={{ background: `linear-gradient(135deg, ${accent}26, ${accent}0d)` }}
         >
-          <Sparkles className="h-4 w-4" style={{ color: accent }} />
-        </motion.span>
-      </motion.div>
-      <h3 className="text-2xl font-bold tracking-tight">You're all set</h3>
-      <div className="mt-3.5 rounded-xl bg-muted px-4 py-2.5">
-        <p className="text-[11px] text-muted-foreground leading-none mb-1">Reference</p>
-        <p className="text-sm font-semibold tracking-wide font-mono">{refId}</p>
+          <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full" style={{ background: `${accent}26` }}>
+            <Check className="h-9 w-9" strokeWidth={2.5} style={{ color: accent }} />
+          </div>
+          <motion.span
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.25, type: 'spring', stiffness: 260, damping: 14 }}
+            className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-background shadow-md"
+          >
+            <Sparkles className="h-4 w-4" style={{ color: accent }} />
+          </motion.span>
+        </motion.div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground mb-1.5">Application confirmed</p>
+        <h3 className="text-2xl font-black tracking-tight">You're all set</h3>
+        <p className="mt-2 max-w-[280px] text-[13px] leading-relaxed text-muted-foreground flex items-center gap-1.5 justify-center">
+          <Clock className="h-3.5 w-3.5 shrink-0" />
+          Our team will call you within 2 hours to confirm and process payment.
+        </p>
       </div>
-      <p className="mt-4 max-w-[280px] text-[13px] leading-relaxed text-muted-foreground flex items-center gap-1.5 justify-center">
-        <Clock className="h-3.5 w-3.5 shrink-0" />
-        Our team will call you within 2 hours to confirm and process payment.
-      </p>
-      <motion.button 
-        whileHover={{ scale: 1.01 }} 
-        whileTap={{ scale: 0.98 }} 
-        onClick={onClose}
-        className="mt-8 w-full rounded-xl bg-foreground py-3.5 text-sm font-semibold text-background shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
-      >
-        Done
-      </motion.button>
+
+      <div className="mx-6 perforation" />
+
+      {/* Stub */}
+      <div className="px-6 pt-6 pb-7">
+        <div
+          className="rounded-2xl p-4 flex items-center justify-between gap-4"
+          style={{ background: `${accent}0d`, border: `1px solid ${accent}33` }}
+        >
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-1">
+              {cfg?.name || 'Reference'}
+            </p>
+            <p className="text-base font-semibold tracking-[0.06em] font-mono">{refId}</p>
+            <div className="mt-2.5">
+              <Barcode accent={accent} />
+            </div>
+          </div>
+          <div
+            className="flex h-11 w-11 items-center justify-center rounded-full shrink-0"
+            style={{ background: `${accent}1f` }}
+          >
+            <Check className="h-5 w-5" style={{ color: accent }} strokeWidth={3} />
+          </div>
+        </div>
+
+        <motion.button 
+          whileHover={{ scale: 1.01 }} 
+          whileTap={{ scale: 0.98 }} 
+          onClick={onClose}
+          className="mt-5 w-full rounded-xl bg-foreground py-3.5 text-sm font-semibold text-background shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
+        >
+          Done
+        </motion.button>
+      </div>
     </div>
   );
 }

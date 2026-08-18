@@ -412,9 +412,9 @@ const FAQsPage: React.FC = () => {
 
   // Check if dark mode
   const isDark = document.documentElement.classList.contains('dark')
-  const primaryColor = isDark ? '#4A8ABF' : '#0A3269'
-  const primaryColorLight = isDark ? '#4A8ABF' + '30' : '#0A3269' + '30'
-  const primaryColorLighter = isDark ? '#4A8ABF' + '15' : '#0A3269' + '15'
+  const primaryColor = '#0A3269' // Use #0A3269 in both modes
+  const primaryColorLight = '#0A3269' + '30'
+  const primaryColorLighter = '#0A3269' + '15'
 
   const filteredFAQs = FAQS.filter(faq => {
     const matchesSearch = !searchQuery || 

@@ -1,0 +1,557 @@
+/* ============================================================
+   SMOOTH SCROLLING STYLES - ULTRA PREMIUM
+   ============================================================ */
+
+/* ============================================================
+   1. BASE SMOOTH SCROLLING
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+/* ============================================================
+   2. CUSTOM SCROLLBAR - PREMIUM
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary, #0A3269);
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primaryHover, #1A4A8A);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary, #0A3269) transparent;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--primary, #4A8ABF);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--primaryHover, #6AA8DF);
+}
+
+.dark * {
+  scrollbar-color: var(--primary, #4A8ABF) transparent;
+}
+
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.scroll-top-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(10, 50, 105, 0.5);
+}
+
+.scroll-top-btn:active {
+  transform: scale(0.9);
+}
+
+.dark .scroll-top-btn {
+  background: #4A8ABF;
+  box-shadow: 0 4px 20px rgba(74, 138, 191, 0.3);
+}
+
+.dark .scroll-top-btn:hover {
+  box-shadow: 0 6px 30px rgba(74, 138, 191, 0.5);
+}
+
+/* ============================================================
+   5. SCROLL ANIMATIONS - SECTION LEVEL (UPDATED)
+   ============================================================ */
+
+/* 5.1 Fade In Scroll - Smooth Rise */
+.fade-in-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 5.2 Fade In Slow - Elegant */
+.fade-in-slow {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in-slow.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 5.3 Slide In From Bottom - With Bounce */
+.slide-in-bottom {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.slide-in-bottom.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 5.4 Slide In From Left - Smooth */
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.slide-in-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 5.5 Slide In From Right - Smooth */
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.slide-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 5.6 Scale In - With Pop */
+.scale-in {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 5.7 Zoom Blur In - Cinematic */
+.zoom-blur-in {
+  opacity: 0;
+  transform: scale(0.85) translateY(20px);
+  filter: blur(4px);
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.zoom-blur-in.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+}
+
+/* 5.8 Flip In 3D - Premium */
+.flip-in {
+  opacity: 0;
+  transform: perspective(800px) rotateX(15deg) translateY(30px);
+  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.flip-in.visible {
+  opacity: 1;
+  transform: perspective(800px) rotateX(0) translateY(0);
+}
+
+/* 5.9 Opacity Glide - Pure Fade */
+.opacity-glide {
+  opacity: 0;
+  transition: opacity 2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.opacity-glide.visible {
+  opacity: 1;
+}
+
+/* 5.10 Reveal On Scroll - Base */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 5.11 Glow In - Premium Highlight */
+.glow-in {
+  opacity: 0;
+  filter: brightness(2) blur(10px);
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glow-in.visible {
+  opacity: 1;
+  filter: brightness(1) blur(0);
+}
+
+/* 5.12 Rotate In - Creative */
+.rotate-in {
+  opacity: 0;
+  transform: rotate(-15deg) scale(0.8);
+  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rotate-in.visible {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* 5.13 Bounce In - Playful */
+.bounce-in {
+  opacity: 0;
+  transform: scale(0.3);
+  transition: opacity 0.8s ease,
+              transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bounce-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 5.14 Slide Fade - Elegant */
+.slide-fade {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.slide-fade.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ============================================================
+   6. STAGGER CHILDREN - For Lists/Grids
+   ============================================================ */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stagger-children.visible > *:nth-child(1) { transition-delay: 0.05s; }
+.stagger-children.visible > *:nth-child(2) { transition-delay: 0.1s; }
+.stagger-children.visible > *:nth-child(3) { transition-delay: 0.15s; }
+.stagger-children.visible > *:nth-child(4) { transition-delay: 0.2s; }
+.stagger-children.visible > *:nth-child(5) { transition-delay: 0.25s; }
+.stagger-children.visible > *:nth-child(6) { transition-delay: 0.3s; }
+.stagger-children.visible > *:nth-child(7) { transition-delay: 0.35s; }
+.stagger-children.visible > *:nth-child(8) { transition-delay: 0.4s; }
+.stagger-children.visible > *:nth-child(9) { transition-delay: 0.45s; }
+.stagger-children.visible > *:nth-child(10) { transition-delay: 0.5s; }
+.stagger-children.visible > *:nth-child(11) { transition-delay: 0.55s; }
+.stagger-children.visible > *:nth-child(12) { transition-delay: 0.6s; }
+
+.stagger-children.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   7. STAGGER ITEM - Individual Items
+   ============================================================ */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stagger-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-item:nth-child(1) { transition-delay: 0.05s; }
+.stagger-item:nth-child(2) { transition-delay: 0.1s; }
+.stagger-item:nth-child(3) { transition-delay: 0.15s; }
+.stagger-item:nth-child(4) { transition-delay: 0.2s; }
+.stagger-item:nth-child(5) { transition-delay: 0.25s; }
+.stagger-item:nth-child(6) { transition-delay: 0.3s; }
+.stagger-item:nth-child(7) { transition-delay: 0.35s; }
+.stagger-item:nth-child(8) { transition-delay: 0.4s; }
+.stagger-item:nth-child(9) { transition-delay: 0.45s; }
+.stagger-item:nth-child(10) { transition-delay: 0.5s; }
+
+/* ============================================================
+   8. PARALLAX EFFECTS
+   ============================================================ */
+.parallax-element {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+.parallax-slow {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   9. SCROLL INDICATOR
+   ============================================================ */
+.scroll-indicator {
+  display: inline-block;
+  animation: bounceDown 2s ease-in-out infinite;
+}
+
+@keyframes bounceDown {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.scroll-hint {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-hint:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   10. SECTION ANCHOR OFFSET
+   ============================================================ */
+.section-anchor {
+  scroll-margin-top: 80px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth !important;
+}
+
+/* ============================================================
+   11. SCROLL SNAP
+   ============================================================ */
+.scroll-snap-y {
+  scroll-snap-type: y proximity;
+}
+
+.scroll-snap-start {
+  scroll-snap-align: start;
+}
+
+/* ============================================================
+   12. RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .fade-in-scroll,
+  .slide-in-left,
+  .slide-in-right,
+  .scale-in,
+  .slide-in-bottom,
+  .zoom-blur-in,
+  .flip-in,
+  .reveal-on-scroll,
+  .slide-fade {
+    transform: translateY(30px);
+    transition-duration: 0.7s;
+  }
+
+  .slide-in-left {
+    transform: translateX(-40px);
+  }
+
+  .slide-in-right {
+    transform: translateX(40px);
+  }
+
+  .slide-in-bottom {
+    transform: translateY(40px);
+  }
+
+  .zoom-blur-in {
+    transform: scale(0.9) translateY(15px);
+    filter: blur(3px);
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .fade-in-scroll,
+  .slide-in-left,
+  .slide-in-right,
+  .scale-in,
+  .slide-in-bottom,
+  .zoom-blur-in,
+  .flip-in,
+  .reveal-on-scroll,
+  .slide-fade {
+    transform: translateY(20px);
+    transition-duration: 0.5s;
+  }
+
+  .slide-in-left {
+    transform: translateX(-25px);
+  }
+
+  .slide-in-right {
+    transform: translateX(25px);
+  }
+
+  .slide-in-bottom {
+    transform: translateY(30px);
+  }
+
+  .zoom-blur-in {
+    transform: scale(0.95) translateY(10px);
+    filter: blur(2px);
+  }
+
+  .scroll-top-btn {
+    width: 40px;
+    height: 40px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .scroll-top-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .scroll-progress {
+    height: 2px;
+  }
+
+  /* Stagger children on mobile - faster */
+  .stagger-children > * {
+    transition-duration: 0.4s;
+  }
+
+  .stagger-children.visible > *:nth-child(1) { transition-delay: 0.02s; }
+  .stagger-children.visible > *:nth-child(2) { transition-delay: 0.04s; }
+  .stagger-children.visible > *:nth-child(3) { transition-delay: 0.06s; }
+  .stagger-children.visible > *:nth-child(4) { transition-delay: 0.08s; }
+  .stagger-children.visible > *:nth-child(5) { transition-delay: 0.1s; }
+  .stagger-children.visible > *:nth-child(6) { transition-delay: 0.12s; }
+  .stagger-children.visible > *:nth-child(7) { transition-delay: 0.14s; }
+  .stagger-children.visible > *:nth-child(8) { transition-delay: 0.16s; }
+  .stagger-children.visible > *:nth-child(9) { transition-delay: 0.18s; }
+  .stagger-children.visible > *:nth-child(10) { transition-delay: 0.2s; }
+
+  /* Single column items stagger */
+  .stagger-item:nth-child(1) { transition-delay: 0.02s; }
+  .stagger-item:nth-child(2) { transition-delay: 0.04s; }
+  .stagger-item:nth-child(3) { transition-delay: 0.06s; }
+  .stagger-item:nth-child(4) { transition-delay: 0.08s; }
+  .stagger-item:nth-child(5) { transition-delay: 0.1s; }
+  .stagger-item:nth-child(6) { transition-delay: 0.12s; }
+  .stagger-item:nth-child(7) { transition-delay: 0.14s; }
+  .stagger-item:nth-child(8) { transition-delay: 0.16s; }
+  .stagger-item:nth-child(9) { transition-delay: 0.18s; }
+  .stagger-item:nth-child(10) { transition-delay: 0.2s; }
+}
+
+/* Very small screens */
+@media (max-width: 380px) {
+  .fade-in-scroll,
+  .slide-in-left,
+  .slide-in-right,
+  .scale-in,
+  .slide-in-bottom,
+  .zoom-blur-in,
+  .flip-in,
+  .reveal-on-scroll,
+  .slide-fade {
+    transform: translateY(15px);
+    transition-duration: 0.4s;
+  }
+}
+
+/* ============================================================
+   13. REDUCED MOTION PREFERENCE
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .fade-in-scroll,
+  .slide-in-left,
+  .slide-in-right,
+  .scale-in,
+  .slide-in-bottom,
+  .zoom-blur-in,
+  .flip-in,
+  .reveal-on-scroll,
+  .slide-fade,
+  .opacity-glide,
+  .glow-in,
+  .rotate-in,
+  .bounce-in,
+  .stagger-children > *,
+  .stagger-item {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .scroll-progress {
+    display: none !important;
+  }
+
+  .scroll-indicator {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   END SMOOTH SCROLLING STYLES
+   ============================================================ */

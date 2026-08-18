@@ -70,6 +70,44 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
+// ─── Signature motif: the "official seal" ──────────────────────────────────
+// A dashed-ring emblem used sparingly across the page — on the popular plan,
+// as a faint watermark behind the hero, and echoed in the savings tag — to
+// carry the "government-backed, verified" idea typographically rather than
+// through another badge-and-pill pattern.
+
+const SealWatermark = () => (
+  <svg
+    className="pointer-events-none absolute left-1/2 top-1 -translate-x-1/2 -z-10 opacity-[0.05] dark:opacity-[0.06]"
+    width="360"
+    height="360"
+    viewBox="0 0 360 360"
+    fill="none"
+    aria-hidden="true"
+  >
+    <circle cx="180" cy="180" r="176" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 7" className="text-[#0A3269]" />
+    <circle cx="180" cy="180" r="150" stroke="currentColor" strokeWidth="1" className="text-[#0A3269]" />
+    <circle cx="180" cy="180" r="4" fill="currentColor" className="text-[#0A3269]" />
+  </svg>
+);
+
+const SealBadge = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <span
+    className={cn(
+      'inline-flex items-center gap-1 rounded-full border border-dashed px-2 py-0.5 text-[10px] font-light uppercase tracking-wider border-[#0A3269]/40 text-[#0A3269]',
+      className
+    )}
+  >
+    {children}
+  </span>
+);
+
 // ─── Value-anchored feature data ────────────────────────────────────────────
 const featuresFor = (plan: Plan) => {
   const getIcon = (id: string) => {
@@ -115,36 +153,36 @@ const WhySubscribeSection = () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-black dark:text-white leading-[1.05] tracking-tight" style={{ fontFamily: "'Inter', sans-serif" }}>
           {isArabic ? 'لماذا تشترك مع' : 'Why Subscribe to'}
           <br />
-          <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal">
+          <span className="text-[#0A3269] font-normal">
             {isArabic ? 'TMMT؟' : 'TMMT?'}
           </span>
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5 max-w-5xl mx-auto">
-        {benefits.map((benefit, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.08, duration: 0.5 }}
-            whileHover={{ y: -4 }}
-            className="group relative rounded-xl sm:rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-black p-3 sm:p-4 md:p-5 text-center hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-xl hover:shadow-[#0A3269]/8 dark:hover:shadow-[#4A8ABF]/8 transition-all duration-300"
-          >
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            <div className="p-2 sm:p-3 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 w-fit mx-auto mb-2 sm:mb-3 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-300">
-              <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#0A3269] dark:text-[#4A8ABF] group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
-            </div>
-            <h4 className="font-normal text-black dark:text-white text-sm sm:text-base md:text-lg group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
-              {benefit.title}
-            </h4>
-            <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50 mt-1 leading-relaxed font-light">
-              {benefit.desc}
-            </p>
-          </motion.div>
-        ))}
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5 max-w-5xl mx-auto">
+  {benefits.map((benefit, idx) => (
+    <motion.div
+      key={idx}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: idx * 0.08, duration: 0.5 }}
+      whileHover={{ y: -4 }}
+      className="group relative rounded-xl sm:rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-black p-3 sm:p-4 md:p-5 text-center hover:border-[#0A3269]/40 hover:shadow-xl hover:shadow-[#0A3269]/8 transition-all duration-300"
+    >
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      <div className="p-2 sm:p-3 rounded-xl bg-[#0A3269] w-fit mx-auto mb-2 sm:mb-3 group-hover:bg-[#0A3269]/80 transition-all duration-300">
+        <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white group-hover:text-white transition-colors duration-300" strokeWidth={1.75} />
       </div>
+      <p className="font-normal text-black dark:text-white text-sm sm:text-base md:text-lg group-hover:text-[#0A3269] transition-colors duration-300">
+        {benefit.title}
+      </p>
+      <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50 mt-1 leading-relaxed font-light">
+        {benefit.desc}
+      </p>
+    </motion.div>
+  ))}
+</div>
     </motion.div>
   );
 };
@@ -162,18 +200,18 @@ const GoldenGuaranteeCard = () => {
       transition={{ duration: 0.5, delay: 0.3 }}
       className="mt-6 sm:mt-8 max-w-3xl mx-auto"
     >
-      <div className="relative rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-white/50 dark:bg-black/70 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5">
+      <div className="relative rounded-xl border border-amber-500/30 bg-white/50 dark:bg-black/70 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5">
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
           <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-            <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
+            <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" strokeWidth={1.5} />
           </div>
           
           <div className="flex-1 min-w-0">
             <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
               {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-              <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
+              <SealBadge className="border-amber-500/40 text-amber-700 text-[7px] sm:text-[8px] px-1.5 sm:px-2">
                 ✓ Trusted
-              </Badge>
+              </SealBadge>
             </h4>
             <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 leading-relaxed mt-0.5 max-w-2xl font-light">
               {isArabic 
@@ -184,7 +222,7 @@ const GoldenGuaranteeCard = () => {
               href="/legal#guarantee"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-light transition-all duration-300 group/link hover:gap-1.5"
+              className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 hover:text-amber-700 font-light transition-all duration-300 group/link hover:gap-1.5"
             >
               {isArabic ? 'اقرأ المزيد' : 'Read more'}
               <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover/link:translate-x-0.5" />
@@ -221,53 +259,53 @@ const HowItWorksSection = () => {
           <>
             كيف يعمل
             <br />
-            <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal">بعد اشتراكك</span>
+            <span className="text-[#0A3269] font-normal">بعد اشتراكك</span>
           </>
         ) : (
           <>
             How Works After
             <br />
-            <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal">subscription</span>
+            <span className="text-[#0A3269] font-normal">subscription</span>
           </>
         )}
       </h3>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-        {steps.map((step, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 + idx * 0.08, duration: 0.5 }}
-            className="group relative text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-black/80 border border-black/5 dark:border-zinc-800 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 hover:shadow-md transition-all duration-300"
-          >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF] rounded-full group-hover:w-8 transition-all duration-500" />
-            
-            <div className="flex flex-col items-center">
-              <div className="relative">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-[#0A3269]/10 dark:bg-zinc-800 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-300">
-                  <step.icon 
-                    className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#0A3269] dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" 
-                    strokeWidth={1.75} 
-                  />
-                </div>
-                
-                {idx < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 left-full w-[calc(100%+0.5rem)] h-px bg-gradient-to-r from-[#0A3269]/20 to-transparent dark:from-[#4A8ABF]/20 -translate-y-1/2" />
-                )}
-                
-                <div className="absolute -top-1.5 -right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black text-[7px] sm:text-[9px] font-medium flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-                  {idx + 1}
-                </div>
-              </div>
-              
-              <span className="text-[9px] sm:text-xs md:text-sm font-light text-black dark:text-white/80 max-w-[70px] sm:max-w-[100px] text-center leading-tight group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
-                {step.label}
-              </span>
-            </div>
-          </motion.div>
-        ))}
+ <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+  {steps.map((step, idx) => (
+    <motion.div
+      key={idx}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 + idx * 0.08, duration: 0.5 }}
+      className="group relative text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-black/80 border border-black/5 dark:border-zinc-800 hover:border-[#0A3269]/30 hover:shadow-md transition-all duration-300"
+    >
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] rounded-full group-hover:w-8 transition-all duration-500" />
+      
+      <div className="flex flex-col items-center">
+        <div className="relative">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-[#0A3269] flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-[#0A3269]/80 transition-all duration-300">
+            <step.icon 
+              className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white group-hover:text-white transition-colors duration-300" 
+              strokeWidth={1.75} 
+            />
+          </div>
+          
+          {idx < steps.length - 1 && (
+            <div className="hidden md:block absolute top-1/2 left-full w-[calc(100%+0.5rem)] h-px bg-gradient-to-r from-[#0A3269]/20 to-transparent -translate-y-1/2" />
+          )}
+          
+          <div className="absolute -top-1.5 -right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#0A3269] text-white text-[7px] sm:text-[9px] font-medium flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+            {idx + 1}
+          </div>
+        </div>
+        
+        <span className="text-[9px] sm:text-xs md:text-sm font-light text-black dark:text-white/80 max-w-[70px] sm:max-w-[100px] text-center leading-tight group-hover:text-[#0A3269] transition-colors duration-300">
+          {step.label}
+        </span>
       </div>
+    </motion.div>
+  ))}
+</div>
     </motion.div>
   );
 };
@@ -287,21 +325,52 @@ const TrustSection = () => {
   ];
 
   return (
+ <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.35 }}
+  className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4"
+>
+  {trustItems.map((item, idx) => (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.35 }}
-      className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-5"
+      key={idx}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.4 + idx * 0.08, duration: 0.3 }}
+      whileHover={{ 
+        scale: 1.03,
+        y: -3,
+        transition: { duration: 0.2 }
+      }}
+      className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 
+        rounded-xl 
+        bg-white/40 dark:bg-white/5 
+        backdrop-blur-md 
+        border border-white/20 dark:border-white/10 
+        hover:border-[#0A3269]/40 dark:hover:border-[#0A3269]/30 
+        hover:bg-white/60 dark:hover:bg-white/10 
+        transition-all duration-300"
     >
-      {trustItems.map((item, idx) => (
-        <div key={idx} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50">
-          <div className="p-1 sm:p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-zinc-800">
-            <item.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.75} />
-          </div>
-          <span className="font-light text-[8px] sm:text-[10px] md:text-xs">{item.label}</span>
-        </div>
-      ))}
+      {/* Glow Effect */}
+      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 
+        bg-gradient-to-r from-[#0A3269]/5 to-transparent dark:from-[#0A3269]/10" />
+      
+      <item.icon 
+        className="relative h-3.5 w-3.5 sm:h-4 sm:w-4 
+          text-[#0A3269] dark:text-[#0A3269] 
+          group-hover:scale-110 
+          transition-all duration-300" 
+        strokeWidth={1.75} 
+      />
+      <span className="relative text-[9px] sm:text-[11px] md:text-xs font-medium 
+        text-zinc-700 dark:text-zinc-300 
+        group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] 
+        transition-colors duration-300 whitespace-nowrap">
+        {item.label}
+      </span>
     </motion.div>
+  ))}
+</motion.div>
   );
 };
 
@@ -352,8 +421,9 @@ export function PlanSelectionSection({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto"
+          className="relative text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto"
         >
+          <SealWatermark />
           <h1
             className="font-light text-black dark:text-white leading-[1.05]"
             style={{ 
@@ -365,7 +435,7 @@ export function PlanSelectionSection({
               <>
                 الخدمات الحكومية،
                 <br />
-                <span className="relative text-[#0A3269] dark:text-[#4A8ABF] font-normal" style={{ fontSize: 'clamp(1.2rem, 2.8vw, 2.2rem)' }}>
+                <span className="relative text-[#0A3269] font-normal" style={{ fontSize: 'clamp(1.2rem, 2.8vw, 2.2rem)' }}>
                   بدون عناء.
                   <svg className="absolute -bottom-2 left-0 w-full" height="6" viewBox="0 0 300 6" preserveAspectRatio="none">
                     <path d="M0,4 Q75,1 150,3 T300,2.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
@@ -376,7 +446,7 @@ export function PlanSelectionSection({
               <>
                 Government Services,
                 <br />
-                <span className="relative text-[#0A3269] dark:text-[#4A8ABF] font-normal">
+                <span className="relative text-[#0A3269] font-normal">
                   Without the Hassle.
                   <svg className="absolute -bottom-2 left-0 w-full" height="6" viewBox="0 0 300 6" preserveAspectRatio="none">
                     <path d="M0,4 Q75,1 150,3 T300,2.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
@@ -408,11 +478,11 @@ export function PlanSelectionSection({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.5 }}
-            className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#0A3269]/30 dark:border-[#4A8ABF]/20 bg-[#0A3269]/5 dark:bg-black max-w-3xl mx-auto"
+            className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#0A3269]/30 bg-[#0A3269]/5 dark:bg-black max-w-3xl mx-auto"
           >
             <div className="relative p-3 sm:p-4 md:p-5 flex items-center gap-2 sm:gap-3 md:gap-4">
-              <div className="hidden md:flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-[#0A3269]/20 dark:bg-zinc-800 border border-[#0A3269]/30 dark:border-[#4A8ABF]/30">
-                <Gift className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.5} />
+              <div className="hidden md:flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-[#0A3269]/20 dark:bg-zinc-800 border border-[#0A3269]/30">
+                <Gift className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#0A3269]" strokeWidth={1.5} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-light text-xs sm:text-sm md:text-[15px] text-black dark:text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -466,7 +536,7 @@ export function PlanSelectionSection({
     'h-auto min-h-[520px] md:min-h-[560px]',
     isPopular
       ? [
-          'border-[#0A3269]/60 dark:border-[#4A8ABF]/40',
+          'border-[#0A3269]/60',
           'shadow-[0_24px_60px_-16px_rgba(10,50,105,0.12)] dark:shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]',
           'md:-translate-y-3 z-10',
           'min-h-[540px] md:min-h-[590px]',
@@ -475,35 +545,37 @@ export function PlanSelectionSection({
           'border-zinc-200 dark:border-zinc-800',
           'hover:border-zinc-300 dark:hover:border-zinc-700',
         ],
-    isSelected && !isPopular && 'ring-2 ring-[#0A3269]/60 dark:ring-[#4A8ABF]/50 border-transparent'
+    isSelected && !isPopular && 'ring-2 ring-[#0A3269]/60 border-transparent'
   )}
 >
-  <div className="flex flex-wrap items-center justify-center gap-1 absolute -top-3.5 left-1/2 -translate-x-1/2">
-    {isPopular && (
-      <span className="flex items-center gap-1 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] px-3.5 py-1.5 text-[10px] font-light uppercase tracking-wider text-white dark:text-black shadow-lg shadow-[#0A3269]/30 dark:shadow-[#4A8ABF]/30">
-        <Star className="h-2.5 w-2.5" strokeWidth={3} />
-        Most popular
-      </span>
-    )}
-  </div>
+  {/* Popular plan: an official-seal badge overlapping the corner */}
+  {isPopular && (
+    <div className="absolute -top-4 -right-3 flex h-[60px] w-[60px] rotate-[10deg] items-center justify-center rounded-full border-[1.5px] border-dashed border-[#0A3269] bg-white dark:bg-black shadow-md">
+      <div className="flex flex-col items-center leading-none text-[#0A3269]">
+        <Star className="h-3 w-3 mb-0.5" strokeWidth={2.5} fill="currentColor" />
+        <span className="text-[7px] font-semibold uppercase tracking-wide">Most</span>
+        <span className="text-[7px] font-semibold uppercase tracking-wide">Popular</span>
+      </div>
+    </div>
+  )}
 
   <div className="relative flex items-center gap-3">
     <div
       className={cn(
         'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-300',
         isPopular
-          ? 'bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 border-[#0A3269]/30 dark:border-[#4A8ABF]/30'
+          ? 'bg-[#0A3269]/15 border-[#0A3269]/30'
           : 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-800'
       )}
     >
       <PlanIcon
-        className={cn('h-5 w-5', isPopular ? 'text-[#0A3269] dark:text-[#4A8ABF]' : 'text-zinc-600 dark:text-white/60')}
+        className={cn('h-5 w-5', isPopular ? 'text-[#0A3269]' : 'text-zinc-600 dark:text-white/60')}
         strokeWidth={1.75}
       />
     </div>
     <h3
-      className="text-xl md:text-[22px] font-light text-black dark:text-white leading-tight"
-      style={{ fontFamily: "'Inter', sans-serif" }}
+      className="text-xl md:text-[22px] font-semibold text-black dark:text-white leading-tight"
+      style={{ fontFamily: "'Fraunces', serif", letterSpacing: '-0.01em' }}
     >
       {plan.label}
     </h3>
@@ -537,18 +609,18 @@ export function PlanSelectionSection({
     </div>
 
     {eff.isOffer && (
-      <span className="inline-block mt-2 text-[10px] font-light px-1.5 py-0.5 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 text-[#0A3269] dark:text-[#4A8ABF] border border-[#0A3269]/30 dark:border-[#4A8ABF]/30 tracking-wide">
-        SAVE {eff.savings}
-      </span>
+      <SealBadge className="mt-2">
+        Save {eff.savings}
+      </SealBadge>
     )}
 
     {plan.interval !== 'month' && (
-      <p className="text-xs mt-2 font-light text-[#0A3269] dark:text-[#4A8ABF]">
+      <p className="text-xs mt-2 font-light text-[#0A3269] flex items-center gap-1.5">
         ≈ AED {perMonth}/month
         {savingsPercentage && savingsPercentage > 0 && (
-          <span className="ml-1 text-[10px] font-light bg-[#0A3269] dark:bg-[#4A8ABF] px-1.5 py-0.5 rounded-full text-white dark:text-black">
+          <SealBadge className="py-0">
             Save {savingsPercentage}%
-          </span>
+          </SealBadge>
         )}
       </p>
     )}
@@ -564,44 +636,43 @@ export function PlanSelectionSection({
 
   <ul className="relative space-y-3 flex-1">
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
-        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
         {plan.planDetails.serviceLimit} Service Requests
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
-        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
         {plan.planDetails.questionsPerMonth} Status Checks
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
-        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
         {plan.planDetails.aiLevel} AI Level
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
-        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
         {plan.planDetails.discountRate} Discount
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269] dark:bg-[#4A8ABF]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
-        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white dark:text-black' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+        <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-        {plan.planDetails.priority} Priority
-      </span>
+        {plan.planDetails.priority} Priority      </span>
     </li>
   </ul>
 
@@ -610,12 +681,12 @@ export function PlanSelectionSection({
     <div className="flex flex-wrap gap-1">
       {serviceExamples.slice(0, isMonthly ? 3 : 5).map((service, i) => (
         <span key={i} className="flex items-center gap-0.5 text-[10px] bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full font-light transition-all duration-200 hover:scale-105 hover:shadow-sm">
-          <service.icon className="h-2.5 w-2.5 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.5} />
+          <service.icon className="h-2.5 w-2.5 text-[#0A3269]" strokeWidth={1.5} />
           <span className="text-black/70 dark:text-white/60">{service.label}</span>
         </span>
       ))}
       {!isMonthly && (
-        <span className="text-[10px] text-[#0A3269] dark:text-[#4A8ABF] font-light">+ more</span>
+        <span className="text-[10px] text-[#0A3269] font-light">+ more</span>
       )}
     </div>
   </div>
@@ -628,7 +699,7 @@ export function PlanSelectionSection({
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 100);
     }}
-    className="mt-2 text-xs font-light text-gray-600 dark:text-white/50 hover:text-[#0A3269] dark:hover:text-[#4A8ABF] transition-colors flex items-center gap-1 self-start group"
+    className="mt-2 text-xs font-light text-gray-600 dark:text-white/50 hover:text-[#0A3269] transition-colors flex items-center gap-1 self-start group"
   >
     View Full Details
     <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
@@ -646,21 +717,12 @@ export function PlanSelectionSection({
       'relative mt-5 flex items-center justify-center gap-2.5 h-12 rounded-full text-sm font-medium',
       'transition-all duration-300 cursor-pointer select-none overflow-hidden group/btn',
       isPopular
-        ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black shadow-[0_8px_25px_-6px_rgba(10,50,105,0.55)] dark:shadow-[0_8px_25px_-6px_rgba(74,138,191,0.55)]'
+        ? 'bg-[#0A3269] text-white shadow-[0_8px_25px_-6px_rgba(10,50,105,0.55)]'
         : 'bg-black text-white dark:bg-white dark:text-black border border-black dark:border-white'
     )}
   >
-    {/* Shimmer Effect - Always visible on hover */}
+    {/* Shimmer Effect - only on hover */}
     <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-    
-    {/* Hover Glow Effect */}
-    <span className={cn(
-      'absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 blur-xl',
-      isPopular ? 'bg-[#0A3269]/30 dark:bg-[#4A8ABF]/30' : 'bg-black/30 dark:bg-white/30'
-    )} />
-
-    {/* Hover Scale Effect - Only on the button itself, not color */}
-    <span className="absolute inset-0 group-hover/btn:scale-105 transition-transform duration-300 opacity-0 group-hover/btn:opacity-100 bg-white/5 dark:bg-black/5 rounded-full" />
     
     <span className="relative z-10 flex items-center gap-2">
       <span>{isPopular ? 'Get Started' : isMonthly ? 'Subscribe Now' : 'Start Your Membership'}</span>
@@ -684,10 +746,10 @@ export function PlanSelectionSection({
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mt-4 max-w-3xl mx-auto"
         >
-          <div className="relative rounded-lg sm:rounded-xl border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-[#0A3269]/5 dark:bg-black p-2.5 sm:p-3 md:p-4">
+          <div className="relative rounded-lg sm:rounded-xl border border-[#0A3269]/20 bg-[#0A3269]/5 dark:bg-black p-2.5 sm:p-3 md:p-4">
             <div className="flex items-start gap-2">
               <div className="p-0.5 sm:p-1 rounded-full bg-[#0A3269]/10 dark:bg-zinc-800 mt-0.5 flex-shrink-0">
-                <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={2.5} />
+                <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0A3269]" strokeWidth={2.5} />
               </div>
               <div>
                 <p className="text-[9px] sm:text-[10px] md:text-xs font-light text-black dark:text-white">
@@ -710,48 +772,50 @@ export function PlanSelectionSection({
   transition={{ delay: 0.55, duration: 0.5 }}
   className="mt-6 sm:mt-8 relative overflow-hidden rounded-xl bg-white/70 dark:bg-black/80 backdrop-blur-sm p-4 sm:p-6 lg:p-8 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-500 group"
 >
-  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-amber-400/5 dark:bg-amber-500/3 blur-2xl group-hover:bg-amber-400/8 transition-all duration-700" />
-  <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-orange-400/5 dark:bg-orange-500/3 blur-2xl group-hover:bg-orange-400/8 transition-all duration-700" />
+  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-amber-400/5 blur-2xl group-hover:bg-amber-400/8 transition-all duration-700" />
+  <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-orange-400/5 blur-2xl group-hover:bg-orange-400/8 transition-all duration-700" />
 
   <div className="relative">
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
       <div className="flex items-center gap-3">
-        <div className="relative p-2 rounded-lg bg-amber-400/10 dark:bg-amber-500/10 border border-amber-200/20 dark:border-amber-400/10">
-          <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
+        <div className="relative p-2 rounded-lg bg-amber-400/10 border border-amber-200/20">
+          <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500" strokeWidth={1.75} />
         </div>
         <div>
-          <h4 className="text-base sm:text-xl font-light text-black dark:text-white">
+          <h4 className="text-base sm:text-xl font-semibold text-black dark:text-white" style={{ fontFamily: "'Fraunces', serif" }}>
             {isArabic ? 'الأعضاء المؤسسون' : 'Founding Members'}
           </h4>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] font-light tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 dark:bg-amber-400/10 px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] font-light tracking-wider text-amber-600 bg-amber-500/10 px-2 py-0.5 rounded-full">
               <span className="relative flex h-1 w-1">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60" />
                 <span className="relative inline-flex rounded-full h-1 w-1 bg-amber-500" />
               </span>
               {isArabic ? 'وقت محدود' : 'Limited Time'}
             </span>
-            <span className="text-[8px] sm:text-[10px] font-light text-amber-500/60 dark:text-amber-400/50">
+            <span className="text-[8px] sm:text-[10px] font-light text-amber-500/60">
               {isArabic ? '• عرض حصري' : '• Exclusive'}
             </span>
           </div>
         </div>
       </div>
 
-      <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          navigate('/subscription');
-          setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
-        }}
-        className="group/btn relative overflow-hidden bg-amber-500 hover:bg-amber-600 dark:bg-amber-500/80 dark:hover:bg-amber-600/80 text-white rounded-full px-4 sm:px-6 py-1.5 sm:py-2.5 text-[10px] sm:text-sm font-light transition-all duration-300 hover:scale-[1.02]"
-      >
-        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-        <span className="relative flex items-center gap-1.5">
-          {isArabic ? 'اكتشف المزايا' : 'Discover Benefits'}
-          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-        </span>
-      </Button>
+<Button
+  onClick={(e) => {
+    e.stopPropagation();
+    navigate('/subscription');
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+  }}
+  className="relative bg-amber-500 hover:bg-amber-400/90 text-white rounded-full px-5 sm:px-7 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-all duration-300 shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:-translate-y-0.5 active:scale-95 overflow-hidden"
+>
+  {/* Subtle glow effect */}
+  <span className="absolute inset-0 bg-gradient-to-r from-amber-400/20 via-transparent to-amber-600/20 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+  
+  <span className="relative flex items-center gap-2">
+    {isArabic ? 'اكتشف المزايا' : 'Discover Benefits'}
+    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+  </span>
+</Button>
     </div>
 
     <p className="text-[11px] sm:text-sm text-black/60 dark:text-white/50 max-w-3xl leading-relaxed mt-2 sm:mt-3 font-light">
@@ -773,12 +837,12 @@ export function PlanSelectionSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 + idx * 0.1, duration: 0.4 }}
-          className="group/item relative overflow-hidden rounded-lg bg-white/50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 hover:border-amber-200/30 dark:hover:border-amber-400/10 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
+          className="group/item relative overflow-hidden rounded-lg bg-white/50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 hover:border-amber-200/30 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
         >
           <div className="absolute -top-10 -right-10 w-16 h-16 rounded-full bg-amber-400/5 blur-xl group-hover/item:bg-amber-400/10 transition-all duration-500" />
           <div className="relative flex items-start gap-2.5">
-            <div className="p-1.5 rounded-lg bg-amber-500/10 dark:bg-amber-400/10 group-hover/item:bg-amber-500/20 dark:group-hover/item:bg-amber-400/20 transition-colors duration-300">
-              <item.icon className="w-4 h-4 text-amber-500 dark:text-amber-400" strokeWidth={1.75} />
+            <div className="p-1.5 rounded-lg bg-amber-500/10 group-hover/item:bg-amber-500/20 transition-colors duration-300">
+              <item.icon className="w-4 h-4 text-amber-500" strokeWidth={1.75} />
             </div>
             <div>
               <h5 className="font-light text-black dark:text-white text-xs sm:text-sm">
@@ -798,12 +862,12 @@ export function PlanSelectionSection({
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay: 0.4, duration: 0.5 }}
-      className="mt-3 sm:mt-4 relative overflow-hidden rounded-lg bg-amber-500/5 dark:bg-amber-400/5 border border-amber-200/20 dark:border-amber-400/10 p-2 sm:p-3"
+      className="mt-3 sm:mt-4 relative overflow-hidden rounded-lg bg-amber-500/5 border border-amber-200/20 p-2 sm:p-3"
     >
       <div className="relative flex flex-col sm:flex-row items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-amber-500 dark:text-amber-400 text-sm font-light">⚡</span>
-          <p className="text-[10px] sm:text-xs text-amber-600 dark:text-amber-400/80 font-light text-center sm:text-left">
+          <span className="text-amber-500 text-sm font-light">⚡</span>
+          <p className="text-[10px] sm:text-xs text-amber-600 font-light text-center sm:text-left">
             {isArabic 
               ? 'عضوية المؤسسين محدودة — انضم الآن قبل إغلاق التسجيل.'
               : 'Founding membership is limited — join now before enrollment closes.'
@@ -838,12 +902,12 @@ export function PlanSelectionSection({
     "w-full sm:w-auto min-w-[200px] sm:min-w-[280px] px-5 sm:px-10 rounded-full",
     "text-[13px] sm:text-[15px] md:text-[16px] font-semibold",
     "transition-all duration-300 cursor-pointer select-none",
-    "bg-[#0A3269] dark:bg-white",
-    "border border-[#0A3269]/30 dark:border-zinc-700",
-    "text-white dark:text-black",
-    "hover:shadow-xl hover:shadow-[#0A3269]/30 dark:hover:shadow-zinc-800",
-    "hover:border-[#0A3269]/50 dark:hover:border-zinc-600",
-    "hover:scale-105 active:scale-95",
+    "bg-[#0A3269]",
+    "border border-[#0A3269]/30",
+    "text-white",
+    "hover:shadow-xl hover:shadow-[#0A3269]/30",
+    "hover:border-[#0A3269]/50",
+    "active:scale-95",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     "overflow-hidden"
   )}
@@ -857,91 +921,66 @@ export function PlanSelectionSection({
       duration: 3,
       repeat: Infinity,
       ease: "easeInOut",
-      repeatDelay: 1
-    }}
-  />
-  
-  <motion.span 
-    className="absolute inset-0 rounded-full bg-white/10 dark:bg-black/10 blur-xl"
-    animate={{ 
-      opacity: [0.3, 0.7, 0.3]
-    }}
-    transition={{ 
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
+      repeatDelay: 1.5
     }}
   />
 
   {isRedirecting ? (
     <span className="relative z-10 flex items-center gap-2">
-      <Loader2 className="h-4.5 w-4.5 animate-spin text-white dark:text-black" />
-      <span className="text-sm sm:text-base text-white dark:text-black font-medium">Loading...</span>
+      <Loader2 className="h-4.5 w-4.5 animate-spin text-white" />
+      <span className="text-sm sm:text-base text-white font-medium">Loading...</span>
     </span>
   ) : (
-    <motion.span 
-      className="relative z-10 flex items-center gap-2 sm:gap-2.5"
-      animate={{ 
-        scale: [1, 1.02, 1]
-      }}
-      transition={{ 
-        duration: 2.5,
-        repeat: Infinity,
-        ease: "easeInOut",
-        repeatDelay: 0.5
-      }}
-    >
-      <span className="text-[12px] sm:text-[14px] md:text-[15px] text-white dark:text-black font-semibold">
+    <span className="relative z-10 flex items-center gap-2 sm:gap-2.5">
+      <span className="text-[12px] sm:text-[14px] md:text-[15px] text-white font-semibold">
         {language === 'ar' ? 'ابدأ عضويتك' : 'Start Your Membership'}
       </span>
-      
-      <motion.span 
-        className="flex items-center rounded-full px-2.5 sm:px-3.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] bg-white/25 dark:bg-black/25 text-white dark:text-black font-medium"
-        animate={{ 
-          scale: [1, 1.08, 1]
-        }}
-        transition={{ 
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          repeatDelay: 1
-        }}
-      >
+
+      <span className="flex items-center rounded-full px-2.5 sm:px-3.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] bg-white/25 text-white font-medium">
         AED {effectivePlan.amount}
-      </motion.span>
-      
-      <motion.div
-        className="flex items-center justify-center rounded-full bg-white/20 dark:bg-black/20 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9"
-        animate={{ 
-          x: [0, 4, 0]
-        }}
-        transition={{ 
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          repeatDelay: 0.5
-        }}
-      >
-        <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 text-white dark:text-black" strokeWidth={2.5} />
-      </motion.div>
-    </motion.span>
+      </span>
+
+      <span className="flex items-center justify-center rounded-full bg-white/20 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:translate-x-0.5">
+        <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 text-white" strokeWidth={2.5} />
+      </span>
+    </span>
   )}
 </motion.button>
+<div className="grid grid-cols-3 gap-2 sm:gap-2.5 mt-3 sm:mt-4">
+  {/* PCI-DSS Secure */}
+  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30  transition-all duration-300 hover:-translate-y-0.5">
+    <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#0A3269] transition-all duration-300 group-hover:scale-110">
+      <ShieldCheck className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0A3269] dark:text-[#0A3269] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
+    </div>
+    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] transition-colors duration-300">
+      PCI-DSS Secure
+    </span>
+    {/* Hover indicator line */}
+    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#0A3269] transition-all duration-300 group-hover:w-8 rounded-full" />
+  </div>
 
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-2">
-            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-black">
-              <ShieldCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
-              <span className="text-[6px] sm:text-[8px] md:text-[10px] text-center text-black/70 dark:text-white/70 leading-tight font-light">PCI-DSS Secure</span>
-            </div>
-            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-black">
-              <LockIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
-              <span className="text-[6px] sm:text-[8px] md:text-[10px] text-center text-black/70 dark:text-white/70 leading-tight font-light">256-bit Encryption</span>
-            </div>
-            <div className="flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-black">
-              <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
-              <span className="text-[6px] sm:text-[8px] md:text-[10px] text-center text-black/70 dark:text-white/70 leading-tight font-light">Cancel Anytime</span>
-            </div>
-          </div>
+  {/* 256-bit Encryption */}
+  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30 transition-all duration-300 hover:-translate-y-0.5">
+    <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#0A3269] transition-all duration-300 group-hover:scale-110">
+      <LockIcon className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0A3269] dark:text-[#0A3269] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
+    </div>
+    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] transition-colors duration-300">
+      256-bit Encryption
+    </span>
+    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#0A3269] transition-all duration-300 group-hover:w-8 rounded-full" />
+  </div>
+
+  {/* Cancel Anytime */}
+  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30  transition-all duration-300 hover:-translate-y-0.5">
+    <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#0A3269] transition-all duration-300 group-hover:scale-110">
+      <ExternalLink className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0A3269] dark:text-[#0A3269] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
+    </div>
+    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] transition-colors duration-300">
+      Cancel Anytime
+    </span>
+    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#0A3269] transition-all duration-300 group-hover:w-8 rounded-full" />
+  </div>
+</div>
 
           <TrustSection />
 
@@ -953,7 +992,7 @@ export function PlanSelectionSection({
               </div>
               <p className="max-w-lg text-[8px] sm:text-[10px] md:text-[11px] leading-4 sm:leading-5 text-black/50 dark:text-white/50 font-light">
                 <span className="font-normal">7-day refund guarantee</span> when no service has been used
-                <span className="mx-1.5 sm:mx-2 text-[#0A3269] dark:text-[#4A8ABF]">•</span>
+                <span className="mx-1.5 sm:mx-2 text-[#0A3269]">•</span>
                 End-to-end encrypted payments
               </p>
             </div>
@@ -1119,7 +1158,7 @@ export function SubscriptionPageInner() {
   if (loadingCurrent) {
     return (
       <div className="flex items-center justify-center py-24 bg-white dark:bg-black text-zinc-500 dark:text-white/50 gap-2 transition-colors duration-300">
-        <Loader2 className="h-5 w-5 animate-spin text-[#0A3269] dark:text-[#4A8ABF]" />
+        <Loader2 className="h-5 w-5 animate-spin text-[#0A3269]" />
         <span>Loading…</span>
       </div>
     );
@@ -1173,7 +1212,7 @@ export function SubscriptionPageInner() {
 function Feature({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-2 text-sm">
-      <Check className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF] mt-0.5 shrink-0" />
+      <Check className="h-4 w-4 text-[#0A3269] mt-0.5 shrink-0" />
       <span>{children}</span>
     </div>
   );
@@ -1301,7 +1340,7 @@ function ElementsPaymentForm({
 
       <div>
         <h2 className="text-2xl font-light flex items-center gap-2 text-black dark:text-white">
-          <Lock className="h-5 w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+          <Lock className="h-5 w-5 text-[#0A3269]" />
           Complete subscription
         </h2>
         <p className="text-black/50 dark:text-white/50 mt-1 text-sm font-light">
@@ -1318,7 +1357,7 @@ function ElementsPaymentForm({
           <div className="text-right">
             <p className="text-2xl font-light text-black dark:text-white">AED {effectivePlan.amount}</p>
             {effectivePlan.isOffer && (
-              <Badge className="bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 text-[#0A3269] dark:text-[#4A8ABF] border-[#0A3269]/30 dark:border-[#4A8ABF]/30 text-xs mt-1 font-light">
+              <Badge className="bg-[#0A3269]/15 text-[#0A3269] border-[#0A3269]/30 text-xs mt-1 font-light">
                 Eid offer
               </Badge>
             )}
@@ -1334,14 +1373,14 @@ function ElementsPaymentForm({
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
             placeholder="Name on card"
-            className="h-11 rounded-xl bg-zinc-100/50 dark:bg-black border-zinc-200 dark:border-zinc-800 text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-white/30 focus-visible:ring-[#0A3269] dark:focus-visible:ring-[#4A8ABF] font-light"
+            className="h-11 rounded-xl bg-zinc-100/50 dark:bg-black border-zinc-200 dark:border-zinc-800 text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-white/30 focus-visible:ring-[#0A3269] font-light"
             autoComplete="cc-name"
           />
         </div>
 
         <div className="space-y-2">
           <Label className="text-black/70 dark:text-white/70 font-light">Card Number</Label>
-          <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
+          <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] transition-shadow">
             <CreditCard className="h-4 w-4 text-black/40 dark:text-white/40 mr-2 shrink-0" />
             <div className="flex-1">
               <CardNumberElement
@@ -1355,7 +1394,7 @@ function ElementsPaymentForm({
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
             <Label className="text-black/70 dark:text-white/70 font-light">Expiry</Label>
-            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
+            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] transition-shadow">
               <div className="flex-1">
                 <CardExpiryElement
                   options={{ ...cardElementOptions, placeholder: 'MM / YY' }}
@@ -1366,7 +1405,7 @@ function ElementsPaymentForm({
           </div>
           <div className="space-y-2">
             <Label className="text-black/70 dark:text-white/70 font-light">CVC</Label>
-            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] dark:focus-within:ring-[#4A8ABF] transition-shadow">
+            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] transition-shadow">
               <div className="flex-1">
                 <CardCvcElement
                   options={{ ...cardElementOptions, placeholder: 'CVC' }}
@@ -1384,7 +1423,7 @@ function ElementsPaymentForm({
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-sm text-red-500 dark:text-red-400 font-light"
+            className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-sm text-red-500 font-light"
           >
             {paymentError}
           </motion.div>
@@ -1395,7 +1434,7 @@ function ElementsPaymentForm({
         onClick={handleSubscribe}
         disabled={!stripe || isProcessing || !allFieldsValid}
         size="lg"
-        className="w-full gap-2 rounded-2xl bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black font-light hover:brightness-110 shadow-lg shadow-[#0A3269]/20 dark:shadow-[#4A8ABF]/20 transition-shadow"
+        className="w-full gap-2 rounded-2xl bg-[#0A3269] text-white font-light hover:brightness-110 shadow-lg shadow-[#0A3269]/20 transition-shadow"
       >
         {isProcessing ? (
           <>
@@ -1443,7 +1482,7 @@ function ManageSubscriptionView({
     <div className="max-w-2xl mx-auto p-6 space-y-6 bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden">
       <div>
         <h2 className="text-2xl font-light flex items-center gap-2 text-black dark:text-white">
-          <Crown className="h-6 w-6 text-[#0A3269] dark:text-[#4A8ABF]" />
+          <Crown className="h-6 w-6 text-[#0A3269]" />
           Your Subscription
         </h2>
         <p className="text-black/50 dark:text-white/50 mt-1 font-light">Manage your Tammat membership</p>
@@ -1456,11 +1495,11 @@ function ManageSubscriptionView({
             <p className="text-2xl font-light mt-0.5 text-black dark:text-white">{subscription.productName}</p>
           </div>
           {subscription.cancelAtPeriodEnd ? (
-            <Badge className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30 font-light">
+            <Badge className="bg-amber-500/15 text-amber-600 border-amber-500/30 font-light">
               Canceling
             </Badge>
           ) : (
-            <Badge className="bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 text-[#0A3269] dark:text-[#4A8ABF] border-[#0A3269]/30 dark:border-[#4A8ABF]/30 font-light">
+            <Badge className="bg-[#0A3269]/15 text-[#0A3269] border-[#0A3269]/30 font-light">
               Active
             </Badge>
           )}
@@ -1489,8 +1528,8 @@ function ManageSubscriptionView({
 
         {subscription.cancelAtPeriodEnd && (
           <div className="relative flex items-start gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
-            <AlertCircle className="h-4 w-4 text-amber-500 dark:text-amber-400 mt-0.5 shrink-0" />
-            <p className="text-xs text-amber-600 dark:text-amber-300/90 font-light">
+            <AlertCircle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+            <p className="text-xs text-amber-600 font-light">
               Your subscription will remain active until{' '}
               {new Date(subscription.currentPeriodEnd * 1000).toLocaleDateString('en-GB')}, after
               which it will not renew.
@@ -1503,7 +1542,7 @@ function ManageSubscriptionView({
         size="lg"
         onClick={onManageBilling}
         disabled={isRedirecting}
-        className="w-full gap-2 rounded-2xl bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black font-light hover:brightness-110 shadow-lg shadow-[#0A3269]/20 dark:shadow-[#4A8ABF]/20"
+        className="w-full gap-2 rounded-2xl bg-[#0A3269] text-white font-light hover:brightness-110 shadow-lg shadow-[#0A3269]/20"
       >
         {isRedirecting ? (
           <>

@@ -658,39 +658,85 @@ const ApplicationRow: React.FC<{
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="border-t border-gray-200 dark:border-gray-800 bg-gradient-to-b from-gray-50/80 to-white dark:from-gray-900/50 dark:to-gray-900 rounded-b-2xl overflow-hidden"
           >
-            <div className="p-6 sm:p-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Application Details - Premium Card */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-[#0A3269]/10">
-                      <FileText className="w-4 h-4 text-[#0A3269]" />
-                    </div>
-                    Application Details
-                  </h4>
-                  <div className="space-y-2.5 text-sm bg-white dark:bg-gray-900/80 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
-                    <div className="flex justify-between items-center py-1.5 border-b border-gray-100 dark:border-gray-800">
-                      <span className="text-gray-500 dark:text-gray-400">ID</span>
-                      <span className="font-mono font-medium text-gray-900 dark:text-white">#{application._id.slice(-8)}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-1.5 border-b border-gray-100 dark:border-gray-800">
-                      <span className="text-gray-500 dark:text-gray-400">Type</span>
-                      <span className="capitalize font-medium text-gray-900 dark:text-white">{application.applicationType.replace(/_/g, ' ')}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-1.5 border-b border-gray-100 dark:border-gray-800">
-                      <span className="text-gray-500 dark:text-gray-400">Submitted</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{new Date(application.metadata.submittedAt || '').toLocaleString()}</span>
-                    </div>
-                    {(application.metadata as any).govStage && (
-                      <div className="flex justify-between items-center py-1.5">
-                        <span className="text-gray-500 dark:text-gray-400">Gov Stage</span>
-                        <Badge className="bg-[#0A3269]/10 text-[#0A3269] border-[#0A3269]/20 rounded-full">
-                          {(application.metadata as any).govStage}
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-                </div>
+             <div className="p-4 sm:p-6 lg:p-8">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+    
+    {/* ─── APPLICATION DETAILS ────────────────────────────────────────────── */}
+    <div className="space-y-3">
+      <h4 className="text-xs sm:text-sm font-semibold text-gray-500 dark:text-white/40 flex items-center gap-2.5 uppercase tracking-wider">
+        <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 border border-blue-200/50 dark:border-white/5">
+          <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
+        </div>
+        Application Details
+      </h4>
+      
+      <div className="space-y-0 overflow-hidden rounded-2xl bg-white/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 backdrop-blur-sm">
+        {/* ID */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100/50 dark:border-white/5 group hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors duration-200">
+          <span className="text-[10px] sm:text-xs font-medium text-gray-400 dark:text-white/30 uppercase tracking-wider flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 dark:bg-blue-500" />
+            ID
+          </span>
+          <span className="font-mono text-xs sm:text-sm font-medium text-gray-700 dark:text-white/80 flex items-center gap-2">
+            #{application._id.slice(-8)}
+          </span>
+        </div>
+        
+        {/* Type */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100/50 dark:border-white/5 group hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors duration-200">
+          <span className="text-[10px] sm:text-xs font-medium text-gray-400 dark:text-white/30 uppercase tracking-wider flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-400 dark:bg-purple-500" />
+            Type
+          </span>
+          <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-white/80 capitalize">
+            {application.applicationType.replace(/_/g, ' ')}
+          </span>
+        </div>
+        
+        {/* Submitted */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100/50 dark:border-white/5 group hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors duration-200">
+          <span className="text-[10px] sm:text-xs font-medium text-gray-400 dark:text-white/30 uppercase tracking-wider flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-emerald-500" />
+            Submitted
+          </span>
+          <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-white/80">
+            {new Date(application.metadata.submittedAt || '').toLocaleString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </span>
+        </div>
+        
+        {/* Gov Stage */}
+        {(application.metadata as any).govStage && (
+          <div className="flex items-center justify-between px-4 py-3 group hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors duration-200">
+            <span className="text-[10px] sm:text-xs font-medium text-gray-400 dark:text-white/30 uppercase tracking-wider flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 dark:bg-amber-500" />
+              Gov Stage
+            </span>
+            <Badge className={cn(
+              "rounded-full px-3 py-1 text-[10px] font-medium border-0",
+              (application.metadata as any).govStage === 'approved' ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400" :
+              (application.metadata as any).govStage === 'pending' ? "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400" :
+              "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400"
+            )}>
+              <span className="flex items-center gap-1.5">
+                <span className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  (application.metadata as any).govStage === 'approved' ? "bg-emerald-500" :
+                  (application.metadata as any).govStage === 'pending' ? "bg-amber-500" :
+                  "bg-blue-500"
+                )} />
+                {(application.metadata as any).govStage.replace('_', ' ').toUpperCase()}
+              </span>
+            </Badge>
+          </div>
+        )}
+      </div>
+    </div>
 
 {/* Documents - Premium Card with Image Preview */}
 <div className="space-y-3">
@@ -863,82 +909,142 @@ const ApplicationRow: React.FC<{
     </div>
   </div>
 </div>
+{/* ─── QUICK ACTIONS - MODERN UPGRADE ────────────────────────────────────── */}
+<div className="space-y-4">
+  <div className="flex items-center justify-between">
+    <h4 className="text-xs sm:text-sm font-semibold text-gray-500 dark:text-white/40 flex items-center gap-2.5 uppercase tracking-wider">
+      <div className="p-1.5 rounded-lg bg-gradient-to-br from-purple-500/10 to-pink-500/10 dark:from-purple-500/20 dark:to-pink-500/20 border border-purple-200/50 dark:border-white/5">
+        <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 dark:text-purple-400" />
+      </div>
+      Quick Actions
+    </h4>
+    <Badge variant="outline" className="text-[9px] text-gray-400 dark:text-white/30 border-gray-200 dark:border-white/5 rounded-full px-2.5 py-0.5">
+      {application.attachments?.length || 0} docs
+    </Badge>
+  </div>
+  
+  <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+    {[
+      { 
+        icon: Eye, 
+        label: 'View', 
+        onClick: () => onViewDetails(application), 
+        light: 'hover:border-blue-400 hover:bg-blue-50/80 hover:text-blue-600',
+        dark: 'dark:hover:border-blue-400/30 dark:hover:bg-blue-500/10 dark:hover:text-blue-400',
+        iconLight: 'text-blue-600', 
+        iconDark: 'dark:text-blue-400',
+        bgLight: 'bg-blue-50/50',
+        bgDark: 'dark:bg-blue-500/5',
+        desc: 'Full details'
+      },
+      { 
+        icon: Upload, 
+        label: 'Upload', 
+        onClick: () => onDocumentUpload(application._id), 
+        light: 'hover:border-emerald-400 hover:bg-emerald-50/80 hover:text-emerald-600',
+        dark: 'dark:hover:border-emerald-400/30 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400',
+        iconLight: 'text-emerald-600', 
+        iconDark: 'dark:text-emerald-400',
+        bgLight: 'bg-emerald-50/50',
+        bgDark: 'dark:bg-emerald-500/5',
+        desc: 'Add documents'
+      },
+      { 
+        icon: FileText, 
+        label: 'Result', 
+        onClick: () => onResultUpload(application._id), 
+        light: 'hover:border-purple-400 hover:bg-purple-50/80 hover:text-purple-600',
+        dark: 'dark:hover:border-purple-400/30 dark:hover:bg-purple-500/10 dark:hover:text-purple-400',
+        iconLight: 'text-purple-600', 
+        iconDark: 'dark:text-purple-400',
+        bgLight: 'bg-purple-50/50',
+        bgDark: 'dark:bg-purple-500/5',
+        desc: 'Upload result'
+      },
+      { 
+        icon: FileCheck, 
+        label: 'Review', 
+        onClick: () => onDocumentReview(application._id), 
+        disabled: !application.attachments?.length,
+        light: 'hover:border-amber-400 hover:bg-amber-50/80 hover:text-amber-600',
+        dark: 'dark:hover:border-amber-400/30 dark:hover:bg-amber-500/10 dark:hover:text-amber-400',
+        iconLight: 'text-amber-600', 
+        iconDark: 'dark:text-amber-400',
+        bgLight: 'bg-amber-50/50',
+        bgDark: 'dark:bg-amber-500/5',
+        desc: !application.attachments?.length ? 'No docs to review' : 'Review docs'
+      },
+    ].map((action, idx) => (
+      <motion.button
+        key={idx}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: idx * 0.06 }}
+        whileHover={{ scale: 1.03, y: -2 }}
+        whileTap={{ scale: 0.95 }}
+        disabled={action.disabled}
+        onClick={(e) => {
+          e.stopPropagation();
+          action.onClick();
+        }}
+        className={cn(
+          'group/btn relative flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl transition-all duration-300',
+          'bg-white dark:bg-white/5',
+          'border-2 border-gray-200/60 dark:border-white/10',
+          action.disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
+          action.light,
+          action.dark
+        )}
+      >
+        {/* Hover Gradient Overlay */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        
+        {/* Icon Container */}
+        <div className={cn(
+          "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl transition-all duration-300",
+          action.bgLight,
+          action.bgDark,
+          "group-hover/btn:scale-110 group-hover/btn:shadow-lg",
+          action.disabled ? "opacity-50" : ""
+        )}>
+          <action.icon className={cn(
+            "w-5 h-5 sm:w-5.5 sm:h-5.5 transition-all duration-300",
+            action.iconLight,
+            action.iconDark,
+            "group-hover/btn:scale-110 group-hover/btn:rotate-3"
+          )} />
+          
+          {/* Icon Glow */}
+          <div className={cn(
+            "absolute inset-0 rounded-xl blur-xl opacity-0 group-hover/btn:opacity-50 transition-opacity duration-500 pointer-events-none",
+            action.iconLight,
+            action.iconDark
+          )} />
+        </div>
+        
+        {/* Label & Description */}
+        <div className="text-center space-y-0.5">
+          <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-white/80 group-hover/btn:text-current transition-colors duration-300 block">
+            {action.label}
+          </span>
+          <span className="text-[9px] sm:text-[10px] text-gray-400 dark:text-white/30 group-hover/btn:text-current/70 transition-colors duration-300 block">
+            {action.desc}
+          </span>
+        </div>
 
-                {/* Quick Actions - Premium Big Cards */}
-                <div className="space-y-4">
-                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-[#0A3269]/10">
-                      <Zap className="w-4 h-4 text-[#0A3269]" />
-                    </div>
-                    Quick Actions
-                  </h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { icon: Eye, label: 'View', onClick: () => onViewDetails(application), color: 'blue', desc: 'Full details' },
-                      { icon: Upload, label: 'Upload', onClick: () => onDocumentUpload(application._id), color: 'emerald', desc: 'Add documents' },
-                      { icon: FileText, label: 'Result', onClick: () => onResultUpload(application._id), color: 'purple', desc: 'Upload result' },
-                      { icon: FileCheck, label: 'Review', onClick: () => onDocumentReview(application._id), color: 'amber', disabled: !application.attachments?.length, desc: 'Review docs' },
-                    ].map((action, idx) => {
-                      const colorMap: Record<string, string> = {
-                        blue: 'hover:border-[#0A3269]/30 hover:bg-[#0A3269]/5 hover:text-[#0A3269]',
-                        emerald: 'hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600',
-                        purple: 'hover:border-purple-300 hover:bg-purple-50 hover:text-purple-600',
-                        amber: 'hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600',
-                      };
-                      
-                      const iconColorMap: Record<string, string> = {
-                        blue: 'text-[#0A3269]',
-                        emerald: 'text-emerald-500',
-                        purple: 'text-purple-500',
-                        amber: 'text-amber-500',
-                      };
-                      
-                      return (
-                        <motion.button
-                          key={idx}
-                          whileHover={{ scale: 1.03, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                          disabled={action.disabled}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            action.onClick();
-                          }}
-                          className={cn(
-                            'group/btn relative flex flex-col items-center gap-1.5 p-4 rounded-xl transition-all duration-300',
-                            'bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700',
-                            colorMap[action.color],
-                            action.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
-                            'shadow-sm hover:shadow-md'
-                          )}
-                        >
-                          {/* Icon */}
-                          <div className={cn(
-                            'flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300',
-                            'bg-gray-100 dark:bg-gray-800 group-hover/btn:bg-white/20',
-                            `group-hover/btn:${iconColorMap[action.color]}`
-                          )}>
-                            <action.icon className={cn(
-                              'w-5 h-5 transition-all duration-300',
-                              iconColorMap[action.color],
-                              'group-hover/btn:scale-110'
-                            )} />
-                          </div>
-                          
-                          {/* Label */}
-                          <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover/btn:text-current transition-colors duration-300">
-                            {action.label}
-                          </span>
-                          <span className="text-[9px] text-gray-400 dark:text-gray-500 group-hover/btn:text-current/70 transition-colors duration-300">
-                            {action.desc}
-                          </span>
-                          
-                          {/* Ripple Effect */}
-                          <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
-                        </motion.button>
-                      );
-                    })}
-                  </div>
-                </div>
+        {/* Ripple Effect Line */}
+        
+        {/* Bottom Accent Line */}
+        <span className={cn(
+          "absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 rounded-full transition-all duration-300",
+          action.disabled ? "" : "group-hover/btn:w-8",
+          action.iconLight,
+          action.iconDark
+        )} />
+      </motion.button>
+    ))}
+  </div>
+</div>
               </div>
             </div>
           </motion.div>

@@ -5,6 +5,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { AuthDrawer } from '@/components/auth/AuthDrawer';
 import TammatVoiceAgent from '@/components/VoiceAgent/TammatVoiceAgent';
 import { useVoiceAgent } from '@/contexts/VoiceAgentContext';
+import './smooth-scroll.css';
 import {
   Rocket,
   Sparkles,
@@ -424,7 +425,7 @@ const closeVideoModal = () => {
 };
 
 return (
-  <section className="container mx-auto px-4 pb-16 sm:pb-24">
+  <section  id="services" className="container mx-auto px-4 pb-16 sm:pb-24">
     <div className="max-w-7xl mx-auto">
       <div className="mb-12">
         {/* ─── VIDEO COMPONENT WITH CONTROLS ────────────────────────────── */}
@@ -665,7 +666,7 @@ return (
               border-2 border-slate-200/60 dark:border-slate-800/50 
               transition-all duration-500 
               backdrop-blur-sm
-              hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#0A3269]/10 dark:hover:shadow-[#4A8ABF]/10
+              hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#0A3269]/10 dark:hover:shadow-[#0A3269]/10
               ${card.borderColor}
               ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
             `}
@@ -706,7 +707,7 @@ return (
             <div className="relative z-10 p-5 sm:p-6 lg:p-7">
               <div className="flex items-center gap-2 mb-2">
                 <div className={`w-1 h-6 rounded-full ${card.iconColor} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
-                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269  ] transition-colors duration-300">
                   {card.name}
                 </h3>
               </div>
@@ -746,13 +747,13 @@ return (
                     flex h-7 w-7 sm:h-8 sm:w-8
                     items-center justify-center
                     rounded-full
-                    bg-[#fff] dark:bg-[#000]/60  
+                    bg-[#fff] dark:bg-black/10  
                     transition-transform duration-300
                     group-hover/btn:translate-x-1
                     hover:scale-110
                   "
                 >
-                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#000] dark:text-[#fff]" />
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0a3269] dark:text-[#0a3269]" />
                 </div>
               </button>
 
@@ -1648,7 +1649,6 @@ const TammatFeatures = () => {
 };
 
 
-
 // Service Journey Section — Modern bento grid, glass cards, lucide icons, progress-ring steps
 
 const ServiceJourney = () => {
@@ -1790,11 +1790,11 @@ const ServiceJourney = () => {
   return (
     <section
       ref={containerRef}
-      className="relative py-20 sm:py-28 md:py-2 bg-white dark:bg-black border-t-2 border-x-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20 rounded-t-[2rem] overflow-hidden px-0"
+      className="relative py-20 sm:py-28 md:py-2 bg-white dark:bg-black border-t-2 border-x-2 border-[#0A3269]/20 rounded-t-[2rem] overflow-hidden px-0"
     >
       {/* ================= Premium Hero Header ================= */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute right-[-10rem] bottom-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 blur-[150px] animate-float-slower" />
+        <div className="absolute right-[-10rem] bottom-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[#0A3269]/10 blur-[150px] animate-float-slower" />
         <div
           className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07]"
           style={{
@@ -1825,7 +1825,7 @@ const ServiceJourney = () => {
               >
                 {t("serviceJourney.headline")}
                 <br />
-                <span className="text-[#0A3269] dark:text-[#4A8ABF] font-normal">
+                <span className="text-[#0A3269] font-normal">
                   {t("serviceJourney.headlineHighlight")}
                 </span>
               </h2>
@@ -1833,63 +1833,71 @@ const ServiceJourney = () => {
           </div>
         </div>
 
-        {/* Premium Modern Segmented Tabs */}
-        <div
-          className={`mb-8 sm:mb-12 flex justify-center px-2 sm:px-0 transition-all duration-500 delay-100 ${
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+     {/* Premium Modern Segmented Tabs */}
+<div
+  className={`mb-8 sm:mb-12 flex justify-center px-2 sm:px-0 transition-all duration-500 delay-100 ${
+    isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+  }`}
+>
+  <div
+    className="relative flex w-full max-w-fit overflow-x-auto scrollbar-hide rounded-2xl lg:rounded-3xl border border-black/10 dark:border-white/10 bg-gray-100/80 dark:bg-white/5 backdrop-blur-2xl p-1.5 shadow-inner shadow-black/5 dark:shadow-white/5"
+  >
+    {tabs.map((tab) => {
+      const active = activeTab === tab.id;
+
+      return (
+        <button
+          key={tab.id}
+          onClick={() => {
+            setActiveTab(tab.id);
+            setActiveStep(0);
+          }}
+          className={`
+            group relative flex shrink-0 items-center gap-2 rounded-2xl px-3 sm:px-5 lg:px-7 py-2.5 sm:py-3 transition-all duration-300
+            ${active 
+              ? "text-white dark:text-white" 
+              : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            }
+          `}
         >
+          {active && (
+            <div className="absolute inset-0 overflow-hidden rounded-2xl bg-[#0A3269] dark:bg-[#0A3269] shadow-[0_12px_35px_rgba(10,50,105,.25)] -z-10">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
+            </div>
+          )}
+
+          {!active && (
+            <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 bg-black/[0.05] dark:bg-white/[0.08] transition-opacity duration-300" />
+          )}
+
           <div
-            className="relative flex w-full max-w-fit overflow-x-auto scrollbar-hide rounded-2xl lg:rounded-3xl border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] backdrop-blur-2xl p-1.5 "
+            className={`
+              relative z-10 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl transition-all duration-300
+              ${active 
+                ? "bg-white/20 text-white shadow-[0_4px_12px_rgba(0,0,0,.15)] dark:bg-white/20" 
+                : "bg-black/[0.05] dark:bg-white/[0.06] text-zinc-500 dark:text-zinc-400 group-hover:bg-black/[0.08] dark:group-hover:bg-white/[0.1] group-hover:scale-105"
+              }
+            `}
           >
-            {tabs.map((tab) => {
-              const active = activeTab === tab.id;
-
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    setActiveStep(0);
-                  }}
-                  className={`
-                    group relative flex shrink-0 items-center gap-2 rounded-2xl px-3 sm:px-5 lg:px-7 py-2.5 sm:py-3 transition-all duration-300
-                    ${active ? "text-black dark:text-white" : "text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-white"}
-                  `}
-                >
-                  {active && (
-                    <div className="absolute inset-0 overflow-hidden rounded-2xl bg-white dark:bg-black shadow-[0_12px_35px_rgba(0,0,0,.15)] dark:shadow-[0_10px_35px_rgba(255,255,255,.12)] -z-10">
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent -translate-x-full animate-shimmer" />
-                    </div>
-                  )}
-
-                  {!active && (
-                    <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 bg-black/[0.03] dark:bg-white/[0.05] transition-opacity duration-300" />
-                  )}
-
-                  <div
-                    className={`
-                      relative z-10 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl transition-all duration-300
-                      ${active ? "bg-[#0A3269] dark:bg-[#4A8ABF] text-white shadow-[0_6px_20px_rgba(10,50,105,.35)] dark:shadow-[0_6px_20px_rgba(74,138,191,.35)] scale-105" : "bg-black/[0.05] dark:bg-white/[0.06] group-hover:scale-105"}
-                    `}
-                  >
-                    <tab.Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.2} />
-                  </div>
-
-                  <span className="relative z-10 text-xs sm:text-[15px] lg:text-base font-semibold whitespace-nowrap">
-                    {tab.label}
-                  </span>
-                </button>
-              );
-            })}
+            <tab.Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 transition-colors duration-300 ${active ? 'text-white' : ''}`} strokeWidth={2.2} />
           </div>
-        </div>
+
+          <span className={`relative z-10 text-xs sm:text-[15px] lg:text-base font-semibold whitespace-nowrap transition-colors duration-300 ${
+            active ? 'text-white' : 'text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white'
+          }`}>
+            {tab.label}
+          </span>
+        </button>
+      );
+    })}
+  </div>
+</div>
 
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-6 px-2 sm:px-0">
           {/* Main Timeline Card */}
           <div
-            className="lg:col-span-7 bg-white/80 dark:bg-black/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 relative overflow-hidden transition-all duration-500"
+            className="lg:col-span-7 bg-white/80 dark:bg-black/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-[#0A3269]/20 relative overflow-hidden transition-all duration-500"
             style={{ transitionDelay: '200ms' }}
           >
             <div className="absolute -top-20 -right-20 w-64 h-64 opacity-10 hidden sm:block">
@@ -1897,8 +1905,8 @@ const ServiceJourney = () => {
 
             <div className="mb-5 sm:mb-8">
               <div className="flex items-center gap-2.5 sm:gap-3 mb-2">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 flex items-center justify-center shrink-0">
-                  <activeTabMeta.Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#0A3269]/15 flex items-center justify-center shrink-0">
+                  <activeTabMeta.Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#0A3269]" />
                 </div>
                 <div
                   className="text-lg sm:text-2xl font-medium text-black dark:text-white"
@@ -1910,8 +1918,8 @@ const ServiceJourney = () => {
               <p className="text-black/50 dark:text-white/40 text-xs sm:text-base">
                 {t(`serviceJourney.${activeTab}.description`)}
               </p>
-              <div className="mt-2.5 sm:mt-3 inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF] rounded-full text-[11px] sm:text-sm font-medium">
-                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#0A3269] dark:bg-[#4A8ABF] rounded-full animate-pulse" />
+              <div className="mt-2.5 sm:mt-3 inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-[#0A3269]/10 text-[#0A3269] rounded-full text-[11px] sm:text-sm font-medium">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#0A3269] rounded-full animate-pulse" />
                 {t(`serviceJourney.${activeTab}.totalDuration`)}
               </div>
             </div>
@@ -1924,17 +1932,17 @@ const ServiceJourney = () => {
                     onClick={() => setActiveStep(index)}
                     className={`
                       group relative flex items-start gap-3 sm:gap-5 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 cursor-pointer overflow-hidden border backdrop-blur-xl transition-all duration-300 hover:translate-x-1 hover:-translate-y-0.5
-                      ${activeStep === index ? "border-[#0A3269]/40 dark:border-[#4A8ABF]/40 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 shadow-md shadow-[#0A3269]/10 dark:shadow-[#4A8ABF]/10" : "border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-white/70 dark:bg-black/30 hover:bg-white/80 dark:hover:bg-black/40 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30 hover:shadow-md"}
+                      ${activeStep === index ? "border-[#0A3269]/40 bg-[#0A3269]/10 shadow-md shadow-[#0A3269]/10" : "border-[#0A3269]/20 bg-white/70 dark:bg-black/30 hover:bg-white/80 dark:hover:bg-black/40 hover:border-[#0A3269]/30 hover:shadow-md"}
                     `}
                   >
                     <div className="relative flex-shrink-0">
                       {activeStep === index && (
-                        <div className="absolute -inset-1.5 sm:-inset-2 rounded-full border-2 border-[#0A3269]/40 dark:border-[#4A8ABF]/40" />
+                        <div className="absolute -inset-1.5 sm:-inset-2 rounded-full border-2 border-[#0A3269]/40" />
                       )}
                       <div
                         className={`
                           relative flex h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all duration-300
-                          ${activeStep === index ? "bg-[#0A3269] dark:bg-[#4A8ABF] text-white shadow-md shadow-[#0A3269]/30 dark:shadow-[#4A8ABF]/30" : activeStep > index ? "bg-green-500 text-white" : "bg-black/5 dark:bg-white/10 text-black/40 dark:text-white/40 border border-[#0A3269]/20 dark:border-[#4A8ABF]/20"}
+                          ${activeStep === index ? "bg-[#0A3269] text-white shadow-md shadow-[#0A3269]/30" : activeStep > index ? "bg-green-500 text-white" : "bg-black/5 dark:bg-white/10 text-black/40 dark:text-white/40 border border-[#0A3269]/20"}
                         `}
                       >
                         {activeStep > index ? "✓" : index + 1}
@@ -1949,7 +1957,7 @@ const ServiceJourney = () => {
                         <span
                           className={`
                             shrink-0 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-[11px] font-semibold
-                            ${activeStep === index ? "bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 text-[#0A3269] dark:text-[#4A8ABF]" : "bg-black/5 dark:bg-white/10 text-black/40 dark:text-white/40"}
+                            ${activeStep === index ? "bg-[#0A3269]/15 text-[#0A3269]" : "bg-black/5 dark:bg-white/10 text-black/40 dark:text-white/40"}
                           `}
                         >
                           {step.duration}
@@ -1964,13 +1972,13 @@ const ServiceJourney = () => {
               </div>
 
               <div
-                className="group relative overflow-hidden mt-5 sm:mt-8 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-4 rounded-2xl sm:rounded-3xl border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-white/80 dark:bg-black/30 backdrop-blur-2xl p-4 sm:p-5 lg:p-6 transition-all duration-500 hover:-translate-y-1"
+                className="group relative overflow-hidden mt-5 sm:mt-8 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-4 rounded-2xl sm:rounded-3xl border border-[#0A3269]/20 bg-white/80 dark:bg-black/30 backdrop-blur-2xl p-4 sm:p-5 lg:p-6 transition-all duration-500 hover:-translate-y-1"
               >
-                <div className="absolute -right-10 -top-10 h-28 w-28 sm:h-40 sm:w-40 rounded-full bg-[#0A3269]/15 dark:bg-[#4A8ABF]/15 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="absolute -right-10 -top-10 h-28 w-28 sm:h-40 sm:w-40 rounded-full bg-[#0A3269]/15 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
                 <div className="relative flex w-full items-center gap-3 sm:gap-4 min-w-0">
-                  <div className="flex h-11 w-11 sm:h-14 sm:w-14 lg:h-16 lg:w-16 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border border-[#0A3269]/20 dark:border-[#4A8ABF]/20 bg-gradient-to-br from-[#0A3269]/20 dark:from-[#4A8ABF]/20 via-[#0A3269]/10 dark:via-[#4A8ABF]/10 to-transparent shadow-lg shadow-[#0A3269]/10 dark:shadow-[#4A8ABF]/10 transition-all duration-300 group-hover:scale-105">
-                    <Award className="h-5 w-5 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#0A3269] dark:text-[#4A8ABF]" />
+                  <div className="flex h-11 w-11 sm:h-14 sm:w-14 lg:h-16 lg:w-16 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border border-[#0A3269]/20 bg-gradient-to-br from-[#0A3269]/20 via-[#0A3269]/10 to-transparent shadow-lg shadow-[#0A3269]/10 transition-all duration-300 group-hover:scale-105">
+                    <Award className="h-5 w-5 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#0A3269]" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-black/40 dark:text-white/40">
@@ -1999,12 +2007,12 @@ const ServiceJourney = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
               <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/10 via-white/5 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0A3269]/10 dark:from-[#4A8ABF]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0A3269]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
               <div className="absolute left-3 top-3 xs:left-4 xs:top-4 sm:left-6 sm:top-6 z-10">
                 <div className="flex items-center gap-1 xs:gap-1.5 px-2 py-1 xs:px-2.5 xs:py-1.5 sm:px-3 sm:py-1.5 rounded-full backdrop-blur-xl border shadow-lg transition-all duration-300 hover:scale-105 bg-white/90 border-white/20 shadow-black/5 dark:bg-black/50 dark:border-white/10 dark:shadow-black/20">
                   <span className="text-[8px] xs:text-[9px] sm:text-[12px] md:text-[13px] font-medium transition-colors duration-300 text-slate-700 dark:text-white/90 tracking-wide">
-                    <span className="text-[#0A3269] dark:text-[#4A8ABF] font-semibold">0{activeStep + 1}</span>
+                    <span className="text-[#0A3269] font-semibold">0{activeStep + 1}</span>
                     <span className="mx-1 text-slate-300 dark:text-white/20">/</span>
                     <span className="text-slate-400 dark:text-white/40">{currentSteps.length}</span>
                   </span>
@@ -2032,7 +2040,7 @@ const ServiceJourney = () => {
                   </div>
 
                   <div className="relative h-2 xs:h-2 sm:h-2.5 rounded-full overflow-hidden bg-white/10 backdrop-blur-sm">
-                    <div className="relative h-full rounded-full bg-gradient-to-r from-[#0A3269] to-[#4A8ABF] dark:from-[#4A8ABF] dark:to-[#4A8ABF] transition-all duration-500"
+                    <div className="relative h-full rounded-full bg-gradient-to-r from-[#0A3269] to-[#0a3269] transition-all duration-500"
                       style={{ width: `${((activeStep + 1) / currentSteps.length) * 100}%` }}
                     >
                       <div className="absolute inset-0 animate-shimmer-fast" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)', width: '40%' }} />
@@ -2091,8 +2099,8 @@ const ServiceJourney = () => {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 px-3 py-1">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0A3269] dark:bg-[#4A8ABF]">
-                      <ShieldCheck className="h-3.5 w-3.5 text-white dark:text-black" />
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0A3269]">
+                      <ShieldCheck className="h-3.5 w-3.5 text-white" />
                     </div>
                     <div className="leading-tight">
                       <p className="text-[9px] font-medium uppercase tracking-wider text-gray-500 dark:text-white/40">
@@ -2113,7 +2121,7 @@ const ServiceJourney = () => {
                     </h2>
                     <p className="mt-2 max-w-xs sm:max-w-sm text-sm leading-6 text-gray-500 dark:text-white/60">
                       {t('successCard.approvedText')}
-                      <span className="font-medium text-[#0A3269] dark:text-[#4A8ABF]">
+                      <span className="font-medium text-[#0A3269]">
                         {t('successCard.expertReview')}
                       </span>
                       {t('successCard.processText')}
@@ -2122,11 +2130,11 @@ const ServiceJourney = () => {
                 </div>
 
                 <div className="relative">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0A3269] dark:bg-[#4A8ABF]">
-                    <Award className="h-4 w-4 text-white dark:text-black" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0A3269]">
+                    <Award className="h-4 w-4 text-white" />
                   </div>
-                  <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white dark:border-[#0A0A0F] bg-[#0A3269] dark:bg-[#4A8ABF]">
-                    <CircleCheckBig className="h-3 w-3 text-white dark:text-black" />
+                  <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white dark:border-[#0A0A0F] bg-[#0A3269]">
+                    <CircleCheckBig className="h-3 w-3 text-white" />
                   </div>
                 </div>
               </div>
@@ -2134,26 +2142,26 @@ const ServiceJourney = () => {
               <div className="my-4 h-px bg-gray-100 dark:bg-[#4A8ABF]/20" />
 
               <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
-                  <TrendingUp className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
+                  <TrendingUp className="mb-3 h-4 w-4 text-[#0A3269]" />
                   <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">99.8%</p>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.approval')}</span>
                 </div>
 
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
-                  <Activity className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
+                  <Activity className="mb-3 h-4 w-4 text-[#0A3269]" />
                   <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">24/7</p>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.monitoring')}</span>
                 </div>
 
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
-                  <Users className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
+                  <Users className="mb-3 h-4 w-4 text-[#0A3269]" />
                   <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">250+</h3>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.expertAdvisors')}</span>
                 </div>
 
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/40 transition-all duration-300 hover:-translate-y-1">
-                  <ShieldCheck className="mb-3 h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
+                  <ShieldCheck className="mb-3 h-4 w-4 text-[#0A3269]" />
                   <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">A+</p>
                   <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.rating')}</span>
                 </div>
@@ -2615,6 +2623,7 @@ const EmailCapture = () => {
   // ─── Translation Constants ──────────────────────────────────────────
   const translations = {
     en: {
+      eyebrow: 'Free Guidance',
       heading: 'Get Your Free',
       headingHighlight: 'Government Guidance',
       description: 'Everything you need to know about UAE visas, Emirates ID, fines, business setup, and all government procedures. Expert insights from professionals with 10+ years of experience.',
@@ -2627,9 +2636,11 @@ const EmailCapture = () => {
       mute: 'Mute',
       unmute: 'Unmute',
       muted: 'Muted',
-      unmuted: 'Unmuted'
+      unmuted: 'Unmuted',
+      watchHint: 'Watch the 90-second guide',
     },
     ar: {
+      eyebrow: 'تحميل مجاني',
       heading: 'احصل على',
       headingHighlight: 'إرشاد حكومي مجاني',
       description: 'كل ما تحتاج معرفته عن تأشيرات الإمارات، الهوية الإماراتية، الغرامات، تأسيس الأعمال، وجميع الإجراءات الحكومية. رؤى خبراء من محترفين لديهم أكثر من 10 سنوات من الخبرة.',
@@ -2642,7 +2653,8 @@ const EmailCapture = () => {
       mute: 'كتم الصوت',
       unmute: 'إلغاء كتم الصوت',
       muted: 'مكتوم',
-      unmuted: 'غير مكتوم'
+      unmuted: 'غير مكتوم',
+      watchHint: 'شاهد الدليل المختصر',
     }
   };
 
@@ -2766,16 +2778,13 @@ const EmailCapture = () => {
 <section ref={containerRef} className={`relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 ${
   isDarkMode ? 'bg-black' : 'bg-white'
 }`}>
-  {/* Ambient Glow Effects */}
+  {/* Ambient glow — two deliberate fields instead of a stacked pile of blurs */}
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div className={`absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full blur-[120px] ${
-      isDarkMode ? 'bg-[#4A8ABF]/10' : 'bg-[#0A3269]/5'
+    <div className={`absolute -top-32 -right-32 w-[560px] h-[560px] rounded-full blur-[130px] ${
+      isDarkMode ? 'bg-[#0A3269]/8' : 'bg-[#0A3269]/[0.06]'
     }`} />
-    <div className={`absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full blur-[100px] ${
-      isDarkMode ? 'bg-[#4A8ABF]/8' : 'bg-[#0A3269]/3'
-    }`} />
-    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[150px] ${
-      isDarkMode ? 'bg-[#4A8ABF]/8' : 'bg-[#0A3269]/3'
+    <div className={`absolute -bottom-40 -left-24 w-[420px] h-[420px] rounded-full blur-[110px] ${
+      isDarkMode ? 'bg-amber-500/[0.06]' : 'bg-amber-400/[0.05]'
     }`} />
   </div>
 
@@ -2785,9 +2794,16 @@ const EmailCapture = () => {
       
       {/* ─── Left - Content ──────────── */}
       <div className="flex-1 max-w-2xl order-2 lg:order-1">
+        {/* Eyebrow — same dashed-seal language used across the site's trust badges */}
+        <span className={`inline-flex items-center gap-1.5 rounded-full border border-dashed px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider border-[#0A3269]/40 text-[#0A3269]`}>
+          <Mail className="h-2.5 w-2.5" />
+          {lang.eyebrow}
+        </span>
+
         {/* Heading */}
         <h1
           className={`
+            mt-3 sm:mt-4
             font-black
             leading-[1.05]
             tracking-[-0.03em]
@@ -2798,16 +2814,16 @@ const EmailCapture = () => {
             lg:text-[4.5rem]
             xl:text-[5rem]
             max-w-3xl
-            ${isDarkMode ? 'text-[#4A8ABF]' : 'text-gray-900'}
+            ${isDarkMode ? 'text-[#0A3269]' : 'text-gray-900'}
           `}
           style={{ fontFamily: "'Fraunces', serif" }}
         >
           {lang.heading}
-          <span className={`block mt-1 sm:mt-2 font-bold ${
-            isDarkMode ? 'text-white' : 'text-[#0A3269]'
-          }`}>
-            {lang.headingHighlight}
-          </span>
+            <span className={`block mt-1 sm:mt-2 font-bold ${
+              isDarkMode ? 'text-white' : 'text-[#0A3269]'
+            }`}>
+              {lang.headingHighlight}
+            </span>
         </h1>
 
         {/* Description */}
@@ -2837,9 +2853,7 @@ const EmailCapture = () => {
                 overflow-hidden
                 rounded-xl sm:rounded-2xl
                 ${focused
-                  ? isDarkMode 
-                    ? 'ring-2 ring-[#4A8ABF]/30' 
-                    : 'ring-2 ring-[#0A3269]/20'
+                  ? 'ring-2 ring-[#0A3269]/30'
                   : ''
                 }
                 ${isDarkMode ? 'bg-white/10' : 'bg-gray-50'}
@@ -2851,7 +2865,7 @@ const EmailCapture = () => {
               {/* Icon */}
               <div className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
                 isDarkMode 
-                  ? 'bg-[#4A8ABF]/20 text-[#4A8ABF]' 
+                  ? 'bg-[#0A3269]/20 text-[#0A3269]' 
                   : 'bg-[#0A3269]/10 text-[#0A3269]'
               }`}>
                 <Mail className="h-4.5 w-4.5" />
@@ -2874,13 +2888,13 @@ const EmailCapture = () => {
                   outline-none
                   placeholder:text-gray-400 dark:placeholder:text-white/40
                   ${isDarkMode ? 'text-white' : 'text-gray-900'}
-                  ${isDarkMode ? 'caret-[#4A8ABF]' : 'caret-[#0A3269]'}
+                  caret-[#0A3269]
                 `}
                 style={{ fontFamily: "'Inter', sans-serif" }}
               />
             </div>
 
-            {/* CTA Button - White in Dark Mode, #0A3269 in Light Mode */}
+            {/* CTA Button */}
             <button
               className={`
                 group
@@ -2895,19 +2909,14 @@ const EmailCapture = () => {
                 font-bold
                 whitespace-nowrap
                 transition-all duration-300
-                ${isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-100' 
-                  : 'bg-[#0A3269] text-white hover:bg-[#1A4A8A]'
-                }
+                bg-[#0A3269] text-white hover:bg-[#1A4A8A]
                 hover:scale-105 active:scale-95
               `}
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <span className="relative z-10 flex items-center gap-2.5">
                 {lang.cta}
-                <ArrowRight className={`h-4 w-4 sm:h-4.5 sm:w-4.5 transition-transform duration-300 group-hover:translate-x-1 ${
-                  isDarkMode ? 'text-black' : 'text-white'
-                }`} />
+                <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 transition-transform duration-300 group-hover:translate-x-1 text-white" />
               </span>
             </button>
           </div>
@@ -2917,19 +2926,11 @@ const EmailCapture = () => {
             isDarkMode ? 'text-white/30' : 'text-gray-400'
           }`}>
             {lang.terms}
-            <a href="/t&c" className={`mx-1 font-medium transition-colors underline underline-offset-2 ${
-              isDarkMode 
-                ? 'text-[#4A8ABF] hover:text-[#4A8ABF]/80' 
-                : 'text-[#0A3269] hover:text-[#1A4A8A]'
-            }`}>
+            <a href="/t&c" className={`mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]`}>
               {lang.termsLink}
             </a>
             {isArabic ? 'و' : 'and'}
-            <a href="/privacy" className={`mx-1 font-medium transition-colors underline underline-offset-2 ${
-              isDarkMode 
-                ? 'text-[#4A8ABF] hover:text-[#4A8ABF]/80' 
-                : 'text-[#0A3269] hover:text-[#1A4A8A]'
-            }`}>
+            <a href="/privacy" className={`mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]`}>
               {lang.privacyLink}
             </a>
             . {lang.unsubscribe}
@@ -2940,9 +2941,9 @@ const EmailCapture = () => {
       {/* ─── Right - Video ────────────── */}
       <div className="flex-1 w-full lg:w-auto order-1 lg:order-2">
         <div className="relative max-w-md mx-auto lg:ml-auto w-full">
-          {/* Video - No borders, no card wrapper */}
-          <div 
-            className="relative rounded-2xl overflow-hidden shadow-xl bg-black w-full h-[240px] sm:h-[280px] md:h-[360px] lg:h-[480px] xl:h-[580px] cursor-pointer group"
+          {/* Video - thin brand-colored frame instead of a plain shadow box */}
+          <div
+            className={`relative rounded-2xl overflow-hidden bg-black w-full h-[240px] sm:h-[280px] md:h-[360px] lg:h-[480px] xl:h-[580px] cursor-pointer group ring-1 shadow-xl ring-[#0A3269]/15`}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
             onClick={openModal}
@@ -2958,8 +2959,13 @@ const EmailCapture = () => {
             />
             
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A3269]/10 dark:from-[#4A8ABF]/20 via-transparent to-transparent" />
-            
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A3269]/10 via-transparent to-transparent" />
+
+            {/* Credibility badge — same dashed-seal mark used for the eyebrow tag */}
+            <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5 rounded-full border border-dashed border-white/50 bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-white">
+              10+ yrs experience
+            </div>
+
             {/* Play Button - Shows #0A3269 on hover */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className={`
@@ -3004,22 +3010,15 @@ const EmailCapture = () => {
               </button>
             )}
 
-            {/* Sound Status Badge */}
-            <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-full px-2.5 py-1">
-              {isMuted ? (
-                <VolumeX className="h-2.5 w-2.5 text-white/60" strokeWidth={1.5} />
-              ) : (
-                <Volume2 className="h-2.5 w-2.5 text-white/80" strokeWidth={1.5} />
-              )}
-              <span className="text-[8px] text-white/60">
-                {isMuted ? lang.muted : lang.unmuted}
-              </span>
-            </div>
-
-            {/* Click to watch hint */}
+            {/* Watch hint — consolidated single pill */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
-              <span className="text-white/60 text-xs font-medium bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
-                Click to watch
+              <span className="flex items-center gap-1.5 text-white/80 text-[11px] sm:text-xs font-medium bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
+                {isMuted ? (
+                  <VolumeX className="h-3 w-3 text-white/50" strokeWidth={1.75} />
+                ) : (
+                  <Volume2 className="h-3 w-3 text-white/70" strokeWidth={1.75} />
+                )}
+                {lang.watchHint}
               </span>
             </div>
           </div>
@@ -3890,7 +3889,7 @@ const LaptopShowcase = () => {
             شاهد كيف{' '}
             <br />
             <span className="relative inline-block">
-              <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light">
+              <span className="text-[#0A3269] dark:text-[#0A3269] font-light">
                 تعمل TMMT
               </span>
             </span>
@@ -3900,7 +3899,7 @@ const LaptopShowcase = () => {
             See how{' '}
             <br />
             <span className="relative inline-block">
-              <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light">
+              <span className="text-[#0A3269] dark:text-[#0A3269] font-light">
                 TMMT works
               </span>
             </span>
@@ -4692,52 +4691,309 @@ const Hero = () => {
 }
 
 
+  const TammatHomePage = () => {
+    useEffect(() => {
+      // ============================================
+      // 1. ULTRA SMOOTH SCROLL WITH PHYSICS
+      // ============================================
+      
+      document.documentElement.style.scrollBehavior = 'smooth';
+      
+      const originalScrollTo = window.scrollTo;
+      window.scrollTo = function(optionsOrX, y) {
+        if (typeof optionsOrX === 'object') {
+          const target = optionsOrX.top || 0;
+          const start = window.pageYOffset;
+          const distance = target - start;
+          const duration = Math.min(2000, Math.max(800, Math.abs(distance) * 1.5));
+          let startTime: number | null = null;
+          
+          const easeOutElastic = (t: number) => {
+            const c4 = (2 * Math.PI) / 3;
+            return t === 0 ? 0 : t === 1 ? 1 : 
+              Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+          };
+          
+          const easeInOutQuint = (t: number) => {
+            return t < 0.5 
+              ? 16 * t * t * t * t * t 
+              : 1 - Math.pow(-2 * t + 2, 5) / 2;
+          };
+          
+          const animation = (currentTime: number) => {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const progress = Math.min(timeElapsed / duration, 1);
+            const ease = Math.abs(distance) > 800 ? easeOutElastic(progress) : easeInOutQuint(progress);
+            window.scrollTo(0, start + distance * ease);
+            if (timeElapsed < duration) {
+              requestAnimationFrame(animation);
+            }
+          };
+          requestAnimationFrame(animation);
+        } else {
+          originalScrollTo.call(window, optionsOrX as any, y as any);
+        }
+      };
 
+      // ============================================
+      // 2. ADVANCED INTERSECTION OBSERVER
+      // ============================================
+      
+      const animationObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const target = entry.target as HTMLElement;
+              target.classList.add('visible');
+              
+              const children = target.querySelectorAll('.stagger-item, .stagger-children > *');
+              children.forEach((child, index) => {
+                setTimeout(() => {
+                  child.classList.add('visible');
+                }, 80 + index * 60);
+              });
+              
+              const counters = target.querySelectorAll('.count-up');
+              counters.forEach((counter) => {
+                animateCounter(counter as HTMLElement);
+              });
+            }
+          });
+        },
+        {
+          threshold: 0.15,
+          rootMargin: '0px 0px -50px 0px',
+        }
+      );
 
-const TammatHomePage = () => {
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth';
-    return () => {
-      document.documentElement.style.scrollBehavior = '';
-    };
-  }, []);
-  return (
-    <>
-      <SEO
-        title="Tammat - UAE Visa Services | Fast & Reliable"
-        description="Professional UAE visa services for tourists, residents, and investors. Fast processing, expert support, and hassle-free visa solutions in Dubai and across the UAE."
-        keywords="UAE visa, Dubai visa, residence visa, tourist visa, investor visa, golden visa UAE, Tammat visa services, Dubai immigration"
-        canonicalUrl="/"
-      />
-      <main
-        className=" min-h-[100dvh] text-foreground scroll-smooth"
-        style={{ '--primary': '#0A3269' } as React.CSSProperties}
-      >
-          {/* <Hero /> */}
+      // Observe all elements with animation classes
+      const animatedElements = document.querySelectorAll(
+        '.fade-in-scroll, .slide-in-left, .slide-in-right, .scale-in, ' +
+        '.reveal-on-scroll, .fade-in-slow, .opacity-glide, .zoom-blur-in, ' +
+        '.flip-in, .slide-in-bottom, .glow-in, .rotate-in, .bounce-in, ' +
+        '.slide-fade, .stagger-children'
+      );
+      
+      animatedElements.forEach((el) => {
+        animationObserver.observe(el);
+      });
 
-        <Services />
+      // ============================================
+      // 3. COUNTER ANIMATION
+      // ============================================
+      
+      const animateCounter = (element: HTMLElement) => {
+        const target = parseInt(element.getAttribute('data-target') || '0');
+        const duration = 2000;
+        const startTime = performance.now();
+        
+        const updateCounter = (currentTime: number) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(ease * target);
+          element.textContent = current.toString();
+          if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+          } else {
+            element.textContent = target.toString();
+          }
+        };
+        requestAnimationFrame(updateCounter);
+      };
 
-        <WhyTMMTSection />
-        <VideoSection /> 
+      // ============================================
+      // 4. PARALLAX EFFECT
+      // ============================================
+      
+      const handleParallax = () => {
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        const scrolled = window.pageYOffset;
+        parallaxElements.forEach((el) => {
+          const speed = parseFloat(el.getAttribute('data-speed') || '0.1');
+          const rect = el.getBoundingClientRect();
+          const offset = rect.top + scrolled;
+          const yPos = (scrolled - offset) * speed;
+          const maxMove = 100;
+          const clamped = Math.max(-maxMove, Math.min(maxMove, yPos));
+          (el as HTMLElement).style.transform = `translateY(${clamped}px)`;
+        });
+      };
 
-        <SubscriptionPage />
-        {/* <LifeUpgraded /> */}
-        {/* <EmiratesSection /> */}
-        <ServiceJourney />
+      window.addEventListener('scroll', handleParallax, { passive: true });
 
-        {/* <Testimonials /> */}
-        {/* <TammatFeatures /> */}
-        {/* <Features /> */}
-        {/* <LogoMarquee /> */}
-        {/* <Pricing /> */}
+      // ============================================
+      // 5. ANCHOR NAVIGATION
+      // ============================================
+      
+      const handleAnchorClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        const anchor = target.closest('a[href^="#"]');
+        
+        if (anchor) {
+          const href = anchor.getAttribute('href');
+          if (href && href !== '#') {
+            e.preventDefault();
+            
+            document.querySelectorAll('.nav-link').forEach((link) => {
+              link.classList.remove('active');
+            });
+            anchor.classList.add('active');
+            
+            const targetElement = document.querySelector(href);
+            if (targetElement) {
+              const headerOffset = 80;
+              const elementPosition = targetElement.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        <FAQSection />
-        <EmailCapture />
-        <TammatFooter />
-      </main>
+              const start = window.pageYOffset;
+              const distance = offsetPosition - start;
+              const duration = Math.min(1800, Math.max(800, Math.abs(distance) * 1.2));
+              let startTime: number | null = null;
+              
+              const easeInOutQuint = (t: number) => {
+                return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+              };
+              
+              const animation = (currentTime: number) => {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+                const ease = easeInOutQuint(progress);
+                window.scrollTo(0, start + distance * ease);
+                if (timeElapsed < duration) {
+                  requestAnimationFrame(animation);
+                }
+              };
+              requestAnimationFrame(animation);
+              history.pushState(null, '', href);
+            }
+          }
+        }
+      };
 
+      document.addEventListener('click', handleAnchorClick);
 
-    </>
-  );
-};
+      // ============================================
+      // 6. SCROLL PROGRESS
+      // ============================================
+      
+      let ticking = false;
+      const updateProgress = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const progressBar = document.getElementById('scroll-progress');
+            if (!progressBar) return;
+
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+            progressBar.style.width = `${progress}%`;
+            progressBar.classList.toggle('active', scrollTop > 100);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', updateProgress, { passive: true });
+
+      // ============================================
+      // 7. ACTIVE SECTION HIGHLIGHTING
+      // ============================================
+      
+      const highlightActiveSection = () => {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        let currentSection = '';
+        sections.forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 100) {
+            currentSection = section.id;
+          }
+        });
+        navLinks.forEach((link) => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${currentSection}`) {
+            link.classList.add('active');
+          }
+        });
+      };
+
+      window.addEventListener('scroll', highlightActiveSection, { passive: true });
+
+      // ============================================
+      // 8. SCROLL TOP BUTTON
+      // ============================================
+      
+      const scrollTopBtn = document.querySelector('.scroll-top-btn');
+      if (scrollTopBtn) {
+        window.addEventListener('scroll', () => {
+          scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+
+        scrollTopBtn.addEventListener('click', () => {
+          const start = window.pageYOffset;
+          const duration = 1200;
+          let startTime: number | null = null;
+          const easeInOutQuint = (t: number) => {
+            return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+          };
+          const animation = (currentTime: number) => {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const progress = Math.min(timeElapsed / duration, 1);
+            const ease = easeInOutQuint(progress);
+            window.scrollTo(0, start * (1 - ease));
+            if (timeElapsed < duration) {
+              requestAnimationFrame(animation);
+            }
+          };
+          requestAnimationFrame(animation);
+        });
+      }
+
+      // ============================================
+      // 9. CLEANUP
+      // ============================================
+      
+      return () => {
+        document.documentElement.style.scrollBehavior = '';
+        window.scrollTo = originalScrollTo;
+        animationObserver.disconnect();
+        window.removeEventListener('scroll', handleParallax);
+        window.removeEventListener('scroll', updateProgress);
+        window.removeEventListener('scroll', highlightActiveSection);
+        document.removeEventListener('click', handleAnchorClick);
+      };
+    }, []);
+
+    return (
+      <>
+        <SEO
+          title="Tammat - UAE Visa Services | Fast & Reliable"
+          description="Professional UAE visa services for tourists, residents, and investors. Fast processing, expert support, and hassle-free visa solutions in Dubai and across the UAE."
+          keywords="UAE visa, Dubai visa, residence visa, tourist visa, investor visa, golden visa UAE, Tammat visa services, Dubai immigration"
+          canonicalUrl="/"
+        />
+        <main className="min-h-[100dvh] text-foreground scroll-smooth">
+          <div className="scroll-progress" id="scroll-progress" />
+          
+          {/* Original sections - NO WRAPPING DIVS, just add classes directly to sections */}
+          <Services />
+          <WhyTMMTSection />
+          <VideoSection />
+          <SubscriptionPage />
+          <ServiceJourney />
+          <FAQSection />
+          <EmailCapture />
+          <TammatFooter />
+          
+       
+        </main>
+      </>
+    );
+  };
 export default TammatHomePage;

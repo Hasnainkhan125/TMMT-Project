@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { 
   Play, ArrowRight, Shield, Users, 
   Zap, Globe, Rocket, TrendingUp, 
-  X, Diamond, ChevronRight
+  X, Diamond
 } from 'lucide-react';
 
 const VideoSection = () => {
@@ -187,6 +187,9 @@ const VideoSection = () => {
 
   const lang = translations[isArabic ? 'ar' : 'en'];
 
+  // ─── Use #0A3269 in both light and dark mode ──────────────────────────
+  const accent = '#0A3269';
+
   const features = [
     { icon: Zap, label: lang.features.fastProcessing },
     { icon: Shield, label: lang.features.secure },
@@ -205,21 +208,20 @@ const VideoSection = () => {
       >
         {/* Background Effects - Subtle */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className={`absolute top-0 -right-20 w-[600px] h-[600px] rounded-full blur-3xl ${
-            isDarkMode ? 'bg-[#4A8ABF]/3' : 'bg-[#0A3269]/3'
-          }`} />
-          <div className={`absolute bottom-0 -left-20 w-[600px] h-[600px] rounded-full blur-3xl ${
-            isDarkMode ? 'bg-[#4A8ABF]/3' : 'bg-[#0A3269]/3'
-          }`} />
-          <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl ${
-            isDarkMode ? 'bg-[#4A8ABF]/2' : 'bg-[#0A3269]/2'
-          }`} />
+          <div
+            className="absolute top-0 -right-20 w-[600px] h-[600px] rounded-full blur-3xl"
+            style={{ backgroundColor: accent, opacity: isDarkMode ? 0.04 : 0.04 }}
+          />
+          <div
+            className="absolute bottom-0 -left-20 w-[600px] h-[600px] rounded-full blur-3xl"
+            style={{ backgroundColor: accent, opacity: isDarkMode ? 0.04 : 0.04 }}
+          />
         </div>
 
         <div className="container mx-auto px-1.5 sm:px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-14 xl:gap-20 items-center max-w-7xl mx-auto">
             
-            {/* ─── Right Column - Video ────────── */}
+            {/* ─── Right Column - Video (unchanged) ────────── */}
             <div
               className="relative px-0 order-1 lg:order-2"
               onMouseEnter={() => setIsHovering(true)}
@@ -274,18 +276,12 @@ const VideoSection = () => {
                 {/* Premium Badge */}
                 <div
                   className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${
-                    isDarkMode 
-                      ? 'bg-white/5' 
-                      : 'bg-[#0A3269]/5'
+                    isDarkMode ? 'bg-white/5' : 'bg-black/[0.03]'
                   }`}
                 >
-                  <Diamond className={`w-3.5 h-3.5 ${
-                    isDarkMode ? 'text-white/60' : 'text-[#0A3269]/90'
-                  }`} />
-                  <span className={`text-[10px] font-semibold uppercase tracking-wider ${
-                    isDarkMode ? 'text-white/60' : 'text-[#0A3269]/90'
-                  }`}>
-                    Premium Service
+                  <Diamond className="w-3.5 h-3.5" style={{ color: accent }} />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: accent }}>
+                    Watch Demo
                   </span>
                 </div>
 
@@ -300,15 +296,11 @@ const VideoSection = () => {
                 >
                   <span className="font-bold">{lang.visaJourney}</span>
                   <br />
-                  <span className="relative inline-block">
-                    <span 
-                      className={`font-light ${
-                        isDarkMode ? 'text-[#4A8ABF]' : 'text-[#0A3269]'
-                      }`}
-                      style={{ fontSize: 'clamp(1.8rem, 6vw, 3.2rem)' }}
-                    >
-                      {lang.nowSeamless}
-                    </span>
+                  <span
+                    className="font-light"
+                    style={{ color: accent, fontSize: 'clamp(1.8rem, 6vw, 3.2rem)' }}
+                  >
+                    {lang.nowSeamless}
                   </span>
                 </h2>
 
@@ -318,56 +310,39 @@ const VideoSection = () => {
                   }`}
                 >
                   {lang.description}
-                  <span className={`font-normal block mt-1 ${
-                    isDarkMode ? 'text-white/70' : 'text-black/70'
-                  }`}>{lang.descriptionHighlight}</span>
                 </p>
 
-                {/* ─── FEATURE CARDS ────────────────────── */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 pt-1">
+                {/* ─── FEATURE CARDS ──── */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-2">
                   {features.map((feature, idx) => {
                     const Icon = feature.icon;
                     return (
                       <motion.div
                         key={idx}
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ 
-                          delay: idx * 0.05, 
-                          duration: 0.4,
-                          ease: "easeOut"
-                        }}
-                        whileHover={{ 
-                          y: -4,
-                          transition: { duration: 0.2 }
-                        }}
-                        className={`group flex flex-col items-center gap-1.5 p-3 sm:p-4 rounded-2xl transition-all duration-300 border ${
-                          isDarkMode 
-                            ? 'bg-black border-white/10 hover:border-white/30 hover:bg-[#1a1a1a]' 
-                            : 'bg-[#0A3269]/5 border-[#0A3269]/10 hover:border-[#0A3269]/30 hover:bg-[#0A3269]/10'
+                        transition={{ delay: idx * 0.05, duration: 0.4, ease: 'easeOut' }}
+                        whileHover={{ y: -3 }}
+                        className={`group flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl transition-colors duration-300 ${
+                          isDarkMode ? 'bg-zinc-900' : 'bg-white'
                         }`}
+                        style={{
+                          boxShadow: isDarkMode
+                            ? '0 1px 0 rgba(255,255,255,0.06) inset, 0 16px 28px -20px rgba(0,0,0,0.6)'
+                            : '0 1px 0 rgba(0,0,0,0.03) inset, 0 16px 28px -20px rgba(10,50,105,0.2)',
+                          border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(10,50,105,0.08)'}`,
+                        }}
                       >
-                        {/* Icon */}
-                        <div 
-                          className={`p-2.5 rounded-xl transition-all duration-300 ${
-                            isDarkMode 
-                              ? 'bg-white/10 group-hover:bg-white/20' 
-                              : 'bg-[#0A3269]/10 group-hover:bg-[#0A3269]/20'
-                          }`}
+                        <div
+                          className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl shadow-sm"
+                          style={{ backgroundColor: accent }}
                         >
-                          <Icon className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 ${
-                            isDarkMode 
-                              ? 'text-white group-hover:text-white' 
-                              : 'text-[#0A3269] group-hover:text-[#0A3269]'
-                          }`} strokeWidth={2} />
+                          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" strokeWidth={2} />
                         </div>
-                        
-                        {/* Label */}
-                        <span className={`text-[11px] sm:text-[13px] md:text-[14px] font-semibold text-center leading-tight transition-colors duration-300 ${
-                          isDarkMode 
-                            ? 'text-white/80 group-hover:text-white' 
-                            : 'text-black/70 group-hover:text-[#0A3269]'
+
+                        <span className={`text-[11px] sm:text-[13px] font-semibold text-center leading-tight ${
+                          isDarkMode ? 'text-white/80' : 'text-black/70'
                         }`}>
                           {feature.label}
                         </span>
@@ -377,37 +352,32 @@ const VideoSection = () => {
                 </div>
               </div>
 
-              {/* Premium CTA Button - Smaller */}
+              {/* CTA Button */}
               <motion.button
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 20 }}
                 onClick={() => window.location.href = '/apply'}
-                className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-5 sm:px-7 py-2.5 sm:py-3 text-[13px] sm:text-[14px] font-medium tracking-tight transition-all duration-300 w-auto min-w-[160px] sm:min-w-[180px] ${
+                className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-5 sm:px-7 py-2.5 sm:py-3 text-[13px] sm:text-[14px] font-medium tracking-tight transition-all duration-300 w-auto min-w-[160px] sm:min-w-[180px] shadow-lg ${
                   isDarkMode 
-                    ? 'bg-white text-black hover:bg-gray-100' 
-                    : 'bg-[#013269] text-white hover:bg-[#1a4a7a]'
-                } shadow-lg ${
-                  isDarkMode 
-                    ? 'shadow-white/10 hover:shadow-white/20' 
-                    : 'shadow-[#013269]/30 hover:shadow-[#013269]/40'
+                    ? 'bg-white text-[#0A3269] hover:bg-gray-100' 
+                    : 'text-white'
                 }`}
+                style={{ backgroundColor: isDarkMode ? undefined : accent }}
               >
-                <span className="relative z-10  whitespace-nowrap">
-                  {lang.cta}
-                </span>
+                <span className="relative z-10 whitespace-nowrap">{lang.cta}</span>
 
                 <motion.div
                   className={`relative z-10 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover/btn:translate-x-1 ${
                     isDarkMode 
-                      ? 'bg-black/30 text-white' 
-                      : 'bg-white text-[#013269]'
+                      ? 'bg-[#0A3269]/10 text-[#0A3269]' 
+                      : 'bg-white/20 text-white'
                   }`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
                   <ArrowRight className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${
-                    isDarkMode ? 'text-black' : 'text-[#013269]'
+                    isDarkMode ? 'text-[#0A3269]' : 'text-white'
                   }`} />
                 </motion.div>
               </motion.button>

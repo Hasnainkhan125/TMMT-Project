@@ -54,6 +54,9 @@ interface ComplianceData {
   business?: any
 }
 
+// ─── Brand Color ──────────────────────────────────────────────────────────
+const primaryColor = '#0A3269'
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 const getDocumentUrl = (path: string) => {
   if (!path) return ''
@@ -340,7 +343,7 @@ const CompliancePage = () => {
       title: 'Compliance Score',
       value: `${complianceData?.complianceScore || 0}%`,
       icon: Shield,
-      color: 'bg-[#0A3269] dark:bg-[#4A8ABF]',
+      color: 'bg-[#0A3269]',
       textColor: 'text-white',
       progress: complianceData?.complianceScore || 0,
     },
@@ -348,21 +351,21 @@ const CompliancePage = () => {
       title: 'Valid Documents',
       value: `${(complianceData?.totalDocuments || 0) - (complianceData?.expiredCount || 0) - (complianceData?.expiringSoonCount || 0)}`,
       icon: CheckCircle,
-      color: 'bg-blue-600 dark:bg-blue-500',
+      color: 'bg-blue-600',
       textColor: 'text-white',
     },
     {
       title: 'Expiring Soon',
       value: `${complianceData?.expiringSoonCount || 0}`,
       icon: AlertTriangle,
-      color: 'bg-amber-600 dark:bg-amber-500',
+      color: 'bg-amber-600',
       textColor: 'text-white',
     },
     {
       title: 'Expired',
       value: `${complianceData?.expiredCount || 0}`,
       icon: XCircle,
-      color: 'bg-red-600 dark:bg-red-500',
+      color: 'bg-red-600',
       textColor: 'text-white',
     },
   ]
@@ -383,7 +386,7 @@ const CompliancePage = () => {
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2.5 mb-0.5">
-                <div className="p-1.5 rounded-lg bg-[#0A3269] dark:bg-[#4A8ABF]">
+                <div className="p-1.5 rounded-lg bg-[#0A3269]">
                   <Shield className="h-4 w-4 text-white" />
                 </div>
                 <h3 className="text-2xl md:text-3xl font-light text-gray-900 dark:text-white tracking-tight">
@@ -406,7 +409,7 @@ const CompliancePage = () => {
               </Button>
               <Button 
                 onClick={() => setShowUploadDialog(true)}
-                className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
+                className="bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
               >
                 <Upload className="mr-2 h-3.5 w-3.5" />
                 Upload Document
@@ -424,7 +427,7 @@ const CompliancePage = () => {
                 transition={{ delay: index * 0.05 }}
                 className="relative overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-black/40 shadow-sm hover:shadow-md transition-all duration-300 group"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0A3269]/5 to-transparent dark:from-[#4A8ABF]/5 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0A3269]/5 to-transparent pointer-events-none" />
                 <div className="p-3 sm:p-4 relative z-10">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
@@ -441,7 +444,7 @@ const CompliancePage = () => {
                   </div>
                   {stat.progress !== undefined && (
                     <div className="mt-2 relative">
-                      <Progress value={stat.progress} className="h-1 bg-gray-200/50 dark:bg-gray-700/50 [&>div]:bg-[#0A3269] dark:[&>div]:bg-[#4A8ABF]" />
+                      <Progress value={stat.progress} className="h-1 bg-gray-200/50 dark:bg-gray-700/50 [&>div]:bg-[#0A3269]" />
                       <div className="absolute top-0 left-0 h-full w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <div className="w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />
                       </div>
@@ -507,7 +510,7 @@ const CompliancePage = () => {
                             shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-light
                             transition-all duration-300 whitespace-nowrap
                             ${isActive
-                              ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white shadow-sm'
+                              ? 'bg-[#0A3269] text-white shadow-sm'
                               : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
                             }
                           `}
@@ -554,13 +557,13 @@ const CompliancePage = () => {
                             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
                             <Input
                               placeholder="Search documents..."
-                              className="pl-8 h-9 w-full sm:w-44 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/10 text-xs focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
+                              className="pl-8 h-9 w-full sm:w-44 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/10 text-xs focus:ring-[#0A3269]"
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
                             />
                           </div>
                           <Select value={statusFilter} onValueChange={setStatusFilter}>
-                            <SelectTrigger className="h-9 w-32 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/10 text-xs focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]">
+                            <SelectTrigger className="h-9 w-32 rounded-lg border-gray-200/50 dark:border-white/10 bg-white dark:bg-black/10 text-xs focus:ring-[#0A3269]">
                               <SelectValue placeholder="All status" />
                             </SelectTrigger>
                             <SelectContent>
@@ -746,7 +749,7 @@ const CompliancePage = () => {
                               <p className="text-sm text-gray-500 dark:text-gray-400 font-light mb-3">No documents match your search</p>
                               <Button 
                                 onClick={() => setShowUploadDialog(true)} 
-                                className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
+                                className="bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
                               >
                                 <Upload className="w-3.5 h-3.5 mr-2" />
                                 Upload Your First Document
@@ -834,7 +837,7 @@ const CompliancePage = () => {
                           <p className="text-sm text-gray-500 dark:text-gray-400 font-light mb-3 max-w-md mx-auto">
                             Add your company information to track trade license and establishment requirements
                           </p>
-                          <Button onClick={() => setShowBusinessDialog(true)} className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
+                          <Button onClick={() => setShowBusinessDialog(true)} className="bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
                             <Plus className="w-3.5 h-3.5 mr-2" />
                             Add Business Information
                           </Button>
@@ -870,11 +873,11 @@ const CompliancePage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.08 }}
                           >
-                            <div className="rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white dark:bg-black/20 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30 transition-all duration-300 overflow-hidden">
-                              <div className="h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF]"></div>
+                            <div className="rounded-lg border border-gray-200/50 dark:border-gray-700/50 bg-white dark:bg-black/20 hover:border-[#0A3269]/30 transition-all duration-300 overflow-hidden">
+                              <div className="h-0.5 bg-[#0A3269]"></div>
                               <div className="p-4">
                                 <div className="flex items-center gap-2 mb-3">
-                                  <item.icon className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                                  <item.icon className="h-4 w-4 text-[#0A3269]" />
                                   <h4 className="text-sm font-light text-gray-900 dark:text-white">{item.title}</h4>
                                 </div>
                                 <ul className="space-y-1.5 text-xs">
@@ -904,8 +907,8 @@ const CompliancePage = () => {
                   >
                     <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                          <Gavel className="h-5 w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                        <div className="p-2 rounded-lg bg-[#0A3269]/10">
+                          <Gavel className="h-5 w-5 text-[#0A3269]" />
                         </div>
                         <div>
                           <h3 className="text-base font-light text-gray-900 dark:text-white">
@@ -919,7 +922,7 @@ const CompliancePage = () => {
 
                       <div className="rounded-lg border border-blue-200/40 dark:border-blue-800/20 bg-blue-50/30 dark:bg-blue-950/10 p-3.5">
                         <div className="flex items-start gap-2.5">
-                          <div className="p-1.5 rounded-lg bg-blue-500/10 dark:bg-blue-400/10 border border-blue-200/30 dark:border-blue-400/20">
+                          <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-200/30">
                             <Globe className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                           </div>
                           <div className="text-blue-900 dark:text-blue-200">
@@ -1033,8 +1036,8 @@ const CompliancePage = () => {
                   >
                     <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                          <Bell className="h-5 w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                        <div className="p-2 rounded-lg bg-[#0A3269]/10">
+                          <Bell className="h-5 w-5 text-[#0A3269]" />
                         </div>
                         <div>
                           <h3 className="text-base font-light text-gray-900 dark:text-white">
@@ -1048,7 +1051,7 @@ const CompliancePage = () => {
 
                       <div className="rounded-lg border border-blue-200/40 dark:border-blue-800/20 bg-blue-50/30 dark:bg-blue-950/10 p-3.5">
                         <div className="flex items-start gap-2.5">
-                          <div className="p-1.5 rounded-lg bg-blue-500/10 dark:bg-blue-400/10 border border-blue-200/30 dark:border-blue-400/20">
+                          <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-200/30">
                             <Bell className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                           </div>
                           <div className="text-blue-900 dark:text-blue-200">
@@ -1090,8 +1093,8 @@ const CompliancePage = () => {
                                     <div className="flex items-start gap-3">
                                       <div className={`p-1.5 rounded-lg ${
                                         doc.status === 'expired' 
-                                          ? 'bg-rose-500/10 dark:bg-rose-400/10 border border-rose-200/30 dark:border-rose-400/20' 
-                                          : 'bg-amber-500/10 dark:bg-amber-400/10 border border-amber-200/30 dark:border-amber-400/20'
+                                          ? 'bg-rose-500/10 border border-rose-200/30' 
+                                          : 'bg-amber-500/10 border border-amber-200/30'
                                       }`}>
                                         {doc.status === 'expired' ? (
                                           <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
@@ -1146,7 +1149,7 @@ const CompliancePage = () => {
                         </>
                       ) : (
                         <div className="rounded-lg border border-emerald-200/40 dark:border-emerald-800/20 bg-emerald-50/30 dark:bg-emerald-950/10 p-6 text-center">
-                          <div className="mx-auto w-14 h-14 rounded-full bg-emerald-500/10 dark:bg-emerald-400/10 border border-emerald-200/30 dark:border-emerald-400/20 flex items-center justify-center mb-3">
+                          <div className="mx-auto w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-200/30 flex items-center justify-center mb-3">
                             <CheckCircle className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
                           </div>
                           <p className="text-base font-light text-gray-900 dark:text-white">All Documents Valid</p>
@@ -1167,11 +1170,11 @@ const CompliancePage = () => {
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
         <DialogContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 max-w-md rounded-xl shadow-xl p-0 overflow-hidden backdrop-blur-sm">
           <div className="relative">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF]" />
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269]" />
             <DialogHeader className="p-5 pb-2">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                  <Upload className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="p-2 rounded-lg bg-[#0A3269]/10">
+                  <Upload className="h-4 w-4 text-[#0A3269]" />
                 </div>
                 <div>
                   <DialogTitle className="text-lg font-light text-gray-900 dark:text-white">
@@ -1192,7 +1195,7 @@ const CompliancePage = () => {
                 Document Type
               </Label>
               <Select value={uploadDocType} onValueChange={setUploadDocType}>
-                <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]">
+                <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]">
                   <SelectValue placeholder="Select document type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 rounded-lg">
@@ -1218,7 +1221,7 @@ const CompliancePage = () => {
                   type="file"
                   onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
                   accept=".pdf,.jpg,.jpeg,.png"
-                  className="bg-white dark:bg-black border-2 border-dashed border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-light file:bg-[#0A3269] dark:file:bg-[#4A8ABF] file:text-white hover:file:bg-[#1A4A8A] dark:hover:file:bg-[#3a7aaf] transition-all duration-300"
+                  className="bg-white dark:bg-black border-2 border-dashed border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-light file:bg-[#0A3269] file:text-white hover:file:bg-[#1A4A8A] transition-all duration-300"
                 />
               </div>
             </div>
@@ -1232,7 +1235,7 @@ const CompliancePage = () => {
                 value={uploadDocNumber}
                 onChange={(e) => setUploadDocNumber(e.target.value)}
                 placeholder="e.g., 784-1234-5678901-2"
-                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
+                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]"
               />
             </div>
 
@@ -1245,7 +1248,7 @@ const CompliancePage = () => {
                 type="date"
                 value={uploadExpiryDate}
                 onChange={(e) => setUploadExpiryDate(e.target.value)}
-                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
+                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]"
               />
             </div>
 
@@ -1253,7 +1256,7 @@ const CompliancePage = () => {
               <Button 
                 onClick={handleUploadDocument} 
                 disabled={isLoading} 
-                className="flex-1 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
+                className="flex-1 bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
               >
                 {isLoading ? (
                   <>
@@ -1283,11 +1286,11 @@ const CompliancePage = () => {
       <Dialog open={showBusinessDialog} onOpenChange={setShowBusinessDialog}>
         <DialogContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 max-w-2xl rounded-xl shadow-xl p-0 overflow-hidden">
           <div className="relative">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] dark:bg-[#4A8ABF]" />
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269]" />
             <DialogHeader className="p-5 pb-2">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                  <Building2 className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="p-2 rounded-lg bg-[#0A3269]/10">
+                  <Building2 className="h-4 w-4 text-[#0A3269]" />
                 </div>
                 <div>
                   <DialogTitle className="text-lg font-light text-gray-900 dark:text-white">
@@ -1326,7 +1329,7 @@ const CompliancePage = () => {
                       value={businessData.companyName}
                       onChange={(e) => setBusinessData({ ...businessData, companyName: e.target.value })}
                       placeholder="Enter company name"
-                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
+                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]"
                     />
                   </div>
 
@@ -1336,7 +1339,7 @@ const CompliancePage = () => {
                       value={businessData.establishmentType} 
                       onValueChange={(value) => setBusinessData({ ...businessData, establishmentType: value })}
                     >
-                      <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]">
+                      <SelectTrigger className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white dark:bg-black border border-gray-200/50 dark:border-white/10 rounded-lg">
@@ -1353,7 +1356,7 @@ const CompliancePage = () => {
                       value={businessData.businessActivity}
                       onChange={(e) => setBusinessData({ ...businessData, businessActivity: e.target.value })}
                       placeholder="e.g., Trading, Consulting, etc."
-                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
+                      className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]"
                     />
                   </div>
 
@@ -1364,7 +1367,7 @@ const CompliancePage = () => {
                         value={businessData.tradeLicenseNumber}
                         onChange={(e) => setBusinessData({ ...businessData, tradeLicenseNumber: e.target.value })}
                         placeholder="License number"
-                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
+                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]"
                       />
                     </div>
                     <div>
@@ -1373,7 +1376,7 @@ const CompliancePage = () => {
                         type="date"
                         value={businessData.tradeLicenseExpiry}
                         onChange={(e) => setBusinessData({ ...businessData, tradeLicenseExpiry: e.target.value })}
-                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] dark:focus:ring-[#4A8ABF]"
+                        className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]"
                       />
                     </div>
                   </div>
@@ -1382,7 +1385,7 @@ const CompliancePage = () => {
             )}
 
             <div className="flex gap-2 pt-1">
-              <Button onClick={handleUpdateBusiness} disabled={isLoading} className="flex-1 bg-[#0A3269] dark:bg-[#4A8ABF] text-white hover:bg-[#1A4A8A] dark:hover:bg-[#3a7aaf] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
+              <Button onClick={handleUpdateBusiness} disabled={isLoading} className="flex-1 bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
                 {isLoading ? 'Saving...' : 'Save Changes'}
               </Button>
               <Button 

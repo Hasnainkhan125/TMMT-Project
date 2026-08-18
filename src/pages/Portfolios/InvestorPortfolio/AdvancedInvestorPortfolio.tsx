@@ -108,7 +108,6 @@ const ACCENT = {
   primary: '#0A3269',
   primaryLight: '#1a4a7a',
   primaryDark: '#082a5a',
-  primaryDarkMode: '#4A8ABF',
   teal: '#0d9488',
   amber: '#d97706',
   slate: '#64748b',
@@ -243,6 +242,11 @@ const AdvancedInvestorPortfolio = () => {
   const [dataView, setDataView] = useState<DataView>(null);
 
   const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
+
+  // ─── Brand Color ──────────────────────────────────────────────────────────
+  const primaryColor = '#0A3269';
+  const primaryColorLight = '#0A3269' + '30';
+  const primaryColorLighter = '#0A3269' + '15';
 
   useEffect(() => {
     setActiveTab(getTabFromPath(location.pathname));
@@ -515,12 +519,12 @@ const AdvancedInvestorPortfolio = () => {
     { key: 'approved', label: 'Approved', count: applications.filter(a => a.status === 'approved').length },
   ];
 
-  // Shared pill-filter classes
+  // Shared pill-filter classes - using primary color
   const pillBtnClass = (active: boolean) => `
     px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-medium transition-all duration-200 border whitespace-nowrap
     ${active
-      ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-white border-[#0A3269] dark:border-[#4A8ABF] shadow-[0_0_0_1px_rgba(10,50,105,0.35)] dark:shadow-[0_0_0_1px_rgba(74,138,191,0.35)]'
-      : 'bg-gray-100 dark:bg-white/[0.03] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:text-[#0A3269] dark:hover:text-[#4A8ABF]'
+      ? 'bg-[#0A3269] text-white border-[#0A3269] shadow-[0_0_0_1px_rgba(10,50,105,0.35)]'
+      : 'bg-gray-100 dark:bg-white/[0.03] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/40 hover:text-[#0A3269]'
     }
   `;
 
@@ -602,139 +606,139 @@ const AdvancedInvestorPortfolio = () => {
 
       {/* ─── Charts Section ─────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
-    <Card className="md:col-span-2 rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
-  <CardHeader className="pb-1.5 px-4 pt-4 sm:px-5 sm:pt-5">
-    <CardTitle className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-gray-100">
-      Application Trend
-    </CardTitle>
-    <CardDescription className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-light">
-      Jan – Jun 2026 monthly trajectory
-    </CardDescription>
-  </CardHeader>
-  <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
-    <ResponsiveContainer width="100%" height={230}>
-      <AreaChart data={chartData.monthlyTrend}>
-        <defs>
-          <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor={ACCENT.primary} stopOpacity={0.35} />
-            <stop offset="95%" stopColor={ACCENT.primary} stopOpacity={0.02} />
-          </linearGradient>
-        </defs>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#94a3b8" opacity={0.15} />
-        <XAxis
-          dataKey="month"
-          tickLine={false}
-          axisLine={false}
-          tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 300 }}
-        />
-        <YAxis
-          tickLine={false}
-          axisLine={false}
-          width={25}
-          tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 300 }}
-        />
-        <Tooltip
-          contentStyle={{
-            backgroundColor: 'rgba(18,18,28,0.95)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: '10px',
-            padding: '6px 10px',
-            fontSize: '11px',
-            color: '#f5f5f7',
-          }}
-          formatter={(value) => [`${value} applications`, 'Total']}
-          labelStyle={{ color: '#ffffff' }}
-          itemStyle={{ color: '#ffffff' }}
-        />
-        <Area
-          type="monotone"
-          dataKey="applications"
-          stroke={ACCENT.primary}
-          strokeWidth={2.5}
-          fill="url(#trendFill)"
-        />
-      </AreaChart>
-    </ResponsiveContainer>
-  </CardContent>
-</Card>
+        <Card className="md:col-span-2 rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
+          <CardHeader className="pb-1.5 px-4 pt-4 sm:px-5 sm:pt-5">
+            <CardTitle className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-gray-100">
+              Application Trend
+            </CardTitle>
+            <CardDescription className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-light">
+              Jan – Jun 2026 monthly trajectory
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
+            <ResponsiveContainer width="100%" height={230}>
+              <AreaChart data={chartData.monthlyTrend}>
+                <defs>
+                  <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={ACCENT.primary} stopOpacity={0.35} />
+                    <stop offset="95%" stopColor={ACCENT.primary} stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#94a3b8" opacity={0.15} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 300 }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  width={25}
+                  tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 300 }}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(18,18,28,0.95)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '10px',
+                    padding: '6px 10px',
+                    fontSize: '11px',
+                    color: '#f5f5f7',
+                  }}
+                  formatter={(value) => [`${value} applications`, 'Total']}
+                  labelStyle={{ color: '#ffffff' }}
+                  itemStyle={{ color: '#ffffff' }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="applications"
+                  stroke={ACCENT.primary}
+                  strokeWidth={2.5}
+                  fill="url(#trendFill)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
 
-   <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
-  <CardHeader className="pb-1.5 px-4 pt-4 sm:px-5 sm:pt-5">
-    <CardTitle className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-gray-100">
-      Status Distribution
-    </CardTitle>
-    <CardDescription className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-light">
-      Share by application status
-    </CardDescription>
-  </CardHeader>
-  <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
-    {chartData.statusDistribution.length > 0 ? (
-      <>
-        <div className="relative">
-          <ResponsiveContainer width="100%" height={160}>
-            <RechartsPie>
-              <Pie
-                data={chartData.statusDistribution}
-                cx="50%"
-                cy="50%"
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={3}
-                dataKey="value"
-              >
-                {chartData.statusDistribution.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                    stroke="transparent"
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'rgba(18,18,28,0.95)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '10px',
-                  padding: '6px 10px',
-                  fontSize: '11px',
-                  color: '#f5f5f7',
-                }}
-                formatter={(value, name) => [`${value} applications`, name]}
-                labelStyle={{ color: '#ffffff' }}
-                itemStyle={{ color: '#ffffff' }}
-              />
-            </RechartsPie>
-          </ResponsiveContainer>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-            <p className="text-[9px] font-light text-gray-400 dark:text-gray-500">Total</p>
-            <p className="text-base font-semibold text-gray-900 dark:text-white">
-              {chartData.statusDistribution.reduce((sum, item) => sum + item.value, 0)}
-            </p>
-          </div>
-        </div>
-        <div className="mt-3 space-y-1.5">
-          {chartData.statusDistribution.map((item, index) => (
-            <div key={item.name} className="flex items-center gap-2 text-[11px]">
-              <span
-                className="h-2 w-2 shrink-0 rounded-sm"
-                style={{ backgroundColor: COLORS[index % COLORS.length] }}
-              />
-              <span className="min-w-0 flex-1 truncate text-gray-600 dark:text-gray-400">{item.name}</span>
-              <span className="font-medium text-gray-900 dark:text-white">{item.value}</span>
-            </div>
-          ))}
-        </div>
-      </>
-    ) : (
-      <div className="py-10 text-center">
-        <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-gray-100 dark:bg-white/[0.03] flex items-center justify-center">
-          <PieChartIcon className="h-5 w-5 text-gray-300 dark:text-gray-600" />
-        </div>
-        <p className="text-xs text-gray-400 dark:text-gray-500 font-light">No data to display</p>
-      </div>
-    )}
-  </CardContent>
-</Card>
+        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
+          <CardHeader className="pb-1.5 px-4 pt-4 sm:px-5 sm:pt-5">
+            <CardTitle className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-gray-100">
+              Status Distribution
+            </CardTitle>
+            <CardDescription className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-light">
+              Share by application status
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
+            {chartData.statusDistribution.length > 0 ? (
+              <>
+                <div className="relative">
+                  <ResponsiveContainer width="100%" height={160}>
+                    <RechartsPie>
+                      <Pie
+                        data={chartData.statusDistribution}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={45}
+                        outerRadius={70}
+                        paddingAngle={3}
+                        dataKey="value"
+                      >
+                        {chartData.statusDistribution.map((_, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                            stroke="transparent"
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(18,18,28,0.95)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '10px',
+                          padding: '6px 10px',
+                          fontSize: '11px',
+                          color: '#f5f5f7',
+                        }}
+                        formatter={(value, name) => [`${value} applications`, name]}
+                        labelStyle={{ color: '#ffffff' }}
+                        itemStyle={{ color: '#ffffff' }}
+                      />
+                    </RechartsPie>
+                  </ResponsiveContainer>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+                    <p className="text-[9px] font-light text-gray-400 dark:text-gray-500">Total</p>
+                    <p className="text-base font-semibold text-gray-900 dark:text-white">
+                      {chartData.statusDistribution.reduce((sum, item) => sum + item.value, 0)}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 space-y-1.5">
+                  {chartData.statusDistribution.map((item, index) => (
+                    <div key={item.name} className="flex items-center gap-2 text-[11px]">
+                      <span
+                        className="h-2 w-2 shrink-0 rounded-sm"
+                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                      />
+                      <span className="min-w-0 flex-1 truncate text-gray-600 dark:text-gray-400">{item.name}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="py-10 text-center">
+                <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-gray-100 dark:bg-white/[0.03] flex items-center justify-center">
+                  <PieChartIcon className="h-5 w-5 text-gray-300 dark:text-gray-600" />
+                </div>
+                <p className="text-xs text-gray-400 dark:text-gray-500 font-light">No data to display</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       {/* ─── DATA VIEW BUTTONS ────────────────────────────────────────────────── */}
@@ -746,8 +750,8 @@ const AdvancedInvestorPortfolio = () => {
             text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
             border
             ${dataView === 'checks'
-              ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white border-[#0A3269] dark:border-[#4A8ABF]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:text-[#0A3269] dark:hover:text-[#4A8ABF]'
+              ? 'bg-[#0A3269] text-white border-[#0A3269]'
+              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 hover:text-[#0A3269]'
             }
           `}
         >
@@ -771,8 +775,8 @@ const AdvancedInvestorPortfolio = () => {
             text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
             border
             ${dataView === 'applications'
-              ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white border-[#0A3269] dark:border-[#4A8ABF]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:text-[#0A3269] dark:hover:text-[#4A8ABF]'
+              ? 'bg-[#0A3269] text-white border-[#0A3269]'
+              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 hover:text-[#0A3269]'
             }
           `}
         >
@@ -796,8 +800,8 @@ const AdvancedInvestorPortfolio = () => {
             text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
             border
             ${dataView === 'packages'
-              ? 'bg-[#0A3269] dark:bg-[#4A8ABF] text-white border-[#0A3269] dark:border-[#4A8ABF]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:text-[#0A3269] dark:hover:text-[#4A8ABF]'
+              ? 'bg-[#0A3269] text-white border-[#0A3269]'
+              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 hover:text-[#0A3269]'
             }
           `}
         >
@@ -832,8 +836,8 @@ const AdvancedInvestorPortfolio = () => {
           <CardHeader className="flex flex-col items-start justify-between gap-4 p-3 sm:p-4 md:p-6">
             <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
               <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 border border-[#0A3269]/25 dark:border-[#4A8ABF]/25">
-                  <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 border border-[#0A3269]/25">
+                  <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -848,7 +852,7 @@ const AdvancedInvestorPortfolio = () => {
                 </div>
               </div>
               <Button
-                className="w-full sm:w-auto bg-[#0A3269] dark:bg-[#4A8ABF] hover:bg-[#1a4a7a] dark:hover:bg-[#3a7aaf] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
+                className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
                 onClick={() => navigate('/customer-dashboard')}
               >
                 <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
@@ -891,7 +895,7 @@ const AdvancedInvestorPortfolio = () => {
               </div>
             ) : filteredChecks.length === 0 ? (
               <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-12 sm:py-16 text-center">
-                <ClipboardCheck className="text-[#0A3269] dark:text-[#4A8ABF] mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
+                <ClipboardCheck className="text-[#0A3269] mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
                 <h3 className="text-gray-900 dark:text-white mb-2 text-lg sm:text-xl font-medium">
                   {checks.length === 0 ? 'No checks yet' : 'No checks match filter'}
                 </h3>
@@ -902,7 +906,7 @@ const AdvancedInvestorPortfolio = () => {
                 </p>
                 {checks.length === 0 && (
                   <Button
-                    className="w-full sm:w-auto bg-[#0A3269] dark:bg-[#4A8ABF] hover:bg-[#1a4a7a] dark:hover:bg-[#3a7aaf] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-medium"
+                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-medium"
                     onClick={() => navigate('/services')}
                   >
                     <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
@@ -953,8 +957,8 @@ const AdvancedInvestorPortfolio = () => {
           <CardHeader className="flex flex-col items-start justify-between gap-3 sm:gap-4 p-3 sm:p-4 md:p-6">
             <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
               <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 border border-[#0A3269]/25 dark:border-[#4A8ABF]/25">
-                  <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 border border-[#0A3269]/25">
+                  <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -997,7 +1001,7 @@ const AdvancedInvestorPortfolio = () => {
 
             {filteredApplications.length === 0 ? (
               <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
-                <ClipboardList className="text-[#0A3269] dark:text-[#4A8ABF] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+                <ClipboardList className="text-[#0A3269] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
                 <h4 className="text-gray-900 dark:text-white mb-1 sm:mb-1.5 text-sm sm:text-base md:text-lg font-medium">
                   {applications.length === 0 ? 'No applications yet' : 'No applications match'}
                 </h4>
@@ -1008,7 +1012,7 @@ const AdvancedInvestorPortfolio = () => {
                 </p>
                 {applications.length === 0 && (
                   <Button
-                    className="w-full sm:w-auto bg-[#0A3269] dark:bg-[#4A8ABF] hover:bg-[#1a4a7a] dark:hover:bg-[#3a7aaf] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
+                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
                     onClick={() => setShowStartApplication(true)}
                   >
                     <Plus className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
@@ -1073,8 +1077,8 @@ const AdvancedInvestorPortfolio = () => {
           <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
             <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
               <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 border border-[#0A3269]/25 dark:border-[#4A8ABF]/25">
-                  <Package className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 border border-[#0A3269]/25">
+                  <Package className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <CardTitle className="flex flex-wrap items-center gap-1.5 text-base sm:text-lg md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -1089,7 +1093,7 @@ const AdvancedInvestorPortfolio = () => {
                 </div>
               </div>
               <Button
-                className="w-full sm:w-auto bg-[#0A3269] dark:bg-[#4A8ABF] hover:bg-[#1a4a7a] dark:hover:bg-[#3a7aaf] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
+                className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
                 onClick={() => navigate('/packages')}
               >
                 <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
@@ -1140,7 +1144,7 @@ const AdvancedInvestorPortfolio = () => {
               </div>
             ) : filteredPackages.length === 0 ? (
               <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
-                <Package className="text-[#0A3269] dark:text-[#4A8ABF] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+                <Package className="text-[#0A3269] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
                 <h3 className="text-gray-900 dark:text-white mb-1 text-sm sm:text-base md:text-lg font-medium">
                   {packageApps.length === 0 ? 'No packages yet' : 'No packages match filter'}
                 </h3>
@@ -1151,7 +1155,7 @@ const AdvancedInvestorPortfolio = () => {
                 </p>
                 {packageApps.length === 0 && (
                   <Button
-                    className="w-full sm:w-auto bg-[#0A3269] dark:bg-[#4A8ABF] hover:bg-[#1a4a7a] dark:hover:bg-[#3a7aaf] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
+                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
                     onClick={() => navigate('/packages')}
                   >
                     <Package className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
@@ -1194,11 +1198,11 @@ const AdvancedInvestorPortfolio = () => {
 
           <div className="relative flex flex-col items-center gap-4">
             <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 blur-xl animate-pulse" />
-              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 border border-[#0A3269]/25 dark:border-[#4A8ABF]/25">
-                <FileText className="h-7 w-7 text-[#0A3269] dark:text-[#4A8ABF] opacity-80" strokeWidth={1.5} />
+              <div className="absolute inset-0 rounded-full bg-[#0A3269]/10 blur-xl animate-pulse" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#0A3269]/10 border border-[#0A3269]/25">
+                <FileText className="h-7 w-7 text-[#0A3269] opacity-80" strokeWidth={1.5} />
               </div>
-              <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] dark:from-[#4A8ABF] dark:to-[#3a7aaf] text-white text-[8px] font-medium animate-pulse">
+              <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] text-white text-[8px] font-medium animate-pulse">
                 <span>✦</span>
               </div>
             </div>
@@ -1208,7 +1212,7 @@ const AdvancedInvestorPortfolio = () => {
                 Select a section to view
               </h3>
               <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto font-light leading-relaxed">
-                Click on <span className="font-medium text-[#0A3269] dark:text-[#4A8ABF]">Checks</span>, <span className="font-medium text-[#0A3269] dark:text-[#4A8ABF]">Applications</span>, or <span className="font-medium text-[#0A3269] dark:text-[#4A8ABF]">Packages</span> to see your data
+                Click on <span className="font-medium text-[#0A3269]">Checks</span>, <span className="font-medium text-[#0A3269]">Applications</span>, or <span className="font-medium text-[#0A3269]">Packages</span> to see your data
               </p>
             </div>
 
@@ -1217,7 +1221,7 @@ const AdvancedInvestorPortfolio = () => {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setDataView('checks')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A3269] dark:bg-[#4A8ABF] text-white transition-all duration-300 hover:bg-[#1a4a7a] dark:hover:bg-[#3a7aaf]"
+                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A3269] text-white transition-all duration-300 hover:bg-[#1a4a7a]"
               >
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                 <ClipboardCheck className="h-4 w-4 relative z-10" />
@@ -1229,7 +1233,7 @@ const AdvancedInvestorPortfolio = () => {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setDataView('applications')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
+                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#0A3269]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
               >
                 <ClipboardList className="h-4 w-4 relative z-10" />
                 <span className="relative z-10 text-sm font-medium">View Applications</span>
@@ -1240,7 +1244,7 @@ const AdvancedInvestorPortfolio = () => {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setDataView('packages')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
+                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#0A3269]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
               >
                 <Package className="h-4 w-4 relative z-10" />
                 <span className="relative z-10 text-sm font-medium">View Packages</span>
@@ -1250,8 +1254,8 @@ const AdvancedInvestorPortfolio = () => {
 
             <div className="flex flex-wrap items-center justify-center gap-5 mt-1 pt-3 border-t border-gray-200/30 dark:border-white/5">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                  <ClipboardCheck className="h-3.5 w-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10">
+                  <ClipboardCheck className="h-3.5 w-3.5 text-[#0A3269]" />
                 </div>
                 <div className="text-left">
                   <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Checks</p>
@@ -1260,8 +1264,8 @@ const AdvancedInvestorPortfolio = () => {
               </div>
               <div className="h-6 w-px bg-gray-200/50 dark:bg-white/10" />
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                  <ClipboardList className="h-3.5 w-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10">
+                  <ClipboardList className="h-3.5 w-3.5 text-[#0A3269]" />
                 </div>
                 <div className="text-left">
                   <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Applications</p>
@@ -1270,8 +1274,8 @@ const AdvancedInvestorPortfolio = () => {
               </div>
               <div className="h-6 w-px bg-gray-200/50 dark:bg-white/10" />
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                  <Package className="h-3.5 w-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10">
+                  <Package className="h-3.5 w-3.5 text-[#0A3269]" />
                 </div>
                 <div className="text-left">
                   <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Packages</p>
@@ -1288,8 +1292,8 @@ const AdvancedInvestorPortfolio = () => {
         <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 border border-[#0A3269]/25 dark:border-[#4A8ABF]/25">
-                <Building2 className="h-4 w-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0A3269]/10 border border-[#0A3269]/25">
+                <Building2 className="h-4 w-4 text-[#0A3269]" />
               </div>
               Government Services
             </CardTitle>
@@ -1303,10 +1307,10 @@ const AdvancedInvestorPortfolio = () => {
                 <button
                   key={key}
                   onClick={() => window.open(url, '_blank')}
-                  className="group relative flex flex-col items-start gap-2.5 overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40"
+                  className="group relative flex flex-col items-start gap-2.5 overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A3269]/40"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10">
-                    <Icon className="h-5 w-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A3269]/10">
+                    <Icon className="h-5 w-5 text-[#0A3269]" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-gray-900 dark:text-white text-sm font-semibold leading-tight">
@@ -1316,7 +1320,7 @@ const AdvancedInvestorPortfolio = () => {
                       {sub}
                     </p>
                   </div>
-                  <ArrowUpRight className="absolute right-3 top-3 h-3.5 w-3.5 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
+                  <ArrowUpRight className="absolute right-3 top-3 h-3.5 w-3.5 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#0A3269]" />
                 </button>
               ))}
             </div>
@@ -1326,8 +1330,8 @@ const AdvancedInvestorPortfolio = () => {
         <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#64748b]/10 dark:bg-[#4A8ABF]/10 border border-[#64748b]/25 dark:border-[#4A8ABF]/25">
-                <HelpCircle className="h-4 w-4 text-[#64748b] dark:text-[#4A8ABF]" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#64748b]/10 border border-[#64748b]/25">
+                <HelpCircle className="h-4 w-4 text-[#64748b]" />
               </div>
               Help & Support
             </CardTitle>
@@ -1337,27 +1341,27 @@ const AdvancedInvestorPortfolio = () => {
           </CardHeader>
           <CardContent className="space-y-2">
             <Link to="/knowledge" className="block">
-              <button className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#64748b]/40 dark:hover:border-[#4A8ABF]/40">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#64748b]/10 dark:bg-[#4A8ABF]/10 text-[#64748b] dark:text-[#4A8ABF]">
+              <button className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#64748b]/40">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#64748b]/10 text-[#64748b]">
                   <BookOpen className="h-4 w-4" />
                 </div>
                 <span className="text-gray-900 dark:text-white flex-1 text-sm font-medium">
                   Knowledge Hub
                 </span>
-                <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#64748b] dark:group-hover:text-[#4A8ABF]" />
+                <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#64748b]" />
               </button>
             </Link>
             <button
               onClick={() => toast.info('Opening live chat...')}
-              className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0d9488]/40 dark:hover:border-[#4A8ABF]/40"
+              className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0d9488]/40"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0d9488]/10 dark:bg-[#4A8ABF]/10 text-[#0d9488] dark:text-[#4A8ABF]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0d9488]/10 text-[#0d9488]">
                 <MessageSquare className="h-4 w-4" />
               </div>
               <span className="text-gray-900 dark:text-white flex-1 text-sm font-medium">
                 Live Chat Support
               </span>
-              <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#0d9488] dark:group-hover:text-[#4A8ABF]" />
+              <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#0d9488]" />
             </button>
             <a
               href="tel:+97145551234"
@@ -1375,27 +1379,27 @@ const AdvancedInvestorPortfolio = () => {
                   }
                 }, 1500);
               }}
-              className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#7c3aed]/40 dark:hover:border-[#4A8ABF]/40"
+              className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#7c3aed]/40"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#7c3aed]/10 dark:bg-[#4A8ABF]/10 text-[#7c3aed] dark:text-[#4A8ABF]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#7c3aed]/10 text-[#7c3aed]">
                 <Phone className="h-4 w-4" />
               </div>
               <span className="text-gray-900 dark:text-white flex-1 text-sm font-medium">
                 Call Center
               </span>
-              <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#7c3aed] dark:group-hover:text-[#4A8ABF]" />
+              <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#7c3aed]" />
             </a>
             <button
               onClick={handleEmailClick}
-              className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d97706]/40 dark:hover:border-[#4A8ABF]/40"
+              className="group flex w-full items-center gap-3 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d97706]/40"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#d97706]/10 dark:bg-[#4A8ABF]/10 text-[#d97706] dark:text-[#4A8ABF]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#d97706]/10 text-[#d97706]">
                 <Mail className="h-4 w-4" />
               </div>
               <span className="text-gray-900 dark:text-white flex-1 text-sm font-medium">
                 Email Support
               </span>
-              <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#d97706] dark:group-hover:text-[#4A8ABF]" />
+              <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:text-[#d97706]" />
             </button>
           </CardContent>
         </Card>
@@ -1420,7 +1424,7 @@ const AdvancedInvestorPortfolio = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50/50 dark:bg-[#0a0a0f] px-4">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-14 w-14 animate-spin rounded-full border-2 border-[#0A3269] dark:border-[#4A8ABF] border-t-transparent sm:h-16 sm:w-16"></div>
+          <div className="mx-auto mb-4 h-14 w-14 animate-spin rounded-full border-2 border-[#0A3269] border-t-transparent sm:h-16 sm:w-16"></div>
           <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg">
             Loading your dashboard...
           </p>
@@ -1462,7 +1466,7 @@ const AdvancedInvestorPortfolio = () => {
               width: isSidebarCollapsed ? 36 : 'auto',
             }}
           >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0A3269] dark:bg-[#4A8ABF]">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]">
               {TMMTLogo ? (
                 <img
                   src={TMMTLogo}
@@ -1529,14 +1533,14 @@ const AdvancedInvestorPortfolio = () => {
                         transition-all duration-300 ease-out border
                         ${
                           isActiveTab(key as TabKey)
-                            ? 'bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF] border-[#0A3269]/30 dark:border-[#4A8ABF]/30'
+                            ? 'bg-[#0A3269]/10 text-[#0A3269] border-[#0A3269]/30'
                             : 'text-gray-500 dark:text-gray-400 border-transparent hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-gray-200'
                         }
                       `}
                     >
                       <Icon
                         className={`h-[18px] w-[18px] shrink-0 transition-colors duration-300 ${
-                          isActiveTab(key as TabKey) ? 'text-[#0A3269] dark:text-[#4A8ABF]' : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+                          isActiveTab(key as TabKey) ? 'text-[#0A3269]' : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
                         }`}
                       />
                       <motion.span
@@ -1554,7 +1558,7 @@ const AdvancedInvestorPortfolio = () => {
                         <motion.span
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
-                          className="ml-auto flex h-1.5 w-1.5 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF]"
+                          className="ml-auto flex h-1.5 w-1.5 rounded-full bg-[#0A3269]"
                         />
                       )}
                     </div>
@@ -1606,10 +1610,10 @@ const AdvancedInvestorPortfolio = () => {
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-600">
                   Sync Status
                 </p>
-                <Radio className="h-3 w-3 text-[#0d9488] dark:text-[#4A8ABF]" />
+                <Radio className="h-3 w-3 text-[#0d9488]" />
               </div>
               <div className="mt-2 flex items-center gap-1.5">
-                <span className={`h-1.5 w-1.5 rounded-full ${(loading || checksLoading || packageLoading) ? 'bg-[#d97706] animate-pulse' : 'bg-[#0d9488] dark:bg-[#4A8ABF]'}`} />
+                <span className={`h-1.5 w-1.5 rounded-full ${(loading || checksLoading || packageLoading) ? 'bg-[#d97706] animate-pulse' : 'bg-[#0d9488]'}`} />
                 <span className="text-[11px] text-gray-600 dark:text-gray-400">
                   {(loading || checksLoading || packageLoading) ? 'Syncing data…' : 'All data up to date'}
                 </span>
@@ -1665,17 +1669,17 @@ const AdvancedInvestorPortfolio = () => {
                 TMMT Portal <ChevronRight className="h-3 w-3" /> Overview
               </p>
               <h3 className="truncate text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-white">
-                Welcome, <span className="text-[#0A3269] dark:text-[#4A8ABF]">{userDetails?.firstName || user?.name || 'User'}</span>
+                Welcome, <span className="text-[#0A3269]">{userDetails?.firstName || user?.name || 'User'}</span>
               </h3>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF] text-white">
+              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0A3269] text-white">
                 <Crown className="h-3 w-3 text-amber-200" />
                 <span className="text-[9px] sm:text-[10px] font-medium tracking-wide">Level {userLevel}</span>
               </div>
 
-              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] dark:from-[#4A8ABF] dark:to-[#3a7aaf] text-white">
+              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] text-white">
                 <Sparkles className="h-2.5 w-2.5" />
                 <span className="text-[9px] sm:text-[10px] font-medium tracking-wide">{rewardPoints.toLocaleString()} pts</span>
               </div>
@@ -1704,7 +1708,7 @@ const AdvancedInvestorPortfolio = () => {
 
               <Avatar className="h-8 w-8 sm:h-9 sm:w-9 border border-gray-200/60 dark:border-white/10">
                 <AvatarImage src={userDetails?.avatar} />
-                <AvatarFallback className="bg-[#0A3269] dark:bg-[#4A8ABF] text-white text-[10px] sm:text-xs font-medium">
+                <AvatarFallback className="bg-[#0A3269] text-white text-[10px] sm:text-xs font-medium">
                   {userDetails?.firstName?.[0]}
                   {userDetails?.lastName?.[0]}
                 </AvatarFallback>
@@ -1726,7 +1730,7 @@ const AdvancedInvestorPortfolio = () => {
                 </>
               ) : (
                 <>
-                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 text-[#0A3269] dark:text-[#4A8ABF]">
+                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#0A3269]/10 text-[#0A3269]">
                     <Rocket className="h-2.5 w-2.5" />
                   </span>
                   <span>Start your journey with TMMT today</span>
@@ -1753,18 +1757,18 @@ const AdvancedInvestorPortfolio = () => {
             <div
               className={`flex w-full flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[11px] transition-all duration-200 ${
                 isActiveTab(key as TabKey)
-                  ? 'text-[#0A3269] dark:text-[#4A8ABF] font-semibold'
+                  ? 'text-[#0A3269] font-semibold'
                   : 'text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
             >
               {isActiveTab(key as TabKey) && (
                 <motion.div
                   layoutId="mobile-tab-indicator"
-                  className="absolute -top-0.5 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF]"
+                  className="absolute -top-0.5 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#0A3269]"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
-              <Icon className={`h-5 w-5 ${isActiveTab(key as TabKey) ? 'text-[#0A3269] dark:text-[#4A8ABF]' : ''}`} />
+              <Icon className={`h-5 w-5 ${isActiveTab(key as TabKey) ? 'text-[#0A3269]' : ''}`} />
               <span className="text-[10px]">{label}</span>
             </div>
           </button>
@@ -1956,10 +1960,10 @@ const AdvancedInvestorPortfolio = () => {
                 {/* Result Documents */}
                 {(selectedApplication as any).resultDocuments &&
                   (selectedApplication as any).resultDocuments.length > 0 && (
-                    <Card className="border-[#0d9488]/25 dark:border-[#4A8ABF]/25 bg-[#0d9488]/[0.05] dark:bg-[#4A8ABF]/[0.05] rounded-xl">
+                    <Card className="border-[#0d9488]/25 bg-[#0d9488]/[0.05] rounded-xl">
                       <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-lg text-[#0d9488] dark:text-[#4A8ABF]">
-                          <CheckCircle className="h-4 w-4 text-[#0d9488] dark:text-[#4A8ABF]" />
+                        <CardTitle className="flex items-center gap-2 text-lg text-[#0d9488]">
+                          <CheckCircle className="h-4 w-4 text-[#0d9488]" />
                           Result Documents (
                           {(selectedApplication as any).resultDocuments.length})
                         </CardTitle>
@@ -1970,31 +1974,31 @@ const AdvancedInvestorPortfolio = () => {
                             (doc: any, idx: number) => (
                               <div
                                 key={idx}
-                                className="flex items-center justify-between gap-2 rounded-lg border border-[#0d9488]/25 dark:border-[#4A8ABF]/25 bg-[#0d9488]/[0.05] dark:bg-[#4A8ABF]/[0.05] p-3"
+                                className="flex items-center justify-between gap-2 rounded-lg border border-[#0d9488]/25 bg-[#0d9488]/[0.05] p-3"
                               >
                                 <div className="flex min-w-0 flex-1 items-center gap-2">
-                                  <Zap className="h-4 w-4 shrink-0 text-[#0d9488] dark:text-[#4A8ABF]" />
+                                  <Zap className="h-4 w-4 shrink-0 text-[#0d9488]" />
                                   <div className="min-w-0 flex-1">
-                                    <p className="truncate text-sm font-medium text-[#0d9488] dark:text-[#4A8ABF]">
+                                    <p className="truncate text-sm font-medium text-[#0d9488]">
                                       {doc.label ||
                                         doc.originalName ||
                                         'Result Document'}
                                     </p>
                                     <div className="mt-1 flex flex-wrap items-center gap-2">
-                                      <p className="text-xs text-[#0d9488]/80 dark:text-[#4A8ABF]/80">
+                                      <p className="text-xs text-[#0d9488]/80">
                                         Uploaded:{' '}
                                         {new Date(
                                           doc.uploadedAt
                                         ).toLocaleDateString()}
                                       </p>
                                       {doc.uploadedByRole && (
-                                        <Badge className="bg-[#64748b]/10 dark:bg-[#4A8ABF]/10 text-[10px] text-[#64748b] dark:text-[#4A8ABF] border-0">
+                                        <Badge className="bg-[#64748b]/10 text-[10px] text-[#64748b] border-0">
                                           by {doc.uploadedByRole}
                                         </Badge>
                                       )}
                                     </div>
                                     {doc.description && (
-                                      <p className="mt-1 text-xs text-[#0d9488]/70 dark:text-[#4A8ABF]/70">
+                                      <p className="mt-1 text-xs text-[#0d9488]/70">
                                         {doc.description}
                                       </p>
                                     )}
@@ -2004,7 +2008,7 @@ const AdvancedInvestorPortfolio = () => {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-[#0d9488] dark:text-[#4A8ABF] hover:bg-[#0d9488]/10 dark:hover:bg-[#4A8ABF]/10"
+                                    className="text-[#0d9488] hover:bg-[#0d9488]/10"
                                     onClick={() =>
                                       handleViewResultDocument(doc, selectedApplication)
                                     }
@@ -2014,7 +2018,7 @@ const AdvancedInvestorPortfolio = () => {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-[#0d9488] dark:text-[#4A8ABF] hover:bg-[#0d9488]/10 dark:hover:bg-[#4A8ABF]/10"
+                                    className="text-[#0d9488] hover:bg-[#0d9488]/10"
                                     onClick={() => handleDocumentDownload(doc, selectedApplication)}
                                   >
                                     <Download className="h-4 w-4" />
@@ -2046,7 +2050,7 @@ const AdvancedInvestorPortfolio = () => {
                                 key={index}
                                 className="flex items-start gap-3"
                               >
-                                <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#0A3269] dark:bg-[#4A8ABF]" />
+                                <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#0A3269]" />
                                 <div className="min-w-0 flex-1">
                                   <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
                                     {event.action

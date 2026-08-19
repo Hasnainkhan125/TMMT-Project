@@ -907,7 +907,7 @@ const AdvancedInvestorPortfolio = () => {
                 {checks.length === 0 && (
                   <Button
                     className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-medium"
-                    onClick={() => navigate('/services')}
+                    onClick={() => navigate('/customer-dashboard')}
                   >
                     <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     Start a Check

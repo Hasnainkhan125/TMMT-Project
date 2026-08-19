@@ -2070,11 +2070,11 @@ const ServiceJourney = () => {
                 alt={currentSteps[activeStep]?.title}
                 className="absolute inset-0 w-full h-full object-content transition-transform duration-1000 ease-out group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
  
-              <div className="absolute left-4 top-4 z-10 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 backdrop-blur-md px-3 py-1.5">
+              <div className="absolute left-4 top-3 z-10 flex items-center gap-1.5 rounded-full border border-[#0a3269]/20 bg-[#0a3269]/20 backdrop-blur-md px-3 py-1">
                 <span className="font-mono text-[11px] font-semibold text-white/90">
-                  <span className="text-[#0a3269]">{String(activeStep + 1).padStart(2, '0')}</span>
+                  <span className="text-[#fff]">{String(activeStep + 1).padStart(2, '0')}</span>
                   <span className="mx-1 text-white/25">/</span>
                   <span className="text-white/40">{String(currentSteps.length).padStart(2, '0')}</span>
                 </span>

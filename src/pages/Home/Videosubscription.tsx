@@ -253,13 +253,11 @@ const VideoSection = () => {
                       <Play className="h-8 w-8 sm:h-10 sm:w-10 text-white ml-1" strokeWidth={2.5} />
                     </div>
                   </div>
-                  
-                  {/* Bottom Label */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
-                    <span className="text-white/70 text-xs font-light bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10">
-                      {lang.clickToWatch}
-                    </span>
-                  </div>
+             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
+  <span className="flex items-center gap-1.5 rounded-full border border-[#0a3269]/20 bg-[#0a3269]/20 backdrop-blur-md px-4 py-1.5 text-xs font-light text-white/70">
+    {lang.clickToWatch}
+  </span>
+</div>
 
                   {/* Corner Accents */}
                   <div className="absolute top-3 left-3 w-6 h-6 border-t-2 border-l-2 border-white/20 rounded-tl-lg" />

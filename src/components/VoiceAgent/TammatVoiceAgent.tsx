@@ -332,8 +332,8 @@ export default function TammatVoiceAgent({
             ${isConnected 
               ? 'bg-[#0A3269] text-white shadow-[0_8px_24px_-4px_rgba(10,50,105,0.5)]' 
               : isDarkMode
-                ? 'bg-[#0A3269] text-white hover:bg-[#1A4A8A] shadow-[0_8px_24px_-4px_rgba(10,50,105,0.4)]'
-                : 'bg-[#0A3269] text-white border border-[#0A3269]/20 hover:bg-gray-50 shadow-[0_8px_24px_-4px_rgba(0,0,0,0.1)]'
+                ? 'bg-[#0A3269] text-white hover:bg-[#0A3269] shadow-[0_8px_24px_-4px_rgba(10,50,105,0.4)]'
+                : 'bg-[#0A3269] text-white border border-[#0A3269]/20 hover:bg-[#0A3269] shadow-[0_8px_24px_-4px_rgba(0,0,0,0.1)]'
             }
             ${state.isVoiceConnecting ? 'opacity-70 cursor-not-allowed' : ''}
           `}

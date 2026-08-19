@@ -525,6 +525,9 @@ export function PackageCard({
   const [uploadingFile, setUploadingFile] = useState(false);
   const [selectedImage, setSelectedImage] = useState<PackageDocument | null>(null);
   
+  // ── NEW: Delete confirmation modal state ──────────────────────────────
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
@@ -598,7 +601,13 @@ export function PackageCard({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDelete = async () => {
+  // ── NEW: Open delete confirmation modal ──────────────────────────────────
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  // ── NEW: Actual delete function (renamed) ──────────────────────────────
+  const handleDeleteConfirmed = async () => {
     setDeleting(true);
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
@@ -621,12 +630,17 @@ export function PackageCard({
 
       toast.success(data.message || 'Package deleted');
       onDelete?.(pkg._id);
+      setShowDeleteConfirm(false);
     } catch (error: any) {
       console.error('Delete error:', error);
       toast.error(error.message || 'Failed to delete package');
     } finally {
       setDeleting(false);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleRefresh = async () => {
@@ -744,7 +758,7 @@ export function PackageCard({
         throw new Error(data.message || 'Upload failed');
       }
 
-      toast.success('Document uploaded successfully! ✅');
+      toast.success('Document uploaded successfully! ');
       
       setRequestedDocs(prev => 
         prev.map(doc => 
@@ -830,7 +844,7 @@ export function PackageCard({
         throw new Error(data.message || 'Upload failed');
       }
 
-      toast.success('Document uploaded successfully! ✅');
+      toast.success('Document uploaded successfully!');
       
       setShowUploadModal(false);
       setSelectedFile(null);
@@ -896,24 +910,7 @@ export function PackageCard({
                       Please upload the requested document{pendingDocsCount > 1 ? 's' : ''} to continue
                     </p>
                   </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-7 sm:h-8 text-[10px] sm:text-xs border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-900/30 bg-white/50 dark:bg-transparent"
-                    onClick={() => {
-                      setExpanded(true);
-                      setTimeout(() => {
-                        document.getElementById('requested-docs-section')?.scrollIntoView({ 
-                          behavior: 'smooth', 
-                          block: 'center' 
-                        });
-                      }, 300);
-                    }}
-                  >
-                    <Upload className="h-3 w-3 mr-1" />
-                    Upload Now
-                  </Button>
+               
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange-200 dark:bg-orange-800/50">
@@ -998,20 +995,7 @@ export function PackageCard({
               </div>
 
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-7 sm:h-8 px-2 sm:px-3 gap-1.5 bg-white dark:bg-white hover:bg-gray-50 dark:hover:bg-gray-100 border-gray-200 dark:border-gray-300 text-gray-700 dark:text-gray-700 transition-all duration-300"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowUploadModal(true);
-                  }}
-                >
-                  <Upload className="h-3.5 w-3.5 text-gray-500 dark:text-gray-500" />
-                  <span className="text-[10px] sm:text-xs font-medium">Upload</span>
-                </Button>
-
+          
                 <Button
                   type="button"
                   variant="ghost"
@@ -1379,7 +1363,7 @@ export function PackageCard({
                                   <>
                                     <Badge className="bg-emerald-100 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 border-0 text-[8px]">
                                       <CheckCircle className="h-2.5 w-2.5 mr-0.5" />
-                                      Uploaded ✅
+                                      Uploaded 
                                     </Badge>
                                     {req.fulfilledAt && (
                                       <span className="text-[7px] text-gray-400 dark:text-gray-500 hidden sm:inline">
@@ -1694,7 +1678,7 @@ export function PackageCard({
                         variant="ghost"
                         size="sm"
                         className="h-5 text-[7px] sm:text-[8px] text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 px-1.5"
-                        onClick={handleDelete}
+                        onClick={handleDeleteClick}
                         disabled={deleting}
                       >
                         {deleting ? (
@@ -1720,6 +1704,68 @@ export function PackageCard({
             imageUrl={selectedImageUrl}
             onClose={() => setSelectedImage(null)}
           />
+        )}
+      </AnimatePresence>
+
+      {/* ─── NEW: Delete Confirmation Modal ────────────────────────────────── */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={handleCancelDelete}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-sm w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-red-200/30 dark:border-red-800/20 p-5 sm:p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Icon */}
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 mx-auto mb-3">
+                <Trash2 className="h-6 w-6 text-red-600 dark:text-red-400" strokeWidth={2} />
+              </div>
+
+              <h3 className="text-lg font-bold text-center text-gray-900 dark:text-white">
+                Delete Package?
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">
+                This action <strong>cannot be undone</strong>. All associated data and documents will be permanently removed.
+              </p>
+              <p className="text-xs text-red-500 dark:text-red-400 text-center mt-1 font-medium">
+                High risk operation
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-5">
+                <Button
+                  variant="outline"
+                  className="w-full sm:flex-1 rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 h-10 text-sm"
+                  onClick={handleCancelDelete}
+                  disabled={deleting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-full sm:flex-1 rounded-xl bg-red-500 hover:bg-red-600 text-white h-10 text-sm font-semibold shadow-lg shadow-red-500/25"
+                  onClick={handleDeleteConfirmed}
+                  disabled={deleting}
+                >
+                  {deleting ? (
+                    <>
+                      <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Deleting...
+                    </>
+                  ) : (
+                    'Delete Permanently'
+                  )}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

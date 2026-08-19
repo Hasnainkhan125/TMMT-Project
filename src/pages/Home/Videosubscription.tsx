@@ -351,36 +351,37 @@ const VideoSection = () => {
                   })}
                 </div>
               </div>
-
-              {/* CTA Button */}
-              <motion.button
-                whileHover={{ y: -2, scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: 'spring', stiffness: 320, damping: 20 }}
-                onClick={() => window.location.href = '/apply'}
-                className={`group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-5 sm:px-7 py-2.5 sm:py-3 text-[13px] sm:text-[14px] font-medium tracking-tight transition-all duration-300 w-auto min-w-[160px] sm:min-w-[180px] shadow-lg ${
-                  isDarkMode 
-                    ? 'bg-white text-[#0A3269] hover:bg-gray-100' 
-                    : 'text-white'
-                }`}
-                style={{ backgroundColor: isDarkMode ? undefined : accent }}
-              >
-                <span className="relative z-10 whitespace-nowrap">{lang.cta}</span>
-
-                <motion.div
-                  className={`relative z-10 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover/btn:translate-x-1 ${
-                    isDarkMode 
-                      ? 'bg-[#0A3269]/10 text-[#0A3269]' 
-                      : 'bg-white/20 text-white'
-                  }`}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <ArrowRight className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${
-                    isDarkMode ? 'text-[#0A3269]' : 'text-white'
-                  }`} />
-                </motion.div>
-              </motion.button>
+<motion.button
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.97 }}
+  transition={{ type: 'spring', stiffness: 320, damping: 20 }}
+  onClick={() => window.location.href = '/apply'}
+  className="
+    group relative overflow-hidden flex items-center justify-center gap-2.5
+    w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold whitespace-nowrap
+    transition-all duration-300 bg-[#0A3269] text-white
+    rounded-md
+  "
+>
+  <span className="relative z-10 flex items-center gap-2.5">
+    {lang.cta}
+    
+    {/* Arrow with solid white background and black icon */}
+    <div
+      className="
+        flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full
+        bg-white
+        transition-colors duration-300
+        group-hover:bg-gray-100
+      "
+    >
+      <ArrowRight 
+        className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-black transition-transform duration-300 group-hover:translate-x-1" 
+        strokeWidth={2.5}
+      />
+    </div>
+  </span>
+</motion.button>
             </div>
           </div>
         </div>

@@ -58,6 +58,8 @@ import {
   FileWarning,
   BadgeCheck,
   Headphones,
+  Gavel,
+  Key,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getSocket } from '@/lib/socket';
@@ -194,6 +196,36 @@ const getReceiptUrl = (receipt: any, apiBase: string, appId: string): string | n
   return null;
 };
 
+// ─── Severity Helpers ──────────────────────────────────────────────────────
+
+const getSeverityColor = (severity: string) => {
+  switch (severity?.toLowerCase()) {
+    case 'high':
+    case 'critical':
+      return 'bg-red-500/20 text-red-600 border-red-500/30 dark:bg-red-500/20 dark:text-red-400';
+    case 'medium':
+      return 'bg-amber-500/20 text-amber-600 border-amber-500/30 dark:bg-amber-500/20 dark:text-amber-400';
+    case 'low':
+      return 'bg-blue-500/20 text-blue-600 border-blue-500/30 dark:bg-blue-500/20 dark:text-blue-400';
+    default:
+      return 'bg-gray-500/20 text-gray-600 border-gray-500/30 dark:bg-gray-500/20 dark:text-gray-400';
+  }
+};
+
+const getSeverityDot = (severity: string) => {
+  switch (severity?.toLowerCase()) {
+    case 'high':
+    case 'critical':
+      return 'bg-red-500';
+    case 'medium':
+      return 'bg-amber-500';
+    case 'low':
+      return 'bg-blue-500';
+    default:
+      return 'bg-gray-500';
+  }
+};
+
 interface ExpandedApplicationCardProps {
   application: any;
   isExpanded: boolean;
@@ -257,6 +289,14 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
   // ─── History expand state ──────────────────────────────────────────────────
   const [showHistory, setShowHistory] = useState(false);
+
+  // ─── Alert States ──────────────────────────────────────────────────────────
+  const [fraudAlerts, setFraudAlerts] = useState<any[]>([]);
+  const [penaltyAlerts, setPenaltyAlerts] = useState<any[]>([]);
+  const [otpAlerts, setOtpAlerts] = useState<any[]>([]);
+  const [showFraudDetails, setShowFraudDetails] = useState(false);
+  const [showPenaltyDetails, setShowPenaltyDetails] = useState(false);
+  const [showOtpDetails, setShowOtpDetails] = useState(false);
 
   const statusConfig = STATUS_CONFIG[application.status] || STATUS_CONFIG.pending;
   const StatusIcon = statusConfig.icon;
@@ -399,75 +439,6 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
       setIsDeleting(false);
     }
   };
-
-  useEffect(() => {
-    if (!application) return;
-
-    const socket = getSocket();
-    const appId = application._id || application.id;
-
-    const handleDocumentRequest = (data: any) => {
-      if (data.applicationId === appId) {
-        const newDocs = data.requestedDocuments || [];
-        setRequestedDocuments(prev => [...prev, ...newDocs.map((doc: any) => ({
-          documentType: doc,
-          description: data.note,
-          requestedAt: new Date(),
-          status: 'pending'
-        }))]);
-        setNotifications(prev => [...prev, {
-          type: 'document_request',
-          message: `${newDocs.length} document(s) requested: ${newDocs.join(', ')}`,
-          timestamp: new Date(),
-          data: data
-        }]);
-        toast.warning(`Documents requested for your application`, {
-          description: `${newDocs.length} document(s) needed: ${newDocs.join(', ')}`,
-        });
-      }
-    };
-
-    const handleOtpRequest = (data: any) => {
-      if (data.applicationId === appId) {
-        setOtpRequests(prev => [...prev, {
-          phone: data.phone,
-          expiresIn: data.expiresIn,
-          requestedAt: new Date(),
-          status: 'pending'
-        }]);
-        setNotifications(prev => [...prev, {
-          type: 'otp_request',
-          message: `OTP verification requested for ${data.phone}`,
-          timestamp: new Date(),
-          data: data
-        }]);
-        toast.info('OTP verification requested', {
-          description: `Please check ${data.phone} for the verification code`,
-        });
-      }
-    };
-
-    const handleStatusUpdate = (data: any) => {
-      if (data.applicationId === appId) {
-        toast.success('Application status updated', {
-          description: `New status: ${data.status}`,
-        });
-        if (refetchApplications) {
-          refetchApplications();
-        }
-      }
-    };
-
-    socket.on('document_requested', handleDocumentRequest);
-    socket.on('otp_requested', handleOtpRequest);
-    socket.on('application_status_updated', handleStatusUpdate);
-
-    return () => {
-      socket.off('document_requested', handleDocumentRequest);
-      socket.off('otp_requested', handleOtpRequest);
-      socket.off('application_status_updated', handleStatusUpdate);
-    };
-  }, [application, refetchApplications]);
 
   // ─── Document Upload Handler ─────────────────────────────────────────────
   const handleFileUpload = async () => {
@@ -887,6 +858,210 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
     );
   };
 
+  // ─── Main Socket Effect ────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!application) return;
+
+    const socket = getSocket();
+    const appId = application._id || application.id;
+
+    // ─── Document Request Listener ──────────────────────────────────────────
+    const handleDocumentRequest = (data: any) => {
+      if (data.applicationId === appId) {
+        const newDocs = data.requestedDocuments || [];
+        setRequestedDocuments(prev => [...prev, ...newDocs.map((doc: any) => ({
+          documentType: doc,
+          description: data.note,
+          requestedAt: new Date(),
+          status: 'pending'
+        }))]);
+        setNotifications(prev => [...prev, {
+          type: 'document_request',
+          message: `${newDocs.length} document(s) requested: ${newDocs.join(', ')}`,
+          timestamp: new Date(),
+          data: data
+        }]);
+        toast.warning(`Documents requested for your application`, {
+          description: `${newDocs.length} document(s) needed: ${newDocs.join(', ')}`,
+        });
+      }
+    };
+
+    // ─── OTP Request Listener ──────────────────────────────────────────────
+    const handleOtpRequest = (data: any) => {
+      if (data.applicationId === appId) {
+        setOtpRequests(prev => [...prev, {
+          phone: data.phone,
+          expiresIn: data.expiresIn,
+          requestedAt: new Date(),
+          status: 'pending'
+        }]);
+        setNotifications(prev => [...prev, {
+          type: 'otp_request',
+          message: `OTP verification requested for ${data.phone}`,
+          timestamp: new Date(),
+          data: data
+        }]);
+        toast.info('OTP verification requested', {
+          description: `Please check ${data.phone} for the verification code`,
+        });
+      }
+    };
+
+    // ─── Status Update Listener ─────────────────────────────────────────────
+    const handleStatusUpdate = (data: any) => {
+      if (data.applicationId === appId) {
+        toast.success('Application status updated', {
+          description: `New status: ${data.status}`,
+        });
+        if (refetchApplications) {
+          refetchApplications();
+        }
+      }
+    };
+
+    // ─── Fraud Alert Listener ──────────────────────────────────────────────
+    const handleFraudAlert = (data: any) => {
+      if (data.applicationId === appId) {
+        setFraudAlerts(prev => [{
+          id: data.id || Date.now().toString(),
+          type: data.type || 'Suspicious Activity',
+          severity: data.severity || 'medium',
+          description: data.description || 'Potential fraud detected',
+          timestamp: data.timestamp || new Date().toISOString(),
+          status: data.status || 'open',
+          applicationId: data.applicationId,
+        }, ...prev]);
+        
+        toast.error(`🚨 Fraud Alert: ${data.type || 'Suspicious Activity'}`, {
+          description: data.description || 'Please review this application immediately',
+          duration: 5000,
+        });
+        
+        setNotifications(prev => [...prev, {
+          type: 'fraud_alert',
+          message: `Fraud alert: ${data.type || 'Suspicious Activity'}`,
+          timestamp: new Date(),
+          data: data
+        }]);
+      }
+    };
+
+    // ─── Penalty Issued Listener ───────────────────────────────────────────
+    const handlePenaltyIssued = (data: any) => {
+      if (data.applicationId === appId) {
+        setPenaltyAlerts(prev => [{
+          id: data.id || Date.now().toString(),
+          type: data.type || 'Penalty Issued',
+          amount: data.amount || 0,
+          currency: data.currency || 'AED',
+          reason: data.reason || 'Regulatory violation',
+          dueDate: data.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          timestamp: data.timestamp || new Date().toISOString(),
+          status: data.status || 'pending',
+          applicationId: data.applicationId,
+        }, ...prev]);
+        
+        toast.warning(`⚖️ Penalty Issued: ${data.type || 'Penalty'}`, {
+          description: `Amount: ${data.amount || 0} ${data.currency || 'AED'} - ${data.reason || 'Regulatory violation'}`,
+          duration: 5000,
+        });
+        
+        setNotifications(prev => [...prev, {
+          type: 'penalty_issued',
+          message: `Penalty issued: ${data.type || 'Penalty'}`,
+          timestamp: new Date(),
+          data: data
+        }]);
+      }
+    };
+
+    // ─── OTP Alert Listener ─────────────────────────────────────────────────
+    const handleOtpAlert = (data: any) => {
+      if (data.applicationId === appId) {
+        setOtpAlerts(prev => [{
+          id: data.id || Date.now().toString(),
+          phone: data.phone || 'Unknown',
+          code: data.code || '******',
+          expiresIn: data.expiresIn || 2,
+          timestamp: data.timestamp || new Date().toISOString(),
+          status: data.status || 'pending',
+          applicationId: data.applicationId,
+        }, ...prev]);
+        
+        toast.info(`🔑 OTP Requested for ${data.phone || 'applicant'}`, {
+          description: `Code expires in ${data.expiresIn || 2} minutes`,
+          duration: 4000,
+        });
+        
+        setNotifications(prev => [...prev, {
+          type: 'otp_alert',
+          message: `OTP requested for ${data.phone || 'applicant'}`,
+          timestamp: new Date(),
+          data: data
+        }]);
+      }
+    };
+
+    // ─── Register All Socket Listeners ──────────────────────────────────────
+    socket.on('document_requested', handleDocumentRequest);
+    socket.on('otp_requested', handleOtpRequest);
+    socket.on('application_status_updated', handleStatusUpdate);
+    socket.on('fraud_alert', handleFraudAlert);
+    socket.on('penalty_issued', handlePenaltyIssued);
+    socket.on('otp_requested_alert', handleOtpAlert);
+
+    // ─── Fetch Existing Alerts ─────────────────────────────────────────────
+    const fetchAlerts = async () => {
+      try {
+        const token = localStorage.getItem('authToken') || '';
+        
+        // Fetch fraud alerts
+        const fraudRes = await fetch(`${apiBase}/api/v1/fraud/alerts?applicationId=${appId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (fraudRes.ok) {
+          const data = await fraudRes.json();
+          if (data.data) setFraudAlerts(data.data);
+        }
+
+        // Fetch penalties
+        const penaltyRes = await fetch(`${apiBase}/api/v1/penalties?applicationId=${appId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (penaltyRes.ok) {
+          const data = await penaltyRes.json();
+          if (data.data) setPenaltyAlerts(data.data);
+        }
+
+        // Fetch OTP requests
+        const otpRes = await fetch(`${apiBase}/api/v1/auth/otp/requests?applicationId=${appId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (otpRes.ok) {
+          const data = await otpRes.json();
+          if (data.data) setOtpAlerts(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching alerts:', error);
+      }
+    };
+
+    fetchAlerts();
+
+    return () => {
+      socket.off('document_requested', handleDocumentRequest);
+      socket.off('otp_requested', handleOtpRequest);
+      socket.off('application_status_updated', handleStatusUpdate);
+      socket.off('fraud_alert', handleFraudAlert);
+      socket.off('penalty_issued', handlePenaltyIssued);
+      socket.off('otp_requested_alert', handleOtpAlert);
+    };
+  }, [application, refetchApplications, apiBase]);
+
+  // ─── Total Notifications ──────────────────────────────────────────────────
+  const totalNotifications = notifications.length + fraudAlerts.length + penaltyAlerts.length + otpAlerts.length;
+
   return (
     <>
       <motion.div
@@ -974,11 +1149,11 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     <span className="h-3 w-px bg-gray-200 dark:bg-gray-700" />
                     <FileText className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>{application.attachments?.length || 0}</span>
-                    {notifications.length > 0 && (
+                    {totalNotifications > 0 && (
                       <>
                         <span className="h-3 w-px bg-gray-200 dark:bg-gray-700" />
                         <Bell className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-red-500" />
-                        <span className="text-red-500 font-medium text-[9px] sm:text-[10px]">{notifications.length}</span>
+                        <span className="text-red-500 font-medium text-[9px] sm:text-[10px]">{totalNotifications}</span>
                       </>
                     )}
                   </div>
@@ -1099,6 +1274,296 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                         <span className="text-[8px] sm:text-[10px] text-gray-500 dark:text-gray-400">Boosts</span>
                       </div>
                     </div>
+
+                    {/* ─── Alerts Section ───────────────────────────────────── */}
+                    {(fraudAlerts.length > 0 || penaltyAlerts.length > 0 || otpAlerts.length > 0) && (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Bell className="w-4 h-4 text-amber-500" />
+                          <p className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                            Alerts ({fraudAlerts.length + penaltyAlerts.length + otpAlerts.length})
+                          </p>
+                        </div>
+
+                        {/* ─── Fraud Alerts ────────────────────────────────── */}
+                        {fraudAlerts.length > 0 && (
+                          <div className="space-y-2">
+                            <button
+                              onClick={() => setShowFraudDetails(!showFraudDetails)}
+                              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-red-50/50 dark:bg-red-950/20 border border-red-200/50 dark:border-red-800/30 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Shield className="w-4 h-4 text-red-500" />
+                                <span className="text-xs font-medium text-red-700 dark:text-red-400">
+                                  Fraud Alerts ({fraudAlerts.length})
+                                </span>
+                                <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-[8px]">
+                                  {fraudAlerts.filter(a => a.status === 'open').length} open
+                                </Badge>
+                              </div>
+                              <ChevronDown className={cn(
+                                "w-4 h-4 text-red-400 transition-transform duration-300",
+                                showFraudDetails && "rotate-180"
+                              )} />
+                            </button>
+
+                            <AnimatePresence>
+                              {showFraudDetails && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="space-y-2">
+                                    {fraudAlerts.map((alert, idx) => (
+                                      <div
+                                        key={alert.id || idx}
+                                        className="p-3 rounded-xl bg-white/80 dark:bg-white/5 border border-red-200/50 dark:border-red-800/30 hover:shadow-md transition-all"
+                                      >
+                                        <div className="flex items-start gap-3">
+                                          <div className={cn(
+                                            "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0",
+                                            getSeverityColor(alert.severity)
+                                          )}>
+                                            <AlertCircle className="w-4 h-4" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                              <span className="text-xs font-medium text-gray-900 dark:text-white">
+                                                {alert.type || 'Fraud Alert'}
+                                              </span>
+                                              <Badge className={cn(
+                                                "text-[8px] border-0",
+                                                getSeverityColor(alert.severity)
+                                              )}>
+                                                <span className={cn(
+                                                  "w-1.5 h-1.5 rounded-full inline-block mr-1",
+                                                  getSeverityDot(alert.severity)
+                                                )} />
+                                                {alert.severity || 'medium'}
+                                              </Badge>
+                                              <Badge className={cn(
+                                                "text-[8px] border-0",
+                                                alert.status === 'open' ? "bg-red-500/20 text-red-600" :
+                                                alert.status === 'investigating' ? "bg-amber-500/20 text-amber-600" :
+                                                "bg-emerald-500/20 text-emerald-600"
+                                              )}>
+                                                {alert.status || 'open'}
+                                              </Badge>
+                                            </div>
+                                            <p className="text-[10px] text-gray-600 dark:text-gray-400 mt-0.5">
+                                              {alert.description || 'Suspicious activity detected'}
+                                            </p>
+                                            <p className="text-[8px] text-gray-400 dark:text-gray-500 mt-1">
+                                              {formatDate(alert.timestamp || alert.createdAt)}
+                                            </p>
+                                          </div>
+                                          {alert.status === 'open' && (
+                                            <Button
+                                              size="sm"
+                                              className="h-7 text-[8px] bg-red-500 hover:bg-red-600 text-white rounded-lg px-2.5 flex-shrink-0"
+                                              onClick={() => {
+                                                toast.success('Fraud alert marked as investigating');
+                                                setFraudAlerts(prev => prev.map(a => 
+                                                  a.id === alert.id ? { ...a, status: 'investigating' } : a
+                                                ));
+                                              }}
+                                            >
+                                              Investigate
+                                            </Button>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+
+                        {/* ─── Penalty Alerts ───────────────────────────────── */}
+                        {penaltyAlerts.length > 0 && (
+                          <div className="space-y-2">
+                            <button
+                              onClick={() => setShowPenaltyDetails(!showPenaltyDetails)}
+                              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/50 dark:border-purple-800/30 hover:bg-purple-50 dark:hover:bg-purple-950/30 transition-all"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Gavel className="w-4 h-4 text-purple-500" />
+                                <span className="text-xs font-medium text-purple-700 dark:text-purple-400">
+                                  Penalties ({penaltyAlerts.length})
+                                </span>
+                                <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 text-[8px]">
+                                  {penaltyAlerts.filter(a => a.status === 'pending').length} pending
+                                </Badge>
+                              </div>
+                              <ChevronDown className={cn(
+                                "w-4 h-4 text-purple-400 transition-transform duration-300",
+                                showPenaltyDetails && "rotate-180"
+                              )} />
+                            </button>
+
+                            <AnimatePresence>
+                              {showPenaltyDetails && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="space-y-2">
+                                    {penaltyAlerts.map((penalty, idx) => (
+                                      <div
+                                        key={penalty.id || idx}
+                                        className="p-3 rounded-xl bg-white/80 dark:bg-white/5 border border-purple-200/50 dark:border-purple-800/30 hover:shadow-md transition-all"
+                                      >
+                                        <div className="flex items-start gap-3">
+                                          <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                                            <DollarSign className="w-4 h-4 text-purple-600" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                              <span className="text-xs font-medium text-gray-900 dark:text-white">
+                                                {penalty.type || 'Penalty Issued'}
+                                              </span>
+                                              <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 text-[8px]">
+                                                {penalty.amount} {penalty.currency || 'AED'}
+                                              </Badge>
+                                              <Badge className={cn(
+                                                "text-[8px] border-0",
+                                                penalty.status === 'pending' ? "bg-amber-500/20 text-amber-600" :
+                                                penalty.status === 'paid' ? "bg-emerald-500/20 text-emerald-600" :
+                                                "bg-purple-500/20 text-purple-600"
+                                              )}>
+                                                {penalty.status || 'pending'}
+                                              </Badge>
+                                            </div>
+                                            <p className="text-[10px] text-gray-600 dark:text-gray-400 mt-0.5">
+                                              {penalty.reason || 'Regulatory violation'}
+                                            </p>
+                                            <p className="text-[8px] text-gray-400 dark:text-gray-500 mt-1">
+                                              Due: {formatDate(penalty.dueDate)} • Issued: {formatDate(penalty.timestamp || penalty.issuedAt)}
+                                            </p>
+                                          </div>
+                                          {penalty.status === 'pending' && (
+                                            <Button
+                                              size="sm"
+                                              className="h-7 text-[8px] bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-2.5 flex-shrink-0"
+                                              onClick={() => {
+                                                toast.success('Penalty marked as paid');
+                                                setPenaltyAlerts(prev => prev.map(p => 
+                                                  p.id === penalty.id ? { ...p, status: 'paid' } : p
+                                                ));
+                                              }}
+                                            >
+                                              <CheckCircle className="w-3 h-3 mr-1" />
+                                              Pay
+                                            </Button>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+
+                        {/* ─── OTP Alerts ───────────────────────────────────── */}
+                        {otpAlerts.length > 0 && (
+                          <div className="space-y-2">
+                            <button
+                              onClick={() => setShowOtpDetails(!showOtpDetails)}
+                              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50 dark:border-blue-800/30 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Key className="w-4 h-4 text-blue-500" />
+                                <span className="text-xs font-medium text-blue-700 dark:text-blue-400">
+                                  OTP Requests ({otpAlerts.length})
+                                </span>
+                                <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 text-[8px]">
+                                  {otpAlerts.filter(a => a.status === 'pending').length} pending
+                                </Badge>
+                              </div>
+                              <ChevronDown className={cn(
+                                "w-4 h-4 text-blue-400 transition-transform duration-300",
+                                showOtpDetails && "rotate-180"
+                              )} />
+                            </button>
+
+                            <AnimatePresence>
+                              {showOtpDetails && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="space-y-2">
+                                    {otpAlerts.map((otp, idx) => (
+                                      <div
+                                        key={otp.id || idx}
+                                        className="p-3 rounded-xl bg-white/80 dark:bg-white/5 border border-blue-200/50 dark:border-blue-800/30 hover:shadow-md transition-all"
+                                      >
+                                        <div className="flex items-start gap-3">
+                                          <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                            <Key className="w-4 h-4 text-blue-600" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                              <span className="text-xs font-medium text-gray-900 dark:text-white">
+                                                {otp.phone || 'Unknown'}
+                                              </span>
+                                              <Badge className="font-mono text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-0">
+                                                {otp.code || '******'}
+                                              </Badge>
+                                              <Badge className={cn(
+                                                "text-[8px] border-0",
+                                                otp.status === 'pending' ? "bg-amber-500/20 text-amber-600" :
+                                                otp.status === 'verified' ? "bg-emerald-500/20 text-emerald-600" :
+                                                "bg-red-500/20 text-red-600"
+                                              )}>
+                                                {otp.status || 'pending'}
+                                              </Badge>
+                                            </div>
+                                            <div className="flex items-center gap-3 mt-0.5">
+                                              <p className="text-[10px] text-gray-600 dark:text-gray-400">
+                                                Expires in: <span className="font-mono font-medium">{otp.expiresIn || 2}m</span>
+                                              </p>
+                                              <p className="text-[8px] text-gray-400 dark:text-gray-500">
+                                                {formatDate(otp.timestamp || otp.requestedAt)}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          {otp.status === 'pending' && (
+                                            <Button
+                                              size="sm"
+                                              className="h-7 text-[8px] bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-2.5 flex-shrink-0"
+                                              onClick={() => {
+                                                toast.success('OTP verified successfully');
+                                                setOtpAlerts(prev => prev.map(o => 
+                                                  o.id === otp.id ? { ...o, status: 'verified' } : o
+                                                ));
+                                              }}
+                                            >
+                                              <CheckCircle className="w-3 h-3 mr-1" />
+                                              Verify
+                                            </Button>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {/* ─── User Uploaded Documents ────────────────────────── */}
                     {userDocuments.length > 0 && (

@@ -279,8 +279,6 @@ const HowItWorksSection = () => {
       transition={{ delay: 0.4 + idx * 0.08, duration: 0.5 }}
       className="group relative text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-black/80 border border-black/5 dark:border-zinc-800 hover:border-[#0A3269]/30 hover:shadow-md transition-all duration-300"
     >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] rounded-full group-hover:w-8 transition-all duration-500" />
-      
       <div className="flex flex-col items-center">
         <div className="relative">
           <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-[#0A3269] flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-[#0A3269]/80 transition-all duration-300">
@@ -640,7 +638,7 @@ export function PlanSelectionSection({
         <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-        {plan.planDetails.serviceLimit} Service Requests
+        {plan.serviceLimits}
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
@@ -664,7 +662,7 @@ export function PlanSelectionSection({
         <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
-        {plan.planDetails.discountRate} Discount
+        {plan.planDetails.discountRate}off TMMT Fee
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
@@ -753,7 +751,7 @@ export function PlanSelectionSection({
               </div>
               <div>
                 <p className="text-[9px] sm:text-[10px] md:text-xs font-light text-black dark:text-white">
-                  {language === 'ar' ? 'ما هي طلبات الخدمة؟' : 'What is a Service Request?'}
+                  {language === 'ar' ? 'ما هي مراجعات الحالة الشخصية؟' : 'What is a Personal Case Review?'}
                 </p>
                 <p className="text-[8px] sm:text-[9px] md:text-xs text-gray-500 dark:text-white/50 mt-0.5 leading-relaxed font-light">
                   {getServiceRequestNote(language)}
@@ -764,6 +762,8 @@ export function PlanSelectionSection({
         </motion.div>
         <GoldenGuaranteeCard />
         <HowItWorksSection />
+
+        
 {/* ─── Founding Members Section - Compact & Responsive ──────────────────── */}
 <motion.div
   initial={{ opacity: 0, y: 20 }}
@@ -898,22 +898,21 @@ export function PlanSelectionSection({
   whileTap={{ scale: 0.97 }}
   className={cn(
     "group relative flex items-center justify-center gap-2 sm:gap-3",
-    "h-12 sm:h-14 md:h-15",
-    "w-full sm:w-auto min-w-[200px] sm:min-w-[280px] px-5 sm:px-10 rounded-full",
+    "h-13 sm:h-14 md:h-15",
+    "w-full sm:w-auto min-w-[200px] sm:min-w-[280px] px-5 sm:px-10 rounded-4xl",
     "text-[13px] sm:text-[15px] md:text-[16px] font-semibold",
     "transition-all duration-300 cursor-pointer select-none",
-    "bg-[#0A3269]",
-    "border border-[#0A3269]/30",
-    "text-white",
-    "hover:shadow-xl hover:shadow-[#0A3269]/30",
-    "hover:border-[#0A3269]/50",
+    // ─── Light & Dark mode: both use #0A3269 ────────────────────────────
+    "bg-[#0A3269] text-white",
+    "hover:border-[#0A3269]/50 dark:hover:border-white/40",
     "active:scale-95",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     "overflow-hidden"
   )}
 >
+  {/* ─── Shimmer Effect ──────────────────────────────────────────────────── */}
   <motion.span 
-    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/10"
     animate={{ 
       x: ['-100%', '100%'] 
     }}
@@ -932,16 +931,22 @@ export function PlanSelectionSection({
     </span>
   ) : (
     <span className="relative z-10 flex items-center gap-2 sm:gap-2.5">
+      {/* ─── Text ────────────────────────────────────────────────────────── */}
       <span className="text-[12px] sm:text-[14px] md:text-[15px] text-white font-semibold">
         {language === 'ar' ? 'ابدأ عضويتك' : 'Start Your Membership'}
       </span>
 
+      {/* ─── Price Badge ──────────────────────────────────────────────────── */}
       <span className="flex items-center rounded-full px-2.5 sm:px-3.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] bg-white/25 text-white font-medium">
         AED {effectivePlan.amount}
       </span>
 
-      <span className="flex items-center justify-center rounded-full bg-white/20 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:translate-x-0.5">
-        <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 text-white" strokeWidth={2.5} />
+      {/* ─── Arrow Circle ────────────────────────────────────────────────── */}
+      <span className="flex items-center justify-center rounded-full bg-white w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 transition-all duration-300 group-hover:translate-x-0.5 group-hover:scale-105">
+        <ArrowRight 
+          className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" 
+          strokeWidth={2.5} 
+        />
       </span>
     </span>
   )}

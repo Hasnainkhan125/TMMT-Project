@@ -272,35 +272,35 @@ const buildDocumentUrl = (checkId: string, filename: string, path?: string): str
   if (path) {
     // If it's already a full URL
     if (path.startsWith('http://') || path.startsWith('https://')) {
-      console.log('✅ Using full URL:', path);
+      console.log('Using full URL:', path);
       return path;
     }
     
     // If it starts with /api/v1/
     if (path.startsWith('/api/v1/')) {
       const url = `${apiBase}${path}`;
-      console.log('✅ Using API v1 path:', url);
+      console.log('Using API v1 path:', url);
       return url;
     }
     
     // If it starts with /uploads/ - serve directly without /api/v1
     if (path.startsWith('/uploads/')) {
       const url = `${apiBase}${path}`;
-      console.log('✅ Using uploads path:', url);
+      console.log('Using uploads path:', url);
       return url;
     }
     
     // If it starts with just /
     if (path.startsWith('/')) {
       const url = `${apiBase}${path}`;
-      console.log('✅ Using absolute path:', url);
+      console.log('Using absolute path:', url);
       return url;
     }
     
     // If it contains 'uploads' but doesn't start with /
     if (path.includes('uploads')) {
       const url = `${apiBase}/${path}`;
-      console.log('✅ Using path with uploads:', url);
+      console.log('Using path with uploads:', url);
       return url;
     }
   }
@@ -382,7 +382,7 @@ function DocumentThumbnail({ document, checkId, onPreview, onDownload }: Documen
                 loading ? 'opacity-0' : 'opacity-100'
               }`}
               onLoad={() => {
-                console.log('✅ Image loaded successfully:', fileUrl);
+                console.log('Image loaded successfully:', fileUrl);
                 setLoading(false);
               }}
               onError={handleImageError}
@@ -831,6 +831,9 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
   const [uploadingGeneral, setUploadingGeneral] = useState(false);
   const generalFileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // ── NEW: Delete confirmation modal state ──────────────────────────────
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   // ── Normalise base data ──────────────────────────────────────────────────
   const id = check.id || check._id || '';
   const serviceType = check.serviceType || check.service_type || 'Check';
@@ -1162,7 +1165,13 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDelete = async () => {
+  // ── NEW: Open delete confirmation modal ──────────────────────────────────
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  // ── NEW: Actual delete function (renamed) ──────────────────────────────
+  const handleDeleteConfirmed = async () => {
     setDeleting(true);
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
@@ -1174,11 +1183,16 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
       if (!res.ok) throw new Error('Failed to delete');
       toast.success('Check deleted successfully');
       onDelete?.(id);
+      setShowDeleteConfirm(false);
     } catch (error) {
       toast.error('Failed to delete check');
     } finally {
       setDeleting(false);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleViewDocument = (url: string, filename: string, mimeType?: string) => {
@@ -1827,7 +1841,7 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
                           variant="ghost"
                           size="sm"
                           className="h-5 sm:h-6 text-[8px] sm:text-[10px] text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all duration-300 px-1.5 sm:px-2"
-                          onClick={handleDelete}
+                          onClick={handleDeleteClick}
                           disabled={deleting}
                         >
                           {deleting ? (
@@ -1852,7 +1866,7 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
         </Card>
       </motion.div>
 
-      {/* Preview Modal */}
+      {/* ─── Preview Modal ──────────────────────────────────────────────────── */}
       <AnimatePresence>
         {previewFile && (
           <DocumentPreviewModal
@@ -1861,6 +1875,68 @@ export function CheckCard({ check, onViewResult, onDownloadDocument, onDelete, o
             mimeType={previewFile.mimeType}
             onClose={() => setPreviewFile(null)}
           />
+        )}
+      </AnimatePresence>
+
+      {/* ─── NEW: Delete Confirmation Modal ────────────────────────────────── */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={handleCancelDelete}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-sm w-full bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-red-200/30 dark:border-red-800/20 p-5 sm:p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Icon */}
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 mx-auto mb-3">
+                <X className="h-6 w-6 text-red-600 dark:text-red-400" strokeWidth={2} />
+              </div>
+              
+              <h3 className="text-lg font-bold text-center text-gray-900 dark:text-white">
+                Delete Check?
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">
+                This action <strong>cannot be undone</strong>. All associated data will be permanently removed.
+              </p>
+              <p className="text-xs text-red-500 dark:text-red-400 text-center mt-1 font-medium">
+                High risk operation
+              </p>
+              
+              <div className="flex gap-3 mt-5">
+                <Button
+                  variant="outline"
+                  className="flex-1 rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 h-10 text-sm"
+                  onClick={handleCancelDelete}
+                  disabled={deleting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="flex-1 rounded-xl bg-red-500 hover:bg-red-600 text-white h-10 text-sm font-semibold shadow-lg shadow-red-500/25"
+                  onClick={handleDeleteConfirmed}
+                  disabled={deleting}
+                >
+                  {deleting ? (
+                    <>
+                      <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Deleting...
+                    </>
+                  ) : (
+                    'Delete Permanently'
+                  )}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

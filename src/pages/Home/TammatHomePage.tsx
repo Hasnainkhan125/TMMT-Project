@@ -715,47 +715,44 @@ return (
               <p className="text-sm text-black/60 dark:text-white/50 leading-relaxed font-light max-w-sm">
                 {card.description}
               </p>
+<button
+  className="
+    group/btn relative inline-flex items-center justify-start gap-3
+    overflow-hidden rounded-md
+    px-6 sm:px-8
+    py-2.5 sm:py-1.6
+    text-[17px] sm:text-[19px]
+    font-medium tracking-tight
+    bg-[#0A3269] text-white
+    dark:bg-[#0A3269] dark:text-white
+    transition-all duration-300
+    mt-3
+    hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0A3269]/10 dark:hover:shadow-white/10
+    hover:border-[#0A3269]/40 dark:hover:border-white/40
+  "
+>
+  {/* Shimmer Effect */}
+  <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#0A3269]/10 dark:via-white/20 to-transparent" />
+  
+  <span className="relative z-10 whitespace-nowrap">
+    {card.cta}
+  </span>
 
-              {/* Modern CTA Button */}
-              <button
-                className="
-                  group/btn relative inline-flex items-center justify-start gap-3
-                  overflow-hidden rounded-full
-                  px-5 sm:px-6
-                  py-2.5 sm:py-2
-                  text-[17px] sm:text-[19px]
-                  font-medium tracking-tight
-                  bg-[#0a3269] dark:bg-white
-                  text-[#fff] dark:text-[#000]
-                  border-2 border-[#0A3269]/20 dark:border-[#4A8ABF]/20
-                  transition-all duration-300
-                  mt-3
-                  hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0A3269]/10 dark:hover:shadow-[#4A8ABF]/10
-                  hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40
-                "
-              >
-                {/* Shimmer Effect */}
-                <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#0A3269]/10 dark:via-[#4A8ABF]/10 to-transparent" />
-                
-                <span className="relative z-10 whitespace-nowrap">
-                  {card.cta}
-                </span>
-
-                <div
-                  className="
-                    relative z-10
-                    flex h-7 w-7 sm:h-8 sm:w-8
-                    items-center justify-center
-                    rounded-full
-                    bg-[#fff] dark:bg-black/10  
-                    transition-transform duration-300
-                    group-hover/btn:translate-x-1
-                    hover:scale-110
-                  "
-                >
-                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0a3269] dark:text-[#0a3269]" />
-                </div>
-              </button>
+  <div
+    className="
+      relative z-10
+      flex h-7 w-7 sm:h-8 sm:w-8
+      items-center justify-center
+      rounded-full
+      bg-white dark:bg-white
+      transition-transform duration-300
+      group-hover/btn:translate-x-1
+      hover:scale-110
+    "
+  >
+    <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-black dark:text-black" />
+  </div>
+</button>
 
               {/* Bottom Accent Line */}
               <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
@@ -1790,436 +1787,396 @@ const ServiceJourney = () => {
   return (
     <section
       ref={containerRef}
-      className="relative py-20 sm:py-28 md:py-2 bg-white dark:bg-black border-t-2 border-x-2 border-[#0A3269]/20 rounded-t-[2rem] overflow-hidden px-0"
+      className="relative py-10 sm:py-2 md:py-2 bg-white dark:bg-black/90 border-t-2 border-x-2 border-[#0A3269]/20 rounded-t-[2rem] overflow-hidden px-0"
     >
-      {/* ================= Premium Hero Header ================= */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute right-[-10rem] bottom-[-8rem] h-[28rem] w-[28rem] rounded-full bg-[#0A3269]/10 blur-[150px] animate-float-slower" />
-        <div
-          className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07]"
+   {/* ================= Premium Hero Header ================= */}
+<div className="pointer-events-none absolute inset-0 overflow-hidden">
+  <div className="absolute right-[-6rem] bottom-[-6rem] h-[18rem] w-[18rem] sm:h-[24rem] sm:w-[24rem] lg:h-[28rem] lg:w-[28rem] rounded-full bg-[#0A3269]/10 blur-[100px] sm:blur-[120px] lg:blur-[150px] animate-float-slower" />
+  <div
+    className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+    style={{
+      backgroundImage:
+        "radial-gradient(circle at 1px 1px,currentColor 1px,transparent 0)",
+      backgroundSize: "24px 24px sm:28px 28px lg:36px 36px",
+    }}
+  />
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/60 dark:to-black/80" />
+</div>
+
+<div className="container relative z-10 mx-auto max-w-[1500px] px-3 sm:px-5 lg:px-10">
+  <div
+    className={cn(
+      "mb-8 sm:mb-12 lg:mb-16 transition-all duration-700",
+      isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+    )}
+  >
+    <div className="flex flex-col gap-8 lg:gap-12 lg:flex-row lg:items-end lg:justify-between">
+      <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+        <h2
+          className="mt-4 sm:mt-6 lg:mt-8 w-full max-w-none font-bold leading-[1.05] sm:leading-[0.95] tracking-[-0.03em] sm:tracking-[-0.04em] text-black dark:text-white whitespace-normal break-words"
           style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px,currentColor 1px,transparent 0)",
-            backgroundSize: "36px 36px",
+            fontFamily: "'Fraunces', serif",
+            fontWeight: 700,
+            fontVariationSettings: "'opsz' 144",
+            fontSize: 'clamp(1.6rem, 6vw, 3rem)'
           }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/80 dark:to-black/80" />
-      </div>
-
-      <div className="container relative z-10 mx-auto max-w-[1500px] px-0 sm:px-5 lg:px-10">
-        <div
-          className={`mb-15 transition-all duration-700 ${
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
         >
-          <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
-              <h2
-                className="mt-8 w-full max-w-none font-bold leading-[0.95] tracking-[-0.04em] text-black dark:text-white whitespace-normal break-words"
-                style={{
-                  fontFamily: "'Fraunces', serif",
-                  fontWeight: 700,
-                  fontVariationSettings: "'opsz' 144",
-                  fontSize: 'clamp(2rem, 8vw, 3rem)'
-                }}
-              >
-                {t("serviceJourney.headline")}
-                <br />
-                <span className="text-[#0A3269] font-normal">
-                  {t("serviceJourney.headlineHighlight")}
-                </span>
-              </h2>
-            </div>
-          </div>
-        </div>
+          {t("serviceJourney.headline")}
+          <br />
+          <span className="text-[#0A3269] font-normal">
+            {t("serviceJourney.headlineHighlight")}
+          </span>
+        </h2>
+      </div>
+    </div>
+  </div>
 
-     {/* Premium Modern Segmented Tabs */}
+{/* ─── Premium Modern Segmented Tabs ──────────────────────────────────────── */}
 <div
-  className={`mb-8 sm:mb-12 flex justify-center px-2 sm:px-0 transition-all duration-500 delay-100 ${
+  className={cn(
+    "mb-3 sm:mb-5 lg:mb-8 flex justify-center px-1 transition-all duration-500 delay-100",
     isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-  }`}
+  )}
 >
   <div
-    className="relative flex w-full max-w-fit overflow-x-auto scrollbar-hide rounded-2xl lg:rounded-3xl border border-black/10 dark:border-white/10 bg-gray-100/80 dark:bg-white/5 backdrop-blur-2xl p-1.5 shadow-inner shadow-black/5 dark:shadow-white/5"
+    className="relative flex w-full max-w-full sm:max-w-fit overflow-x-auto scrollbar-hide 
+      rounded-lg sm:rounded-xl lg:rounded-2xl 
+      border border-black/10 dark:border-white/10 
+      p-2 sm:p-3 shadow-inner shadow-black/5 dark:shadow-white/5"
   >
     {tabs.map((tab) => {
       const active = activeTab === tab.id;
 
       return (
-        <button
-          key={tab.id}
-          onClick={() => {
-            setActiveTab(tab.id);
-            setActiveStep(0);
-          }}
-          className={`
-            group relative flex shrink-0 items-center gap-2 rounded-2xl px-3 sm:px-5 lg:px-7 py-2.5 sm:py-3 transition-all duration-300
-            ${active 
-              ? "text-white dark:text-white" 
-              : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
-            }
-          `}
-        >
-          {active && (
-            <div className="absolute inset-0 overflow-hidden rounded-2xl bg-[#0A3269] dark:bg-[#0A3269] shadow-[0_12px_35px_rgba(10,50,105,.25)] -z-10">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
-            </div>
-          )}
-
-          {!active && (
-            <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 bg-black/[0.05] dark:bg-white/[0.08] transition-opacity duration-300" />
-          )}
-
-          <div
+          <button
+            key={tab.id}
+            onClick={() => {
+              setActiveTab(tab.id);
+              setActiveStep(0);
+            }}
             className={`
-              relative z-10 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl transition-all duration-300
+              group relative flex shrink-0 items-center gap-1 sm:gap-2 lg:gap-2.5 
+              rounded-lg sm:rounded-xl 
+              px-5 sm:px-5 lg:px-5 xl:px-10
+              py-2 sm:py-2 lg:py-3.5 
+              transition-all duration-300
               ${active 
-                ? "bg-white/20 text-white shadow-[0_4px_12px_rgba(0,0,0,.15)] dark:bg-white/20" 
-                : "bg-black/[0.05] dark:bg-white/[0.06] text-zinc-500 dark:text-zinc-400 group-hover:bg-black/[0.08] dark:group-hover:bg-white/[0.1] group-hover:scale-105"
+                ? "text-white dark:text-white" 
+                : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
               }
             `}
           >
-            <tab.Icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 transition-colors duration-300 ${active ? 'text-white' : ''}`} strokeWidth={2.2} />
-          </div>
+            {/* ─── Active Background ──────────────────────────────────────── */}
+            {active && (
+              <div className="absolute inset-0 overflow-hidden rounded-lg sm:rounded-xl bg-[#0A3269] dark:bg-[#0A3269] shadow-[0_4px_15px_rgba(10,50,105,.15)] dark:shadow-[0_4px_15px_rgba(10,50,105,.25)] -z-10">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
+              </div>
+            )}
 
-          <span className={`relative z-10 text-xs sm:text-[15px] lg:text-base font-semibold whitespace-nowrap transition-colors duration-300 ${
-            active ? 'text-white' : 'text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white'
-          }`}>
-            {tab.label}
-          </span>
-        </button>
+            {/* ─── Hover Background ──────────────────────────────────────── */}
+            {!active && (
+              <span className="absolute inset-0 rounded-lg sm:rounded-xl opacity-0 group-hover:opacity-100 bg-black/[0.05] dark:bg-white/[0.08] transition-opacity duration-300" />
+            )}
+
+            {/* ─── Icon ────────────────────────────────────────────────────── */}
+            <div
+              className={`
+                relative z-10 flex h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 
+                items-center justify-center 
+                rounded-lg 
+                transition-all duration-300
+                ${active 
+                  ? "bg-white/20 text-white shadow-[0_2px_8px_rgba(0,0,0,.1)] dark:bg-white/20" 
+                  : "bg-black/[0.04] dark:bg-white/[0.05] text-zinc-500 dark:text-zinc-400 group-hover:bg-black/[0.06] dark:group-hover:bg-white/[0.08] group-hover:scale-105"
+                }
+              `}
+            >
+              <tab.Icon 
+                className={cn(
+                  "h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 lg:h-4 lg:w-4 transition-colors duration-300",
+                  active ? 'text-white' : 'text-zinc-500 dark:text-zinc-400'
+                )} 
+                strokeWidth={2} 
+              />
+            </div>
+
+            {/* ─── Label ────────────────────────────────────────────────────── */}
+            <span className={`
+              relative z-10 
+              text-[12px] sm:text-[11px] lg:text-sm xl:text-[16px] 
+              font-medium sm:font-semibold 
+              whitespace-nowrap 
+              transition-colors duration-300
+              ${active 
+                ? 'text-white' 
+                : 'text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white'
+              }
+            `}>
+              {tab.label}
+            </span>
+
+            {/* ─── Badge ────────────────────────────────────────────────────── */}
+            {tab.badge !== undefined && tab.badge > 0 && (
+              <span className={`
+                relative z-10 
+                ml-0.5 sm:ml-1 
+                px-1 sm:px-1.5 
+                py-0.5 
+                rounded-full 
+                text-[7px] sm:text-[9px] lg:text-[10px] 
+                font-bold 
+                transition-all duration-300
+                ${active 
+                  ? "bg-white/30 text-white" 
+                  : "bg-red-500/90 text-white shadow-sm shadow-red-500/30"
+                }
+              `}>
+                {tab.badge > 9 ? '9+' : tab.badge}
+              </span>
+            )}
+
+          </button>
       );
     })}
   </div>
 </div>
-
-        {/* Bento Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-6 px-2 sm:px-0">
-          {/* Main Timeline Card */}
+      {/* ================= Main layout ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+          {/* Timeline card — steps as ink stamps on a dashed flight path */}
           <div
-            className="lg:col-span-7 bg-white/80 dark:bg-black/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-[#0A3269]/20 relative overflow-hidden transition-all duration-500"
+            className="lg:col-span-7 bg-white dark:bg-white/[0.03] rounded-3xl p-5 sm:p-8 shadow-sm border border-[#0A3269]/12 dark:border-white/10 relative transition-all duration-500"
             style={{ transitionDelay: '200ms' }}
           >
-            <div className="absolute -top-20 -right-20 w-64 h-64 opacity-10 hidden sm:block">
-            </div>
-
-            <div className="mb-5 sm:mb-8">
-              <div className="flex items-center gap-2.5 sm:gap-3 mb-2">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#0A3269]/15 flex items-center justify-center shrink-0">
-                  <activeTabMeta.Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#0A3269]" />
+            <div className="mb-6 flex items-center justify-between gap-3 border-b border-solid border-[#0A3269]/20 dark:border-white/15 pb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#0A3269] dark:bg-[#0A3269] flex items-center justify-center shrink-0">
+                  <activeTabMeta.Icon className="w-5 h-5 text-[#fff] dark:text-[#fff]" />
                 </div>
-                <div
-                  className="text-lg sm:text-2xl font-medium text-black dark:text-white"
-                  style={{ fontFamily: "'Poppins', sans-serif" }}
-                >
-                  {t(`serviceJourney.${activeTab}.title`)}
+                <div>
+                  <div
+                    className="text-lg sm:text-xl font-medium text-[#0A0E14] dark:text-white"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                  >
+                    {t(`serviceJourney.${activeTab}.title`)}
+                  </div>
+                  <p className="text-[#0A0E14]/45 dark:text-white/40 text-xs sm:text-sm">
+                    {t(`serviceJourney.${activeTab}.description`)}
+                  </p>
                 </div>
               </div>
-              <p className="text-black/50 dark:text-white/40 text-xs sm:text-base">
-                {t(`serviceJourney.${activeTab}.description`)}
-              </p>
-              <div className="mt-2.5 sm:mt-3 inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-[#0A3269]/10 text-[#0A3269] rounded-full text-[11px] sm:text-sm font-medium">
-                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#0A3269] rounded-full animate-pulse" />
+              <div className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-full border border-[#0A3269]/20 dark:border-[#0A3269]/25 px-3 py-1.5 font-mono text-[11px] font-semibold text-[#0A3269] dark:text-[#0A3269]">
                 {t(`serviceJourney.${activeTab}.totalDuration`)}
               </div>
             </div>
-
-            <div className="relative">
-              <div className="space-y-3 sm:space-y-5">
-                {currentSteps.map((step, index) => (
-                  <div
-                    key={`${activeTab}-step-${index}`}
-                    onClick={() => setActiveStep(index)}
-                    className={`
-                      group relative flex items-start gap-3 sm:gap-5 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 cursor-pointer overflow-hidden border backdrop-blur-xl transition-all duration-300 hover:translate-x-1 hover:-translate-y-0.5
-                      ${activeStep === index ? "border-[#0A3269]/40 bg-[#0A3269]/10 shadow-md shadow-[#0A3269]/10" : "border-[#0A3269]/20 bg-white/70 dark:bg-black/30 hover:bg-white/80 dark:hover:bg-black/40 hover:border-[#0A3269]/30 hover:shadow-md"}
-                    `}
-                  >
-                    <div className="relative flex-shrink-0">
-                      {activeStep === index && (
-                        <div className="absolute -inset-1.5 sm:-inset-2 rounded-full border-2 border-[#0A3269]/40" />
-                      )}
+ 
+            <div className="relative space-y-1">
+              {currentSteps.map((step, index) => {
+                const done = activeStep > index;
+                const active = activeStep === index;
+                return (
+                  <div key={`${activeTab}-step-${index}`} className="relative flex gap-4 sm:gap-3">
+                    {/* connecting dashed "flight path" */}
+                    {index < currentSteps.length - 1 && (
+                      <div className="absolute left-[19px] sm:left-[23px] top-11 sm:top-12 bottom-0 w-px border-l-2 border-solid border-[#0A3269]/15 dark:border-white/10" />
+                    )}
+ 
+                    <button
+                      onClick={() => setActiveStep(index)}
+                      className="relative shrink-0 self-start pt-3"
+                      aria-label={step.title}
+                    >
                       <div
                         className={`
-                          relative flex h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all duration-300
-                          ${activeStep === index ? "bg-[#0A3269] text-white shadow-md shadow-[#0A3269]/30" : activeStep > index ? "bg-green-500 text-white" : "bg-black/5 dark:bg-white/10 text-black/40 dark:text-white/40 border border-[#0A3269]/20"}
+                          flex h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-solid font-mono text-xs font-bold transition-all duration-300
+                          ${
+                            done
+                              ? 'border-[#0A3269] bg-[#0a3269] text-[#fff] rotate-[-6deg]'
+                              : active
+                              ? 'border-[#0A3269] bg-[#0A3269] text-white scale-105 shadow-md shadow-[#0A3269]/25'
+                              : 'border-[#0A3269]/20 dark:border-white/15 text-[#0A0E14]/30 dark:text-white/25'
+                          }
                         `}
                       >
-                        {activeStep > index ? "✓" : index + 1}
+                        {done ? '✓' : String(index + 1).padStart(2, '0')}
                       </div>
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="mb-1 sm:mb-2 flex items-center justify-between gap-2 sm:gap-3">
-                        <h4 className="text-sm sm:text-base font-semibold text-black dark:text-white truncate">
+                    </button>
+ 
+                    <div
+                      onClick={() => setActiveStep(index)}
+                      className={`
+                        group mb-2 flex-1 min-w-0 cursor-pointer rounded-2xl border px-4 sm:px-5 py-3.5 sm:py-4 transition-all duration-300
+                        ${
+                          active
+                            ? 'border-[#0A3269]/30 bg-[#0A3269]/[0.04] dark:bg-[#0A3269]/10'
+                            : 'border-transparent hover:border-[#0A3269]/15 hover:bg-black/[0.015] dark:hover:bg-white/[0.02]'
+                        }
+                      `}
+                    >
+                      <div className="mb-1 flex items-center justify-between gap-3">
+                        <h4 className="text-sm sm:text-base font-semibold text-[#0A0E14] dark:text-white truncate">
                           {step.title}
                         </h4>
-                        <span
-                          className={`
-                            shrink-0 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-[11px] font-semibold
-                            ${activeStep === index ? "bg-[#0A3269]/15 text-[#0A3269]" : "bg-black/5 dark:bg-white/10 text-black/40 dark:text-white/40"}
-                          `}
-                        >
+                        <span className="shrink-0 font-mono text-[10px] sm:text-[11px] font-semibold text-[#0A0E14]/35 dark:text-white/35">
                           {step.duration}
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm leading-5 sm:leading-7 text-black/50 dark:text-white/40">
+                      <p className="text-xs sm:text-sm leading-relaxed text-[#0A0E14]/50 dark:text-white/40">
                         {step.description}
                       </p>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              <div
-                className="group relative overflow-hidden mt-5 sm:mt-8 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-4 rounded-2xl sm:rounded-3xl border border-[#0A3269]/20 bg-white/80 dark:bg-black/30 backdrop-blur-2xl p-4 sm:p-5 lg:p-6 transition-all duration-500 hover:-translate-y-1"
-              >
-                <div className="absolute -right-10 -top-10 h-28 w-28 sm:h-40 sm:w-40 rounded-full bg-[#0A3269]/15 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-                <div className="relative flex w-full items-center gap-3 sm:gap-4 min-w-0">
-                  <div className="flex h-11 w-11 sm:h-14 sm:w-14 lg:h-16 lg:w-16 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border border-[#0A3269]/20 bg-gradient-to-br from-[#0A3269]/20 via-[#0A3269]/10 to-transparent shadow-lg shadow-[#0A3269]/10 transition-all duration-300 group-hover:scale-105">
-                    <Award className="h-5 w-5 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-[#0A3269]" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-black/40 dark:text-white/40">
-                      Completed
-                    </p>
-                    <h4 className="mt-1 text-sm sm:text-base md:text-lg font-semibold leading-snug text-black dark:text-white break-words">
-                      {t(`serviceJourney.${activeTab}.completion`)}
-                    </h4>
-                    <p className="mt-1 text-[11px] sm:text-xs md:text-sm leading-relaxed text-black/40 dark:text-white/40 break-words">
-                      Everything is ready. Continue your application anytime.
-                    </p>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
-          </div>
 
-          {/* Right Column - Bento Cards */}
-          <div className="lg:col-span-5 grid grid-cols-2 gap-3 xs:gap-4 sm:gap-5">
-            {/* Featured Image Card */}
-            <div className="group relative col-span-2 w-full h-48 xs:h-56 sm:h-72 md:h-80 lg:h-[28rem] overflow-hidden rounded-xl xs:rounded-2xl sm:rounded-[28px] lg:rounded-[32px] bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-slate-900/20 transition-all duration-500 hover:shadow-2xl hover:shadow-slate-900/30 border border-white/5">
+
+{/* ─── Completion strip — ticket stub styling ────────────────────────────── */}
+<div className="relative mt-2 sm:mt-8 lg:mt-9 flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl border border-[#0A3269]/15 dark:border-white/10 bg-[#0A3269]/[0.03] dark:bg-white/[0.02] p-3 sm:p-4 lg:p-5">
+  
+  {/* ─── Icon ────────────────────────────────────────────────────────────── */}
+  <div className="flex h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-full border-2 border-solid border-[#0A3269] bg-[#0A3269]/10">
+    <Award className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-[#0A3269]" />
+  </div>
+  
+  {/* ─── Content ──────────────────────────────────────────────────────────── */}
+  <div className="min-w-0 flex-1">
+    <p className="font-mono text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.18em] sm:tracking-[0.2em] lg:tracking-[0.22em] font-semibold text-[#0A0E14]/40 dark:text-white/35">
+      Cleared
+    </p>
+    <h4 className="mt-0.5 text-xs sm:text-sm lg:text-base font-semibold text-[#0A0E14] dark:text-white">
+      {t(`serviceJourney.${activeTab}.completion`)}
+    </h4>
+    <p className="text-xs sm:text-sm lg:text-base text-[#0A0E14] dark:text-white/80 font-light">
+      Everything is ready. Continue your application anytime.
+    </p>
+    
+    {/* ─── Button ────────────────────────────────────────────────────────── */}
+    <button
+      onClick={() => navigate('/apply')}
+      className="mt-1.5 sm:mt-2 inline-flex items-center gap-1.5 sm:gap-2 text-[#0A3269] font-semibold text-[10px] sm:text-sm transition-all hover:gap-2 sm:hover:gap-3 group"
+    >
+      <span>Continue Application</span>
+      <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+    </button>
+  </div>
+</div>
+</div> 
+          {/* Right column */}
+          <div className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-5">
+            {/* Featured image — passport-page framing */}
+            <div className="group relative col-span-2 w-full h-52 xs:h-60 sm:h-72 md:h-80 lg:h-[26rem] overflow-hidden rounded-2xl sm:rounded-[28px] bg-[#0a3269] shadow-lg border border-white/5">
               <img
                 src={currentImages[activeStep]}
                 alt={currentSteps[activeStep]?.title}
-                className="absolute inset-0 w-full h-full object-conten transition-transform duration-1000 ease-out group-hover:scale-110"
+                className="absolute inset-0 w-full h-full object-content transition-transform duration-1000 ease-out group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
-              <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/10 via-white/5 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0A3269]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-              <div className="absolute left-3 top-3 xs:left-4 xs:top-4 sm:left-6 sm:top-6 z-10">
-                <div className="flex items-center gap-1 xs:gap-1.5 px-2 py-1 xs:px-2.5 xs:py-1.5 sm:px-3 sm:py-1.5 rounded-full backdrop-blur-xl border shadow-lg transition-all duration-300 hover:scale-105 bg-white/90 border-white/20 shadow-black/5 dark:bg-black/50 dark:border-white/10 dark:shadow-black/20">
-                  <span className="text-[8px] xs:text-[9px] sm:text-[12px] md:text-[13px] font-medium transition-colors duration-300 text-slate-700 dark:text-white/90 tracking-wide">
-                    <span className="text-[#0A3269] font-semibold">0{activeStep + 1}</span>
-                    <span className="mx-1 text-slate-300 dark:text-white/20">/</span>
-                    <span className="text-slate-400 dark:text-white/40">{currentSteps.length}</span>
-                  </span>
-                </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+ 
+              <div className="absolute left-4 top-4 z-10 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 backdrop-blur-md px-3 py-1.5">
+                <span className="font-mono text-[11px] font-semibold text-white/90">
+                  <span className="text-[#0a3269]">{String(activeStep + 1).padStart(2, '0')}</span>
+                  <span className="mx-1 text-white/25">/</span>
+                  <span className="text-white/40">{String(currentSteps.length).padStart(2, '0')}</span>
+                </span>
               </div>
-
-              <div className="absolute bottom-0 left-0 right-0 p-3 xs:p-4 sm:p-6 lg:p-8 z-10">
-                <h2 className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-[2rem] font-bold text-white tracking-tight leading-tight drop-shadow-lg line-clamp-2">
+ 
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 z-10">
+                <h2 className="text-base sm:text-xl lg:text-2xl font-bold text-white tracking-tight leading-tight line-clamp-2">
                   {currentSteps[activeStep]?.title}
                 </h2>
-                <p className="mt-1 xs:mt-1.5 max-w-[95%] xs:max-w-[90%] sm:max-w-[90%] text-[10px] xs:text-xs sm:text-sm text-white/60 leading-relaxed drop-shadow-md line-clamp-2 xs:line-clamp-2 sm:line-clamp-none">
+                <p className="mt-1.5 max-w-[90%] text-xs sm:text-sm text-white/55 leading-relaxed line-clamp-2">
                   {currentSteps[activeStep]?.description}
                 </p>
-                <div className="mt-2 xs:mt-3 sm:mt-4 md:mt-5">
-                  <div className="mb-1 xs:mb-1.5 sm:mb-2 flex items-center justify-between">
-                    <span className="text-[9px] xs:text-[10px] sm:text-[10px] font-medium text-white/40 uppercase tracking-[0.15em]">
-                      Progress
-                    </span>
-                    <span className="text-[11px] xs:text-[12px] sm:text-[12px] font-semibold text-white/80">
-                      {String(activeStep + 1).padStart(2, '0')}
-                      <span className="text-white/30 font-medium">
-                        /{String(currentSteps.length).padStart(2, '0')}
-                      </span>
-                    </span>
-                  </div>
-
-                  <div className="relative h-2 xs:h-2 sm:h-2.5 rounded-full overflow-hidden bg-white/10 backdrop-blur-sm">
-                    <div className="relative h-full rounded-full bg-gradient-to-r from-[#0A3269] to-[#0a3269] transition-all duration-500"
-                      style={{ width: `${((activeStep + 1) / currentSteps.length) * 100}%` }}
+ 
+                <div className="mt-4 flex items-center gap-1.5">
+                  {currentSteps.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveStep(i)}
+                      className="group/dot relative py-2"
+                      aria-label={`Go to step ${i + 1}`}
                     >
-                      <div className="absolute inset-0 animate-shimmer-fast" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)', width: '40%' }} />
-                    </div>
-
-                    <div className="absolute inset-0 flex items-center justify-between px-0.5">
-                      {currentSteps.map((_, i) => {
-                        const isActive = i === activeStep;
-                        const isCompleted = i < activeStep;
-                        return (
-                          <button
-                            key={i}
-                            onClick={() => setActiveStep(i)}
-                            className="relative z-10 group"
-                          >
-                            <div className={`
-                              h-2 w-2 xs:h-2 xs:w-2 sm:h-2.5 sm:w-2.5 rounded-full transition-all duration-300
-                              ${isActive ? 'bg-white scale-125 shadow-lg shadow-white/30' : isCompleted ? 'bg-white/60' : 'bg-white/20'}
-                            `} />
-                            {isActive && (
-                              <div className="absolute inset-[-3px] rounded-full border border-white/30 animate-ping" />
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="mt-1.5 xs:mt-2 flex items-center justify-between">
-                    <span className="text-[7px] xs:text-[7px] sm:text-[8px] font-medium text-white/20 uppercase tracking-[0.2em]">
-                      Start
-                    </span>
-                    <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2">
-                      {currentSteps.map((step, i) => (
-                        <span
-                          key={i}
-                          className={`
-                            text-[7px] xs:text-[8px] sm:text-[9px] font-medium transition-all duration-300 hidden xs:inline-block
-                            ${i === activeStep ? 'text-white/80' : i < activeStep ? 'text-white/40' : 'text-white/15'}
-                          `}
-                        >
-                          {step.title?.split(' ').slice(0, 1).join(' ')}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="text-[7px] xs:text-[7px] sm:text-[8px] font-medium text-white/20 uppercase tracking-[0.2em]">
-                      Done
-                    </span>
-                  </div>
+                      <span
+                        className={`block h-1 rounded-full transition-all duration-300 ${
+                          i === activeStep ? 'w-6 bg-[#0a3269]' : i < activeStep ? 'w-3 bg-white/50' : 'w-3 bg-white/15'
+                        }`}
+                      />
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
-
-            {/* Success Card */}
-            <div className="relative w-full col-span-2 md:col-span-1 rounded-3xl border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-white dark:bg-[#0A0A0F] p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 px-3 py-1">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0A3269]">
-                      <ShieldCheck className="h-3.5 w-3.5 text-white" />
-                    </div>
-                    <div className="leading-tight">
-                      <p className="text-[9px] font-medium uppercase tracking-wider text-gray-500 dark:text-white/40">
-                        {t('successCard.verified')}
-                      </p>
-                      <p className="text-[10px] font-semibold text-gray-900 dark:text-white">
-                        {t('successCard.successRate')}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-5">
-                    <h2 className="flex items-start text-[44px] sm:text-[52px] font-bold tracking-tight leading-none text-gray-900 dark:text-white">
-                      99.8
-                      <span className="ml-2 flex h-8 w-8 items-center justify-center rounded-full border border-[#E2E8F0] dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 text-xs font-semibold text-gray-900 dark:text-white">
-                        %
-                      </span>
-                    </h2>
-                    <p className="mt-2 max-w-xs sm:max-w-sm text-sm leading-6 text-gray-500 dark:text-white/60">
-                      {t('successCard.approvedText')}
-                      <span className="font-medium text-[#0A3269]">
-                        {t('successCard.expertReview')}
-                      </span>
-                      {t('successCard.processText')}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0A3269]">
-                    <Award className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white dark:border-[#0A0A0F] bg-[#0A3269]">
-                    <CircleCheckBig className="h-3 w-3 text-white" />
-                  </div>
-                </div>
+ 
+             {/* Success card — official seal */}
+            <div className="relative w-full col-span-2 md:col-span-1 rounded-3xl border border-[#0A3269]/12 dark:border-white/10 bg-white dark:bg-white/[0.03] p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-md">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#0A3269]/15 dark:border-white/10 bg-[#0A3269]/[0.04] dark:bg-white/[0.03] px-3 py-1">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#0A3269] dark:text-[#0a3269]" />
+                <p className="font-mono text-[9px] font-semibold uppercase tracking-wider text-[#0A0E14]/50 dark:text-white/40">
+                  {t('successCard.verified')}
+                </p>
               </div>
-
-              <div className="my-4 h-px bg-gray-100 dark:bg-[#4A8ABF]/20" />
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
-                  <TrendingUp className="mb-3 h-4 w-4 text-[#0A3269]" />
-                  <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">99.8%</p>
-                  <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.approval')}</span>
-                </div>
-
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
-                  <Activity className="mb-3 h-4 w-4 text-[#0A3269]" />
-                  <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">24/7</p>
-                  <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.monitoring')}</span>
-                </div>
-
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
-                  <Users className="mb-3 h-4 w-4 text-[#0A3269]" />
-                  <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">250+</h3>
-                  <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.expertAdvisors')}</span>
-                </div>
-
-                <div className="rounded-2xl border border-gray-100 dark:border-[#4A8ABF]/20 bg-gray-50 dark:bg-[#4A8ABF]/10 p-4 hover:border-[#0A3269]/30 transition-all duration-300 hover:-translate-y-1">
-                  <ShieldCheck className="mb-3 h-4 w-4 text-[#0A3269]" />
-                  <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">A+</p>
-                  <span className="text-xs text-gray-500 dark:text-white/40">{t('successCard.rating')}</span>
-                </div>
+ 
+              <h2 className="mt-4 flex items-start text-[42px] sm:text-[48px] font-bold tracking-tight leading-none text-[#0A0E14] dark:text-white">
+                99.8
+                <span className="ml-1.5 mt-1 text-base font-semibold text-[#0A0E14]/40 dark:text-white/40">%</span>
+              </h2>
+              <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#0A0E14]/50 dark:text-white/45">
+                {t('successCard.approvedText')}
+                <span className="font-medium text-[#0A3269] dark:text-[#0a3269]"> {t('successCard.expertReview')} </span>
+                {t('successCard.processText')}
+              </p>
+ 
+              <div className="my-4 h-px border-t border-dashed border-[#0A3269]/15 dark:border-white/10" />
+ 
+              <div className="grid grid-cols-2 gap-2.5">
+                {[
+                  { Icon: TrendingUp, value: '99.8%', label: t('successCard.approval') },
+                  { Icon: Activity, value: '24/7', label: t('successCard.monitoring') },
+                  { Icon: Users, value: '250+', label: t('successCard.expertAdvisors') },
+                  { Icon: ShieldCheck, value: 'A+', label: t('successCard.rating') },
+                ].map(({ Icon, value, label }, i) => (
+                  <div key={i} className="rounded-xl border border-[#0A3269]/10 dark:border-white/10 bg-[#0A3269]/[0.02] dark:bg-white/[0.02] p-3">
+                    <Icon className="mb-2 h-3.5 w-3.5 text-[#0A3269] dark:text-[#0a3269]" />
+                    <p className="text-lg font-bold tracking-tight text-[#0A0E14] dark:text-white">{value}</p>
+                    <span className="text-[10px] text-[#0A0E14]/40 dark:text-white/35">{label}</span>
+                  </div>
+                ))}
               </div>
             </div>
-
-            {/* CTA Card */}
+ 
+            {/* CTA card */}
             <div
-              onClick={() => navigate("/apply")}
-              className="hidden md:flex relative h-full flex-col cursor-pointer overflow-hidden rounded-3xl border border-white/10 p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+              onClick={() => navigate('/apply')}
+              className="hidden md:flex relative h-full flex-col cursor-pointer overflow-hidden rounded-3xl border border-white/10 p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="absolute inset-0 -z-20 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1518684079-3c830dcef090?q=80&w=1600&auto=format&fit=crop')" }} />
-              <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/95 via-black/80 to-transparent" />
-              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-black/20 via-black/10 to-transparent" />
-              <div className="absolute inset-0 -z-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
-              <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -translate-y-40 translate-x-40" />
-              <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-3xl translate-y-40 -translate-x-40" />
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl px-4 py-2 w-fit">
-                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/80">{t('ctaCard.trustedPlatform')}</span>
-              </div>
-
-              <div className="mt-6 flex flex-1 flex-col">
-                <h2 className="max-w-lg">
-                  <span className="block text-sm font-medium tracking-wider text-white/60 uppercase mb-2">{t('ctaCard.journeyBegins')}</span>
-                  <span className="block text-4xl font-bold text-white leading-tight">{t('ctaCard.startYour')}</span>
-                  <span className="block text-5xl font-bold text-white mt-1 leading-tight">{t('ctaCard.dreamJourney')}</span>
-                </h2>
-                <p className="mt-6 max-w-md text-sm leading-relaxed text-white/70 font-light">{t('ctaCard.description')}</p>
-
-                <div className="mt-8">
-                  <div className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm shadow-xl shadow-black/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/40 active:scale-95 cursor-pointer group">
+              <div
+                className="absolute inset-0 -z-20 bg-cover"
+                style={{ backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjLLKWm9-qd6hj615NwZSSMnNYrGfA5VgzqfdrDC7PVw&s=10')" }}
+              />
+              <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#000]/75 via-[#0A0E14]/80 to-transparent" />
+ 
+ 
+              <div className="mt-25  flex flex-1 flex-col">
+              
+                <h2 className="text-3xl font-bold text-white leading-tight">{t('ctaCard.startYour')}</h2>
+                <h4 className="text-2xl font-bold text-white mt-0.5 " style={{ fontFamily: "'Fraunces', serif" }}>
+                  {t('ctaCard.dreamJourney')}
+                </h4>
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-white/60 font-light">{t('ctaCard.description')}</p>
+ 
+                <div className="mt-6">
+                  <div className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#0a3269] text-[#fff] font-semibold text-sm transition-all duration-300 hover:scale-105 group">
                     <span>{t('ctaCard.applyNow')}</span>
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
                   </div>
                 </div>
-
-                <div className="mt-auto pt-6 border-t border-white/10">
-                  <div className="flex items-center gap-8 text-xs text-white/60 font-light">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex -space-x-1.5">
-                        <div className="w-6 h-6 rounded-full bg-white/20 border border-white/10 flex items-center justify-center text-[8px] font-bold text-white">✓</div>
-                        <div className="w-6 h-6 rounded-full bg-white/15 border border-white/10 flex items-center justify-center text-[8px] font-bold text-white">✓</div>
-                        <div className="w-6 h-6 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-[8px] font-bold text-white">✓</div>
-                      </div>
-                      <span>{t('ctaCard.applications')}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                      <span>{t('ctaCard.successRate')}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                      <span>{t('ctaCard.support')}</span>
-                    </div>
-                  </div>
+ 
+                <div className="mt-auto pt-5 border-t border-dashed border-white/15 flex items-center gap-6 text-[11px] text-white/55 font-light">
+                  <span>{t('ctaCard.applications')}</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    {t('ctaCard.successRate')}
+                  </span>
                 </div>
               </div>
             </div>
@@ -2775,32 +2732,30 @@ const EmailCapture = () => {
 
   return (
     <>
-<section ref={containerRef} className={`relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 ${
-  isDarkMode ? 'bg-black' : 'bg-white'
-}`}>
-  {/* Ambient glow — two deliberate fields instead of a stacked pile of blurs */}
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div className={`absolute -top-32 -right-32 w-[560px] h-[560px] rounded-full blur-[130px] ${
-      isDarkMode ? 'bg-[#0A3269]/8' : 'bg-[#0A3269]/[0.06]'
-    }`} />
-    <div className={`absolute -bottom-40 -left-24 w-[420px] h-[420px] rounded-full blur-[110px] ${
-      isDarkMode ? 'bg-amber-500/[0.06]' : 'bg-amber-400/[0.05]'
-    }`} />
-  </div>
+<section
+  ref={containerRef}
+  className={`relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 ${
+    isDarkMode ? 'bg-black/70' : 'bg-white'
+  }`}
+>
+    <div
+      className={`absolute inset-0 ${isDarkMode ? 'opacity-[0.05]' : 'opacity-[0.035]'}`}
+      style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
+        backgroundSize: '24px 24px',
+        color: '#0A3269',
+      }}
+    />
 
   <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    {/* Content - No card wrapper, direct background */}
     <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 xl:gap-16 py-4 sm:py-6 lg:py-8">
-      
       {/* ─── Left - Content ──────────── */}
       <div className="flex-1 max-w-2xl order-2 lg:order-1">
-        {/* Eyebrow — same dashed-seal language used across the site's trust badges */}
-        <span className={`inline-flex items-center gap-1.5 rounded-full border border-dashed px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider border-[#0A3269]/40 text-[#0A3269]`}>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-[#0A3269]/40 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#0A3269]">
           <Mail className="h-2.5 w-2.5" />
           {lang.eyebrow}
         </span>
 
-        {/* Heading */}
         <h1
           className={`
             mt-3 sm:mt-4
@@ -2819,14 +2774,11 @@ const EmailCapture = () => {
           style={{ fontFamily: "'Fraunces', serif" }}
         >
           {lang.heading}
-            <span className={`block mt-1 sm:mt-2 font-bold ${
-              isDarkMode ? 'text-white' : 'text-[#0A3269]'
-            }`}>
-              {lang.headingHighlight}
-            </span>
+          <span className={`block mt-1 sm:mt-2 font-normal italic ${isDarkMode ? 'text-white' : 'text-[#0A3269]'}`}>
+            {lang.headingHighlight}
+          </span>
         </h1>
 
-        {/* Description */}
         <p
           className={`
             mt-3 sm:mt-4
@@ -2835,43 +2787,33 @@ const EmailCapture = () => {
             sm:text-base
             lg:text-lg
             leading-relaxed
-            sm:leading-relaxed
             ${isDarkMode ? 'text-white/60' : 'text-gray-500'}
           `}
         >
           {lang.description}
         </p>
 
-        {/* Email Capture Form */}
+        {/* Email Capture — styled as a single ticket stub with a perforated divider */}
         <div className="mt-6 sm:mt-8 w-full max-w-lg">
-          <div className="flex flex-col sm:flex-row items-stretch gap-3">
-
+          <div
+            className={`
+              relative flex flex-col sm:flex-row items-stretch
+              rounded-xl sm:rounded-2xl overflow-hidden
+              border ${isDarkMode ? 'border-white/10' : 'border-[#0A3269]/12'}
+              ${focused ? 'ring-2 ring-[#0A3269]/30' : ''}
+              ${isDarkMode ? 'bg-white/[0.04]' : 'bg-gray-50'}
+              transition-all duration-300
+            `}
+          >
             {/* Email Input */}
-            <div
-              className={`
-                group relative flex-1 flex items-center gap-3
-                overflow-hidden
-                rounded-xl sm:rounded-2xl
-                ${focused
-                  ? 'ring-2 ring-[#0A3269]/30'
-                  : ''
-                }
-                ${isDarkMode ? 'bg-white/10' : 'bg-gray-50'}
-                transition-all duration-300
-                px-4 sm:px-5
-                py-3.5
-              `}
-            >
-              {/* Icon */}
-              <div className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                isDarkMode 
-                  ? 'bg-[#0A3269]/20 text-[#0A3269]' 
-                  : 'bg-[#0A3269]/10 text-[#0A3269]'
-              }`}>
+            <div className="group relative flex-1 flex items-center gap-3 px-4 sm:px-5 py-3.5">
+              <div
+                className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                  isDarkMode ? 'bg-[#0A3269]/20 text-[#0A3269]' : 'bg-[#0A3269]/10 text-[#0A3269]'
+                }`}
+              >
                 <Mail className="h-4.5 w-4.5" />
               </div>
-
-              {/* Input */}
               <input
                 type="email"
                 value={email}
@@ -2880,12 +2822,7 @@ const EmailCapture = () => {
                 onBlur={() => setFocused(false)}
                 placeholder={lang.placeholder}
                 className={`
-                  relative
-                  w-full
-                  bg-transparent
-                  text-[15px] sm:text-base
-                  font-medium
-                  outline-none
+                  relative w-full bg-transparent text-[15px] sm:text-base font-medium outline-none
                   placeholder:text-gray-400 dark:placeholder:text-white/40
                   ${isDarkMode ? 'text-white' : 'text-gray-900'}
                   caret-[#0A3269]
@@ -2894,43 +2831,63 @@ const EmailCapture = () => {
               />
             </div>
 
-            {/* CTA Button */}
-            <button
-              className={`
-                group
-                relative
-                overflow-hidden
-                flex items-center justify-center gap-2.5
-                w-full sm:w-auto
-                rounded-xl sm:rounded-2xl
-                px-6 sm:px-8
-                py-3.5 sm:py-4
-                text-sm sm:text-base
-                font-bold
-                whitespace-nowrap
-                transition-all duration-300
-                bg-[#0A3269] text-white hover:bg-[#1A4A8A]
-                hover:scale-105 active:scale-95
-              `}
-            >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-              <span className="relative z-10 flex items-center gap-2.5">
-                {lang.cta}
-                <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 transition-transform duration-300 group-hover:translate-x-1 text-white" />
-              </span>
-            </button>
+            {/* Perforated divider — punch-hole notches, ticket-stub tear line */}
+            <div className="relative hidden sm:flex items-stretch">
+              <div
+                className={`w-px my-3 border-l-2 border-dashed ${isDarkMode ? 'border-white/15' : 'border-[#0A3269]/15'}`}
+              />
+              <span
+                className={`absolute -top-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rounded-full ${
+                  isDarkMode ? 'bg-black' : 'bg-white'
+                }`}
+              />
+              <span
+                className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rounded-full ${
+                  isDarkMode ? 'bg-black' : 'bg-white'
+                }`}
+              />
+            </div>
+
+         {/* CTA Button */}
+<button
+  className="
+    group relative overflow-hidden flex items-center justify-center gap-2.5
+    w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold whitespace-nowrap
+    transition-all duration-300 bg-[#0A3269] text-white hover:bg-[#1A4A8A]
+  "
+>
+  {/* Shimmer Effect */}
+  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+  
+  <span className="relative z-10 flex items-center gap-2.5">
+    {lang.cta}
+    
+    {/* Arrow with solid white background and black icon */}
+    <div
+      className="
+        flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full
+        bg-white
+        transition-colors duration-300
+        group-hover:bg-gray-100
+      "
+    >
+      <ArrowRight 
+        className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-black transition-transform duration-300 group-hover:translate-x-1" 
+        strokeWidth={2.5}
+      />
+    </div>
+  </span>
+</button>
           </div>
 
           {/* Terms */}
-          <p className={`mt-3 sm:mt-4 px-1 text-[10px] sm:text-xs leading-5 ${
-            isDarkMode ? 'text-white/30' : 'text-gray-400'
-          }`}>
+          <p className={`mt-3 sm:mt-4 px-1 text-[10px] sm:text-xs leading-5 ${isDarkMode ? 'text-white/30' : 'text-gray-400'}`}>
             {lang.terms}
-            <a href="/t&c" className={`mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]`}>
+            <a href="/t&c" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]">
               {lang.termsLink}
             </a>
             {isArabic ? 'و' : 'and'}
-            <a href="/privacy" className={`mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]`}>
+            <a href="/privacy" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]">
               {lang.privacyLink}
             </a>
             . {lang.unsubscribe}
@@ -2941,9 +2898,11 @@ const EmailCapture = () => {
       {/* ─── Right - Video ────────────── */}
       <div className="flex-1 w-full lg:w-auto order-1 lg:order-2">
         <div className="relative max-w-md mx-auto lg:ml-auto w-full">
-          {/* Video - thin brand-colored frame instead of a plain shadow box */}
+          {/* dashed outer frame, offset behind the card — reads like a boarding-pass stub sitting in a sleeve */}
+          <div className="absolute -inset-2.5 rounded-[26px] border-2 border-dashed border-[#0a3269]/20 pointer-events-none hidden sm:block" />
+
           <div
-            className={`relative rounded-2xl overflow-hidden bg-black w-full h-[240px] sm:h-[280px] md:h-[360px] lg:h-[480px] xl:h-[580px] cursor-pointer group ring-1 shadow-xl ring-[#0A3269]/15`}
+            className="relative rounded-2xl overflow-hidden bg-black w-full h-[240px] sm:h-[280px] md:h-[360px] lg:h-[480px] xl:h-[580px] cursor-pointer group ring-1 shadow-xl ring-[#0A3269]/15"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
             onClick={openModal}
@@ -2957,39 +2916,23 @@ const EmailCapture = () => {
               playsInline
               preload="metadata"
             />
-            
-            {/* Gradient Overlay */}
+
             <div className="absolute inset-0 bg-gradient-to-t from-[#0A3269]/10 via-transparent to-transparent" />
 
-            {/* Credibility badge — same dashed-seal mark used for the eyebrow tag */}
-            <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5 rounded-full border border-dashed border-white/50 bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-white">
-              10+ yrs experience
-            </div>
-
-            {/* Play Button - Shows #0A3269 on hover */}
+            {/* Play Button */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className={`
-                w-16 h-16 sm:w-20 sm:h-20 
-                rounded-full 
-                flex items-center justify-center 
-                shadow-2xl 
-                transition-all duration-300 
-                bg-white/20 backdrop-blur-sm
-                group-hover:bg-[#0A3269]
-                group-hover:scale-110
-                border border-white/30
-                group-hover:border-[#0A3269]
-              `}>
-                <Play className={`
-                  h-8 w-8 sm:h-10 sm:w-10 
-                  text-white 
-                  ml-1
-                  transition-all duration-300
-                  group-hover:text-white
-                `} strokeWidth={2.5} />
+              <div
+                className="
+                  w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-2xl
+                  transition-all duration-300 bg-white/20 backdrop-blur-sm
+                  group-hover:bg-[#0A3269] group-hover:scale-110
+                  border border-white/30 group-hover:border-[#0A3269]
+                "
+              >
+                <Play className="h-8 w-8 sm:h-10 sm:w-10 text-white ml-1 transition-all duration-300 group-hover:text-white" strokeWidth={2.5} />
               </div>
             </div>
-            
+
             {/* Sound Toggle Button */}
             {isHovering && (
               <button
@@ -3010,17 +2953,6 @@ const EmailCapture = () => {
               </button>
             )}
 
-            {/* Watch hint — consolidated single pill */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
-              <span className="flex items-center gap-1.5 text-white/80 text-[11px] sm:text-xs font-medium bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
-                {isMuted ? (
-                  <VolumeX className="h-3 w-3 text-white/50" strokeWidth={1.75} />
-                ) : (
-                  <Volume2 className="h-3 w-3 text-white/70" strokeWidth={1.75} />
-                )}
-                {lang.watchHint}
-              </span>
-            </div>
           </div>
         </div>
       </div>
@@ -3030,15 +2962,8 @@ const EmailCapture = () => {
 
 {/* ─── FULLSCREEN VIDEO MODAL ────────────────────────────────────── */}
 {isModalOpen && (
-  <div
-    className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
-    onClick={closeModal}
-  >
-    <div
-      ref={modalContainerRef}
-      className="relative w-full h-full bg-black"
-      onClick={(e) => e.stopPropagation()}
-    >
+  <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center" onClick={closeModal}>
+    <div ref={modalContainerRef} className="relative w-full h-full bg-black" onClick={(e) => e.stopPropagation()}>
       <video
         ref={modalVideoRef}
         className="w-full h-full object-contain"
@@ -3062,7 +2987,6 @@ const EmailCapture = () => {
     </div>
   </div>
 )}
-
     </>
   );
 };
@@ -3850,26 +3774,22 @@ const LaptopShowcase = () => {
   ref={sectionRef}
   className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden bg-gray-50/80 dark:bg-black/95"
 >
-  {/* Premium Background - Clean & Subtle */}
+  {/* Background */}
   <div className="absolute inset-0">
-    {/* Gradient Orbs - Subtle */}
     <div className="absolute top-1/4 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-2xl sm:blur-3xl" />
-    <div className="absolute bottom-1/4 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-2xl sm:blur-3xl" />
+    <div className="absolute bottom-1/4 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-[#B8873B]/5 dark:bg-[#B8873B]/10 rounded-full blur-2xl sm:blur-3xl" />
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-3xl" />
-    
-    {/* Grid Pattern - Subtle */}
-    <div 
-      className="absolute inset-0 opacity-[0.02] dark:opacity-[0.03]"
+ 
+    {/* dot grain, same texture as the journey/hero sections */}
+    <div
+      className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04]"
       style={{
-        backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
-        `,
-        backgroundSize: '60px 60px'
+        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(10,50,105,0.5) 1px, transparent 0)',
+        backgroundSize: '26px 26px',
       }}
     />
   </div>
-
+ 
   <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
     {/* Header */}
     <div
@@ -3877,45 +3797,35 @@ const LaptopShowcase = () => {
         isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
     >
-      <h2 
+  
+ 
+      <h2
         className="font-bold text-black dark:text-white leading-[1.05] tracking-[-0.02em]"
-        style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: 'clamp(2rem, 8vw, 3rem)'
-        }}
+        style={{ fontFamily: "'Inter', sans-serif", fontSize: 'clamp(2rem, 8vw, 3rem)' }}
       >
         {isArabic ? (
           <>
-            شاهد كيف{' '}
+            شاهد كيف
             <br />
-            <span className="relative inline-block">
-              <span className="text-[#0A3269] dark:text-[#0A3269] font-light">
-                تعمل TMMT
-              </span>
-            </span>
+            <span className="text-[#0A3269] dark:text-[#0A3269] italic font-light">تعمل TMMT</span>
           </>
         ) : (
           <>
-            See how{' '}
+            See how
             <br />
-            <span className="relative inline-block">
-              <span className="text-[#0A3269] dark:text-[#0A3269] font-light">
-                TMMT works
-              </span>
-            </span>
+            <span className="text-[#0A3269] dark:text-[#0A3269] italic font-light">TMMT works</span>
           </>
         )}
       </h2>
-      
+ 
       <p className="text-black/50 dark:text-white/40 text-sm sm:text-base mt-3 max-w-2xl mx-auto font-light">
-        {isArabic 
+        {isArabic
           ? 'اختبر معالجة التأشيرات السلسة مع منصتنا البديهية'
-          : 'Experience seamless visa processing with our intuitive platform'
-        }
+          : 'Experience seamless visa processing with our intuitive platform'}
       </p>
     </div>
-
-    {/* Modern Laptop Mockup */}
+ 
+    {/* Laptop Mockup */}
     <div
       className={`relative max-w-6xl mx-auto transition-all duration-700 ${
         isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
@@ -3923,19 +3833,22 @@ const LaptopShowcase = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      <span className="absolute -top-1.5 left-8 hidden sm:block h-3 w-3 rounded-full bg-gray-50 dark:bg-black" />
+      <span className="absolute -top-1.5 right-8 hidden sm:block h-3 w-3 rounded-full bg-gray-50 dark:bg-black" />
+ 
       <div className="relative transition-all duration-300 hover:-translate-y-1">
-        {/* Premium Bezel */}
+        {/* Bezel */}
         <div className="relative bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 rounded-xl sm:rounded-2xl md:rounded-3xl p-1.5 sm:p-2 md:p-3 shadow-2xl shadow-black/50 dark:shadow-black/70">
           {/* Top Bar with Camera */}
           <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-10">
             <div className="w-2 h-2 sm:w-2.5 md:w-3 bg-neutral-700 rounded-full border border-neutral-600/50">
               <div className="absolute inset-0 m-auto w-0.5 h-0.5 sm:w-1 sm:h-1 bg-neutral-500 rounded-full" />
             </div>
-            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-green-400" />
+            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#0a3269]" />
           </div>
-
+ 
           {/* Screen Container */}
-          <div 
+          <div
             className="relative bg-black rounded-lg sm:rounded-xl md:rounded-3xl overflow-hidden aspect-[16/11] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/9] cursor-pointer group"
             onClick={handleScreenClick}
           >
@@ -3952,7 +3865,7 @@ const LaptopShowcase = () => {
                 </div>
               </div>
             </div>
-
+ 
             {/* Pause/Play Status */}
             {isPaused && (
               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
@@ -3962,7 +3875,7 @@ const LaptopShowcase = () => {
                 </span>
               </div>
             )}
-
+ 
             {/* Tap/Click Hint */}
             {!isPaused && (
               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
@@ -3971,14 +3884,14 @@ const LaptopShowcase = () => {
                 </span>
               </div>
             )}
-
+ 
             {/* Screen Glare */}
             <div className="absolute inset-0 pointer-events-none rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden">
               <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-white/5 via-transparent to-transparent rotate-12" />
             </div>
           </div>
         </div>
-
+ 
         {/* Laptop Base */}
         <div className="relative">
           <div className="relative h-2 sm:h-3 md:h-4 bg-gradient-to-b from-neutral-700 to-neutral-800 rounded-b-lg sm:rounded-b-xl md:rounded-b-2xl">
@@ -3988,7 +3901,7 @@ const LaptopShowcase = () => {
       </div>
     </div>
   </div>
-</section>  );
+</section> );
 };
 
 
@@ -4266,109 +4179,126 @@ const Hero = () => {
   ];
 
     return (
-    <header className="sticky top-0 z-50 p-4 transition-transform duration-350 ease-[cubic-bezier(0.22,1,0.36,1)]" style={{ transform: hidden ? 'translateY(-110%)' : 'translateY(0)' }}>
+<header
+      className="sticky top-0 z-50 p-4 transition-transform duration-350 ease-[cubic-bezier(0.22,1,0.36,1)]"
+      style={{ transform: hidden ? 'translateY(-110%)' : 'translateY(0)' }}
+    >
       <div className="container mx-auto max-w-6xl">
         <div
           className={`
             relative flex h-14 items-center justify-between rounded-full px-5
-            border transition-all duration-300
+            border transition-all duration-300  
             backdrop-blur-2xl backdrop-saturate-150
-            bg-white/70 dark:bg-black/60
+            bg-white/70 dark:bg-[#000]/60
             border-black/10 dark:border-white/10
-            ${scrolled ? 'bg-white/90 dark:bg-black/80 shadow-lg shadow-black/10 dark:shadow-white/10' : 'shadow-sm shadow-black/5 dark:shadow-white/5'}
+            ${scrolled
+              ? 'bg-white/90 dark:bg-[#000]/85 shadow-[0_8px_30px_-8px_rgba(10,50,105,0.25)] dark:shadow-[0_8px_30px_-8px_rgba(0,0,0,0.5)]'
+              : 'shadow-sm shadow-black/5 dark:shadow-black/20'
+            }
           `}
         >
+          {/* ambient glow, only visible once scrolled for a subtle "lit" feel */}
+          <span
+            className={`pointer-events-none absolute -top-10 left-1/4 w-40 h-20 rounded-full bg-[#4A8ABF]/20 blur-3xl transition-opacity duration-500 ${
+              scrolled ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
           {/* subtle top highlight for glass realism */}
           <span className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/60 dark:via-white/10 to-transparent" />
 
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img 
-              src={TammatLogoWhite} 
-              alt="Tammat logo" 
-              width={30} 
-              height={30} 
-              className="h-15 w-10 dark:brightness-0 dark:invert" 
-            />    
-            <span className="text-black dark:text-white font-semibold tracking-wide">TMMT</span>
+          <Link to="/" className="relative flex items-center gap-2 shrink-0">
+            <img
+              src={TammatLogoWhite}
+              alt="Tammat logo"
+              width={30}
+              height={30}
+              className="h-14 w-12 dark:brightness-0 dark:invert"
+            />
+            <span className="text-black dark:text-white font-semibold tracking-tight">TMMT</span>
           </Link>
-    {/* Desktop Nav — without Icons */}
-    <nav className="hidden items-center gap-1 text-sm md:flex">
-      {links.map((l) => (
-        <Link
-          key={l.href}
-          to={l.href}
-          className="
-            group relative px-4 py-2 rounded-full font-medium
-            text-gray-700 dark:text-gray-300
-            hover:text-black dark:hover:text-white
-            hover:bg-gray-100/50 dark:hover:bg-white/10
-            transition-all duration-200
-          "
-        >
-          {l.label}
-        </Link>
-      ))}
-      
-      {/* Dashboard Link in Desktop Nav */}
-      {user && (
-        <Link
-          to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
-          className="
-            group relative px-4 py-2 rounded-full font-medium
-            text-gray-700 dark:text-gray-300
-            hover:text-black dark:hover:text-white
-            hover:bg-gray-100/50 dark:hover:bg-white/10
-            transition-all duration-200
-          "
-        >
-          Dashboard
-        </Link>
-      )}
-    </nav>
+
+          {/* Desktop Nav — without Icons */}
+          <nav className="hidden items-center gap-1 text-sm md:flex">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                to={l.href}
+                className="
+                  group relative px-4 py-2 rounded-full font-medium
+                  text-gray-700 dark:text-white/70
+                  hover:text-black dark:hover:text-white
+                  hover:bg-gray-100/60 dark:hover:bg-white/10
+                  transition-colors duration-200
+                "
+              >
+                {l.label}
+              </Link>
+            ))}
+
+            {/* Dashboard Link in Desktop Nav */}
+            {user && (
+              <Link
+                to={user?.role === 'amer' ? '/amer-dashboard' : '/user/dashboard'}
+                className="
+                  group relative px-4 py-2 rounded-full font-medium
+                  text-gray-700 dark:text-white/70
+                  hover:text-black dark:hover:text-white
+                  hover:bg-gray-100/60 dark:hover:bg-white/10
+                  transition-colors duration-200
+                "
+              >
+                Dashboard
+              </Link>
+            )}
+          </nav>
 
           {/* Desktop Actions */}
           <div className="hidden items-center gap-2.5 md:flex">
-      {/* Apply CTA — Premium Dark Blue */}
-    <button
-      onClick={() => setShowStartApplication(true)}
-      className="
-        group relative overflow-hidden rounded-full
-        bg-[#0A3269] dark:bg-white
-        px-6 py-2.5 font-semibold text-sm
-        text-white dark:text-[#0A3269]
-        shadow-lg shadow-[#0A3269]/25 dark:shadow-white/10
-        transition-all duration-300
-        hover:shadow-xl hover:shadow-[#0A3269]/35 dark:hover:shadow-white/20
-        hover:bg-[#1a4a7a] dark:hover:bg-gray-100
-        hover:scale-105 active:scale-95
-      "
-    >
-      <span className="relative z-10 flex items-center gap-1.5">
-        <Rocket className="h-3.5 w-3.5 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        {t('hero.cta', 'Apply Now')}
-      </span>
-      <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
-    </button>
+            {/* Apply CTA — Premium Dark Blue */}
+            <button
+              onClick={() => setShowStartApplication(true)}
+              className="
+                group relative overflow-hidden rounded-full
+                bg-gradient-to-br from-[#0A3269] to-[#08234F] text-white
+                px-6 py-2.5 font-semibold text-sm
+                shadow-lg shadow-[#0A3269]/25
+                transition-all duration-300
+                hover:shadow-xl hover:shadow-[#0A3269]/35
+                hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]
+              "
+            >
+              {/* soft sheen sweep on hover */}
+              <span
+                className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"
+                style={{
+                  background: 'linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)',
+                }}
+              />
+              <span className="relative z-10 flex items-center gap-1.5">
+                <Rocket className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                {t('hero.cta', 'Apply Now')}
+              </span>
+            </button>
 
             {/* Dashboard icon */}
             {user && (
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full hover:bg-gray-100/50 dark:hover:bg-white/10 text-black dark:text-white"
+                className="rounded-full hover:bg-gray-100/60 dark:hover:bg-white/10 text-black dark:text-white transition-colors"
                 onClick={() => navigate(user.role === 'amer' ? '/amer-dashboard' : '/user/dashboard')}
                 aria-label={t('header.dashboard')}
               >
                 <span className="sr-only">{t('header.profile')}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A9 9 0 1112 21a8.963 8.963 0 01-6.879-3.196z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </Button>
             )}
 
-        {/* Theme toggle — Clean */}
+                {/* Theme toggle — Clean */}
         <button
           onClick={toggleTheme}
           className="
@@ -4390,303 +4320,256 @@ const Hero = () => {
           </span>
         </button>
 
-            {/* Auth button — Clean */}
+            {/* Auth button */}
             {user ? (
               <button
                 onClick={() => {
                   signOut();
-                  navigate("/");
+                  navigate('/');
                 }}
                 className="
-                  group
-                  flex
-                  items-center
-                  gap-2
-                  rounded-full
-                  px-5
-                  py-2.5
-                  text-sm
-                  font-semibold
-                  border
-                  transition-all
-                  duration-300
-                  bg-white dark:bg-black
+                  group flex items-center gap-2 rounded-full px-5 py-2.5
+                  text-sm font-semibold border
+                  transition-all duration-300
+                  bg-white dark:bg-white/5
                   text-black dark:text-white
                   border-gray-200 dark:border-white/10
                   hover:border-red-300 dark:hover:border-red-500/30
-                  hover:bg-red-50 dark:hover:bg-red-900/20
-                  hover:scale-105 active:scale-95
+                  hover:bg-red-50 dark:hover:bg-red-500/10
+                  hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]
                 "
               >
-                <LogOut className="h-4 w-4 text-black dark:text-white transition-transform duration-300 group-hover:translate-x-0.5" />
-                {t("header.signOut")}
+                <LogOut className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                {t('header.signOut')}
               </button>
             ) : (
               <button
-                onClick={() => navigate("/auth")}
+                onClick={() => navigate('/auth')}
                 className="
-                  group
-                  flex
-                  items-center
-                  gap-2
-                  rounded-full
-                  px-5
-                  py-2.5
-                  text-sm
-                  font-semibold
-                  border
-                  transition-all
-                  duration-300
-                bg-black dark:bg-white
-                text-white dark:text-black
-                border-gray-800 dark:border-white/20
-                hover:bg-gray-800 dark:hover:bg-gray-100
-                hover:border-gray-700 dark:hover:border-white/30
-                hover:scale-105 active:scale-95
-              "
+                  group flex items-center gap-2 rounded-full px-5 py-2.5
+                  text-sm font-semibold border
+                  transition-all duration-300
+                  bg-black dark:bg-white
+                  text-white dark:text-black
+                  border-gray-800 dark:border-white/20
+                  hover:bg-gray-800 dark:hover:bg-gray-100
+                  hover:border-gray-700 dark:hover:border-white/30
+                  hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]
+                "
+              >
+                <LogIn className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                {t('header.signIn')}
+              </button>
+            )}
+          </div>
+
+          {/* Mobile controls */}
+          <div className="flex items-center gap-2 md:hidden">
+            {/* Sliding pill theme toggle */}
+            <button
+              onClick={toggleTheme}
+              className="relative flex h-9 w-10 items-center rounded-full border border-gray-200 dark:border-white/10 bg-gray-100/60 dark:bg-white/5 px-1 transition-all duration-300 hover:border-gray-300 dark:hover:border-white/20 active:scale-95"
+              aria-label="Toggle theme"
             >
-              <LogIn className="h-4 w-4 text-white dark:text-black transition-transform duration-300 group-hover:translate-x-0.5" />
-              {t("header.signIn")}
+              <span className={`flex h-7 w-7 items-center justify-center rounded-full ${isLight ? 'bg-gray-200' : 'bg-white/10'}`}>
+            {isLight ? (
+              <Sun className="h-4 w-4 text-black dark:text-white" />
+            ) : (
+              <Moon className="h-4 w-4 text-black dark:text-white" />
+            )}
+          </span> 
             </button>
-          )}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full border-gray-200 dark:border-white/10 bg-gray-100/60 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/60 dark:hover:bg-white/10"
+                >
+          {/* mobile menu */}
+
+                  <Menu className="h-4 w-4" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+
+              {/* Theme-aware mobile menu */}
+              <SheetContent
+                side="right"
+                className="
+                  flex w-80 flex-col p-0
+                  bg-white/95 dark:bg-[#000]/50
+                  backdrop-blur-2xl
+                  border-l border-gray-100 dark:border-white/10
+                  shadow-2xl shadow-black/10 dark:shadow-black/40
+                "
+              >
+                {/* Brand header — logo + title */}
+                <div className="relative flex items-center gap-3 border-b border-gray-100 dark:border-white/10 px-6 py-5 overflow-hidden">
+                  <div className="pointer-events-none absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[#4A8ABF]/15 blur-3xl" />
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/15 rounded-full blur-lg" />
+                    <img
+                      src={TammatLogoWhite}
+                      alt="Tammat logo"
+                      width={32}
+                      height={32}
+                      className="relative h-13 w-10 dark:brightness-0 dark:invert"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-lg font-bold tracking-tight text-black dark:text-white">
+                      TMMT
+                    </span>
+                  </div>
+                </div>
+
+                {/* Navigation */}
+                <nav className="mt-4 flex flex-col gap-1.5 px-4">
+                  {links.map((l) => (
+                    <Link
+                      key={l.href}
+                      to={l.href}
+                      className="
+                        group relative flex items-center gap-4
+                        rounded-2xl px-4 py-3.5
+                        transition-all duration-300
+                        hover:bg-gray-50 dark:hover:bg-white/5
+                        active:scale-[0.98]
+                      "
+                    >
+                      <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
+                        <l.icon className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+                      </div>
+
+                      <div className="relative z-10 flex flex-col">
+                        <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
+                          {l.label}
+                        </span>
+                        <span className="text-[11px] text-black/40 dark:text-white/40">
+                          Quick access
+                        </span>
+                      </div>
+
+                      <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
+                    </Link>
+                  ))}
+
+                  {/* Dashboard Link - Mobile */}
+                  <Link
+                    to={user?.role === 'amer' ? '/amer-dashboard' : '/user/dashboard'}
+                    className="
+                      group relative flex items-center gap-4
+                      rounded-2xl px-4 py-3.5
+                      transition-all duration-300
+                      hover:bg-gray-50 dark:hover:bg-white/5
+                      active:scale-[0.98]
+                    "
+                  >
+                    <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
+                      <LayoutDashboard className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+                    </div>
+
+                    <div className="relative z-10 flex flex-col">
+                      <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
+                        Dashboard
+                      </span>
+                      <span className="text-[11px] text-black/40 dark:text-white/40">
+                        Manage your account
+                      </span>
+                    </div>
+
+                    <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
+                  </Link>
+                </nav>
+
+                {/* CTA buttons — bottom of sheet */}
+                <div className="mt-auto border-t border-gray-100 dark:border-white/10 p-5 space-y-3">
+                  {/* Primary CTA */}
+                  <button
+                    onClick={() => setShowStartApplication(true)}
+                    className="
+                      group relative overflow-hidden rounded-2xl w-full
+                      bg-gradient-to-br from-[#0A3269] to-[#08234F] dark:from-white dark:to-white
+                      px-6 py-3.5 font-semibold text-sm
+                      text-white dark:text-[#0A3269]
+                      shadow-lg shadow-[#0A3269]/20 dark:shadow-white/10
+                      transition-all duration-300
+                      hover:shadow-xl hover:shadow-[#0A3269]/30 dark:hover:shadow-white/20
+                      flex items-center justify-center gap-3
+                      hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]
+                    "
+                  >
+                    <span
+                      className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"
+                      style={{
+                        background: 'linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)',
+                      }}
+                    />
+                    <span className="relative z-10 flex items-center gap-2.5">
+                      <Rocket className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
+                      <span>{t('hero.cta', 'Apply Now')}</span>
+                    </span>
+                  </button>
+
+                  {/* Secondary CTA */}
+                  {user ? (
+                    <button
+                      onClick={() => signOut()}
+                      className="
+                        w-full rounded-2xl px-6 py-3 font-medium text-sm
+                        border border-gray-200 dark:border-white/10
+                        bg-white dark:bg-white/5
+                        text-black dark:text-white
+                        hover:bg-red-50 dark:hover:bg-red-500/10
+                        hover:border-red-300 dark:hover:border-red-500/30
+                        transition-all duration-300
+                        active:scale-[0.97]
+                        flex items-center justify-center gap-2
+                      "
+                    >
+                      <LogOut className="h-4 w-4" strokeWidth={1.8} />
+                      {t('header.signOut')}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => navigate('/auth')}
+                      className="
+                        w-full rounded-2xl px-6 py-3 font-semibold text-sm
+                        bg-white dark:bg-white/5
+                        text-black dark:text-white
+                        border border-gray-200 dark:border-white/10
+                        flex items-center justify-center gap-2.5
+                        transition-all duration-300
+                        hover:bg-gray-50 dark:hover:bg-white/10
+                        hover:border-gray-300 dark:hover:border-white/20
+                        active:scale-[0.97]
+                        shadow-sm hover:shadow-md
+                      "
+                    >
+                      <LogIn className="h-4 w-4" strokeWidth={1.8} />
+                      {t('header.signIn')}
+                    </button>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
+      </div>
 
-
-
-
-        
-<div className="flex items-center gap-2 md:hidden">
-  {/* Modern pill-style theme toggle */}
-  <button
-    onClick={toggleTheme}
-    className="relative flex h-9 w-10 items-center rounded-full border border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 px-1 transition-all duration-300 hover:border-gray-300 dark:hover:border-white/20 hover:shadow-md active:scale-95"
-    aria-label="Toggle theme"
-  >
-    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-100/20 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-    
-    <span
-      className="flex h-7 w-7 items-center justify-center rounded-full bg-white dark:bg-black shadow-sm group-hover:shadow-md transition-all duration-300"
-      style={{ marginLeft: isLight ? 0 : "auto" }}
-    >
-      {isLight ? (
-        <Sun className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-45" />
-      ) : (
-        <Moon className="h-3.5 w-3.5 text-black dark:text-white transition-transform duration-300 group-hover:rotate-[-15deg]" />
+      {showStartApplication && (
+        <LegacyStartApplicationDialog
+          open={showStartApplication}
+          onOpenChange={setShowStartApplication}
+          queryParams={''}
+        />
       )}
-    </span>
-  </button>
-
-  <Sheet>
-    <SheetTrigger asChild>
-      <Button
-        variant="outline"
-        size="icon"
-        className="rounded-full border-gray-200 dark:border-white/10 bg-gray-100/50 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/50 dark:hover:bg-white/10"
-      >
-        <Menu className="h-4 w-4 text-black dark:text-white" />
-        <span className="sr-only">Open menu</span>
-      </Button>
-    </SheetTrigger>
-
-    {/* Theme-aware mobile menu - Modern Premium */}
-    <SheetContent
-      side="right"
-      className="
-        flex w-80 flex-col p-0
-        bg-white/98 dark:bg-black/98
-        backdrop-blur-2xl
-        border-l border-gray-100 dark:border-white/5
-        shadow-2xl shadow-black/5 dark:shadow-white/5
-      "
-    >
-      {/* Brand header — logo + title */}
-      <div className="flex items-center gap-3 border-b border-gray-100 dark:border-white/5 px-6 py-5">
-        <div className="relative">
-          <div className="absolute inset-0 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 rounded-full blur-lg" />
-          <img 
-            src={TammatLogoWhite} 
-            alt="Tammat logo" 
-            width={32} 
-            height={32} 
-            className="relative h-10 w-10 dark:brightness-0 dark:invert" 
-          />
-        </div>
-        <div>
-          <span className="text-lg font-bold tracking-tight text-black dark:text-white">
-            TMMT
-          </span>
-     
-        </div>
-      </div>
-
-      {/* Modern Premium Navigation */}
-      <nav className="mt-4 flex flex-col gap-1.5 px-4">
-        {links.map((l) => (
-          <Link
-            key={l.href}
-            to={l.href}
-            className="
-              group relative overflow-hidden
-              flex items-center gap-4
-              rounded-2xl
-              px-4 py-3.5
-              transition-all duration-300
-              hover:bg-gray-50 dark:hover:bg-white/5
-              hover:shadow-md hover:shadow-black/5 dark:hover:shadow-white/5
-              active:scale-[0.98]
-            "
-          >
-            {/* Hover Background Effect */}
-            <span className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5 rounded-2xl" />
-            
-            {/* Icon Container */}
-            <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105 group-hover:rotate-3">
-              <l.icon className="h-5 w-5 text-black/70 dark:text-white/70 transition-all duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
-            </div>
-
-            {/* Label */}
-            <div className="relative z-10 flex flex-col">
-              <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
-                {l.label}
-              </span>
-              <span className="text-[11px] text-black/40 dark:text-white/40">
-                Quick access
-              </span>
-            </div>
-
-            {/* Arrow Icon */}
-            <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
-          </Link>
-        ))}
-
-        {/* Dashboard Link - Mobile */}
-        <Link
-          to={user?.role === "amer" ? "/amer-dashboard" : "/user/dashboard"}
-          className="
-            group relative overflow-hidden
-            flex items-center gap-4
-            rounded-2xl
-            px-4 py-3.5
-            transition-all duration-300
-            hover:bg-gray-50 dark:hover:bg-white/5
-            hover:shadow-md hover:shadow-black/5 dark:hover:shadow-white/5
-            active:scale-[0.98]
-          "
-        >
-          <span className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-gradient-to-r from-black/5 via-transparent to-black/5 dark:from-white/5 dark:to-white/5 rounded-2xl" />
-
-          <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105 group-hover:rotate-3">
-            <LayoutDashboard className="h-5 w-5 text-black/70 dark:text-white/70 transition-all duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
-          </div>
-
-          <div className="relative z-10 flex flex-col">
-            <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
-              Dashboard
-            </span>
-            <span className="text-[11px] text-black/40 dark:text-white/40">
-              Manage your account
-            </span>
-          </div>
-
-          <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
-        </Link>
-      </nav>
-
-      {/* CTA buttons — bottom of sheet */}
-      <div className="mt-auto border-t border-gray-100 dark:border-white/5 p-5 space-y-3">
-        {/* ─── Primary CTA Button ────────────────────────────────────────────── */}
-        <button
-          onClick={() => setShowStartApplication(true)}
-          className="
-            group relative overflow-hidden rounded-2xl
-            w-full
-            bg-[#0A3269] dark:bg-white
-            px-6 py-3.5 font-semibold text-sm
-            text-white dark:text-[#0A3269]
-            shadow-lg shadow-[#0A3269]/20 dark:shadow-white/10
-            transition-all duration-300
-            hover:shadow-xl hover:shadow-[#0A3269]/30 dark:hover:shadow-white/20
-            hover:bg-[#1a4a7a] dark:hover:bg-gray-100
-            flex items-center justify-center gap-3
-            hover:scale-[1.02] active:scale-[0.97]
-          "
-        >
-          {/* Shine Effect */}
-          <span
-            className="absolute inset-0"
-            style={{
-              background: "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%)",
-            }}
-          />
-          
-          {/* Hover Slide Effect */}
-          <span className="absolute inset-0 bg-white/20 dark:bg-black/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 skew-x-12" />
-          
-          <span className="relative z-10 flex items-center gap-2.5">
-            <Rocket className="h-4 w-4 text-white dark:text-[#0A3269] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
-            <span>{t('hero.cta', 'Apply Now')}</span>
-          </span>
-        </button>
-
-        {/* ─── Secondary CTA Button ──────────────────────────────────── */}
-        {user ? (
-          <button
-            onClick={() => signOut()}
-            className="
-              w-full rounded-2xl px-6 py-3 font-medium text-sm
-              border border-gray-200 dark:border-white/10
-              bg-white dark:bg-black
-              text-black dark:text-white
-              hover:bg-red-50 dark:hover:bg-red-900/20
-              hover:border-red-300 dark:hover:border-red-500/30
-              transition-all duration-300
-              active:scale-[0.97]
-              hover:scale-[1.02]
-              flex items-center justify-center gap-2
-            "
-          >
-            <LogOut className="h-4 w-4" strokeWidth={1.8} />
-            {t('header.signOut')}
-          </button>
-        ) : (
-          <button
-            onClick={() => navigate('/auth')}
-            className="
-              w-full rounded-2xl px-6 py-3 font-semibold text-sm
-              bg-white dark:bg-black
-              text-black dark:text-white
-              border border-gray-200 dark:border-white/10
-              flex items-center justify-center gap-2.5
-              transition-all duration-300
-              hover:bg-gray-50 dark:hover:bg-white/5
-              hover:border-gray-300 dark:hover:border-white/20
-              active:scale-[0.97]
-              shadow-sm hover:shadow-md
-              hover:scale-[1.02]
-            "
-          >
-            <LogIn className="h-4 w-4" strokeWidth={1.8} />
-            {t('header.signIn')}
-          </button>
-        )}
-      </div>
-    </SheetContent>
-  </Sheet>
-</div>      </div>
-    </div>
-
-    {showStartApplication && (
-      <LegacyStartApplicationDialog
-        open={showStartApplication}
-        onOpenChange={setShowStartApplication}
-        queryParams={''}
+      <AuthDrawer
+        isOpen={showAuthDrawer}
+        onClose={() => setShowAuthDrawer(false)}
       />
-    )}
-    <AuthDrawer
-      isOpen={showAuthDrawer}
-      onClose={() => setShowAuthDrawer(false)}
-    />
-  </header>
+    </header>
   );
 }
 

@@ -69,7 +69,6 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
 
   const isFreeService = FREE_SERVICES.includes(service.id);
 
-  // ✅ FIXED: Only allow submission if free service OR has active subscription
   // No trial access for paid services
   const canSubmit = isFreeService || hasActiveSubscription;
 

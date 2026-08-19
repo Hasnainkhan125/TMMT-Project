@@ -190,72 +190,116 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
       setIsReviewing(false);
     }
   };
+const handleFraudAlert = async () => {
+  // Validate description
+  if (!fraudAlertData.description.trim()) {
+    toast.warning('Please describe the fraud concern');
+    return;
+  }
 
-  const handleFraudAlert = async () => {
-    try {
-      const token = localStorage.getItem('authToken') || '';
-      const applicationId = (application as any)?._id || (application as any)?.id;
-      
-      await fetch(`${apiBase}/api/v1/visa/${applicationId}/fraud-alert`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify(fraudAlertData)
-      });
-      
-      toast.success(t('success.saved'));
-      setFraudAlertOpen(false);
-      setFraudAlertData({ type: 'document_verification', severity: 'medium', description: '' });
-    } catch (error) {
-      toast.error(t('errors.general'));
-    }
-  };
+  const toastId = toast.loading('Submitting fraud alert...');
+  try {
+    const token = localStorage.getItem('authToken') || '';
+    const applicationId = (application as any)?._id || (application as any)?.id;
 
-  const handleIssuePenalty = async () => {
-    try {
-      const token = localStorage.getItem('authToken') || '';
-      const applicationId = (application as any)?._id || (application as any)?.id;
-      
-      await fetch(`${apiBase}/api/v1/visa/${applicationId}/penalty`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify(penaltyData)
-      });
-      
-      toast.success(t('success.sent'));
-      setPenaltyOpen(false);
-      setPenaltyData({ type: 'late_submission', amount: 0, description: '' });
-    } catch (error) {
-      toast.error(t('errors.general'));
-    }
-  };
+    const response = await fetch(`${apiBase}/api/v1/visa/${applicationId}/fraud-alert`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(fraudAlertData),
+    });
 
-  const handleRequestOTP = async () => {
-    try {
-      const token = localStorage.getItem('authToken') || '';
-      const applicationId = (application as any)?._id || (application as any)?.id;
-      
-      await fetch(`${apiBase}/api/v1/visa/${applicationId}/otp`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify(otpData)
-      });
-      
-      toast.success(t('otp.otpSent'));
-      setOtpOpen(false);
-      setOtpData({ phone: '', minutes: 5 });
-    } catch (error) {
-      toast.error(t('otp.failedToSend'));
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to add fraud alert');
     }
-  };
+
+    toast.success(data.message || 'Fraud alert added successfully!', { id: toastId });
+    setFraudAlertOpen(false);
+    setFraudAlertData({ type: 'document_verification', severity: 'medium', description: '' });
+    toast.info('Fraud alert recorded and will be reviewed', { duration: 4000, icon: '🔒' });
+  } catch (error: any) {
+    console.error('Fraud alert error:', error);
+    toast.error(error.message || 'Failed to add fraud alert', { id: toastId });
+  }
+};
+const handleIssuePenalty = async () => {
+  if (!penaltyData.description.trim() || penaltyData.amount <= 0) {
+    toast.warning('Please fill in all fields (amount must be > 0)');
+    return;
+  }
+
+  const toastId = toast.loading('Issuing penalty...');
+  try {
+    const token = localStorage.getItem('authToken') || '';
+    const applicationId = (application as any)?._id || (application as any)?.id;
+
+    const response = await fetch(`${apiBase}/api/v1/visa/${applicationId}/penalty`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(penaltyData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to issue penalty');
+    }
+
+    toast.success(data.message || `Penalty of AED ${penaltyData.amount} issued successfully!`, {
+      id: toastId,
+      duration: 5000,
+    });
+    setPenaltyOpen(false);
+    setPenaltyData({ type: 'late_submission', amount: 0, description: '' });
+    toast.info(`Penalty Amount: AED ${penaltyData.amount}`, { duration: 3000, icon: '💰' });
+  } catch (error: any) {
+    console.error('Penalty error:', error);
+    toast.error(error.message || 'Failed to issue penalty', { id: toastId });
+  }
+};
+const handleRequestOTP = async () => {
+  if (!otpData.phone.trim()) {
+    toast.warning('Please enter a valid phone number');
+    return;
+  }
+
+  const toastId = toast.loading('Sending OTP...');
+  try {
+    const token = localStorage.getItem('authToken') || '';
+    const applicationId = (application as any)?._id || (application as any)?.id;
+
+    const response = await fetch(`${apiBase}/api/v1/visa/${applicationId}/otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(otpData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to send OTP');
+    }
+
+    toast.success(data.message || `OTP sent to ${otpData.phone}!`, { id: toastId, duration: 5000 });
+    setOtpOpen(false);
+    setOtpData({ phone: '', minutes: 5 });
+    toast.info(`OTP valid for ${otpData.minutes} minutes`, { duration: 3000, icon: '⏱️' });
+  } catch (error: any) {
+    console.error('OTP error:', error);
+    toast.error(error.message || 'Failed to send OTP', { id: toastId });
+  }
+};
+
 
   const handleStatusUpdate = async () => {
     if (!newStatus || newStatus === application.status) return;
@@ -621,54 +665,66 @@ export const ApplicationDetailsDrawer: React.FC<ApplicationDetailsDrawerProps> =
             </div>
           </div>
         </CollapsibleSection>
-
-        {/* ─── Quick Actions ──────────────────────────────────────────── */}
-        <CollapsibleSection title="Quick Actions" defaultOpen={false}>
-          <div className="grid grid-cols-2 gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setFraudAlertOpen(true)}
-              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-all"
-            >
-              <Shield className="w-3.5 h-3.5 mr-1.5 text-red-500" />
-              Fraud Alert
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setPenaltyOpen(true)}
-              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-600 transition-all"
-            >
-              <Gavel className="w-3.5 h-3.5 mr-1.5 text-orange-500" />
-              Penalty
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setOtpOpen(true)}
-              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 transition-all"
-            >
-              <Key className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
-              OTP
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => {
-                setNewStatus(application.status === 'closed' ? 'draft' : 'closed');
-                handleStatusUpdate();
-              }}
-              className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-all"
-            >
-              <Ban className="w-3.5 h-3.5 mr-1.5 text-red-500" />
-              {application.status === 'closed' ? 'Reopen' : 'Close'}
-            </Button>
-          </div>
-        </CollapsibleSection>
+{/* ─── Quick Actions ──────────────────────────────────────────── */}
+<CollapsibleSection title="Quick Actions" defaultOpen={false}>
+  <div className="grid grid-cols-2 gap-2">
+    <Button 
+      variant="outline" 
+      size="sm"
+      onClick={() => {
+        // Show dialog first, then handle action
+        setFraudAlertOpen(true);
+      }}
+      className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-all"
+    >
+      <Shield className="w-3.5 h-3.5 mr-1.5 text-red-500" />
+      Fraud Alert
+    </Button>
+    
+    <Button 
+      variant="outline" 
+      size="sm"
+      onClick={() => setPenaltyOpen(true)}
+      className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-600 transition-all"
+    >
+      <Gavel className="w-3.5 h-3.5 mr-1.5 text-orange-500" />
+      Penalty
+    </Button>
+    
+    <Button 
+      variant="outline" 
+      size="sm"
+      onClick={() => setOtpOpen(true)}
+      className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 transition-all"
+    >
+      <Key className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
+      OTP
+    </Button>
+    
+    <Button 
+      variant="outline" 
+      size="sm"
+      onClick={async () => {
+        const newStatus = application.status === 'closed' ? 'draft' : 'closed';
+        const id = (application as any)?._id || (application as any)?.id;
+        
+        try {
+          setIsUpdating(true);
+          await onStatusUpdate(id, newStatus, `Application ${newStatus === 'closed' ? 'closed' : 'reopened'} by Amer officer`);
+          toast.success(`Application ${newStatus === 'closed' ? 'closed' : 'reopened'} successfully`);
+        } catch (error) {
+          toast.error(`Failed to ${newStatus === 'closed' ? 'close' : 'reopen'} application`);
+        } finally {
+          setIsUpdating(false);
+        }
+      }}
+      className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-all"
+    >
+      <Ban className="w-3.5 h-3.5 mr-1.5 text-red-500" />
+      {application.status === 'closed' ? 'Reopen' : 'Close'}
+    </Button>
+  </div>
+</CollapsibleSection> 
 
         {/* ─── Status Update ────────────────────────────────────────── */}
         <CollapsibleSection title="Update Status" defaultOpen={false}>

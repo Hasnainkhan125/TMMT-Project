@@ -37,8 +37,8 @@ export interface Plan {
 
 // ─── Service Request Note (English & Arabic) ──────────────────────────────
 export const SERVICE_REQUEST_NOTE = {
-  en: 'A Service Request includes one complete TMMT service, such as Emirates ID, Visa, Passport, Driving License, Family Services, Business Services, Vehicle Services, or any supported UAE government service.',
-  ar: 'طلب خدمة واحد يشمل خدمة TMMT كاملة، مثل الهوية الإماراتية، التأشيرة، جواز السفر، رخصة القيادة، الخدمات العائلية، الخدمات التجارية، خدمات المركبات، أو أي خدمة حكومية إماراتية مدعومة.'
+  en: 'A Personal Case Review includes one complete TMMT service, such as Emirates ID, Visa, Passport, Driving License, Family Services, Business Services, Vehicle Services, or any supported UAE government service.',
+  ar: 'مراجعة حالة شخصية واحدة تشمل خدمة TMMT كاملة، مثل الهوية الإماراتية، التأشيرة، جواز السفر، رخصة القيادة، الخدمات العائلية، الخدمات التجارية، خدمات المركبات، أو أي خدمة حكومية إماراتية مدعومة.'
 };
 
 // ─── Arabic translations for all plan data ──────────────────────────────────
@@ -47,7 +47,7 @@ export const ARABIC_PLANS = {
     label: 'شهري',
     headline: 'عضوية TMMT الأساسية',
     bullets: [
-      '3 طلبات خدمات شهرياً (لكل طلب يمكن أن يكون لأي خدمة TMMT)',
+      '3 مراجعات حالة شخصية شهرياً (كل مراجعة يمكن أن تكون لأي خدمة TMMT)',
       '3 فحوصات حالة حكومية مجانية شهرياً',
       'مساعد ذكاء اصطناعي',
       'دعم خبراء (استخدام عادل)',
@@ -55,7 +55,7 @@ export const ARABIC_PLANS = {
       'تتبع الطلبات',
       'خصم 30% على رسوم خدمات TMMT الإضافية'
     ],
-    serviceLimits: '3 طلبات خدمات شهرياً',
+    serviceLimits: '3 مراجعات حالة شخصية شهرياً',
     questionLimits: '3 فحوصات حالة حكومية مجانية شهرياً',
     aiCapabilities: 'مساعد ذكاء اصطناعي أساسي للإرشاد',
     responsePriority: 'خدمة ذات أولوية',
@@ -67,7 +67,7 @@ export const ARABIC_PLANS = {
       'الوصول إلى قاعدة المعرفة'
     ],
     planDetails: {
-      serviceLimit: '3 طلبات / شهر',
+      serviceLimit: '3 مراجعات / شهر',
       questionsPerMonth: '3 فحوصات / شهر',
       aiLevel: 'مساعد ذكاء اصطناعي أساسي',
       priority: 'خدمة ذات أولوية',
@@ -80,14 +80,14 @@ export const ARABIC_PLANS = {
     headline: 'عضوية TMMT المتقدمة',
     bullets: [
       'كل ما في الشهري، بالإضافة إلى:',
-      '4 طلبات خدمات شهرياً',
+      '4 مراجعات حالة شخصية شهرياً',
       '4 فحوصات حالة حكومية مجانية شهرياً',
       'مساعد ذكاء اصطناعي متقدم',
       'دعم خبراء (استخدام عادل)',
       'مراجعة المستندات',
       'خصم 40% على رسوم خدمات TMMT الإضافية'
     ],
-    serviceLimits: '4 طلبات خدمات شهرياً',
+    serviceLimits: '4 مراجعات حالة شخصية شهرياً',
     questionLimits: '4 فحوصات حالة حكومية مجانية شهرياً',
     aiCapabilities: 'مساعد ذكاء اصطناعي متقدم مع تحليل الحالات',
     responsePriority: 'خدمة ذات أولوية عالية',
@@ -104,7 +104,7 @@ export const ARABIC_PLANS = {
       savings: 50,
     },
     planDetails: {
-      serviceLimit: '4 طلبات / شهر',
+      serviceLimit: '4 مراجعات / شهر',
       questionsPerMonth: '4 فحوصات / شهر',
       aiLevel: 'مساعد ذكاء اصطناعي متقدم',
       priority: 'خدمة ذات أولوية عالية',
@@ -117,14 +117,14 @@ export const ARABIC_PLANS = {
     headline: 'عضوية TMMT المميزة',
     bullets: [
       'كل ما في السنوي، بالإضافة إلى:',
-      '5 طلبات خدمات شهرياً',
+      '5 مراجعات حالة شخصية شهرياً',
       '5 فحوصات حالة حكومية مجانية شهرياً',
       'مساعد ذكاء اصطناعي ممتاز',
       'دعم خبراء (استخدام عادل)',
       'مساعدة في تقديم الطلبات بأولوية',
       'خصم 50% على رسوم خدمات TMMT الإضافية'
     ],
-    serviceLimits: '5 طلبات خدمات شهرياً',
+    serviceLimits: '5 مراجعات حالة شخصية شهرياً',
     questionLimits: '5 فحوصات حالة حكومية مجانية شهرياً',
     aiCapabilities: 'مساعد ذكاء اصطناعي ممتاز مع تحليل شامل',
     responsePriority: 'خدمة ذات أولوية قصوى',
@@ -142,7 +142,7 @@ export const ARABIC_PLANS = {
       savings: 50,
     },
     planDetails: {
-      serviceLimit: '5 طلبات / شهر',
+      serviceLimit: '5 مراجعات / شهر',
       questionsPerMonth: '5 فحوصات / شهر',
       aiLevel: 'مساعد ذكاء اصطناعي ممتاز',
       priority: 'خدمة ذات أولوية قصوى',
@@ -207,19 +207,19 @@ export const PLANS: Plan[] = [
     intervalLabel: 'month',
     headline: 'Essential TMMT Membership',
     bullets: [
-      '3 Service Requests per month (Any TMMT service)',
+      '3 Personal Case Reviews per month (Any TMMT service)',
       '3 Free Government Status Checks per month',
       'AI Assistant',
       'Expert Support (Fair Usage)',
       'Smart Renewal Reminders',
       'Application Tracking',
-      '30% off additional TMMT service fees'
+      '30% off TMMT fee'
     ],
-    serviceLimits: '3 Service Requests per month',
+    serviceLimits: '3 Personal Case Reviews per month',
     questionLimits: '3 Free Government Status Checks per month',
     aiCapabilities: 'Basic AI Assistant for guidance',
     responsePriority: 'Priority Service',
-    discounts: '30% off additional TMMT service fees',
+    discounts: '30% off TMMT fee',
     additionalBenefits: [
       'Smart renewal reminders',
       'Application tracking',
@@ -227,7 +227,7 @@ export const PLANS: Plan[] = [
       'Access to knowledge base'
     ],
     planDetails: {
-      serviceLimit: '3 requests / month',
+      serviceLimit: '3 reviews / month',
       questionsPerMonth: '3 checks / month',
       aiLevel: 'Basic AI Assistant',
       priority: 'Priority Service',
@@ -247,18 +247,18 @@ export const PLANS: Plan[] = [
     headline: 'Advanced TMMT Membership',
     bullets: [
       'Everything in Monthly, plus:',
-      '4 Service Requests per month',
+      '4 Personal Case Reviews per month',
       '4 Free Government Status Checks per month',
       'Advanced AI Assistant',
       'Expert Support (Fair Usage)',
       'Document Review',
-      '40% off additional TMMT service fees'
+      '40% off TMMT fee'
     ],
-    serviceLimits: '4 Service Requests per month',
+    serviceLimits: '4 Personal Case Reviews per month',
     questionLimits: '4 Free Government Status Checks per month',
     aiCapabilities: 'Advanced AI Assistant with case analysis',
     responsePriority: 'High Priority Service',
-    discounts: '40% off additional TMMT service fees',
+    discounts: '40% off TMMT fee',
     additionalBenefits: [
       'Document review',
       'Smart renewal alerts with personalized recommendations',
@@ -271,7 +271,7 @@ export const PLANS: Plan[] = [
       savings: 50,
     },
     planDetails: {
-      serviceLimit: '4 requests / month',
+      serviceLimit: '4 reviews / month',
       questionsPerMonth: '4 checks / month',
       aiLevel: 'Advanced AI Assistant',
       priority: 'High Priority Service',
@@ -290,18 +290,18 @@ export const PLANS: Plan[] = [
     headline: 'Premium TMMT Membership',
     bullets: [
       'Everything in the 1-Year plan, plus:',
-      '5 Service Requests per month',
+      '5 Personal Case Reviews per month',
       '5 Free Government Status Checks per month',
       'Premium AI Assistant',
       'Expert Support (Fair Usage)',
       'Priority Application Assistance',
-      '50% off additional TMMT service fees'
+      '50% off TMMT fee'
     ],
-    serviceLimits: '5 Service Requests per month',
+    serviceLimits: '5 Personal Case Reviews per month',
     questionLimits: '5 Free Government Status Checks per month',
     aiCapabilities: 'Premium AI Assistant with comprehensive analysis',
     responsePriority: 'Highest Priority Service',
-    discounts: '50% off additional TMMT service fees',
+    discounts: '50% off TMMT fee',
     additionalBenefits: [
       'Priority application assistance',
       'Comprehensive document review',
@@ -315,7 +315,7 @@ export const PLANS: Plan[] = [
       savings: 50,
     },
     planDetails: {
-      serviceLimit: '5 requests / month',
+      serviceLimit: '5 reviews / month',
       questionsPerMonth: '5 checks / month',
       aiLevel: 'Premium AI Assistant',
       priority: 'Highest Priority Service',

@@ -467,7 +467,7 @@ export function LegacyStartApplicationDialog({ open, onOpenChange, queryParams =
       const systemMessage: ChatMessage = {
         id: Date.now().toString(),
         type: 'system',
-        content: `✅ Connected to ${payload?.officerName || 'Amer Officer'}. You can now chat live!`,
+        content: `Connected to ${payload?.officerName || 'Amer Officer'}. You can now chat live!`,
         timestamp: new Date()
       }
       setAmerChat(prev => [...prev, systemMessage])

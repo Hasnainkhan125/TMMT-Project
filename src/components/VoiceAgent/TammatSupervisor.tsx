@@ -781,7 +781,7 @@ const TammatSupervisor = ({
       >
         <button
           onClick={() => setIsCollapsed(false)}
-className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269] to-[#1a4a7a] dark:from-[#0A3269] dark:to-[#0A3269]/80 hover:shadow-lg hover:shadow-[#0A3269]/30 dark:hover:shadow-[#4A8ABF]/30 transition-all hover:scale-105"          aria-label="Open chat"
+className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269] to-[#0A3269] dark:from-[#0A3269] dark:to-[#0A3269]/80 hover:shadow-lg hover:shadow-[#0A3269]/30 dark:hover:shadow-[#4A8ABF]/30 transition-all hover:scale-105"          aria-label="Open chat"
         >
           <MessageSquare className="absolute inset-0 m-auto h-6 w-6 text-white" strokeWidth={1.5} />
           {connectionStatus === 'connected' && (
@@ -1430,7 +1430,7 @@ const EmptyState = ({
       className="space-y-5 py-2"
     >
       <div className="text-center space-y-3 pt-2 pb-4">
-        <div className="inline-flex h-16 w-16 rounded-full bg-gradient-to-br from-[#0A3269] to-[#1a4a7a] items-center justify-center text-white text-2xl font-bold shadow-lg shadow-[#0A3269]/20">
+        <div className="inline-flex h-16 w-16 rounded-full bg-gradient-to-br from-[#0A3269] to-[#0A3269] items-center justify-center text-white text-2xl font-bold shadow-lg shadow-[#0A3269]/20">
           <GraduationCap className="h-8 w-8" />
         </div>
         <div>

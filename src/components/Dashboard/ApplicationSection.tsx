@@ -507,7 +507,6 @@ export function ApplicationsSection({
           )}
         </AnimatePresence>
 
-        {/* ✅ Golden Guarantee Card - Bottom of Applications Section */}
         <GoldenGuaranteeCard />
 
         {/* Result modal */}

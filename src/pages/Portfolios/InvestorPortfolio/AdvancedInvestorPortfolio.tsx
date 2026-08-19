@@ -1454,7 +1454,7 @@ const AdvancedInvestorPortfolio = () => {
       <motion.aside
         className="border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#0a0a0f] sticky top-0 hidden h-screen shrink-0 border-r lg:flex lg:flex-col"
         animate={{
-          width: isSidebarCollapsed ? 68 : 272,
+          width: isSidebarCollapsed ? 60 : 272,
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
@@ -1466,19 +1466,17 @@ const AdvancedInvestorPortfolio = () => {
               width: isSidebarCollapsed ? 36 : 'auto',
             }}
           >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]">
               {TMMTLogo ? (
                 <img
                   src={TMMTLogo}
                   alt="Tammat logo"
                   width={22}
                   height={22}
-                  className="h-10 w-17 object-contain brightness-0 invert"
+                  className="h-15 w-17 object-contain dark:brightness-0 dark:invert"
                 />
               ) : (
                 <Building2 className="h-5 w-5 text-white" />
               )}
-            </div>
             <motion.div
               className="overflow-hidden"
               initial={{ opacity: 0, width: 0 }}

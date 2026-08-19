@@ -313,7 +313,7 @@ function DocumentThumbnail({ doc, checkId, onPreview, onDownload }: DocumentThum
                 loading ? 'opacity-0' : 'opacity-100'
               }`}
               onLoad={() => {
-                console.log('✅ Image loaded:', currentUrl)
+                console.log(' Image loaded:', currentUrl)
                 setLoading(false)
               }}
               onError={handleImageError}
@@ -1514,7 +1514,7 @@ const ChecksReviewPanel: React.FC = () => {
                                               </p>
                                             )}
                                             <p className="text-[10px] text-slate-400 dark:text-slate-500 ml-7 mt-1">
-                                              {isFulfilled ? '✅ Fulfilled' : '⏳ Pending'}
+                                              {isFulfilled ? ' Fulfilled' : '⏳ Pending'}
                                             </p>
                                           </div>
                                           <div className="flex items-center gap-2 shrink-0">

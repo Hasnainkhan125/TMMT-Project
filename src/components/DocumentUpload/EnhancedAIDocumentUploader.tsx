@@ -192,7 +192,7 @@ const EnhancedAIDocumentUploader: React.FC<AIDocumentUploaderProps> = ({
       // Parse extracted text and map to fields
       const parsedData = parseExtractedText(extractedText, requirement);
       
-      toast.success(`✅ AI analysis completed for ${requirement.name}`);
+      toast.success(`AI analysis completed for ${requirement.name}`);
       return parsedData;
       
     } catch (error) {

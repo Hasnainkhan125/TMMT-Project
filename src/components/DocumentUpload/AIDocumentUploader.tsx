@@ -254,7 +254,7 @@ const AIDocumentUploader: React.FC<AIDocumentUploaderProps> = ({
       // Mock extracted data based on document type
       const mockData = generateMockExtractedData(requirement, file.name);
       
-      toast.success(`✅ AI analysis completed for ${requirement.name}`);
+      toast.success(`AI analysis completed for ${requirement.name}`);
       return mockData;
       
     } catch (error) {

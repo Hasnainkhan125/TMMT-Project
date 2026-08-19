@@ -239,7 +239,7 @@ const DocumentScanner: React.FC<DocumentScannerProps> = ({ onComplete, className
         )
       );
 
-      toast.success(`✅ ${documentType.name} processed successfully!`);
+      toast.success(`${documentType.name} processed successfully!`);
 
       // Auto-advance to next document if available
       if (currentStep < DOCUMENT_TYPES.length - 1) {

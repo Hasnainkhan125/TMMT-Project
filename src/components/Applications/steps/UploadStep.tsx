@@ -767,7 +767,7 @@ export default function UploadStep({ docDefs, onNext }: UploadStepProps) {
               <div className="flex items-center gap-2 flex-wrap">
                 <p className="text-[15px] font-semibold text-zinc-800 dark:text-white">
                   {allRequiredDone
-                    ? t('upload.allSetTitle', '✅ All required documents uploaded!')
+                    ? t('upload.allSetTitle', 'All required documents uploaded!')
                     : `${doneCount} ${t('upload.of', 'of')} ${totalRequired} ${t('upload.uploaded', 'uploaded')}`}
                 </p>
                 {!allRequiredDone && errorCount > 0 && (

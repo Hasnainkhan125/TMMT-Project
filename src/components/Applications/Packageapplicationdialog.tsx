@@ -178,7 +178,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
             
             if (success) {
               uploadResults.push({ ...doc, success: true });
-              toast.success(`✅ ${doc.label} uploaded`);
+              toast.success(` ${doc.label} uploaded`);
             } else {
               uploadResults.push({ ...doc, success: false });
               setUploadErrors(prev => [...prev, doc.label]);
@@ -205,7 +205,7 @@ export default function PackageApplicationDialog({ open, onOpenChange, packages 
         setUploading(false);
       }
 
-      toast.success('✅ Application submitted successfully!');
+      toast.success(' Application submitted successfully!');
       setDone(true);
       
     } catch (error) {

@@ -266,7 +266,7 @@ const VideoSection = () => {
 
             {/* ─── Right Column - Video (3D tilt frame) ────────── */}
             <div
-              className="relative px-0 order-1 lg:order-2"
+              className="relative px-0 order-1 lg:order-2 "
               style={{ perspective: '1200px' }}
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={handleFrameMouseLeave}
@@ -278,7 +278,6 @@ const VideoSection = () => {
                 className="relative cursor-pointer group"
                 style={{
                   transformStyle: 'preserve-3d',
-                  transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
                   transition: fastTransition
                     ? 'transform 0.08s ease-out'
                     : 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
@@ -291,10 +290,10 @@ const VideoSection = () => {
                     border: `1px solid ${isDarkMode ? INK_LIGHTER + '26' : INK + '14'}`,
                   }}
                 >
-                  <div className="relative aspect-video bg-black flex items-center justify-center">
+                  <div className="relative aspect-video  bg-black flex items-center justify-center">
                     <video
                       ref={videoRef}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain "
                       src={subscriptionVideo}
                       autoPlay
                       loop
@@ -303,15 +302,7 @@ const VideoSection = () => {
                       preload="auto"
                     />
 
-                    {/* Cursor-following glare sweep */}
-                    <div
-                      className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-                      style={{
-                        opacity: glare.opacity * 0.22,
-                        background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, #ffffff, transparent 45%)`,
-                      }}
-                    />
-
+               
                     {/* ─── Play Button — raised 3D chip, floats above the frame ─── */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transformStyle: 'preserve-3d' }}>
                       <div

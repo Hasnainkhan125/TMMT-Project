@@ -71,6 +71,10 @@ import {
   Package,
   Command,
   Radio,
+  Activity,
+  BarChart3,
+  DollarSign,
+  Percent,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -98,27 +102,43 @@ import CheckCard from '@/components/Checks/CheckCard';
 import PackageCard from '@/components/PackageCard/PackageCard';
 import { usePackageAdmin } from '@/hooks/usePackageAdmin';
 
-// Import your existing components
 import ProfilePage from './ProfilePage';
 import DocumentPage from './DocumentPage';
 import CompliancePage from './CompliancePage';
-import GuideSubmissionSuccess from './GuideSubmissionSuccess'; // same folder// ─── Design Tokens ──────────────────────────────────────────────────────────
-const ACCENT = {
+import GuideSubmissionSuccess from './GuideSubmissionSuccess';
+
+// ─── Modern Design Tokens ──────────────────────────────────────────────
+const COLORS = {
   primary: '#14235E',
   primaryLight: '#1a4a7a',
-  primaryDark: '#082a5a',
+  primaryDark: '#0e1a4a',
+  primaryBg: '#14235E08',
+  primaryBorder: '#14235E20',
   teal: '#0d9488',
+  tealBg: '#0d948808',
   amber: '#d97706',
-  slate: '#64748b',
-  cream: '#d4c9b3',
+  amberBg: '#d9770608',
   violet: '#7c3aed',
+  violetBg: '#7c3aed08',
+  rose: '#e11d48',
+  roseBg: '#e11d4808',
+  emerald: '#059669',
+  emeraldBg: '#05966908',
+  slate: '#64748b',
+  slateBg: '#64748b08',
+  cream: '#d4c9b3',
+  surface: '#f8fafc',
+  surfaceDark: '#0c0c14',
+  border: '#e2e8f0',
+  borderDark: '#1e1e2a',
+  text: '#0f172a',
+  textSecondary: '#64748b',
+  textDark: '#f1f5f9',
+  textSecondaryDark: '#94a3b8',
 };
 
-// Navigation Items with icons — grouped for the sidebar
-const NAV_GROUPS: {
-  label: string;
-  items: { path: string; label: string; icon: any; key: string }[];
-}[] = [
+// ─── Navigation ─────────────────────────────────────────────────────────
+const NAV_GROUPS = [
   {
     label: 'General',
     items: [
@@ -138,46 +158,21 @@ const NAV_GROUPS: {
       { path: '/user/profile', label: 'Profile', icon: User, key: 'profile' },
     ],
   },
-{
-  label: 'Guide',
-  items: [
-    { path: '/investor/success', label: 'Guide Submission', icon: BookOpen, key: 'guide-submission' },
-  ],
-},
+  {
+    label: 'Guide',
+    items: [
+      { path: '/investor/success', label: 'Guide Submission', icon: BookOpen, key: 'guide-submission' },
+    ],
+  },
 ];
 
 const NAV_ITEMS = NAV_GROUPS.flatMap((g) => g.items);
 
 const GOV_SERVICES = [
-  {
-    key: 'mohre',
-    label: 'MOHRE',
-    sub: 'Labour affairs',
-    url: 'https://www.mohre.gov.ae',
-    icon: Building2,
-  },
-  {
-    key: 'gdrfa',
-    label: 'GDRFA',
-    sub: 'Residency & entry',
-    url: 'https://www.gdrfad.gov.ae',
-    icon: Shield,
-  },
-  {
-    key: 'icp',
-    label: 'ICP',
-    sub: 'Identity & citizenship',
-    url: 'https://smartservices.icp.gov.ae',
-    icon: UserCheck,
-  },
-  {
-    key: 'moh',
-    label: 'MOH',
-    sub: 'Health authority',
-    url: 'https://www.moh.gov.ae',
-    icon: Heart,
-  },
-  
+  { key: 'mohre', label: 'MOHRE', sub: 'Labour affairs', url: 'https://www.mohre.gov.ae', icon: Building2 },
+  { key: 'gdrfa', label: 'GDRFA', sub: 'Residency & entry', url: 'https://www.gdrfad.gov.ae', icon: Shield },
+  { key: 'icp', label: 'ICP', sub: 'Identity & citizenship', url: 'https://smartservices.icp.gov.ae', icon: UserCheck },
+  { key: 'moh', label: 'MOH', sub: 'Health authority', url: 'https://www.moh.gov.ae', icon: Heart },
 ];
 
 type TabKey = 'dashboard' | 'documents' | 'compliance' | 'profile' | 'guide-submission';
@@ -185,18 +180,74 @@ type CheckFilter = 'all' | 'pending' | 'processing' | 'completed' | 'failed';
 type ApplicationFilter = 'all' | 'submitted' | 'under_review' | 'docs_required' | 'approved';
 type DataView = 'checks' | 'applications' | 'packages' | null;
 
+// ─── Modern Status Config ─────────────────────────────────────────────
+const getStatusConfig = (status: string) => {
+  const map: Record<string, { icon: any; color: string; bg: string; label: string }> = {
+    approved: {
+      icon: CheckCircle,
+      color: 'text-emerald-600 dark:text-emerald-400',
+      bg: 'bg-emerald-50 dark:bg-emerald-950/30',
+      label: 'Approved',
+    },
+    under_review: {
+      icon: Clock,
+      color: 'text-blue-600 dark:text-blue-400',
+      bg: 'bg-blue-50 dark:bg-blue-950/30',
+      label: 'Under Review',
+    },
+    docs_required: {
+      icon: AlertCircle,
+      color: 'text-amber-600 dark:text-amber-400',
+      bg: 'bg-amber-50 dark:bg-amber-950/30',
+      label: 'Docs Required',
+    },
+    submitted: {
+      icon: Clock,
+      color: 'text-purple-600 dark:text-purple-400',
+      bg: 'bg-purple-50 dark:bg-purple-950/30',
+      label: 'Submitted',
+    },
+    pending: {
+      icon: Clock,
+      color: 'text-slate-600 dark:text-slate-400',
+      bg: 'bg-slate-50 dark:bg-slate-950/30',
+      label: 'Pending',
+    },
+    processing: {
+      icon: Activity,
+      color: 'text-indigo-600 dark:text-indigo-400',
+      bg: 'bg-indigo-50 dark:bg-indigo-950/30',
+      label: 'Processing',
+    },
+    completed: {
+      icon: Check,
+      color: 'text-emerald-600 dark:text-emerald-400',
+      bg: 'bg-emerald-50 dark:bg-emerald-950/30',
+      label: 'Completed',
+    },
+    failed: {
+      icon: XCircle,
+      color: 'text-rose-600 dark:text-rose-400',
+      bg: 'bg-rose-50 dark:bg-rose-950/30',
+      label: 'Failed',
+    },
+    cancelled: {
+      icon: XCircle,
+      color: 'text-slate-600 dark:text-slate-400',
+      bg: 'bg-slate-50 dark:bg-slate-950/30',
+      label: 'Cancelled',
+    },
+  };
+  return map[status] || map.pending;
+};
+
+const COLORS_CHART = ['#14235E', '#0d9488', '#d97706', '#7c3aed', '#059669', '#64748b'];
+
 const AdvancedInvestorPortfolio = () => {
   const { t } = useTranslation();
   const { signOut, user } = useAuth();
-  const { applications, userDetails, stats, loading, fetchApplications } =
-    useApplications();
-
-  // ─── Package Applications ──────────────────────────────────────────────
-  const {
-    applications: packageApps,
-    loading: packageLoading,
-    fetchApplications: fetchPackages,
-  } = usePackageAdmin({ mine: true });
+  const { applications, userDetails, stats, loading, fetchApplications } = useApplications();
+  const { applications: packageApps, loading: packageLoading, fetchApplications: fetchPackages } = usePackageAdmin({ mine: true });
 
   useEffect(() => {
     fetchPackages();
@@ -204,13 +255,15 @@ const AdvancedInvestorPortfolio = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-const getTabFromPath = (path: string): TabKey => {
-  if (path.includes('/user/documents')) return 'documents';
-  if (path.includes('/investor/compliance')) return 'compliance';
-  if (path.includes('/user/profile')) return 'profile';
-  if (path === '/success' || path === '/investor/success') return 'guide-submission';
-  return 'dashboard';
-};
+
+  const getTabFromPath = (path: string): TabKey => {
+    if (path.includes('/user/documents')) return 'documents';
+    if (path.includes('/investor/compliance')) return 'compliance';
+    if (path.includes('/user/profile')) return 'profile';
+    if (path === '/success' || path === '/investor/success') return 'guide-submission';
+    return 'dashboard';
+  };
+
   const handleEmailClick = () => {
     const email = 'support@tammat.ae';
     window.location.href = `mailto:${email}`;
@@ -225,8 +278,7 @@ const getTabFromPath = (path: string): TabKey => {
 
   const [activeTab, setActiveTab] = useState<TabKey>(getTabFromPath(location.pathname));
   const [showStartApplication, setShowStartApplication] = useState(false);
-  const [selectedApplication, setSelectedApplication] =
-    useState<EnhancedVisaApplication | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<EnhancedVisaApplication | null>(null);
   const [showApplicationDetails, setShowApplicationDetails] = useState(false);
   const [expandedApplicationIds, setExpandedApplicationIds] = useState<Set<string>>(new Set());
   const [checks, setChecks] = useState<any[]>([]);
@@ -240,18 +292,13 @@ const getTabFromPath = (path: string): TabKey => {
     return false;
   });
 
-  // ─── Filter States ──────────────────────────────────────────────────────────
   const [checkFilter, setCheckFilter] = useState<CheckFilter>('all');
   const [appFilter, setAppFilter] = useState<ApplicationFilter>('all');
   const [packageFilter, setPackageFilter] = useState<'all' | 'submitted' | 'processing' | 'completed' | 'cancelled'>('all');
   const [dataView, setDataView] = useState<DataView>(null);
 
   const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
-
-  // ─── Brand Color ──────────────────────────────────────────────────────────
   const primaryColor = '#14235E';
-  const primaryColorLight = '#14235E' + '30';
-  const primaryColorLighter = '#14235E' + '15';
 
   useEffect(() => {
     setActiveTab(getTabFromPath(location.pathname));
@@ -275,7 +322,6 @@ const getTabFromPath = (path: string): TabKey => {
         if (res.ok) {
           const data = await res.json();
           const rawChecks = data.data?.checks || [];
-
           const normalisedChecks = rawChecks.map((check: any) => ({
             ...check,
             id: check._id || check.id,
@@ -297,7 +343,6 @@ const getTabFromPath = (path: string): TabKey => {
             isFreeService: check.is_free_service ?? check.isFreeService ?? false,
             amount: check.amount ?? 0,
           }));
-
           setChecks(normalisedChecks);
         }
       } catch (error) {
@@ -309,7 +354,6 @@ const getTabFromPath = (path: string): TabKey => {
     fetchChecks();
   }, []);
 
-  // ─── Filtered Data ──────────────────────────────────────────────────────────
   const filteredChecks = checks.filter((check) => {
     if (checkFilter === 'all') return true;
     return check.status === checkFilter;
@@ -335,9 +379,7 @@ const getTabFromPath = (path: string): TabKey => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       if (!response.ok) throw new Error('Download failed');
-
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -347,7 +389,6 @@ const getTabFromPath = (path: string): TabKey => {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-
       toast.success(t('success.downloaded'));
     } catch (error) {
       toast.error(t('errors.fileUploadError'));
@@ -386,60 +427,13 @@ const getTabFromPath = (path: string): TabKey => {
   const handleViewAllUrgent = () => {
     setDataView('applications');
     setAppFilter('docs_required');
-    toast.info(`Showing ${urgentApplications.length} application(s) requiring documents`, {
-      duration: 2000,
-    });
+    toast.info(`Showing ${urgentApplications.length} application(s) requiring documents`, { duration: 2000 });
     setTimeout(() => {
       const applicationsSection = document.getElementById('applications-section');
       if (applicationsSection) {
         applicationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 100);
-  };
-
-  const getStatusConfig = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return {
-          icon: CheckCircle,
-          color: 'text-emerald-600 dark:text-emerald-400',
-          bg: 'bg-emerald-50 dark:bg-emerald-950/30',
-          border: 'border-emerald-200 dark:border-emerald-800/30',
-          label: 'Approved',
-        };
-      case 'under_review':
-        return {
-          icon: Clock,
-          color: 'text-blue-600 dark:text-blue-400',
-          bg: 'bg-blue-50 dark:bg-blue-950/30',
-          border: 'border-blue-200 dark:border-blue-800/30',
-          label: 'Under Review',
-        };
-      case 'docs_required':
-        return {
-          icon: AlertCircle,
-          color: 'text-amber-600 dark:text-amber-400',
-          bg: 'bg-amber-50 dark:bg-amber-950/30',
-          border: 'border-amber-200 dark:border-amber-800/30',
-          label: 'Docs Required',
-        };
-      case 'submitted':
-        return {
-          icon: Clock,
-          color: 'text-purple-600 dark:text-purple-400',
-          bg: 'bg-purple-50 dark:bg-purple-950/30',
-          border: 'border-purple-200 dark:border-purple-800/30',
-          label: 'Submitted',
-        };
-      default:
-        return {
-          icon: FileText,
-          color: 'text-gray-500 dark:text-gray-400',
-          bg: 'bg-gray-50 dark:bg-white/5',
-          border: 'border-gray-200 dark:border-white/10',
-          label: status.replace('_', ' '),
-        };
-    }
   };
 
   const chartData = {
@@ -459,56 +453,19 @@ const getTabFromPath = (path: string): TabKey => {
       { month: 'Jun', applications: 25, approved: 20, pending: 5 },
     ],
   };
-  const COLORS = [ACCENT.primary, ACCENT.teal, ACCENT.amber, ACCENT.violet, '#0d9488', '#64748b'];
 
   const STAT_CARDS = [
-    {
-      key: 'total',
-      label: 'Total Applications',
-      sub: 'All time',
-      value: stats.total || 0,
-      icon: FileText,
-      trend: '+12%',
-      trendUp: true,
-      accent: ACCENT.primary,
-    },
-    {
-      key: 'under_review',
-      label: 'In Progress',
-      sub: 'Being reviewed',
-      value: stats.under_review || 0,
-      icon: Clock,
-      trend: '+5%',
-      trendUp: true,
-      accent: ACCENT.slate,
-    },
-    {
-      key: 'approved',
-      label: 'Approved',
-      sub: 'Completed',
-      value: stats.approved || 0,
-      icon: CheckCircle,
-      trend: '+18%',
-      trendUp: true,
-      accent: ACCENT.teal,
-    },
-    {
-      key: 'docs_required',
-      label: 'Pending Action',
-      sub: 'Needs documents',
-      value: stats.docs_required || 0,
-      icon: AlertCircle,
-      trend: '-3%',
-      trendUp: false,
-      accent: ACCENT.amber,
-    },
+    { key: 'total', label: 'Total Applications', value: stats.total || 0, icon: FileText, trend: '+12%', up: true, accent: COLORS.primary },
+    { key: 'under_review', label: 'In Progress', value: stats.under_review || 0, icon: Clock, trend: '+5%', up: true, accent: COLORS.slate },
+    { key: 'approved', label: 'Approved', value: stats.approved || 0, icon: CheckCircle, trend: '+18%', up: true, accent: COLORS.teal },
+    { key: 'docs_required', label: 'Pending Action', value: stats.docs_required || 0, icon: AlertCircle, trend: '-3%', up: false, accent: COLORS.amber },
   ];
 
   const handleNavigate = (path: string) => {
     navigate(path);
   };
 
-  const checkFilterButtons: { key: CheckFilter; label: string; count: number }[] = [
+  const checkFilterButtons = [
     { key: 'all', label: 'All', count: checks.length },
     { key: 'pending', label: 'Pending', count: checks.filter(c => c.status === 'pending').length },
     { key: 'processing', label: 'Processing', count: checks.filter(c => c.status === 'processing').length },
@@ -516,7 +473,7 @@ const getTabFromPath = (path: string): TabKey => {
     { key: 'failed', label: 'Failed', count: checks.filter(c => c.status === 'failed').length },
   ];
 
-  const appFilterButtons: { key: ApplicationFilter; label: string; count: number }[] = [
+  const appFilterButtons = [
     { key: 'all', label: 'All', count: applications.length },
     { key: 'submitted', label: 'Submitted', count: applications.filter(a => a.status === 'submitted').length },
     { key: 'under_review', label: 'Under Review', count: applications.filter(a => a.status === 'under_review').length },
@@ -524,815 +481,468 @@ const getTabFromPath = (path: string): TabKey => {
     { key: 'approved', label: 'Approved', count: applications.filter(a => a.status === 'approved').length },
   ];
 
-  // Shared pill-filter classes - using primary color
   const pillBtnClass = (active: boolean) => `
-    px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-medium transition-all duration-200 border whitespace-nowrap
+    px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 border
     ${active
-      ? 'bg-[#14235E] text-white border-[#14235E] shadow-[0_0_0_1px_rgba(10,50,105,0.35)]'
-      : 'bg-gray-100 dark:bg-white/[0.03] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#14235E]/40 hover:text-[#14235E]'
+      ? 'bg-[#14235E] text-white border-[#14235E] shadow-sm'
+      : 'bg-transparent text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#14235E]/40 hover:text-[#14235E] dark:hover:text-white'
     }
   `;
 
-  // ─── Dashboard Content ─────────────────────────────────────────────────────
+  // ─── Dashboard Content ──────────────────────────────────────────────
   const DashboardContent = () => (
-    <>
+    <div className="space-y-6">
+      {/* Urgent Banner */}
       {urgentApplications.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <Card className="border-amber-200/60 dark:border-amber-800/30 bg-amber-50/60 dark:bg-amber-950/15 rounded-2xl transition-colors">
-            <CardContent className="flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100/60 dark:bg-amber-900/30 border border-amber-200/60 dark:border-amber-800/30">
-                  <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
-                    {urgentApplications.length} Action
-                    {urgentApplications.length > 1 ? 's' : ''} Required
-                  </p>
-                  <p className="text-xs text-amber-700/70 dark:text-amber-300/60">
-                    Documents needed for your applications
-                  </p>
-                </div>
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="rounded-xl border border-amber-200/60 dark:border-amber-800/30 bg-amber-50/70 dark:bg-amber-950/20 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
+                <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </div>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleViewAllUrgent}
-                className="border-amber-300/60 dark:border-amber-700/50 text-amber-700 dark:text-amber-300 hover:bg-amber-100/50 dark:hover:bg-amber-900/30 w-full rounded-xl sm:w-auto transition-colors duration-200 group"
-              >
-                View All
-                <ArrowUpRight className="ml-1 h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Button>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                  {urgentApplications.length} Action{urgentApplications.length > 1 ? 's' : ''} Required
+                </p>
+                <p className="text-xs text-amber-700/70 dark:text-amber-300/60">Documents needed for your applications</p>
+              </div>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleViewAllUrgent}
+              className="border-amber-300/60 dark:border-amber-700/50 text-amber-700 dark:text-amber-300 hover:bg-amber-100/50 dark:hover:bg-amber-900/30 rounded-xl w-full sm:w-auto"
+            >
+              View All
+              <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+            </Button>
+          </div>
         </motion.div>
       )}
 
-      {/* ─── Top metric strip ────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
-        {STAT_CARDS.map(({ key, label, sub, value, trend, trendUp, accent }, i) => (
-          <motion.div
-            key={key}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.06 }}
-          >
-            <div className="relative overflow-hidden rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c] p-3.5 sm:p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-300 dark:hover:border-white/[0.14]">
-              <span
-                className="absolute inset-x-0 top-0 h-[3px]"
-                style={{ backgroundColor: accent }}
-              />
-              <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-                {label}
-              </p>
-              <div className="mt-2 flex items-end justify-between gap-2">
-                <p className="text-xl sm:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight">
-                  {value}
-                </p>
-                <span
-                  className={`inline-flex items-center gap-0.5 rounded-full px-2 py-1 text-[10px] font-medium ${
-                    trendUp
-                      ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400'
-                      : 'bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400'
-                  }`}
-                >
-                  {trendUp ? '↗' : '↘'} {trend}
-                </span>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {STAT_CARDS.map(({ key, label, value, icon: Icon, trend, up, accent }, i) => (
+          <motion.div key={key} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+            <div className="relative overflow-hidden rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14] p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/5">
+              <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: accent }} />
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500">{label}</p>
+                  <p className="mt-1.5 text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{value}</p>
+                </div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-gray-500">
+                  <Icon className="h-4 w-4" />
+                </div>
               </div>
-              <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500 font-light">{sub}</p>
+              <div className="mt-2 flex items-center gap-1.5">
+                <span className={`text-xs font-medium ${up ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                  {up ? '↑' : '↓'} {trend}
+                </span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">vs last month</span>
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* ─── Charts Section ─────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
-        <Card className="md:col-span-2 rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
-          <CardHeader className="pb-1.5 px-4 pt-4 sm:px-5 sm:pt-5">
-            <CardTitle className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-gray-100">
-              Application Trend
-            </CardTitle>
-            <CardDescription className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-light">
-              Jan – Jun 2026 monthly trajectory
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
-            <ResponsiveContainer width="100%" height={230}>
-              <AreaChart data={chartData.monthlyTrend}>
-                <defs>
-                  <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={ACCENT.primary} stopOpacity={0.35} />
-                    <stop offset="95%" stopColor={ACCENT.primary} stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#94a3b8" opacity={0.15} />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 300 }}
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  width={25}
-                  tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 300 }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'rgba(18,18,28,0.95)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '10px',
-                    padding: '6px 10px',
-                    fontSize: '11px',
-                    color: '#f5f5f7',
-                  }}
-                  formatter={(value) => [`${value} applications`, 'Total']}
-                  labelStyle={{ color: '#ffffff' }}
-                  itemStyle={{ color: '#ffffff' }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="applications"
-                  stroke={ACCENT.primary}
-                  strokeWidth={2.5}
-                  fill="url(#trendFill)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
-          <CardHeader className="pb-1.5 px-4 pt-4 sm:px-5 sm:pt-5">
-            <CardTitle className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-gray-100">
-              Status Distribution
-            </CardTitle>
-            <CardDescription className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-light">
-              Share by application status
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
-            {chartData.statusDistribution.length > 0 ? (
-              <>
-                <div className="relative">
-                  <ResponsiveContainer width="100%" height={160}>
-                    <RechartsPie>
-                      <Pie
-                        data={chartData.statusDistribution}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={45}
-                        outerRadius={70}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {chartData.statusDistribution.map((_, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                            stroke="transparent"
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: 'rgba(18,18,28,0.95)',
-                          border: '1px solid rgba(255,255,255,0.1)',
-                          borderRadius: '10px',
-                          padding: '6px 10px',
-                          fontSize: '11px',
-                          color: '#f5f5f7',
-                        }}
-                        formatter={(value, name) => [`${value} applications`, name]}
-                        labelStyle={{ color: '#ffffff' }}
-                        itemStyle={{ color: '#ffffff' }}
-                      />
-                    </RechartsPie>
-                  </ResponsiveContainer>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                    <p className="text-[9px] font-light text-gray-400 dark:text-gray-500">Total</p>
-                    <p className="text-base font-semibold text-gray-900 dark:text-white">
-                      {chartData.statusDistribution.reduce((sum, item) => sum + item.value, 0)}
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-3 space-y-1.5">
-                  {chartData.statusDistribution.map((item, index) => (
-                    <div key={item.name} className="flex items-center gap-2 text-[11px]">
-                      <span
-                        className="h-2 w-2 shrink-0 rounded-sm"
-                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                      />
-                      <span className="min-w-0 flex-1 truncate text-gray-600 dark:text-gray-400">{item.name}</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="py-10 text-center">
-                <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-gray-100 dark:bg-white/[0.03] flex items-center justify-center">
-                  <PieChartIcon className="h-5 w-5 text-gray-300 dark:text-gray-600" />
-                </div>
-                <p className="text-xs text-gray-400 dark:text-gray-500 font-light">No data to display</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+      {/* Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <Card className="md:col-span-2 rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14]">
+  <CardHeader className="pb-2">
+    <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">Application Trend</CardTitle>
+    <CardDescription className="text-xs text-gray-400 dark:text-gray-500">Monthly application activity</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <ResponsiveContainer width="100%" height={220}>
+      <AreaChart data={chartData.monthlyTrend}>
+        <defs>
+          <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#14235E" stopOpacity={0.25} />
+            <stop offset="95%" stopColor="#14235E" stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid
+          strokeDasharray="3 3"
+          vertical={false}
+          stroke={isDarkMode ? 'rgba(255,255,255,0.08)' : '#e2e8f0'}
+          opacity={isDarkMode ? 0.6 : 0.3}
+        />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          axisLine={false}
+          tick={{ fontSize: 10, fill: isDarkMode ? '#f1f5f9' : '#94a3b8' }}
+        />
+        <YAxis
+          tickLine={false}
+          axisLine={false}
+          width={30}
+          tick={{ fontSize: 10, fill: isDarkMode ? '#f1f5f9' : '#94a3b8' }}
+        />
+        <Tooltip
+          contentStyle={{
+            background: isDarkMode ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.95)',
+            border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+            borderRadius: '12px',
+            padding: '8px 12px',
+            fontSize: '12px',
+            color: isDarkMode ? '#f1f5f9' : '#0f172a',
+          }}
+          labelStyle={{ color: isDarkMode ? '#f1f5f9' : '#0f172a' }}
+          formatter={(value) => [`${value} applications`, 'Total']}
+        />
+        <Area
+          type="monotone"
+          dataKey="applications"
+          stroke="#14235E"
+          strokeWidth={2.5}
+          fill="url(#trendFill)"
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  </CardContent>
+</Card>
+<Card className="rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14]">
+  <CardHeader className="pb-2">
+    <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">Status Distribution</CardTitle>
+    <CardDescription className="text-xs text-gray-400 dark:text-gray-500">Application status breakdown</CardDescription>
+  </CardHeader>
+  <CardContent>
+    {chartData.statusDistribution.length > 0 ? (
+      <>
+        <div className="relative mx-auto w-full max-w-[180px]">
+          <ResponsiveContainer width="100%" height={160}>
+            <RechartsPie>
+              <Pie
+                data={chartData.statusDistribution}
+                cx="50%"
+                cy="50%"
+                innerRadius={45}
+                outerRadius={68}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {chartData.statusDistribution.map((_, idx) => (
+                  <Cell key={`cell-${idx}`} fill={COLORS_CHART[idx % COLORS_CHART.length]} stroke="transparent" />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  background: isDarkMode ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.95)',
+                  border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '8px 12px',
+                  fontSize: '12px',
+                  color: isDarkMode ? '#f1f5f9' : '#0f172a',
+                }}
+                labelStyle={{ color: isDarkMode ? '#f1f5f9' : '#0f172a' }}
+                formatter={(value, name) => [`${value} apps`, name]}
+              />
+            </RechartsPie>
+          </ResponsiveContainer>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+            <p className="text-[9px] font-light text-gray-400 dark:text-gray-400">Total</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-white">
+              {chartData.statusDistribution.reduce((s, i) => s + i.value, 0)}
+            </p>
+          </div>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-1.5">
+          {chartData.statusDistribution.map((item, idx) => (
+            <div key={item.name} className="flex items-center gap-1.5 text-[10px]">
+              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: COLORS_CHART[idx % COLORS_CHART.length] }} />
+              <span className="truncate text-gray-600 dark:text-gray-300">{item.name}</span>
+              <span className="ml-auto font-medium text-gray-900 dark:text-white">{item.value}</span>
+            </div>
+          ))}
+        </div>
+      </>
+    ) : (
+      <div className="py-8 text-center">
+        <PieChartIcon className="mx-auto h-8 w-8 text-gray-300 dark:text-gray-600" />
+        <p className="mt-2 text-xs text-gray-400 dark:text-gray-400">No data</p>
+      </div>
+    )}
+  </CardContent>
+</Card> 
       </div>
 
-      {/* ─── DATA VIEW BUTTONS ────────────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-        <button
-          onClick={() => setDataView(dataView === 'checks' ? null : 'checks')}
-          className={`
-            flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-xl
-            text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
-            border
-            ${dataView === 'checks'
-              ? 'bg-[#14235E] text-white border-[#14235E]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#14235E]/40 hover:text-[#14235E]'
-            }
-          `}
-        >
-          <ClipboardCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          <span>Checks</span>
-          <span className={`
-            ${dataView === 'checks'
-              ? 'bg-white/20 text-white'
-              : 'bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400'
-            }
-            text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full font-light
-          `}>
-            {checks.length}
-          </span>
-        </button>
-
-        <button
-          onClick={() => setDataView(dataView === 'applications' ? null : 'applications')}
-          className={`
-            flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-xl
-            text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
-            border
-            ${dataView === 'applications'
-              ? 'bg-[#14235E] text-white border-[#14235E]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#14235E]/40 hover:text-[#14235E]'
-            }
-          `}
-        >
-          <ClipboardList className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          <span>Applications</span>
-          <span className={`
-            ${dataView === 'applications'
-              ? 'bg-white/20 text-white'
-              : 'bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400'
-            }
-            text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full font-light
-          `}>
-            {applications.length}
-          </span>
-        </button>
-
-        <button
-          onClick={() => setDataView(dataView === 'packages' ? null : 'packages')}
-          className={`
-            flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-xl
-            text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
-            border
-            ${dataView === 'packages'
-              ? 'bg-[#14235E] text-white border-[#14235E]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#14235E]/40 hover:text-[#14235E]'
-            }
-          `}
-        >
-          <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          <span>Packages</span>
-          <span className={`
-            ${dataView === 'packages'
-              ? 'bg-white/20 text-white'
-              : 'bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400'
-            }
-            text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full font-light
-          `}>
-            {packageApps.length}
-          </span>
-        </button>
-
-        {dataView !== null && (
+      {/* Data View Toggles */}
+      <div className="flex flex-wrap items-center gap-2">
+        {[
+          { key: 'checks', icon: ClipboardCheck, label: 'Checks', count: checks.length },
+          { key: 'applications', icon: ClipboardList, label: 'Applications', count: applications.length },
+          { key: 'packages', icon: Package, label: 'Packages', count: packageApps.length },
+        ].map(({ key, icon: Icon, label, count }) => (
           <button
-            onClick={() => setDataView(null)}
-            className="flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs font-light text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors whitespace-nowrap"
+            key={key}
+            onClick={() => setDataView(dataView === key as DataView ? null : key as DataView)}
+            className={`
+              flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all border
+              ${dataView === key
+                ? 'bg-[#14235E] text-white border-[#14235E] shadow-sm'
+                : 'bg-transparent text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#14235E]/40 hover:text-[#14235E]'
+              }
+            `}
           >
-            <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">Clear</span>
-            <span className="sm:hidden">✕</span>
+            <Icon className="h-3.5 w-3.5" />
+            <span>{label}</span>
+            <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${dataView === key ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400'}`}>
+              {count}
+            </span>
+          </button>
+        ))}
+        {dataView && (
+          <button onClick={() => setDataView(null)} className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 px-2 py-1">
+            <XCircle className="h-4 w-4" />
           </button>
         )}
       </div>
 
-      {/* ─── CHECKS VIEW ────────────────────────────────────────────────────── */}
+      {/* Checks View */}
       {dataView === 'checks' && (
-        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
-          <CardHeader className="flex flex-col items-start justify-between gap-4 p-3 sm:p-4 md:p-6">
-            <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#14235E]/10 border border-[#14235E]/25">
-                  <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#14235E]" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                    Your Checks
-                    <Badge className="bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
-                      {filteredChecks.length}
-                    </Badge>
-                  </CardTitle>
-                  <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-light tracking-wide mt-0.5 sm:mt-0">
-                    Track all your government status checks
-                  </CardDescription>
-                </div>
+        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14]">
+          <CardHeader className="flex flex-row items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#14235E]/10">
+                <ClipboardCheck className="h-4 w-4 text-[#14235E]" />
               </div>
-              <Button
-                className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
-                onClick={() => navigate('/customer-dashboard')}
-              >
-                <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-                New Check
-              </Button>
+              <div>
+                <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">Your Checks</CardTitle>
+                <CardDescription className="text-xs text-gray-400 dark:text-gray-500">{filteredChecks.length} total</CardDescription>
+              </div>
             </div>
+            <Button className="bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white h-9 px-4 text-sm" onClick={() => navigate('/customer-dashboard')}>
+              <Plus className="mr-1.5 h-3.5 w-3.5" /> New Check
+            </Button>
           </CardHeader>
-
-          <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-            <div className="mb-3 flex flex-wrap items-center gap-1.5">
+          <CardContent className="p-4 pt-0">
+            <div className="flex flex-wrap gap-1.5 mb-3">
               {checkFilterButtons.map(({ key, label, count }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setCheckFilter(key)}
-                  className={pillBtnClass(checkFilter === key)}
-                >
-                  <span className="whitespace-nowrap">{label}</span>
-                  <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
+                <button key={key} onClick={() => setCheckFilter(key as CheckFilter)} className={pillBtnClass(checkFilter === key)}>
+                  {label} <span className="opacity-60">({count})</span>
                 </button>
               ))}
-              {checkFilter !== 'all' && (
-                <button
-                  type="button"
-                  onClick={() => setCheckFilter('all')}
-                  className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                >
-                  <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </button>
-              )}
             </div>
-
             {checksLoading ? (
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="h-20 sm:h-24 rounded-xl bg-gray-100 dark:bg-white/[0.03]" />
-                  </div>
-                ))}
-              </div>
+              <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-16 rounded-xl bg-gray-100 dark:bg-white/5 animate-pulse" />)}</div>
             ) : filteredChecks.length === 0 ? (
-              <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-12 sm:py-16 text-center">
-                <ClipboardCheck className="text-[#14235E] mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
-                <h3 className="text-gray-900 dark:text-white mb-2 text-lg sm:text-xl font-medium">
-                  {checks.length === 0 ? 'No checks yet' : 'No checks match filter'}
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-4 px-4 text-sm sm:text-base font-light max-w-md mx-auto">
-                  {checks.length === 0
-                    ? 'Start your first government status check today'
-                    : 'Try changing your filter to see more checks'}
-                </p>
-                {checks.length === 0 && (
-                  <Button
-                    className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-medium"
-                    onClick={() => navigate('/customer-dashboard')}
-                  >
-                    <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                    Start a Check
-                  </Button>
-                )}
+              <div className="py-12 text-center border border-dashed border-gray-200 dark:border-white/5 rounded-xl">
+                <ClipboardCheck className="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 opacity-30" />
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm">No checks found</p>
               </div>
             ) : (
-              <div className="space-y-3 sm:space-y-4">
-                <AnimatePresence mode="popLayout">
-                  {filteredChecks.map((check) => (
-                    <CheckCard
-                      key={check._id || check.id}
-                      check={{
-                        id: check._id || check.id,
-                        serviceId: check.serviceId,
-                        serviceType: check.serviceType,
-                        status: check.status,
-                        speedTier: check.speedTier,
-                        documents: check.documents || [],
-                        identifiers: check.identifiers || {},
-                        result: check.result,
-                        createdAt: check.createdAt,
-                        updatedAt: check.updatedAt,
-                      }}
-                      onViewResult={(check) => {
-                        toast.info('Viewing check result...');
-                      }}
-                      onDownloadDocument={(doc) => {
-                        toast.info('Downloading document...');
-                      }}
-                      onDelete={(checkId) => {
-                        setChecks(prev => prev.filter(c => (c._id || c.id) !== checkId));
-                        toast.success('Check deleted successfully');
-                      }}
-                    />
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ─── APPLICATIONS VIEW ────────────────────────────────────────────────── */}
-      {dataView === 'applications' && (
-        <Card id="applications-section" className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c] scroll-mt-20">
-          <CardHeader className="flex flex-col items-start justify-between gap-3 sm:gap-4 p-3 sm:p-4 md:p-6">
-            <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#14235E]/10 border border-[#14235E]/25">
-                  <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#14235E]" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                    Your Applications
-                    <Badge className="bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 border-0 text-[10px] sm:text-[10px] md:text-[11px] font-light px-2 py-0.5 rounded-full">
-                      {filteredApplications.length}
-                    </Badge>
-                  </CardTitle>
-                  <CardDescription className="text-[10px] sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-light tracking-wide mt-0.5 sm:mt-0">
-                    Track and manage all your visa applications
-                  </CardDescription>
-                </div>
-              </div>
-            </div>
-          </CardHeader>
-
-          <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-            <div className="mb-3 flex flex-wrap items-center gap-1.5">
-              {appFilterButtons.map(({ key, label, count }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setAppFilter(key)}
-                  className={pillBtnClass(appFilter === key)}
-                >
-                  <span className="whitespace-nowrap">{label}</span>
-                  <span className="opacity-60 ml-0.5 sm:ml-1">({count})</span>
-                </button>
-              ))}
-              {appFilter !== 'all' && (
-                <button
-                  type="button"
-                  onClick={() => setAppFilter('all')}
-                  className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                >
-                  <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </button>
-              )}
-            </div>
-
-            {filteredApplications.length === 0 ? (
-              <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
-                <ClipboardList className="text-[#14235E] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
-                <h4 className="text-gray-900 dark:text-white mb-1 sm:mb-1.5 text-sm sm:text-base md:text-lg font-medium">
-                  {applications.length === 0 ? 'No applications yet' : 'No applications match'}
-                </h4>
-                <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
-                  {applications.length === 0
-                    ? 'Start your first visa application today!'
-                    : 'Try changing your filter to see more applications.'}
-                </p>
-                {applications.length === 0 && (
-                  <Button
-                    className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
-                    onClick={() => setShowStartApplication(true)}
-                  >
-                    <Plus className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
-                    Create Application
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-4 sm:space-y-5">
-                <AnimatePresence mode="popLayout">
-                  {filteredApplications.map((app: any) => {
-                    const appId = app._id || app.id;
-                    const canDelete = userDetails?.role === 'amer' || userDetails?.role === 'admin';
-                    const handleDelete = async () => {
-                      try {
-                        const token = localStorage.getItem('authToken');
-                        if (!token) throw new Error('Not authenticated');
-                        const response = await fetch(`${apiBase}/api/v1/visa/${appId}`, {
-                          method: 'DELETE',
-                          headers: { Authorization: `Bearer ${token}` },
-                        });
-                        if (!response.ok) {
-                          const errorData = await response.json().catch(() => ({}));
-                          throw new Error(errorData.message || 'Failed to delete application');
-                        }
-                        await fetchApplications();
-                        toast.success('Application deleted successfully');
-                      } catch (error: any) {
-                        toast.error(error.message || 'You do not have permission to delete this application.');
-                      }
-                    };
-                    return (
-                      <ExpandedApplicationCard
-                        key={appId}
-                        application={app}
-                        isExpanded={expandedApplicationIds.has(appId)}
-                        onToggle={() => {
-                          setExpandedApplicationIds(prev => {
-                            const newSet = new Set(prev);
-                            if (newSet.has(appId)) newSet.delete(appId);
-                            else newSet.add(appId);
-                            return newSet;
-                          });
-                        }}
-                        onDocumentView={(doc) => handleViewResultDocument(doc, app)}
-                        onDocumentDownload={(doc) => handleDocumentDownload(doc, app)}
-                        canDelete={canDelete}
-                        onDelete={canDelete ? handleDelete : undefined}
-                      />
-                    );
-                  })}
-                </AnimatePresence>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ─── PACKAGES VIEW ────────────────────────────────────────────────────── */}
-      {dataView === 'packages' && (
-        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
-          <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
-            <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
-              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#14235E]/10 border border-[#14235E]/25">
-                  <Package className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#14235E]" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <CardTitle className="flex flex-wrap items-center gap-1.5 text-base sm:text-lg md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                    Your Packages
-                    <Badge className="bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 border-0 text-[11px] sm:text-[10px] md:text-[11px] font-light px-2.5 py-1 rounded-full">
-                      {filteredPackages.length}
-                    </Badge>
-                  </CardTitle>
-                  <CardDescription className="text-sm sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 font-light tracking-wide mt-0.5 sm:mt-0">
-                    View all your package applications
-                  </CardDescription>
-                </div>
-              </div>
-              <Button
-                className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
-                onClick={() => navigate('/packages')}
-              >
-                <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-                Browse Packages
-              </Button>
-            </div>
-          </CardHeader>
-
-          <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
-            <div className="mb-3 flex flex-wrap items-center gap-1.5">
-              {[
-                { key: 'all', label: 'All' },
-                { key: 'submitted', label: 'Submitted' },
-                { key: 'processing', label: 'Processing' },
-                { key: 'completed', label: 'Completed' },
-                { key: 'cancelled', label: 'Cancelled' },
-              ].map(({ key, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setPackageFilter(key as any)}
-                  className={pillBtnClass(packageFilter === key)}
-                >
-                  <span className="whitespace-nowrap">{label}</span>
-                  <span className="opacity-60 ml-0.5 sm:ml-1">({key === 'all'
-                    ? packageApps.length
-                    : packageApps.filter(p => p.status === key).length})</span>
-                </button>
-              ))}
-              {packageFilter !== 'all' && (
-                <button
-                  type="button"
-                  onClick={() => setPackageFilter('all')}
-                  className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                >
-                  <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </button>
-              )}
-            </div>
-
-            {packageLoading ? (
-              <div className="space-y-2">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="h-16 sm:h-20 rounded-xl bg-gray-100 dark:bg-white/[0.03]" />
-                  </div>
+              <div className="space-y-3">
+                {filteredChecks.map(check => (
+                  <CheckCard
+                    key={check._id || check.id}
+                    check={{
+                      id: check._id || check.id,
+                      serviceId: check.serviceId,
+                      serviceType: check.serviceType,
+                      status: check.status,
+                      speedTier: check.speedTier,
+                      documents: check.documents || [],
+                      identifiers: check.identifiers || {},
+                      result: check.result,
+                      createdAt: check.createdAt,
+                      updatedAt: check.updatedAt,
+                    }}
+                    onViewResult={() => toast.info('Viewing result...')}
+                    onDownloadDocument={() => toast.info('Downloading...')}
+                    onDelete={(id) => { setChecks(prev => prev.filter(c => (c._id || c.id) !== id)); toast.success('Deleted'); }}
+                  />
                 ))}
               </div>
-            ) : filteredPackages.length === 0 ? (
-              <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
-                <Package className="text-[#14235E] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
-                <h3 className="text-gray-900 dark:text-white mb-1 text-sm sm:text-base md:text-lg font-medium">
-                  {packageApps.length === 0 ? 'No packages yet' : 'No packages match filter'}
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3 sm:px-4 text-[10px] sm:text-xs md:text-sm font-light max-w-md mx-auto">
-                  {packageApps.length === 0
-                    ? 'Explore our packages and start your journey'
-                    : 'Try changing your filter to see more packages'}
-                </p>
-                {packageApps.length === 0 && (
-                  <Button
-                    className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
-                    onClick={() => navigate('/packages')}
-                  >
-                    <Package className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
-                    Explore Packages
-                  </Button>
-                )}
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Applications View */}
+      {dataView === 'applications' && (
+        <Card id="applications-section" className="rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14] scroll-mt-20">
+          <CardHeader className="flex flex-row items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#14235E]/10">
+                <ClipboardList className="h-4 w-4 text-[#14235E]" />
+              </div>
+              <div>
+                <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">Your Applications</CardTitle>
+                <CardDescription className="text-xs text-gray-400 dark:text-gray-500">{filteredApplications.length} total</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {appFilterButtons.map(({ key, label, count }) => (
+                <button key={key} onClick={() => setAppFilter(key as ApplicationFilter)} className={pillBtnClass(appFilter === key)}>
+                  {label} <span className="opacity-60">({count})</span>
+                </button>
+              ))}
+            </div>
+            {filteredApplications.length === 0 ? (
+              <div className="py-12 text-center border border-dashed border-gray-200 dark:border-white/5 rounded-xl">
+                <ClipboardList className="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 opacity-30" />
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm">No applications found</p>
               </div>
             ) : (
-              <div className="space-y-2 sm:space-y-3 md:space-y-4">
-                <AnimatePresence mode="popLayout">
-                  {filteredPackages.map((pkg) => (
-                    <PackageCard
-                      key={pkg._id}
-                      package={pkg}
-                      onDelete={() => fetchPackages()}
-                      onRefresh={() => fetchPackages()}
+              <div className="space-y-4">
+                {filteredApplications.map((app: any) => {
+                  const appId = app._id || app.id;
+                  const canDelete = userDetails?.role === 'amer' || userDetails?.role === 'admin';
+                  const handleDelete = async () => {
+                    try {
+                      const token = localStorage.getItem('authToken');
+                      if (!token) throw new Error('Not authenticated');
+                      const res = await fetch(`${apiBase}/api/v1/visa/${appId}`, {
+                        method: 'DELETE',
+                        headers: { Authorization: `Bearer ${token}` },
+                      });
+                      if (!res.ok) throw new Error('Failed to delete');
+                      await fetchApplications();
+                      toast.success('Application deleted');
+                    } catch (error: any) {
+                      toast.error(error.message || 'Permission denied');
+                    }
+                  };
+                  return (
+                    <ExpandedApplicationCard
+                      key={appId}
+                      application={app}
+                      isExpanded={expandedApplicationIds.has(appId)}
+                      onToggle={() => setExpandedApplicationIds(prev => {
+                        const newSet = new Set(prev);
+                        newSet.has(appId) ? newSet.delete(appId) : newSet.add(appId);
+                        return newSet;
+                      })}
+                      onDocumentView={(doc) => handleViewResultDocument(doc, app)}
+                      onDocumentDownload={(doc) => handleDocumentDownload(doc, app)}
+                      canDelete={canDelete}
+                      onDelete={canDelete ? handleDelete : undefined}
                     />
-                  ))}
-                </AnimatePresence>
+                  );
+                })}
               </div>
             )}
           </CardContent>
         </Card>
       )}
 
-      {/* ─── EMPTY STATE ────────────────────────────────────────────────────── */}
-      {dataView === null && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="relative overflow-hidden rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c] p-6 sm:p-10 text-center"
-        >
-          <div className="absolute inset-0 opacity-[0.03]">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle at 20px 20px, #14235E 1.5px, transparent 1.5px)`,
-              backgroundSize: '40px 40px'
-            }} />
-          </div>
+      {/* Packages View */}
+      {dataView === 'packages' && (
+        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14]">
+          <CardHeader className="flex flex-row items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#14235E]/10">
+                <Package className="h-4 w-4 text-[#14235E]" />
+              </div>
+              <div>
+                <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">Your Packages</CardTitle>
+                <CardDescription className="text-xs text-gray-400 dark:text-gray-500">{filteredPackages.length} total</CardDescription>
+              </div>
+            </div>
+            <Button className="bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white h-9 px-4 text-sm" onClick={() => navigate('/packages')}>
+              <Plus className="mr-1.5 h-3.5 w-3.5" /> Browse
+            </Button>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {['all','submitted','processing','completed','cancelled'].map(key => (
+                <button key={key} onClick={() => setPackageFilter(key as any)} className={pillBtnClass(packageFilter === key)}>
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                  <span className="opacity-60 ml-0.5">({key === 'all' ? packageApps.length : packageApps.filter(p => p.status === key).length})</span>
+                </button>
+              ))}
+            </div>
+            {packageLoading ? (
+              <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-16 rounded-xl bg-gray-100 dark:bg-white/5 animate-pulse" />)}</div>
+            ) : filteredPackages.length === 0 ? (
+              <div className="py-12 text-center border border-dashed border-gray-200 dark:border-white/5 rounded-xl">
+                <Package className="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 opacity-30" />
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm">No packages found</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredPackages.map(pkg => (
+                  <PackageCard key={pkg._id} package={pkg} onDelete={fetchPackages} onRefresh={fetchPackages} />
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
-          <div className="relative flex flex-col items-center gap-4">
+      {/* Empty State */}
+      {dataView === null && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14] p-8 text-center">
+          <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-[#14235E]/10 blur-xl animate-pulse" />
-              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#14235E]/10 border border-[#14235E]/25">
-                <FileText className="h-7 w-7 text-[#14235E] opacity-80" strokeWidth={1.5} />
-              </div>
-              <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#14235E] to-[#1a4a7a] text-white text-[8px] font-medium animate-pulse">
-                <span>✦</span>
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#14235E]/10">
+                <FileText className="h-7 w-7 text-[#14235E] opacity-80" />
               </div>
             </div>
-
-            <div className="space-y-1.5">
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
-                Select a section to view
-              </h3>
-              <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto font-light leading-relaxed">
-                Click on <span className="font-medium text-[#14235E]">Checks</span>, <span className="font-medium text-[#14235E]">Applications</span>, or <span className="font-medium text-[#14235E]">Packages</span> to see your data
-              </p>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Select a section to view</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Click Checks, Applications, or Packages to see your data</p>
             </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-0.5">
-              <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setDataView('checks')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#14235E] text-white transition-all duration-300 hover:bg-[#1a4a7a]"
-              >
-                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                <ClipboardCheck className="h-4 w-4 relative z-10" />
-                <span className="relative z-10 text-sm font-medium">View Checks</span>
-                <ArrowRight className="h-3.5 w-3.5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setDataView('applications')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#14235E]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
-              >
-                <ClipboardList className="h-4 w-4 relative z-10" />
-                <span className="relative z-10 text-sm font-medium">View Applications</span>
-                <ArrowRight className="h-3.5 w-3.5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setDataView('packages')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#14235E]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
-              >
-                <Package className="h-4 w-4 relative z-10" />
-                <span className="relative z-10 text-sm font-medium">View Packages</span>
-                <ArrowRight className="h-3.5 w-3.5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-              </motion.button>
+            <div className="flex flex-wrap gap-3 justify-center mt-2">
+              {[
+                { key: 'checks', icon: ClipboardCheck, label: 'View Checks' },
+                { key: 'applications', icon: ClipboardList, label: 'View Applications' },
+                { key: 'packages', icon: Package, label: 'View Packages' },
+              ].map(({ key, icon: Icon, label }) => (
+                <button key={key} onClick={() => setDataView(key as DataView)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#14235E] text-white text-sm font-medium hover:bg-[#1a4a7a] transition">
+                  <Icon className="h-4 w-4" /> {label} <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              ))}
             </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-5 mt-1 pt-3 border-t border-gray-200/30 dark:border-white/5">
-              <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14235E]/10">
-                  <ClipboardCheck className="h-3.5 w-3.5 text-[#14235E]" />
+            <div className="flex flex-wrap gap-6 pt-3 border-t border-gray-200/30 dark:border-white/5">
+              {[
+                { label: 'Checks', value: checks.length, icon: ClipboardCheck },
+                { label: 'Applications', value: applications.length, icon: ClipboardList },
+                { label: 'Packages', value: packageApps.length, icon: Package },
+              ].map(({ label, value, icon: Icon }) => (
+                <div key={label} className="flex items-center gap-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14235E]/10">
+                    <Icon className="h-3.5 w-3.5 text-[#14235E]" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] text-gray-400 uppercase tracking-wider">{label}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{value}</p>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Checks</p>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{checks.length}</p>
-                </div>
-              </div>
-              <div className="h-6 w-px bg-gray-200/50 dark:bg-white/10" />
-              <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14235E]/10">
-                  <ClipboardList className="h-3.5 w-3.5 text-[#14235E]" />
-                </div>
-                <div className="text-left">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Applications</p>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{applications.length}</p>
-                </div>
-              </div>
-              <div className="h-6 w-px bg-gray-200/50 dark:bg-white/10" />
-              <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14235E]/10">
-                  <Package className="h-3.5 w-3.5 text-[#14235E]" />
-                </div>
-                <div className="text-left">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Packages</p>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{packageApps.length}</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </motion.div>
       )}
 
-      {/* ─── Government Services & Support ───────────────────────────────────── */}
-      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
-        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
+      {/* Government Services & Support */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0c0c14]">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#14235E]/10 border border-[#14235E]/25">
-                <Building2 className="h-4 w-4 text-[#14235E]" />
-              </div>
-              Government Services
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+              <Building2 className="h-4 w-4 text-[#14235E]" /> Government Services
             </CardTitle>
-            <CardDescription className="text-gray-500 dark:text-gray-400">
-              Quick links to UAE government portals
-            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5">
               {GOV_SERVICES.map(({ key, label, sub, url, icon: Icon }) => (
-                <button
-                  key={key}
-                  onClick={() => window.open(url, '_blank')}
-                  className="group relative flex flex-col items-start gap-2.5 overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#14235E]/40"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#14235E]/10">
-                    <Icon className="h-5 w-5 text-[#14235E]" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-gray-900 dark:text-white text-sm font-semibold leading-tight">
-                      {label}
-                    </p>
-                    <p className="text-gray-500 dark:text-gray-400 text-[11px] leading-tight">
-                      {sub}
-                    </p>
-                  </div>
-                  <ArrowUpRight className="absolute right-3 top-3 h-3.5 w-3.5 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#14235E]" />
+                <button key={key} onClick={() => window.open(url, '_blank')} className="group flex flex-col items-start gap-2 p-3 rounded-xl border border-gray-200/60 dark:border-white/5 bg-white dark:bg-white/2 hover:border-[#14235E]/40 hover:-translate-y-0.5 transition-all">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#14235E]/10"><Icon className="h-4 w-4 text-[#14235E]" /></div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{label}</p>
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500">{sub}</p>
+                  <ArrowUpRight className="h-3 w-3 text-gray-400 self-end" />
                 </button>
               ))}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
+ <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#64748b]/10 border border-[#64748b]/25">
@@ -1409,31 +1019,25 @@ const getTabFromPath = (path: string): TabKey => {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 
-const renderContent = () => {
-  switch (activeTab) {
-    case 'documents':
-      return <DocumentPage />;
-    case 'compliance':
-      return <CompliancePage />;
-    case 'profile':
-      return <ProfilePage />;
-    case 'guide-submission':
-      return <GuideSubmissionSuccess />;
-    default:
-      return <DashboardContent />;
-  }
-};
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'documents': return <DocumentPage />;
+      case 'compliance': return <CompliancePage />;
+      case 'profile': return <ProfilePage />;
+      case 'guide-submission': return <GuideSubmissionSuccess />;
+      default: return <DashboardContent />;
+    }
+  };
+
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50/50 dark:bg-[#0a0a0f] px-4">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50/50 dark:bg-[#0a0a0f]">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-14 w-14 animate-spin rounded-full border-2 border-[#14235E] border-t-transparent sm:h-16 sm:w-16"></div>
-          <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg">
-            Loading your dashboard...
-          </p>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-2 border-[#14235E] border-t-transparent" />
+          <p className="text-gray-500 dark:text-gray-400 text-sm">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -1441,129 +1045,49 @@ const renderContent = () => {
 
   const isActiveTab = (tabKey: TabKey) => activeTab === tabKey;
 
-  const SIDEBAR_STATS = [
-    { label: 'Total Applications', value: totalApplications, color: ACCENT.primary },
-    { label: 'Approved', value: approvedApplications, color: ACCENT.teal },
-    { label: 'Under Review', value: stats.under_review || 0, color: ACCENT.slate },
-    { label: 'Docs Required', value: stats.docs_required || 0, color: ACCENT.amber },
-  ];
-
-  const SIDEBAR_COLLECTIONS = [
-    { label: 'Checks', value: checks.length, color: ACCENT.violet },
-    { label: 'Applications', value: applications.length, color: ACCENT.primary },
-    { label: 'Packages', value: packageApps.length, color: ACCENT.cream },
-  ];
-
   return (
     <div className="bg-gray-50/50 dark:bg-[#0a0a0f] flex min-h-screen">
-      {/* ─── Sidebar ────────────────────────────────────────────────────────── */}
+      {/* ─── Sidebar ────────────────────────────────────────────────────── */}
       <motion.aside
-        className="border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#0a0a0f] sticky top-0 hidden h-screen shrink-0 border-r lg:flex lg:flex-col"
-        animate={{
-          width: isSidebarCollapsed ? 60 : 272,
-        }}
+        className="sticky top-0 hidden h-screen shrink-0 border-r border-gray-200/60 dark:border-white/5 bg-white dark:bg-[#0a0a0f] lg:flex lg:flex-col"
+        animate={{ width: isSidebarCollapsed ? 60 : 272 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
-        {/* Logo Section */}
-        <div className="flex h-16 items-center justify-between border-b border-gray-200/60 dark:border-white/[0.06] px-4">
-          <motion.div
-            className="flex items-center gap-2.5 overflow-hidden"
-            animate={{
-              width: isSidebarCollapsed ? 36 : 'auto',
-            }}
-          >
-              {TMMTLogo ? (
-                <img
-                  src={TMMTLogo}
-                  alt="Tammat logo"
-                  width={22}
-                  height={22}
-                  className="h-15 w-17 object-contain dark:brightness-0 dark:invert"
-                />
-              ) : (
-                <Building2 className="h-5 w-5 text-white" />
-              )}
-            <motion.div
-              className="overflow-hidden"
-              initial={{ opacity: 0, width: 0 }}
-              animate={{
-                opacity: isSidebarCollapsed ? 0 : 1,
-                width: isSidebarCollapsed ? 0 : 'auto',
-              }}
-              transition={{ duration: 0.2 }}
-            >
-              <p className="text-gray-900 dark:text-white whitespace-nowrap text-[14px] font-semibold tracking-tight leading-tight">
-                TMMT Portal
-              </p>
+        {/* Logo */}
+        <div className="flex h-16 items-center justify-between border-b border-gray-200/60 dark:border-white/5 px-4">
+          <motion.div className="flex items-center gap-2.5 overflow-hidden" animate={{ width: isSidebarCollapsed ? 36 : 'auto' }}>
+            <img src={TMMTLogo} alt="TMMT" className="h-9 w-9 object-contain dark:brightness-0 dark:invert" />
+            <motion.div animate={{ opacity: isSidebarCollapsed ? 0 : 1, width: isSidebarCollapsed ? 0 : 'auto' }} transition={{ duration: 0.2 }}>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">TMMT Portal</p>
             </motion.div>
           </motion.div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 shrink-0 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.06] transition-all duration-300"
-            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          >
-            {isSidebarCollapsed ? (
-              <ChevronRight className="h-4 w-4 text-gray-400 dark:text-gray-400" />
-            ) : (
-              <ChevronLeft className="h-4 w-4 text-gray-400 dark:text-gray-400" />
-            )}
+          <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5" onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}>
+            {isSidebarCollapsed ? <ChevronRight className="h-4 w-4 text-gray-400" /> : <ChevronLeft className="h-4 w-4 text-gray-400" />}
           </Button>
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          {/* Navigation Links, grouped */}
           <nav className="space-y-5 px-2.5 py-5">
             {NAV_GROUPS.map((group) => (
               <div key={group.label} className="space-y-1">
-                <motion.p
-                  className="px-2.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-600 whitespace-nowrap overflow-hidden"
-                  animate={{
-                    opacity: isSidebarCollapsed ? 0 : 1,
-                    height: isSidebarCollapsed ? 0 : 'auto',
-                  }}
-                >
+                <motion.p className="px-2.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500" animate={{ opacity: isSidebarCollapsed ? 0 : 1, height: isSidebarCollapsed ? 0 : 'auto' }}>
                   {group.label}
                 </motion.p>
                 {group.items.map(({ path, label, icon: Icon, key }) => (
-                  <button
-                    key={key}
-                    onClick={() => handleNavigate(path)}
-                    className="w-full group relative block"
-                  >
-                    <div
-                      className={`
-                        relative flex h-10 w-full items-center gap-3 overflow-hidden rounded-xl px-3
-                        transition-all duration-300 ease-out border
-                        ${
-                          isActiveTab(key as TabKey)
-                            ? 'bg-[#14235E]/10 text-[#14235E] border-[#14235E]/30'
-                            : 'text-gray-500 dark:text-gray-400 border-transparent hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-gray-200'
-                        }
-                      `}
-                    >
-                      <Icon
-                        className={`h-[18px] w-[18px] shrink-0 transition-colors duration-300 ${
-                          isActiveTab(key as TabKey) ? 'text-[#14235E]' : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
-                        }`}
-                      />
-                      <motion.span
-                        className="overflow-hidden whitespace-nowrap text-[13px] font-medium"
-                        animate={{
-                          opacity: isSidebarCollapsed ? 0 : 1,
-                          width: isSidebarCollapsed ? 0 : 'auto',
-                        }}
-                        transition={{ duration: 0.2 }}
-                      >
+                  <button key={key} onClick={() => handleNavigate(path)} className="w-full group relative block">
+                    <div className={`
+                      relative flex h-10 w-full items-center gap-3 overflow-hidden rounded-xl px-3 transition-all duration-300
+                      ${isActiveTab(key as TabKey)
+                        ? 'bg-[#14235E]/10 text-[#14235E] border border-[#14235E]/30'
+                        : 'text-gray-500 dark:text-gray-400 border border-transparent hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
+                      }
+                    `}>
+                      <Icon className={`h-[18px] w-[18px] shrink-0 ${isActiveTab(key as TabKey) ? 'text-[#14235E]' : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'}`} />
+                      <motion.span className="overflow-hidden whitespace-nowrap text-[13px] font-medium" animate={{ opacity: isSidebarCollapsed ? 0 : 1, width: isSidebarCollapsed ? 0 : 'auto' }} transition={{ duration: 0.2 }}>
                         {label}
                       </motion.span>
-
                       {isActiveTab(key as TabKey) && !isSidebarCollapsed && (
-                        <motion.span
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          className="ml-auto flex h-1.5 w-1.5 rounded-full bg-[#14235E]"
-                        />
+                        <motion.span initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="ml-auto flex h-1.5 w-1.5 rounded-full bg-[#14235E]" />
                       )}
                     </div>
                   </button>
@@ -1572,206 +1096,119 @@ const renderContent = () => {
             ))}
           </nav>
 
-          {/* Quick Stats */}
           {!isSidebarCollapsed && (
             <div className="px-4 pb-5">
-              <p className="mb-2 px-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-600">
-                Application Status
-              </p>
-              <div className="space-y-0.5">
-                {SIDEBAR_STATS.map((s) => (
-                  <div key={s.label} className="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-white/[0.04] last:border-0">
-                    <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: s.color }} />
-                      <span className="text-[12px] text-gray-600 dark:text-gray-400">{s.label}</span>
-                    </div>
-                    <span className="text-[12px] font-semibold text-gray-900 dark:text-white">{s.value}</span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="mb-2 mt-5 px-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-600">
-                Your Collections
-              </p>
-              <div className="space-y-0.5">
-                {SIDEBAR_COLLECTIONS.map((s) => (
-                  <div key={s.label} className="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-white/[0.04] last:border-0">
-                    <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: s.color }} />
-                      <span className="text-[12px] text-gray-600 dark:text-gray-400">{s.label}</span>
-                    </div>
-                    <span className="text-[12px] font-semibold text-gray-900 dark:text-white">{s.value}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Status</p>
+              {[
+                { label: 'Total', value: totalApplications, color: '#14235E' },
+                { label: 'Approved', value: approvedApplications, color: '#0d9488' },
+                { label: 'Under Review', value: stats.under_review || 0, color: '#64748b' },
+                { label: 'Docs Required', value: stats.docs_required || 0, color: '#d97706' },
+              ].map(s => (
+                <div key={s.label} className="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-white/5 last:border-0">
+                  <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full" style={{ background: s.color }} /><span className="text-xs text-gray-600 dark:text-gray-400">{s.label}</span></div>
+                  <span className="text-xs font-semibold text-gray-900 dark:text-white">{s.value}</span>
+                </div>
+              ))}
+              <p className="mt-4 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Collections</p>
+              {[
+                { label: 'Checks', value: checks.length, color: '#7c3aed' },
+                { label: 'Applications', value: applications.length, color: '#14235E' },
+                { label: 'Packages', value: packageApps.length, color: '#d4c9b3' },
+              ].map(s => (
+                <div key={s.label} className="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-white/5 last:border-0">
+                  <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full" style={{ background: s.color }} /><span className="text-xs text-gray-600 dark:text-gray-400">{s.label}</span></div>
+                  <span className="text-xs font-semibold text-gray-900 dark:text-white">{s.value}</span>
+                </div>
+              ))}
             </div>
           )}
 
-          {/* System status footer */}
           {!isSidebarCollapsed && (
-            <div className="mx-3 mb-4 rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-gray-50 dark:bg-white/[0.02] p-3">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-600">
-                  Sync Status
-                </p>
-                <Radio className="h-3 w-3 text-[#0d9488]" />
-              </div>
+            <div className="mx-3 mb-4 rounded-xl border border-gray-200/60 dark:border-white/5 bg-gray-50 dark:bg-white/2 p-3">
+              <div className="flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Sync</p><Radio className="h-3 w-3 text-emerald-500" /></div>
               <div className="mt-2 flex items-center gap-1.5">
-                <span className={`h-1.5 w-1.5 rounded-full ${(loading || checksLoading || packageLoading) ? 'bg-[#d97706] animate-pulse' : 'bg-[#0d9488]'}`} />
-                <span className="text-[11px] text-gray-600 dark:text-gray-400">
-                  {(loading || checksLoading || packageLoading) ? 'Syncing data…' : 'All data up to date'}
-                </span>
+                <span className={`h-1.5 w-1.5 rounded-full ${(loading || checksLoading || packageLoading) ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
+                <span className="text-[11px] text-gray-600 dark:text-gray-400">{(loading || checksLoading || packageLoading) ? 'Syncing...' : 'Up to date'}</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-gray-200/60 dark:border-white/[0.06] space-y-2 border-t p-2.5">
-          <button
-            onClick={toggleDarkMode}
-            className="group flex h-10 w-full items-center gap-3 rounded-xl border border-transparent px-3 text-gray-500 dark:text-gray-400 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-gray-200"
-          >
-            {isDarkMode ? <Sun className="h-[18px] w-[18px] shrink-0" /> : <Moon className="h-[18px] w-[18px] shrink-0" />}
-            <motion.span
-              className="overflow-hidden whitespace-nowrap text-[13px] font-medium"
-              animate={{
-                opacity: isSidebarCollapsed ? 0 : 1,
-                width: isSidebarCollapsed ? 0 : 'auto',
-              }}
-              transition={{ duration: 0.2 }}
-            >
+        <div className="border-t border-gray-200/60 dark:border-white/5 p-2.5 space-y-2">
+          <button onClick={toggleDarkMode} className="group flex h-10 w-full items-center gap-3 rounded-xl px-3 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition">
+            {isDarkMode ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+            <motion.span className="text-[13px] font-medium" animate={{ opacity: isSidebarCollapsed ? 0 : 1, width: isSidebarCollapsed ? 0 : 'auto' }} transition={{ duration: 0.2 }}>
               {isDarkMode ? 'Light Mode' : 'Dark Mode'}
             </motion.span>
           </button>
-          <button
-            onClick={signOut}
-            className="group flex h-10 w-full items-center gap-3 rounded-xl border border-transparent px-3 text-rose-500 dark:text-rose-400/80 transition-all duration-300 hover:border-rose-500/20 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400"
-          >
-            <LogOut className="h-[18px] w-[18px] shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5" />
-            <motion.span
-              className="overflow-hidden whitespace-nowrap text-[13px] font-medium"
-              animate={{
-                opacity: isSidebarCollapsed ? 0 : 1,
-                width: isSidebarCollapsed ? 0 : 'auto',
-              }}
-              transition={{ duration: 0.2 }}
-            >
+          <button onClick={signOut} className="group flex h-10 w-full items-center gap-3 rounded-xl px-3 text-rose-500 dark:text-rose-400/80 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition">
+            <LogOut className="h-[18px] w-[18px] shrink-0 transition-transform group-hover:-translate-x-0.5" />
+            <motion.span className="text-[13px] font-medium" animate={{ opacity: isSidebarCollapsed ? 0 : 1, width: isSidebarCollapsed ? 0 : 'auto' }} transition={{ duration: 0.2 }}>
               Logout
             </motion.span>
           </button>
         </div>
       </motion.aside>
 
-      {/* Main Content */}
+      {/* ─── Main Content ──────────────────────────────────────────────── */}
       <main className="min-w-0 flex-1 pb-20 lg:pb-0">
-        {/* ─── Sticky Header ──────────────────────────────────────────────── */}
-        <div className="sticky top-0 z-20 bg-white/90 dark:bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-gray-200/60 dark:border-white/[0.06]">
-          <div className="flex items-center justify-between gap-3 px-3 py-3 sm:px-4 md:px-6">
+        {/* Sticky Header */}
+        <div className="sticky top-0 z-20 bg-white/90 dark:bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-gray-200/60 dark:border-white/5">
+          <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6">
             <div className="min-w-0">
-              <p className="hidden sm:flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-500 font-light">
-                TMMT Portal <ChevronRight className="h-3 w-3" /> Overview
-              </p>
-              <h4 className="truncate text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-white">
+              <p className="hidden sm:flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">TMMT Portal <ChevronRight className="h-3 w-3" /> Overview</p>
+              <h4 className="truncate text-sm sm:text-base font-semibold text-gray-900 dark:text-white">
                 Welcome, <span className="text-[#14235E]">{userDetails?.firstName || user?.name || 'User'}</span>
               </h4>
             </div>
-
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#14235E] text-white">
-                <Crown className="h-3 w-3 text-amber-200" />
-                <span className="text-[9px] sm:text-[10px] font-medium tracking-wide">Level {userLevel}</span>
+                <Crown className="h-3 w-3 text-amber-200" /><span className="text-[9px] sm:text-[10px] font-medium">Level {userLevel}</span>
               </div>
-
               <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#14235E] to-[#1a4a7a] text-white">
-                <Sparkles className="h-2.5 w-2.5" />
-                <span className="text-[9px] sm:text-[10px] font-medium tracking-wide">{rewardPoints.toLocaleString()} pts</span>
+                <Sparkles className="h-2.5 w-2.5" /><span className="text-[9px] sm:text-[10px] font-medium">{rewardPoints.toLocaleString()} pts</span>
               </div>
-
-              <button
-                onClick={() => setShowStartApplication(true)}
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full border border-gray-200/60 dark:border-white/[0.08] hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-all duration-300 text-[9px] sm:text-[10px] font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-              >
-                <Plus className="h-2.5 w-2.5" />
-                New
+              <button onClick={() => setShowStartApplication(true)} className="hidden sm:flex items-center gap-1 px-3 py-1 rounded-full border border-gray-200/60 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition">
+                <Plus className="h-3 w-3" /> New
               </button>
-
-              <button
-                onClick={toggleDarkMode}
-                className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white hover:border-gray-300 dark:hover:border-white/20 transition-colors lg:hidden"
-              >
+              <button onClick={toggleDarkMode} className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200/60 dark:border-white/5 lg:hidden hover:bg-gray-50 dark:hover:bg-white/5 transition">
                 {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
-
-              <button className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white hover:border-gray-300 dark:hover:border-white/20 transition-colors">
-                <BellRing className="h-4 w-4" />
-                {urgentApplications.length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-rose-500 dark:bg-rose-500" />
-                )}
+              <button className="relative flex h-8 w-8 items-center justify-center rounded-full border border-gray-200/60 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition">
+                <BellRing className="h-4 w-4 text-gray-400" />
+                {urgentApplications.length > 0 && <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-rose-500" />}
               </button>
-
-              <Avatar className="h-8 w-8 sm:h-9 sm:w-9 border border-gray-200/60 dark:border-white/10">
+              <Avatar className="h-8 w-8 border border-gray-200/60 dark:border-white/10">
                 <AvatarImage src={userDetails?.avatar} />
-                <AvatarFallback className="bg-[#14235E] text-white text-[10px] sm:text-xs font-medium">
-                  {userDetails?.firstName?.[0]}
-                  {userDetails?.lastName?.[0]}
+                <AvatarFallback className="bg-[#14235E] text-white text-[10px] font-medium">
+                  {userDetails?.firstName?.[0]}{userDetails?.lastName?.[0]}
                 </AvatarFallback>
               </Avatar>
             </div>
           </div>
-
-          {/* Journey / status line */}
-          <div className="px-3 sm:px-4 md:px-6 pb-3 -mt-1">
-            <p className="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-500 font-light leading-tight">
+          <div className="px-4 pb-2 sm:px-6">
+            <p className="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-400">
               {approvedApplications > 0 ? (
-                <>
-                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#0d9488]/10 text-[#0d9488]">
-                    <Check className="h-2.5 w-2.5" />
-                  </span>
-                  <span>You have </span>
-                  <span className="font-medium text-[#0d9488]">{approvedApplications}</span>
-                  <span> approved application{approvedApplications > 1 ? 's' : ''}</span>
-                </>
+                <><span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#0d9488]/10 text-[#0d9488]"><Check className="h-2.5 w-2.5" /></span> You have <span className="font-medium text-[#0d9488]">{approvedApplications}</span> approved application{approvedApplications > 1 ? 's' : ''}</>
               ) : (
-                <>
-                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#14235E]/10 text-[#14235E]">
-                    <Rocket className="h-2.5 w-2.5" />
-                  </span>
-                  <span>Start your journey with TMMT today</span>
-                </>
+                <><span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#14235E]/10 text-[#14235E]"><Rocket className="h-2.5 w-2.5" /></span> Start your journey with TMMT today</>
               )}
             </p>
           </div>
         </div>
 
-        {/* ─── Content Area ────────────────────────────────────────────────── */}
-        <div className="space-y-6 p-3 sm:space-y-8 sm:p-4 md:space-y-10 md:p-6 lg:p-8">
+        <div className="space-y-6 p-4 sm:p-6 lg:p-8">
           {renderContent()}
         </div>
       </main>
 
-      {/* Mobile Bottom Tab Bar */}
-      <nav className="bg-white/95 dark:bg-[#0a0a0f]/95 border-gray-200/60 dark:border-white/[0.06] fixed inset-x-0 bottom-0 z-30 flex items-center justify-around border-t px-2 py-2 backdrop-blur-xl lg:hidden">
+      {/* ─── Mobile Bottom Nav ────────────────────────────────────────── */}
+      <nav className="bg-white/95 dark:bg-[#0a0a0f]/95 border-t border-gray-200/60 dark:border-white/5 fixed inset-x-0 bottom-0 z-30 flex items-center justify-around px-2 py-2 backdrop-blur-xl lg:hidden">
         {NAV_ITEMS.slice(0, 4).map(({ path, label, icon: Icon, key }) => (
-          <button
-            key={key}
-            onClick={() => handleNavigate(path)}
-            className="flex-1 relative group"
-          >
-            <div
-              className={`flex w-full flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[11px] transition-all duration-200 ${
-                isActiveTab(key as TabKey)
-                  ? 'text-[#14235E] font-semibold'
-                  : 'text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
-              }`}
-            >
-              {isActiveTab(key as TabKey) && (
-                <motion.div
-                  layoutId="mobile-tab-indicator"
-                  className="absolute -top-0.5 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#14235E]"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
+          <button key={key} onClick={() => handleNavigate(path)} className="flex-1 relative group">
+            <div className={`flex w-full flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[11px] transition ${isActiveTab(key as TabKey) ? 'text-[#14235E] font-semibold' : 'text-gray-500 dark:text-gray-400'}`}>
+              {isActiveTab(key as TabKey) && <motion.div layoutId="mobile-tab" className="absolute -top-0.5 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#14235E]" transition={{ type: 'spring', stiffness: 400, damping: 30 }} />}
               <Icon className={`h-5 w-5 ${isActiveTab(key as TabKey) ? 'text-[#14235E]' : ''}`} />
               <span className="text-[10px]">{label}</span>
             </div>
@@ -1779,318 +1216,46 @@ const renderContent = () => {
         ))}
       </nav>
 
-      {/* Dialogs */}
-      <Dialog
-        open={showApplicationDetails}
-        onOpenChange={setShowApplicationDetails}
-      >
-        <DialogContent className="max-h-[90vh] w-[95vw] max-w-4xl overflow-y-auto rounded-2xl border-gray-200 dark:border-white/10 bg-white dark:bg-[#12121c] sm:w-full">
+      {/* ─── Dialogs ────────────────────────────────────────────────────── */}
+      <Dialog open={showApplicationDetails} onOpenChange={setShowApplicationDetails}>
+        <DialogContent className="max-h-[90vh] w-[95vw] max-w-4xl overflow-y-auto rounded-2xl border-gray-200 dark:border-white/10 bg-white dark:bg-[#0c0c14]">
           {selectedApplication && (
             <>
               <DialogHeader>
                 <DialogTitle className="flex flex-wrap items-center gap-2 text-gray-900 dark:text-white">
-                  {(() => {
-                    const config = getStatusConfig(selectedApplication.status);
-                    const StatusIcon = config.icon;
-                    return <StatusIcon className={`h-5 w-5 ${config.color}`} />;
-                  })()}
-                  <span>
-                    {selectedApplication.applicationType
-                      .replace(/_/g, ' ')
-                      .split(' ')
-                      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                      .join(' ')}
-                  </span>
-                  <Badge
-                    className={`${getStatusConfig(selectedApplication.status).bg} ${getStatusConfig(selectedApplication.status).color} border-0`}
-                  >
-                    {getStatusConfig(selectedApplication.status).label}
-                  </Badge>
+                  {(() => { const config = getStatusConfig(selectedApplication.status); const Icon = config.icon; return <Icon className={`h-5 w-5 ${config.color}`} />; })()}
+                  <span>{selectedApplication.applicationType.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</span>
+                  <Badge className={`${getStatusConfig(selectedApplication.status).bg} ${getStatusConfig(selectedApplication.status).color} border-0`}>{getStatusConfig(selectedApplication.status).label}</Badge>
                 </DialogTitle>
-                <DialogDescription className="text-gray-500 dark:text-gray-400">
-                  Application ID: {selectedApplication.id}
-                </DialogDescription>
+                <DialogDescription className="text-gray-500 dark:text-gray-400">Application ID: {selectedApplication.id}</DialogDescription>
               </DialogHeader>
-
               <div className="mt-4 space-y-6">
-                <Card className="rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-gray-50 dark:bg-white/[0.02]">
-                  <CardHeader>
-                    <CardTitle className="text-lg text-gray-900 dark:text-white">
-                      Application Details
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
-                      <div>
-                        <Label className="text-gray-500 dark:text-gray-500">
-                          Application Type
-                        </Label>
-                        <p className="font-medium text-gray-900 dark:text-gray-200">
-                          {selectedApplication.applicationType.replace(
-                            /_/g,
-                            ' '
-                          )}
-                        </p>
-                      </div>
-                      <div>
-                        <Label className="text-gray-500 dark:text-gray-500">Status</Label>
-                        <Badge
-                          className={`${getStatusConfig(selectedApplication.status).bg} ${getStatusConfig(selectedApplication.status).color} border-0`}
-                        >
-                          {getStatusConfig(selectedApplication.status).label}
-                        </Badge>
-                      </div>
-                      <div>
-                        <Label className="text-gray-500 dark:text-gray-500">Created</Label>
-                        <p className="font-medium text-gray-900 dark:text-gray-200">
-                          {new Date(
-                            selectedApplication.createdAt
-                          ).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div>
-                        <Label className="text-gray-500 dark:text-gray-500">
-                          Last Updated
-                        </Label>
-                        <p className="font-medium text-gray-900 dark:text-gray-200">
-                          {new Date(
-                            selectedApplication.updatedAt
-                          ).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Sponsor Information */}
-                <Card className="rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-gray-50 dark:bg-white/[0.02]">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
-                      <User className="h-4 w-4" />
-                      Sponsor Information
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
-                      <div>
-                        <Label className="text-gray-500 dark:text-gray-500">Name</Label>
-                        <p className="font-medium text-gray-900 dark:text-gray-200">
-                          {selectedApplication.sponsor.firstName}{' '}
-                          {selectedApplication.sponsor.lastName}
-                        </p>
-                      </div>
-                      <div>
-                        <Label className="text-gray-500 dark:text-gray-500">Email</Label>
-                        <p className="font-medium text-gray-900 dark:text-gray-200 break-all">
-                          {selectedApplication.sponsor.email}
-                        </p>
-                      </div>
-                      {selectedApplication.sponsor.phoneNumber && (
-                        <div>
-                          <Label className="text-gray-500 dark:text-gray-500">Phone</Label>
-                          <p className="font-medium text-gray-900 dark:text-gray-200">
-                            {selectedApplication.sponsor.phoneNumber}
-                          </p>
+                <Card><CardHeader><CardTitle className="text-sm font-semibold">Details</CardTitle></CardHeader><CardContent className="grid grid-cols-2 gap-4 text-sm">
+                  <div><Label className="text-gray-500">Type</Label><p className="font-medium text-gray-900 dark:text-white">{selectedApplication.applicationType.replace(/_/g, ' ')}</p></div>
+                  <div><Label className="text-gray-500">Status</Label><Badge className={`${getStatusConfig(selectedApplication.status).bg} ${getStatusConfig(selectedApplication.status).color} border-0`}>{getStatusConfig(selectedApplication.status).label}</Badge></div>
+                  <div><Label className="text-gray-500">Created</Label><p className="font-medium text-gray-900 dark:text-white">{new Date(selectedApplication.createdAt).toLocaleDateString()}</p></div>
+                  <div><Label className="text-gray-500">Updated</Label><p className="font-medium text-gray-900 dark:text-white">{new Date(selectedApplication.updatedAt).toLocaleDateString()}</p></div>
+                </CardContent></Card>
+                {selectedApplication.attachments?.length > 0 && (
+                  <Card><CardHeader><CardTitle className="flex items-center gap-2 text-sm"><FileText className="h-4 w-4" /> Documents ({selectedApplication.attachments.length})</CardTitle></CardHeader><CardContent className="space-y-2">
+                    {selectedApplication.attachments.map((doc: any, i: number) => (
+                      <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-gray-200/60 dark:border-white/5">
+                        <div className="flex items-center gap-2"><FileText className="h-4 w-4 text-gray-400" /><span className="text-sm font-medium text-gray-900 dark:text-white truncate">{doc.filename || doc.originalName || 'Document'}</span></div>
+                        <div className="flex gap-1">
+                          <Button variant="ghost" size="sm" onClick={() => handleViewResultDocument(doc, selectedApplication)}><Eye className="h-4 w-4" /></Button>
+                          <Button variant="ghost" size="sm" onClick={() => handleDocumentDownload(doc, selectedApplication)}><Download className="h-4 w-4" /></Button>
                         </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Submitted Documents */}
-                {selectedApplication.attachments &&
-                  selectedApplication.attachments.length > 0 && (
-                    <Card className="rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-gray-50 dark:bg-white/[0.02]">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
-                          <FileText className="h-4 w-4" />
-                          Submitted Documents (
-                          {selectedApplication.attachments.length})
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {selectedApplication.attachments.map(
-                            (doc: any, idx: number) => (
-                              <div
-                                key={idx}
-                                className="flex items-center justify-between gap-2 rounded-lg border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-3"
-                              >
-                                <div className="flex min-w-0 items-center gap-2">
-                                  <FileText className="h-4 w-4 shrink-0 text-[#64748b] dark:text-[#4A8ABF]" />
-                                  <div className="min-w-0">
-                                    <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-200">
-                                      {doc.filename ||
-                                        doc.originalName ||
-                                        'Document'}
-                                    </p>
-                                    {doc.status && (
-                                      <Badge className="mt-1 text-xs bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 border-0">
-                                        {doc.status}
-                                      </Badge>
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="flex shrink-0 gap-1">
-                                  <Button
-                                    onClick={() =>
-                                      handleViewResultDocument(doc, selectedApplication)
-                                    }
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-                                  >
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-                                    onClick={() =>
-                                      handleDocumentDownload(doc, selectedApplication)
-                                    }
-                                  >
-                                    <Download className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                {/* Result Documents */}
-                {(selectedApplication as any).resultDocuments &&
-                  (selectedApplication as any).resultDocuments.length > 0 && (
-                    <Card className="border-[#0d9488]/25 bg-[#0d9488]/[0.05] rounded-xl">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-lg text-[#0d9488]">
-                          <CheckCircle className="h-4 w-4 text-[#0d9488]" />
-                          Result Documents (
-                          {(selectedApplication as any).resultDocuments.length})
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {(selectedApplication as any).resultDocuments.map(
-                            (doc: any, idx: number) => (
-                              <div
-                                key={idx}
-                                className="flex items-center justify-between gap-2 rounded-lg border border-[#0d9488]/25 bg-[#0d9488]/[0.05] p-3"
-                              >
-                                <div className="flex min-w-0 flex-1 items-center gap-2">
-                                  <Zap className="h-4 w-4 shrink-0 text-[#0d9488]" />
-                                  <div className="min-w-0 flex-1">
-                                    <p className="truncate text-sm font-medium text-[#0d9488]">
-                                      {doc.label ||
-                                        doc.originalName ||
-                                        'Result Document'}
-                                    </p>
-                                    <div className="mt-1 flex flex-wrap items-center gap-2">
-                                      <p className="text-xs text-[#0d9488]/80">
-                                        Uploaded:{' '}
-                                        {new Date(
-                                          doc.uploadedAt
-                                        ).toLocaleDateString()}
-                                      </p>
-                                      {doc.uploadedByRole && (
-                                        <Badge className="bg-[#64748b]/10 text-[10px] text-[#64748b] border-0">
-                                          by {doc.uploadedByRole}
-                                        </Badge>
-                                      )}
-                                    </div>
-                                    {doc.description && (
-                                      <p className="mt-1 text-xs text-[#0d9488]/70">
-                                        {doc.description}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="flex shrink-0 gap-1">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-[#0d9488] hover:bg-[#0d9488]/10"
-                                    onClick={() =>
-                                      handleViewResultDocument(doc, selectedApplication)
-                                    }
-                                  >
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-[#0d9488] hover:bg-[#0d9488]/10"
-                                    onClick={() => handleDocumentDownload(doc, selectedApplication)}
-                                  >
-                                    <Download className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                {/* Application History */}
-                {selectedApplication.history &&
-                  selectedApplication.history.length > 0 && (
-                    <Card className="rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-gray-50 dark:bg-white/[0.02]">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
-                          <History className="h-4 w-4" />
-                          Application History
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          {selectedApplication.history.map(
-                            (event: any, index: number) => (
-                              <div
-                                key={index}
-                                className="flex items-start gap-3"
-                              >
-                                <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#14235E]" />
-                                <div className="min-w-0 flex-1">
-                                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                                    {event.action
-                                      ?.replace('_', ' ')
-                                      .toUpperCase()}
-                                  </p>
-                                  {event.note && (
-                                    <p className="text-gray-500 dark:text-gray-500 text-xs">
-                                      {event.note}
-                                    </p>
-                                  )}
-                                  <p className="text-gray-500 dark:text-gray-500 mt-1 text-xs">
-                                    {new Date(event.at).toLocaleString()}
-                                  </p>
-                                </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
+                      </div>
+                    ))}
+                  </CardContent></Card>
+                )}
               </div>
             </>
           )}
         </DialogContent>
       </Dialog>
 
-      {showStartApplication && (
-        <StartApplicationDialog
-          open={showStartApplication}
-          onOpenChange={setShowStartApplication}
-          queryParams=""
-        />
-      )}
-
+      {showStartApplication && <StartApplicationDialog open={showStartApplication} onOpenChange={setShowStartApplication} queryParams="" />}
       <LiveChatWidget />
     </div>
   );

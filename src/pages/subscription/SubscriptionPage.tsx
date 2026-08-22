@@ -737,9 +737,9 @@ export function PlanSelectionSection({
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mt-4 max-w-3xl mx-auto"
         >
-          <div className="relative rounded-lg sm:rounded-xl border border-[#14235E]/20 bg-[#14235E]/5 dark:bg-black p-2.5 sm:p-3 md:p-4">
+          <div className="relative rounded-lg sm:rounded-xl border border-[#14235E]/900 bg-[#14235E]/5 dark:bg-black p-2.5 sm:p-3 md:p-4">
             <div className="flex items-start gap-2">
-              <div className="p-0.5 sm:p-1 rounded-full bg-[#14235E]/10 dark:bg-zinc-800 mt-0.5 flex-shrink-0">
+              <div className="p-0.5 sm:p-1 rounded-full bg-[#14235E]/10 dark:bg-zinc-900 mt-0.5 flex-shrink-0">
                 <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#14235E]" strokeWidth={2.5} />
               </div>
               <div>

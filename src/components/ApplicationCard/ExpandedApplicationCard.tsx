@@ -574,7 +574,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       if (response.ok) {
         setBoostCount((prev: number) => prev + 1);
-        toast.success('Priority boost activated!', {
+        toast.success('Priority  activated!', {
           description: 'Your application has been moved up in the queue',
         });
         setShowBoostDialog(false);
@@ -2035,7 +2035,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       {/* ─── Inline Image Preview Dialog ────────────────────────────────── */}
       <Dialog open={!!previewImage} onOpenChange={() => setPreviewImage(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] w-[90vw] sm:w-[50vw] border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl shadow-2xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] w-[90vw] sm:w-[50vw] border border-gray-200/50 dark:border-white/10 p-0 overflow-hidden rounded-2xl">
           <div className="relative flex items-center justify-center w-full h-full min-h-[200px] sm:min-h-[300px] p-3 sm:p-4">
             {previewImage && (
               <img
@@ -2054,11 +2054,8 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       {/* ─── Boost Dialog ────────────────────────────────────────────────── */}
       <Dialog open={showBoostDialog} onOpenChange={setShowBoostDialog}>
-        <DialogContent className="max-w-md bg-white/95 dark:bg-[#0A1628] backdrop-blur-sm border border-[#14235E]/20 dark:border-[#14235E]/30 rounded-2xl p-0 shadow-2xl shadow-[#14235E]/10 dark:shadow-[#14235E]/20 overflow-hidden">
-          <div className="relative px-6 pt-6 pb-4 border-b border-[#14235E]/10 dark:border-[#14235E]/20 bg-gradient-to-br from-[#14235E]/5 to-[#1A4A8A]/5 dark:from-[#14235E]/10 dark:to-[#1A4A8A]/10">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#14235E]/10 rounded-full blur-3xl -translate-y-12 translate-x-12" />
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#1A4A8A]/10 rounded-full blur-2xl translate-y-8 -translate-x-8" />
-            
+        <DialogContent className="max-w-md bg-white/95 dark:bg-[#0A1628]/5 backdrop-blur-sm border border-[#14235E]/20 dark:border-[#14235E]/30 rounded-2xl p-0 overflow-hidden">
+          <div className="relative px-6 pt-6 pb-4 border-b border-[#14235E]/10 dark:border-[#14235E]/20 bg-gradient-to-br from-[#14235E]/5">
             <DialogHeader className="relative">
               <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-white">
                 <div className="p-2 rounded-xl bg-[#14235E] shadow-lg shadow-[#14235E]/25">
@@ -2128,7 +2125,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               )}
             </div>
 
-            <div className="bg-gray-50/80 dark:bg-white/5 rounded-xl p-3.5 border border-gray-200/50 dark:border-white/5">
+            <div className="bg-gray-50/80 dark:bg-white/600 rounded-xl p-3.5 border border-gray-200/50 dark:border-white/5">
               <p className="text-[10px] font-semibold text-[#14235E] dark:text-[#4A8ABF] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                 <Award className="h-3.5 w-3.5" />
                 Boost Benefits
@@ -2197,7 +2194,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       {/* ─── Edit Dialog ──────────────────────────────────────────────────── */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-lg bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-gray-200/50 dark:border-white/10 rounded-3xl p-0 shadow-2xl overflow-hidden">
+        <DialogContent className="max-w-lg bg-white/95 dark:bg-[#0A1628]/5 backdrop-blur-sm border border-gray-200/50 dark:border-white/10 rounded-3xl p-0 overflow-hidden">
           <div className="px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-200/50 dark:border-white/10">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl font-bold text-gray-900 dark:text-white">

@@ -1,5 +1,5 @@
 /* ============================================================
-   SMOOTH SCROLLING STYLES - ULTRA PREMIUM
+   SMOOTH SCROLLING STYLES - ULTRA PREMIUM v2
    ============================================================ */
 
 /* ============================================================
@@ -33,7 +33,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primaryHover, #14235E);
+  background: var(--primaryHover, #4A8ABF);
 }
 
 * {
@@ -41,9 +41,8 @@ html {
   scrollbar-color: var(--primary, #14235E) transparent;
 }
 
-/* Dark mode scrollbar */
 .dark ::-webkit-scrollbar-thumb {
-  background: var(--primary, #14235E);
+  background: var(--primary, #4A8ABF);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
@@ -51,9 +50,64 @@ html {
 }
 
 .dark * {
-  scrollbar-color: var(--primary, #14235E) transparent;
+  scrollbar-color: var(--primary, #4A8ABF) transparent;
 }
 
+/* ============================================================
+   3. SCROLL PROGRESS INDICATOR (Enhanced)
+   ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  z-index: 9999;
+  background: linear-gradient(90deg, #14235E, #4A8ABF, #14235E);
+  background-size: 200% 100%;
+  width: 0%;
+  transition: width 0.1s ease-out;
+  opacity: 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.scroll-progress.active {
+  opacity: 1;
+  animation: shimmerProgress 3s linear infinite;
+}
+
+@keyframes shimmerProgress {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============================================================
+   4. SCROLL TOP BUTTON (Enhanced)
+   ============================================================ */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 999;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #14235E;
+  color: white;
+  border: none;
+  box-shadow: 0 6px 24px rgba(20,35,94,0.35);
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
+  transition: opacity 0.4s cubic-bezier(0.22,1,0.36,1),
+              transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  background: rgba(20,35,94,0.9);
+  border: 1px solid rgba(255,255,255,0.15);
+}
 
 .scroll-top-btn.visible {
   opacity: 1;
@@ -61,25 +115,37 @@ html {
 }
 
 .scroll-top-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(10, 50, 105, 0.5);
+  transform: scale(1.12) translateY(-4px);
+  box-shadow: 0 12px 40px rgba(20,35,94,0.5);
+  background: #14235E;
 }
 
 .scroll-top-btn:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
 .dark .scroll-top-btn {
-  background: #14235E;
-  box-shadow: 0 4px 20px rgba(74, 138, 191, 0.3);
+  background: rgba(74,138,191,0.9);
+  box-shadow: 0 6px 24px rgba(74,138,191,0.3);
 }
 
 .dark .scroll-top-btn:hover {
-  box-shadow: 0 6px 30px rgba(74, 138, 191, 0.5);
+  box-shadow: 0 12px 40px rgba(74,138,191,0.5);
+  background: #4A8ABF;
+}
+
+.scroll-top-btn svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.3s ease;
+}
+
+.scroll-top-btn:hover svg {
+  transform: translateY(-3px);
 }
 
 /* ============================================================
-   5. SCROLL ANIMATIONS - SECTION LEVEL (UPDATED)
+   5. SCROLL ANIMATIONS - SECTION LEVEL (Enhanced)
    ============================================================ */
 
 /* 5.1 Fade In Scroll - Smooth Rise */
@@ -265,7 +331,161 @@ html {
 }
 
 /* ============================================================
-   6. STAGGER CHILDREN - For Lists/Grids
+   6. ADVANCED SCROLL ANIMATIONS (NEW)
+   ============================================================ */
+
+/* 6.1 Morphing Shape - In */
+.morph-in {
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.6s ease;
+  opacity: 0;
+}
+
+.morph-in.visible {
+  clip-path: circle(70% at 50% 50%);
+  opacity: 1;
+}
+
+/* 6.2 Staggered Text Reveal - Character/Word */
+.text-reveal {
+  overflow: hidden;
+}
+
+.text-reveal span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) rotate(2deg);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.text-reveal.visible span {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+}
+
+.text-reveal span:nth-child(1) { transition-delay: 0.05s; }
+.text-reveal span:nth-child(2) { transition-delay: 0.1s; }
+.text-reveal span:nth-child(3) { transition-delay: 0.15s; }
+.text-reveal span:nth-child(4) { transition-delay: 0.2s; }
+.text-reveal span:nth-child(5) { transition-delay: 0.25s; }
+.text-reveal span:nth-child(6) { transition-delay: 0.3s; }
+.text-reveal span:nth-child(7) { transition-delay: 0.35s; }
+.text-reveal span:nth-child(8) { transition-delay: 0.4s; }
+.text-reveal span:nth-child(9) { transition-delay: 0.45s; }
+.text-reveal span:nth-child(10) { transition-delay: 0.5s; }
+
+/* 6.3 3D Tilt on Scroll */
+.tilt-3d {
+  transform-style: preserve-3d;
+  transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateZ(0);
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tilt-3d.visible {
+  transform: perspective(1200px) rotateX(2deg) rotateY(3deg) translateZ(20px);
+}
+
+.tilt-3d-reverse.visible {
+  transform: perspective(1200px) rotateX(-2deg) rotateY(-3deg) translateZ(20px);
+}
+
+/* 6.4 Gradient Background Shift */
+.gradient-shift {
+  background: linear-gradient(135deg, #14235E, #4A8ABF, #14235E);
+  background-size: 300% 300%;
+  transition: background-position 0.8s ease;
+}
+
+.gradient-shift.visible {
+  animation: gradientMove 4s ease infinite alternate;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 6.5 Floating Particles - Subtle */
+.particles-container {
+  position: relative;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(20,35,94,0.15);
+  animation: floatParticle 6s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { width: 10px; height: 10px; top: 10%; left: 20%; animation-delay: 0s; }
+.particle:nth-child(2) { width: 6px; height: 6px; top: 60%; left: 80%; animation-delay: 1s; }
+.particle:nth-child(3) { width: 14px; height: 14px; top: 30%; left: 70%; animation-delay: 2s; }
+.particle:nth-child(4) { width: 8px; height: 8px; top: 80%; left: 10%; animation-delay: 0.5s; }
+.particle:nth-child(5) { width: 12px; height: 12px; top: 50%; left: 40%; animation-delay: 1.5s; }
+
+@keyframes floatParticle {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-30px) scale(1.5); opacity: 0.2; }
+}
+
+/* 6.6 Reveal with Scale and Opacity */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 6.7 Slide with Glow */
+.slide-glow {
+  opacity: 0;
+  transform: translateX(-60px);
+  filter: drop-shadow(0 0 20px rgba(20,35,94,0));
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.8s ease;
+}
+
+.slide-glow.visible {
+  opacity: 1;
+  transform: translateX(0);
+  filter: drop-shadow(0 0 20px rgba(20,35,94,0.15));
+}
+
+/* 6.8 3D Flip Card */
+.flip-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* ============================================================
+   7. STAGGER CHILDREN - For Lists/Grids
    ============================================================ */
 .stagger-children > * {
   opacity: 0;
@@ -293,7 +513,7 @@ html {
 }
 
 /* ============================================================
-   7. STAGGER ITEM - Individual Items
+   8. STAGGER ITEM - Individual Items
    ============================================================ */
 .stagger-item {
   opacity: 0;
@@ -319,7 +539,7 @@ html {
 .stagger-item:nth-child(10) { transition-delay: 0.5s; }
 
 /* ============================================================
-   8. PARALLAX EFFECTS
+   9. PARALLAX EFFECTS (Enhanced)
    ============================================================ */
 .parallax-element {
   will-change: transform;
@@ -330,8 +550,16 @@ html {
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.parallax-multi {
+  will-change: transform, opacity;
+}
+
+.parallax-layer-1 { transform: translateZ(-10px) scale(1.2); }
+.parallax-layer-2 { transform: translateZ(0px) scale(1); }
+.parallax-layer-3 { transform: translateZ(10px) scale(0.9); }
+
 /* ============================================================
-   9. SCROLL INDICATOR
+   10. SCROLL INDICATOR
    ============================================================ */
 .scroll-indicator {
   display: inline-block;
@@ -339,15 +567,9 @@ html {
 }
 
 @keyframes bounceDown {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
 }
 
 .scroll-hint {
@@ -360,7 +582,7 @@ html {
 }
 
 /* ============================================================
-   10. SECTION ANCHOR OFFSET
+   11. SECTION ANCHOR OFFSET
    ============================================================ */
 .section-anchor {
   scroll-margin-top: 80px;
@@ -371,7 +593,7 @@ html {
 }
 
 /* ============================================================
-   11. SCROLL SNAP
+   12. SCROLL SNAP
    ============================================================ */
 .scroll-snap-y {
   scroll-snap-type: y proximity;
@@ -382,7 +604,24 @@ html {
 }
 
 /* ============================================================
-   12. RESPONSIVE ADJUSTMENTS
+   13. COUNTER ANIMATION
+   ============================================================ */
+.counter {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter.visible {
+  animation: countUp 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   14. RESPONSIVE ADJUSTMENTS
    ============================================================ */
 
 /* Tablets */
@@ -395,26 +634,23 @@ html {
   .zoom-blur-in,
   .flip-in,
   .reveal-on-scroll,
-  .slide-fade {
+  .slide-fade,
+  .slide-glow,
+  .morph-in {
     transform: translateY(30px);
     transition-duration: 0.7s;
   }
 
-  .slide-in-left {
-    transform: translateX(-40px);
-  }
-
-  .slide-in-right {
-    transform: translateX(40px);
-  }
-
-  .slide-in-bottom {
-    transform: translateY(40px);
-  }
-
+  .slide-in-left { transform: translateX(-40px); }
+  .slide-in-right { transform: translateX(40px); }
+  .slide-in-bottom { transform: translateY(40px); }
   .zoom-blur-in {
     transform: scale(0.9) translateY(15px);
     filter: blur(3px);
+  }
+  .tilt-3d.visible,
+  .tilt-3d-reverse.visible {
+    transform: none;
   }
 }
 
@@ -428,23 +664,16 @@ html {
   .zoom-blur-in,
   .flip-in,
   .reveal-on-scroll,
-  .slide-fade {
+  .slide-fade,
+  .slide-glow,
+  .morph-in {
     transform: translateY(20px);
     transition-duration: 0.5s;
   }
 
-  .slide-in-left {
-    transform: translateX(-25px);
-  }
-
-  .slide-in-right {
-    transform: translateX(25px);
-  }
-
-  .slide-in-bottom {
-    transform: translateY(30px);
-  }
-
+  .slide-in-left { transform: translateX(-25px); }
+  .slide-in-right { transform: translateX(25px); }
+  .slide-in-bottom { transform: translateY(30px); }
   .zoom-blur-in {
     transform: scale(0.95) translateY(10px);
     filter: blur(2px);
@@ -456,21 +685,17 @@ html {
     bottom: 20px;
     right: 20px;
   }
-
   .scroll-top-btn svg {
     width: 20px;
     height: 20px;
   }
-
   .scroll-progress {
     height: 2px;
   }
 
-  /* Stagger children on mobile - faster */
   .stagger-children > * {
     transition-duration: 0.4s;
   }
-
   .stagger-children.visible > *:nth-child(1) { transition-delay: 0.02s; }
   .stagger-children.visible > *:nth-child(2) { transition-delay: 0.04s; }
   .stagger-children.visible > *:nth-child(3) { transition-delay: 0.06s; }
@@ -482,7 +707,6 @@ html {
   .stagger-children.visible > *:nth-child(9) { transition-delay: 0.18s; }
   .stagger-children.visible > *:nth-child(10) { transition-delay: 0.2s; }
 
-  /* Single column items stagger */
   .stagger-item:nth-child(1) { transition-delay: 0.02s; }
   .stagger-item:nth-child(2) { transition-delay: 0.04s; }
   .stagger-item:nth-child(3) { transition-delay: 0.06s; }
@@ -505,14 +729,16 @@ html {
   .zoom-blur-in,
   .flip-in,
   .reveal-on-scroll,
-  .slide-fade {
+  .slide-fade,
+  .slide-glow,
+  .morph-in {
     transform: translateY(15px);
     transition-duration: 0.4s;
   }
 }
 
 /* ============================================================
-   13. REDUCED MOTION PREFERENCE
+   15. REDUCED MOTION PREFERENCE
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -537,18 +763,30 @@ html {
   .rotate-in,
   .bounce-in,
   .stagger-children > *,
-  .stagger-item {
+  .stagger-item,
+  .morph-in,
+  .slide-glow,
+  .tilt-3d,
+  .tilt-3d-reverse,
+  .particle,
+  .text-reveal span,
+  .gradient-shift.visible,
+  .counter.visible {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
+    animation: none !important;
+    transition: none !important;
   }
 
   .scroll-progress {
     display: none !important;
   }
-
   .scroll-indicator {
     animation: none !important;
+  }
+  .scroll-top-btn {
+    display: none !important;
   }
 }
 

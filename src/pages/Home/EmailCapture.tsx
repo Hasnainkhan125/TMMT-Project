@@ -1115,380 +1115,385 @@ const SelectField = ({
                     <ChevronDown className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                   </motion.div>
                 </div>
+{/* ─── Form (collapsible) ───────────────────────── */}
+<AnimatePresence initial={false}>
+  {!collapsed && (
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{ height: "auto", opacity: 1 }}
+      exit={{ height: 0, opacity: 0 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className="overflow-hidden"
+    >
+      <div
+        className={`
+          ec-glass-panel ec-panel-border ${isDarkMode ? "dark" : ""}
+          relative rounded-b-2xl overflow-hidden
+          border-x border-b ${isDarkMode ? "border-white/10" : "border-[#14235E]/10"}
+        `}
+      >
+        {/* ── Idle state: just email + CTA ── */}
+        {formMode === "idle" && (
+          <div className="p-4 sm:p-6 md:p-6">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3">
+              <div className="flex-1">
+                <FloatingInput
+                  icon={Mail}
+                  label={lang.emailPlaceholder}
+                  type="email"
+                  value={email}
+                  onChange={(v) => {
+                    setEmail(v);
+                    if (!emailTouched) setEmailTouched(true);
+                  }}
+                  isValid={isValidEmail}
+                  errorMessage={lang.emailError}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
 
-                {/* ─── Form (collapsible) ───────────────────────── */}
-                <AnimatePresence initial={false}>
-                  {!collapsed && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div
-                        className={`
-                          ec-glass-panel ec-panel-border ${isDarkMode ? 'dark' : ''}
-                          relative rounded-b-2xl overflow-hidden
-                          border-x border-b ${isDarkMode ? 'border-white/10' : 'border-[#14235E]/10'}
-                        `}
+              {/* Gradient-border wrapper replaces the drop shadow */}
+              <motion.div
+                className="relative rounded-2xl p-[1.5px] shrink-0"
+                style={{ background: "linear-gradient(135deg, #4A8ABF, #14235E)" }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <button
+                  onClick={handleCtaClick}
+                  disabled={!isValidEmail || isDetecting}
+                  className="group relative overflow-hidden flex items-center justify-center gap-3 px-6 sm:px-8 h-14 sm:h-[60px] text-sm sm:text-base md:text-lg font-bold text-white rounded-[15px] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 w-full h-full"
+                  style={{
+                    backgroundColor: "#14235E",
+                    ["--tw-outline-color" as any]: "#14235E",
+                  }}
+                >
+                  <span className="relative z-10 flex items-center gap-3">
+                    {isDetecting ? (
+                      <>
+                        <div className="h-4 w-4 sm:h-5 sm:w-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                        {lang.preparing}
+                      </>
+                    ) : (
+                      <>
+                        {lang.cta}
+                        <ForwardIcon
+                          className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 rtl:group-hover:-translate-x-1.5 ltr:group-hover:translate-x-1.5"
+                          strokeWidth={2.5}
+                        />
+                      </>
+                    )}
+                  </span>
+                </button>
+              </motion.div>
+            </div>
+
+            <p className={`mt-3.5 sm:mt-4 px-1 text-[10px] sm:text-xs leading-5 ${isDarkMode ? "text-white/30" : "text-gray-400"}`}>
+              {lang.terms}
+              <a href="/t&c" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#14235E] hover:text-[#1A4A8A]">
+                {lang.termsLink}
+              </a>
+              {isArabic ? "و" : "and"}
+              <a href="/privacy" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#14235E] hover:text-[#1A4A8A]">
+                {lang.privacyLink}
+              </a>
+              . {lang.unsubscribe}
+            </p>
+          </div>
+        )}
+
+        {/* ── Active form: two-step ── */}
+        {formMode !== "idle" && (
+          <>
+            <div
+              className={`flex items-center gap-2 sm:gap-3 px-4 sm:px-6 md:px-7 pt-4 sm:pt-6 pb-3 sm:pb-5 border-b ${
+                isDarkMode ? "border-white/10" : "border-[#14235E]/10"
+              }`}
+            >
+              {[1, 2].map((n, idx) => {
+                const currentStep = formMode === "step1" ? 1 : 2;
+                const isActive = currentStep >= n;
+                return (
+                  <div key={n} className="flex items-center gap-2 sm:gap-3 flex-1 last:flex-initial">
+                    <div className="flex items-center gap-2">
+                      {/* Step badge — glow ring instead of boxShadow */}
+                      <motion.div
+                        className="relative flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300"
+                        style={{
+                          backgroundColor: isActive ? NAVY : isDarkMode ? "#ffffff14" : "#14235E0f",
+                          color: isActive ? "#fff" : isDarkMode ? "#ffffff80" : "#14235E80",
+                        }}
+                        animate={isActive ? { scale: [1, 1.1, 1] } : {}}
+                        transition={{ duration: 0.3 }}
                       >
-                        {/* ── Idle state: just email + CTA ── */}
-                        {formMode === 'idle' && (
-                          <div className="p-4 sm:p-6 md:p-6">
-                            <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3">
-                              <div className="flex-1">
-                                <FloatingInput
-                                  icon={Mail}
-                                  label={lang.emailPlaceholder}
-                                  type="email"
-                                  value={email}
-                                  onChange={(v) => {
-                                    setEmail(v);
-                                    if (!emailTouched) setEmailTouched(true);
-                                  }}
-                                  isValid={isValidEmail}
-                                  errorMessage={lang.emailError}
-                                  isDarkMode={isDarkMode}
-                                />
-                              </div>
-                              <motion.button
-                                onClick={handleCtaClick}
-                                disabled={!isValidEmail || isDetecting}
-                                className="group relative overflow-hidden flex items-center justify-center gap-3 px-6 sm:px-8 h-14 sm:h-[60px] text-sm sm:text-base md:text-lg font-bold text-white rounded-2xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap hover:-translate-y-0.5 active:translate-y-0 shadow-[0_10px_30px_-10px_rgba(10,50,105,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 shrink-0"
-                                style={{
-                                  backgroundColor: '#14235E',
-                                  ['--tw-outline-color' as any]: '#14235E',
-                                }}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.97 }}
-                              >
-                                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                                <span className="relative z-10 flex items-center gap-3">
-                                  {isDetecting ? (
-                                    <>
-                                      <div className="h-4 w-4 sm:h-5 sm:w-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                                      {lang.preparing}
-                                    </>
-                                  ) : (
-                                    <>
-                                      {lang.cta}
-                                      <ForwardIcon
-                                        className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 rtl:group-hover:-translate-x-1.5 ltr:group-hover:translate-x-1.5"
-                                        strokeWidth={2.5}
-                                      />
-                                    </>
-                                  )}
-                                </span>
-                              </motion.button>
-                            </div>
-
-                            <p className={`mt-3.5 sm:mt-4 px-1 text-[10px] sm:text-xs leading-5 ${isDarkMode ? 'text-white/30' : 'text-gray-400'}`}>
-                              {lang.terms}
-                              <a href="/t&c" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#14235E] hover:text-[#1A4A8A]">
-                                {lang.termsLink}
-                              </a>
-                              {isArabic ? 'و' : 'and'}
-                              <a href="/privacy" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#14235E] hover:text-[#1A4A8A]">
-                                {lang.privacyLink}
-                              </a>
-                              . {lang.unsubscribe}
-                            </p>
-                          </div>
+                        {isActive && (
+                          <span
+                            className="absolute -inset-1 rounded-full opacity-60 blur-[6px] -z-10"
+                            style={{ background: `radial-gradient(circle, ${NAVY}88, transparent 70%)` }}
+                          />
                         )}
-
-                        {/* ── Active form: two-step ── */}
-                        {formMode !== 'idle' && (
-                          <>
-                            <div
-                              className={`flex items-center gap-2 sm:gap-3 px-4 sm:px-6 md:px-7 pt-4 sm:pt-6 pb-3 sm:pb-5 border-b ${
-                                isDarkMode ? 'border-white/10' : 'border-[#14235E]/10'
-                              }`}
-                            >
-                              {[1, 2].map((n, idx) => {
-                                const currentStep = formMode === 'step1' ? 1 : 2;
-                                return (
-                                  <div key={n} className="flex items-center gap-2 sm:gap-3 flex-1 last:flex-initial">
-                                    <div className="flex items-center gap-2">
-                                      <motion.div
-                                        className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300"
-                                        style={{
-                                          backgroundColor: currentStep >= n ? NAVY : isDarkMode ? '#ffffff14' : '#14235E0f',
-                                          color: currentStep >= n ? '#fff' : isDarkMode ? '#ffffff80' : '#14235E80',
-                                          boxShadow: currentStep >= n ? `0 4px 12px -2px ${NAVY}66` : 'none',
-                                        }}
-                                        animate={currentStep >= n ? { scale: [1, 1.1, 1] } : {}}
-                                        transition={{ duration: 0.3 }}
-                                      >
-                                        {currentStep > n ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={3} /> : n}
-                                      </motion.div>
-                                      <span
-                                        className={`hidden sm:inline text-[10px] sm:text-xs font-semibold uppercase tracking-wide transition-opacity duration-300 ${
-                                          currentStep >= n ? 'opacity-100' : 'opacity-45'
-                                        }`}
-                                        style={{ color: currentStep >= n ? NAVY : isDarkMode ? '#fff' : '#111827', fontFamily: "'Inter', sans-serif" }}
-                                      >
-                                        {n === 1 ? lang.step1Label : lang.step2Label}
-                                      </span>
-                                    </div>
-                                    {idx === 0 && (
-                                      <div
-                                        className={`h-[3px] flex-1 rounded-full overflow-hidden ${isDarkMode ? 'bg-white/10' : 'bg-[#14235E]/10'}`}
-                                      >
-                                        <motion.div
-                                          className="h-full rounded-full"
-                                          style={{ backgroundColor: NAVY }}
-                                          initial={{ width: '0%' }}
-                                          animate={{ width: currentStep > 1 ? '100%' : '0%' }}
-                                          transition={{ duration: 0.5 }}
-                                        />
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              })}
-                            </div>
-
-                            <form onSubmit={handleSubmit} className="p-4 sm:p-6 md:p-7">
-                              <AnimatePresence mode="wait">
-                                {formMode === 'step1' && (
-                                  <motion.div
-                                    key="step1"
-                                    className="ec-step-panel flex flex-col gap-3 sm:gap-3.5"
-                                    variants={stepPanelVariants}
-                                    initial="hidden"
-                                    animate="visible"
-                                    exit="exit"
-                                  >
-                                    <FloatingInput
-                                      icon={User}
-                                      label={lang.namePlaceholder}
-                                      value={name}
-                                      onChange={setName}
-                                      isValid={isValidName}
-                                      errorMessage={lang.nameError}
-                                      isDarkMode={isDarkMode}
-                                    />
-
-                                    <FloatingInput
-                                      icon={Phone}
-                                      label={lang.phonePlaceholder}
-                                      type="tel"
-                                      value={phone}
-                                      onChange={setPhone}
-                                      isValid={isValidPhone}
-                                      errorMessage={lang.phoneError}
-                                      isDarkMode={isDarkMode}
-                                    />
-
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
-                                      <SelectField
-                                        icon={Globe}
-                                        label={lang.nationalityLabel}
-                                        value={nationality}
-                                        onChange={setNationality}
-                                        placeholder={lang.nationalityLabel}
-                                        options={nationalities}
-                                      />
-                                      <SelectField
-                                        icon={MapPin}
-                                        label={lang.emirateLabel}
-                                        value={emirate}
-                                        onChange={setEmirate}
-                                        placeholder={lang.emirateLabel}
-                                        options={emirates}
-                                      />
-                                    </div>
-
-                                    <motion.button
-                                      type="button"
-                                      onClick={goToStep2}
-                                      disabled={!name.trim() || !isValidPhone}
-                                      className="group relative overflow-hidden flex items-center justify-center gap-3 w-full px-6 sm:px-8 py-3.5 sm:py-4 mt-1.5 text-sm sm:text-base md:text-lg font-bold text-white rounded-2xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0 shadow-[0_10px_30px_-10px_rgba(10,50,105,0.55)]"
-                                      style={{ backgroundColor: NAVY }}
-                                      whileHover={{ scale: 1.02 }}
-                                      whileTap={{ scale: 0.97 }}
-                                    >
-                                      <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                                      <span className="relative z-10 flex items-center gap-3">
-                                        {lang.continue}
-                                        <ForwardIcon
-                                          className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 rtl:group-hover:-translate-x-1.5 ltr:group-hover:translate-x-1.5"
-                                          strokeWidth={2.5}
-                                        />
-                                      </span>
-                                    </motion.button>
-                                  </motion.div>
-                                )}
-
-                                {formMode === 'step2' && (
-                                  <motion.div
-                                    key="step2"
-                                    className="ec-step-panel flex flex-col gap-3.5 sm:gap-4"
-                                    variants={stepPanelVariants}
-                                    initial="hidden"
-                                    animate="visible"
-                                    exit="exit"
-                                  >
-                                    <div>
-                                      <p
-                                        className={`mb-2.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wide ${
-                                          isDarkMode ? 'text-white/45' : 'text-gray-400'
-                                        }`}
-                                      >
-                                        {lang.serviceLabel}
-                                      </p>
-                                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                                        {services.map((svc) => {
-                                          const active = serviceInterest === svc.value;
-                                          return (
-                                            <motion.button
-                                              key={svc.value}
-                                              type="button"
-                                              onClick={() => setServiceInterest(active ? '' : svc.value)}
-                                              className="ec-chip inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold border"
-                                              style={{
-                                                borderColor: active ? NAVY : isDarkMode ? '#ffffff22' : '#14235E22',
-                                                backgroundColor: active ? NAVY : isDarkMode ? 'transparent' : '#ffffff',
-                                                color: active ? '#fff' : isDarkMode ? '#ffffffcc' : '#111827',
-                                                boxShadow: active ? `0 6px 16px -6px ${NAVY}80` : 'none',
-                                              }}
-                                              whileHover={{ scale: 1.05 }}
-                                              whileTap={{ scale: 0.95 }}
-                                            >
-                                              {active && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
-                                              {svc.label}
-                                            </motion.button>
-                                          );
-                                        })}
-                                      </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
-                                      <SelectField
-                                        icon={Clock}
-                                        label={lang.urgencyLabel}
-                                        value={urgency}
-                                        onChange={setUrgency}
-                                        placeholder={lang.urgencyLabel}
-                                        options={urgencies}
-                                      />
-                                      <SelectField
-                                        icon={PhoneCall}
-                                        label={lang.contactMethodLabel}
-                                        value={contactMethod}
-                                        onChange={setContactMethod}
-                                        placeholder={lang.contactMethodLabel}
-                                        options={contactMethods}
-                                      />
-                                    </div>
-
-                                    <FloatingTextarea
-                                      icon={MessageSquare}
-                                      label={lang.messagePlaceholder}
-                                      value={message}
-                                      onChange={setMessage}
-                                      maxLength={500}
-                                      isDarkMode={isDarkMode}
-                                    />
-
-                                    {/* Agreement checkbox — advanced animated toggle */}
-                                    <motion.label
-                                      htmlFor="agree"
-                                      className={cn(
-                                        'flex items-start gap-3 p-3 sm:p-3.5 rounded-2xl border-2 cursor-pointer transition-colors duration-200 mt-1',
-                                        agreed
-                                          ? isDarkMode
-                                            ? 'border-white/30 bg-[#14235E]/25'
-                                            : 'border-[#14235E] bg-[#14235E]/[0.05]'
-                                          : isDarkMode
-                                          ? 'border-white/10 hover:border-white/20'
-                                          : 'border-[#14235E]/12 hover:border-[#14235E]/25'
-                                      )}
-                                      whileTap={{ scale: 0.99 }}
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        id="agree"
-                                        checked={agreed}
-                                        onChange={(e) => setAgreed(e.target.checked)}
-                                        className="sr-only"
-                                      />
-                                      <motion.div
-                                        className="mt-0.5 h-5 w-5 shrink-0 rounded-md border-2 flex items-center justify-center"
-                                        style={{
-                                          borderColor: agreed ? NAVY : isDarkMode ? '#ffffff33' : '#14235E33',
-                                          backgroundColor: agreed ? NAVY : 'transparent',
-                                        }}
-                                        animate={agreed ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-                                        transition={{ duration: 0.25 }}
-                                      >
-                                        <AnimatePresence>
-                                          {agreed && (
-                                            <motion.div
-                                              initial={{ scale: 0 }}
-                                              animate={{ scale: 1 }}
-                                              exit={{ scale: 0 }}
-                                              transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                                            >
-                                              <Check className="h-3.5 w-3.5 text-white" strokeWidth={3.5} />
-                                            </motion.div>
-                                          )}
-                                        </AnimatePresence>
-                                      </motion.div>
-                                      <span
-                                        className={`text-xs sm:text-sm leading-5 font-medium ${
-                                          isDarkMode ? 'text-white/70' : 'text-gray-600'
-                                        }`}
-                                      >
-                                        {lang.agreeLabel}
-                                      </span>
-                                    </motion.label>
-
-                                    <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 mt-1">
-                                      <motion.button
-                                        type="button"
-                                        onClick={goToStep1}
-                                        className={`inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3.5 sm:py-4 text-sm sm:text-base font-bold rounded-2xl border transition-colors duration-200 w-full sm:w-auto ${
-                                          isDarkMode ? 'border-white/12 text-white hover:bg-white/5' : 'border-[#14235E]/15 text-[#14235E] hover:bg-[#14235E]/5'
-                                        }`}
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.97 }}
-                                      >
-                                        <BackIcon className="h-4 w-4" strokeWidth={2.5} />
-                                        {lang.back}
-                                      </motion.button>
-                                      <motion.button
-                                        type="submit"
-                                        disabled={isSubmitting || !agreed}
-                                        className="group relative overflow-hidden flex-1 flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base md:text-lg font-bold text-white rounded-2xl transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed w-full hover:-translate-y-0.5 active:translate-y-0 shadow-[0_10px_30px_-10px_rgba(10,50,105,0.55)]"
-                                        style={{ backgroundColor: NAVY }}
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.97 }}
-                                      >
-                                        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                                        <span className="relative z-10 flex items-center gap-3">
-                                          {isSubmitting ? lang.sending : lang.submit}
-                                          <div className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 items-center justify-center rounded-full bg-white transition-colors duration-300 group-hover:bg-gray-100">
-                                            {isSubmitting ? (
-                                              <div className="h-4 w-4 sm:h-5 sm:w-5 border-2 border-[#14235E] border-t-transparent rounded-full animate-spin" />
-                                            ) : (
-                                              <ForwardIcon className="h-4 w-4 sm:h-5 sm:w-5 text-black transition-transform duration-300 rtl:group-hover:-translate-x-1.5 ltr:group-hover:translate-x-1.5" strokeWidth={2.5} />
-                                            )}
-                                          </div>
-                                        </span>
-                                      </motion.button>
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </form>
-                          </>
-                        )}
+                        {currentStep > n ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={3} /> : n}
+                      </motion.div>
+                      <span
+                        className={`hidden sm:inline text-[10px] sm:text-xs font-semibold uppercase tracking-wide transition-opacity duration-300 ${
+                          isActive ? "opacity-100" : "opacity-45"
+                        }`}
+                        style={{ color: isActive ? NAVY : isDarkMode ? "#fff" : "#111827", fontFamily: "'Inter', sans-serif" }}
+                      >
+                        {n === 1 ? lang.step1Label : lang.step2Label}
+                      </span>
+                    </div>
+                    {idx === 0 && (
+                      <div className={`h-[3px] flex-1 rounded-full overflow-hidden ${isDarkMode ? "bg-white/10" : "bg-[#14235E]/10"}`}>
+                        <motion.div
+                          className="h-full rounded-full"
+                          style={{ background: "linear-gradient(90deg, #4A8ABF, #14235E)" }}
+                          initial={{ width: "0%" }}
+                          animate={{ width: currentStep > 1 ? "100%" : "0%" }}
+                          transition={{ duration: 0.5 }}
+                        />
                       </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-4 sm:p-6 md:p-7">
+              <AnimatePresence mode="wait">
+                {formMode === "step1" && (
+                  <motion.div
+                    key="step1"
+                    className="ec-step-panel flex flex-col gap-3 sm:gap-3.5"
+                    variants={stepPanelVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    <FloatingInput
+                      icon={User}
+                      label={lang.namePlaceholder}
+                      value={name}
+                      onChange={setName}
+                      isValid={isValidName}
+                      errorMessage={lang.nameError}
+                      isDarkMode={isDarkMode}
+                    />
+
+                    <FloatingInput
+                      icon={Phone}
+                      label={lang.phonePlaceholder}
+                      type="tel"
+                      value={phone}
+                      onChange={setPhone}
+                      isValid={isValidPhone}
+                      errorMessage={lang.phoneError}
+                      isDarkMode={isDarkMode}
+                    />
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+                      <SelectField
+                        icon={Globe}
+                        label={lang.nationalityLabel}
+                        value={nationality}
+                        onChange={setNationality}
+                        placeholder={lang.nationalityLabel}
+                        options={nationalities}
+                      />
+                      <SelectField
+                        icon={MapPin}
+                        label={lang.emirateLabel}
+                        value={emirate}
+                        onChange={setEmirate}
+                        placeholder={lang.emirateLabel}
+                        options={emirates}
+                      />
+                    </div>
+
+                    <motion.div
+                      className="relative rounded-2xl p-[1.5px] mt-1.5 w-full"
+                      style={{ background: "linear-gradient(135deg, #4A8ABF, #14235E)" }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <button
+                        type="button"
+                        onClick={goToStep2}
+                        disabled={!name.trim() || !isValidPhone}
+                        className="group relative overflow-hidden flex items-center justify-center gap-3 w-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base md:text-lg font-bold text-white rounded-[15px] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
+                        style={{ backgroundColor: NAVY }}
+                      >
+                        <span className="relative z-10 flex items-center gap-3">
+                          {lang.continue}
+                          <ForwardIcon
+                            className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 rtl:group-hover:-translate-x-1.5 ltr:group-hover:translate-x-1.5"
+                            strokeWidth={2.5}
+                          />
+                        </span>
+                      </button>
                     </motion.div>
-                  )}
-                </AnimatePresence>
+                  </motion.div>
+                )}
+
+                {formMode === "step2" && (
+                  <motion.div
+                    key="step2"
+                    className="ec-step-panel flex flex-col gap-3.5 sm:gap-4"
+                    variants={stepPanelVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    <div>
+                      <p className={`mb-2.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wide ${isDarkMode ? "text-white/45" : "text-gray-400"}`}>
+                        {lang.serviceLabel}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        {services.map((svc) => {
+                          const active = serviceInterest === svc.value;
+                          return (
+                            <motion.button
+                              key={svc.value}
+                              type="button"
+                              onClick={() => setServiceInterest(active ? "" : svc.value)}
+                              className="ec-chip relative inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold border overflow-hidden"
+                              style={{
+                                borderColor: active ? NAVY : isDarkMode ? "#ffffff22" : "#14235E22",
+                                backgroundColor: active ? NAVY : isDarkMode ? "transparent" : "#ffffff",
+                                color: active ? "#fff" : isDarkMode ? "#ffffffcc" : "#111827",
+                              }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              {active && (
+                                <span
+                                  className="absolute -inset-1 rounded-full opacity-50 blur-[8px] -z-10"
+                                  style={{ background: `radial-gradient(circle, ${NAVY}99, transparent 70%)` }}
+                                />
+                              )}
+                              {active && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
+                              {svc.label}
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+                      <SelectField
+                        icon={Clock}
+                        label={lang.urgencyLabel}
+                        value={urgency}
+                        onChange={setUrgency}
+                        placeholder={lang.urgencyLabel}
+                        options={urgencies}
+                      />
+                      <SelectField
+                        icon={PhoneCall}
+                        label={lang.contactMethodLabel}
+                        value={contactMethod}
+                        onChange={setContactMethod}
+                        placeholder={lang.contactMethodLabel}
+                        options={contactMethods}
+                      />
+                    </div>
+
+                    <FloatingTextarea
+                      icon={MessageSquare}
+                      label={lang.messagePlaceholder}
+                      value={message}
+                      onChange={setMessage}
+                      maxLength={500}
+                      isDarkMode={isDarkMode}
+                    />
+
+                    {/* Agreement checkbox — glow-based active state, no shadow */}
+                    <motion.label
+                      htmlFor="agree"
+                      className={cn(
+                        "flex items-start gap-3 p-3 sm:p-3.5 rounded-2xl border-2 cursor-pointer transition-colors duration-200 mt-1",
+                        agreed
+                          ? isDarkMode
+                            ? "border-white/30 bg-[#14235E]/25"
+                            : "border-[#14235E] bg-[#14235E]/[0.05]"
+                          : isDarkMode
+                          ? "border-white/10 hover:border-white/20"
+                          : "border-[#14235E]/12 hover:border-[#14235E]/25"
+                      )}
+                      whileTap={{ scale: 0.99 }}
+                    >
+                      <input type="checkbox" id="agree" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="sr-only" />
+                      <motion.div
+                        className="relative mt-0.5 h-5 w-5 shrink-0 rounded-md border-2 flex items-center justify-center"
+                        style={{
+                          borderColor: agreed ? NAVY : isDarkMode ? "#ffffff33" : "#14235E33",
+                          backgroundColor: agreed ? NAVY : "transparent",
+                        }}
+                        animate={agreed ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <AnimatePresence>
+                          {agreed && (
+                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: "spring", stiffness: 500, damping: 25 }}>
+                              <Check className="h-3.5 w-3.5 text-white" strokeWidth={3.5} />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                      <span className={`text-xs sm:text-sm leading-5 font-medium ${isDarkMode ? "text-white/70" : "text-gray-600"}`}>
+                        {lang.agreeLabel}
+                      </span>
+                    </motion.label>
+
+                    <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 mt-1">
+                      <motion.button
+                        type="button"
+                        onClick={goToStep1}
+                        className={`inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3.5 sm:py-4 text-sm sm:text-base font-bold rounded-2xl border transition-colors duration-200 w-full sm:w-auto ${
+                          isDarkMode ? "border-white/12 text-white hover:bg-white/5" : "border-[#14235E]/15 text-[#14235E] hover:bg-[#14235E]/5"
+                        }`}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <BackIcon className="h-4 w-4" strokeWidth={2.5} />
+                        {lang.back}
+                      </motion.button>
+
+                      <motion.div
+                        className="relative rounded-2xl p-[1.5px] flex-1"
+                        style={{ background: "linear-gradient(135deg, #4A8ABF, #14235E)" }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <button
+                          type="submit"
+                          disabled={isSubmitting || !agreed}
+                          className="group relative overflow-hidden flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base md:text-lg font-bold text-white rounded-[15px] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed w-full hover:-translate-y-0.5 active:translate-y-0"
+                          style={{ backgroundColor: NAVY }}
+                        >
+                          <span className="relative z-10 flex items-center gap-3">
+                            {isSubmitting ? lang.sending : lang.submit}
+                            <div className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 items-center justify-center rounded-full bg-white transition-colors duration-300 group-hover:bg-gray-100">
+                              {isSubmitting ? (
+                                <div className="h-4 w-4 sm:h-5 sm:w-5 border-2 border-[#14235E] border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <ForwardIcon className="h-4 w-4 sm:h-5 sm:w-5 text-black transition-transform duration-300 rtl:group-hover:-translate-x-1.5 ltr:group-hover:translate-x-1.5" strokeWidth={2.5} />
+                              )}
+                            </div>
+                          </span>
+                        </button>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </form>
+          </>
+        )}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
               </motion.div>
             </motion.div>
 
@@ -1499,14 +1504,15 @@ const SelectField = ({
             >
               <div className="relative w-full">
                 <div
-                  className="pointer-events-none absolute -inset-3 rounded-[2rem] opacity-60 blur-2xl"
+                  className="pointer-events-none absolute -inset-3 rounded-2xl opacity-60 blur-2xl"
                   style={{ background: `linear-gradient(135deg, ${NAVY}40, ${GOLD}20)` }}
                 />
                 <motion.div
-                  className="relative rounded-[1.75rem] overflow-hidden"
+                  className="relative rounded-2xl overflow-hidden"
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}
                   whileHover={{ scale: 1.01 }}
+                  
                   transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
                   <motion.div
@@ -1523,7 +1529,6 @@ const SelectField = ({
                       playsInline
                       preload="metadata"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10 pointer-events-none" />
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <motion.div
                         className="ec-play-btn w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center transition-all duration-300 bg-white/15 backdrop-blur-md group-hover:scale-110 border border-white/30"

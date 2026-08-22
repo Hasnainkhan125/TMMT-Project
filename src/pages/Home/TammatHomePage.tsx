@@ -63,6 +63,7 @@ import servicesImageDark from './images/servicesComboDark.png';
 import TammatFlowDialog from '@/components/Applications/TammatFlowDialog';
 import { Home, Users, Star, IdCard, Building2,  ArrowRight as ArrowRightLucide, Zap, ShieldCheck, Headphones } from 'lucide-react';
 import EmailCapture from './EmailCapture';
+import { motion } from 'framer-motion';
 
 import ApplicationFlow from '@/components/Applications/ApplicationFlow';
 import WhyTMMTSection from './WhyTMMTSection';
@@ -384,6 +385,48 @@ const togglePlay = () => {
   }
 };
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.6 } },
+};
+
+const staggerChildren = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+  },
+};
+
+const cardHover = {
+  whileHover: {
+    y: -6,
+    scale: 1.02,
+    boxShadow: "0 20px 40px -12px rgba(0,0,0,0.15)",
+    transition: { duration: 0.25, ease: "easeOut" },
+  },
+  whileTap: { scale: 0.98 },
+};
+
+const itemReveal = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+
 const toggleMute = () => {
   const video = videoRef.current;
   if (!video) return;
@@ -428,186 +471,176 @@ const closeVideoModal = () => {
 };
 
 return (
-  <section  id="services" className="container mx-auto px-4 pb-16 sm:pb-24">
-    <div className="max-w-7xl mx-auto">
-      <div className="mb-12">
-        {/* ─── VIDEO COMPONENT WITH CONTROLS ────────────────────────────── */}
-        <div className="w-full max-w-10xl mx-auto px-2 sm:px-0">
-          <div className="relative rounded-lg sm:rounded-xl overflow-hidden group bg-black/95" style={{ aspectRatio: "21/9" }}>
-            {/* Video */}
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover cursor-pointer"
-              src="/images/laptop/subscription-video.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              onClick={togglePlay}
-            />
-            
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-            
-            {/* ✅ Play/Pause Overlay Button */}
-            <div 
-              className="absolute inset-0 flex items-center justify-center cursor-pointer"
-              onClick={togglePlay}
+ <section id="services" className="container mx-auto px-4 pb-16 sm:pb-24">
+  <div className="max-w-7xl mx-auto">
+    <div className="mb-12">
+      {/* ─── VIDEO COMPONENT WITH CONTROLS ────────────────────────────── */}
+      <div className="w-full max-w-10xl mx-auto px-2 sm:px-0">
+        <div
+          className="relative rounded-2xl sm:rounded-[28px] overflow-hidden group bg-black/95 ring-1 ring-white/10"
+          style={{ aspectRatio: "21/9" }}
+        >
+          {/* Video */}
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover cursor-pointer"
+            src="/images/laptop/subscription-video.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            onClick={togglePlay}
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+
+          {/* Play/Pause Overlay Button — 3D disc, no shadow, ring + gradient for depth */}
+          <div
+            className="absolute inset-0 flex items-center justify-center cursor-pointer"
+            onClick={togglePlay}
+          >
+            {!isPlaying && (
+              <div
+                className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative transition-transform duration-300 hover:scale-105 active:scale-95"
+                style={{
+                  background: "linear-gradient(145deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08))",
+                  border: "1px solid rgba(255,255,255,0.35)",
+                  backdropFilter: "blur(6px)",
+                }}
+              >
+                <span className="absolute inset-0 rounded-full border-2 border-white/20 animate-pulse-ring" />
+                <span className="absolute inset-0 rounded-full border-2 border-white/10 animate-pulse-ring-delayed" />
+                <Play className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 md:h-9 md:w-9 text-white ml-0.5 xs:ml-1" strokeWidth={2.5} />
+              </div>
+            )}
+          </div>
+
+          {/* Video Controls Bar */}
+          <div
+            className={`absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 ${
+              showControls ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <div
+              className="w-full h-1 bg-white/25 rounded-full cursor-pointer mb-2 hover:h-1.5 transition-all"
+              onClick={handleProgressClick}
             >
-              {!isPlaying && (
-                <div className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-2xl relative">
-                  {/* Pulsing ring animation via CSS */}
-                  <span className="absolute inset-0 rounded-full border-2 border-white/20 animate-pulse-ring" />
-                  <span className="absolute inset-0 rounded-full border-2 border-white/10 animate-pulse-ring-delayed" />
-                  <Play className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 md:h-9 md:w-9 text-white ml-0.5 xs:ml-1" strokeWidth={2.5} />
-                </div>
-              )}
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${progress}%`,
+                  background: "linear-gradient(90deg, #4A8ABF, #ffffff)",
+                }}
+              />
             </div>
 
-            {/* ✅ Video Controls Bar */}
-            <div className={`absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 ${
-              showControls ? 'opacity-100' : 'opacity-0'
-            }`}>
-              {/* Progress Bar */}
-              <div
-                className="w-full h-1 bg-white/30 rounded-full cursor-pointer mb-2 hover:h-1.5 transition-all"
-                onClick={handleProgressClick}
-              >
-                <div
-                  className="h-full bg-white rounded-full transition-all"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-
-              {/* Controls Row */}
-              <div className="flex items-center justify-between text-white">
-                <div className="flex items-center gap-1 sm:gap-2">
-                  <button
-                    onClick={togglePlay}
-                    className="p-1 hover:bg-white/20 rounded transition-colors"
-                    aria-label={isPlaying ? 'Pause' : 'Play'}
-                  >
-                    {isPlaying ? (
-                      <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" />
-                    )}
-                  </button>
-
-                  <button
-                    onClick={toggleMute}
-                    className="p-1 hover:bg-white/20 rounded transition-colors"
-                    aria-label={isMuted ? 'Unmute' : 'Mute'}
-                  >
-                    {isMuted ? (
-                      <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
-                  </button>
-
-                  <span className="text-[10px] sm:text-xs opacity-80 ml-1">
-                    {formatTime(videoRef.current?.currentTime || 0)} / {formatTime(duration)}
-                  </span>
-                </div>
+            <div className="flex items-center justify-between text-white">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <button
+                  onClick={togglePlay}
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  aria-label={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" /> : <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" />}
+                </button>
 
                 <button
-                  onClick={openVideoModal}
-                  className="p-1 hover:bg-white/20 rounded transition-colors"
-                  aria-label="Fullscreen"
+                  onClick={toggleMute}
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  aria-label={isMuted ? "Unmute" : "Mute"}
                 >
-                  <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
+                  {isMuted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />}
                 </button>
+
+                <span className="text-[10px] sm:text-xs opacity-80 ml-1 tabular-nums">
+                  {formatTime(videoRef.current?.currentTime || 0)} / {formatTime(duration)}
+                </span>
               </div>
+
+              <button
+                onClick={openVideoModal}
+                className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                aria-label="Fullscreen"
+              >
+                <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
             </div>
           </div>
         </div>
-        {/* ─── ANIMATED SERVICE TITLES (CSS) ──────────────────────────────────── */}
-        <div className="space-y-1 mt-8" style={{ fontFamily: "'Poppins', sans-serif" }}>
-          <div
-            className="relative h-[100px] sm:h-[120px] md:h-[140px] lg:h-[160px] overflow-hidden"
-            style={{ perspective: '1200px' }}
-          >
-            {/* No Framer Motion – we use simple class toggling with a timer */}
-            <div
-              key={currentServiceIndex}
-              className="absolute inset-0 flex items-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{
-                transform: 'translateY(0) scale(1) rotateX(0)',
-                opacity: 1,
-                color: serviceTitles[currentServiceIndex].titleColor,
-                fontFamily: "'Poppins', sans-serif",
-              }}
-            >
-              <span className="text-[1.7rem] sm:text-[3rem] md:text-[4.5rem] lg:text-[4.5rem] leading-[1.1] break-words max-w-full text-left">
-                {serviceTitles[currentServiceIndex].title}
-              </span>
-            </div>
-          </div>
-
-          <div
-            className="text-[2rem] -mt-4 md:-tracking-[6px] -tracking-[2px] sm:text-[5rem] md:text-[5rem] lg:text-[4.5rem] font-medium text-foreground"
-            style={{ fontFamily: "'Poppins', sans-serif" }}
-          >
-            {t('services.personalizedToYou', 'personalized to you')}
-          </div>
-        </div>
-
-        <p
-          className="mt-2 text-text-secondary max-w-x2"
-          style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: 'clamp(0.77rem, 1.5vw, 1.3rem)'
-          }}
-        >
-          {t('services.subtitle')}
-        </p>
       </div>
-    </div>
 
-    {/* ─── VIDEO MODAL ────────────────────────────────────────────────── */}
-    {isVideoModalOpen && (
-      <div
-        className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
-        onClick={closeVideoModal}
-      >
+      {/* ─── ANIMATED SERVICE TITLES ──────────────────────────────────── */}
+      <div className="space-y-1 mt-8" style={{ fontFamily: "'Poppins', sans-serif" }}>
         <div
-          className="relative w-full max-w-6xl"
-          onClick={(e) => e.stopPropagation()}
+          className="relative h-[100px] sm:h-[120px] md:h-[140px] lg:h-[160px] overflow-hidden"
+          style={{ perspective: "1200px" }}
         >
-          {/* Close Button */}
-          <button
-            onClick={closeVideoModal}
-            className="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors z-10"
-            aria-label="Close video"
+          <div
+            key={currentServiceIndex}
+            className="absolute inset-0 flex items-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            style={{
+              transform: "translateY(0) scale(1) rotateX(0)",
+              opacity: 1,
+              color: serviceTitles[currentServiceIndex].titleColor,
+              fontFamily: "'Poppins', sans-serif",
+            }}
           >
-            <X className="w-8 h-8" />
-          </button>
-
-          {/* Video in Modal */}
-          <div className="aspect-video w-full bg-black rounded-lg overflow-hidden">
-            <video
-              ref={modalVideoRef}
-              className="w-full h-full object-cover cursor-pointer"
-              src="/images/laptop/subscription-video.mp4"
-              controls
-              playsInline
-              preload="auto"
-            />
+            <span className="text-[1.7rem] sm:text-[3rem] md:text-[4.5rem] lg:text-[4.5rem] leading-[1.1] break-words max-w-full text-left font-semibold">
+              {serviceTitles[currentServiceIndex].title}
+            </span>
           </div>
         </div>
+
+        <div
+          className="text-[2rem] -mt-4 md:-tracking-[6px] -tracking-[2px] sm:text-[5rem] md:text-[5rem] lg:text-[4.5rem] font-medium text-foreground"
+          style={{ fontFamily: "'Poppins', sans-serif" }}
+        >
+          {t("services.personalizedToYou", "personalized to you")}
+        </div>
       </div>
-    )}
 
-    {/* ─── SERVICE CARDS ──────────────────────────────────────────────── */}
-    <div className="relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <p
+        className="mt-2 text-text-secondary max-w-x2"
+        style={{ fontFamily: "'Poppins', sans-serif", fontSize: "clamp(0.77rem, 1.5vw, 1.3rem)" }}
+      >
+        {t("services.subtitle")}
+      </p>
     </div>
+  </div>
 
-   <section className="py-10 sm:py-12 md:py-16">
-  <div className="max-w-[1400px] mx-auto ">
+  {/* ─── VIDEO MODAL ────────────────────────────────────────────────── */}
+  {isVideoModalOpen && (
+    <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4" onClick={closeVideoModal}>
+      <div className="relative w-full max-w-6xl" onClick={(e) => e.stopPropagation()}>
+        <button
+          onClick={closeVideoModal}
+          className="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors z-10"
+          aria-label="Close video"
+        >
+          <X className="w-8 h-8" />
+        </button>
 
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
+        <div className="aspect-video w-full bg-black rounded-2xl overflow-hidden ring-1 ring-white/10">
+          <video
+            ref={modalVideoRef}
+            className="w-full h-full object-cover cursor-pointer"
+            src="/images/laptop/subscription-video.mp4"
+            controls
+            playsInline
+            preload="auto"
+          />
+        </div>
+      </div>
+    </div>
+  )}
+{/* ─── SERVICE CARDS ──────────────────────────────────────────────────── */}
+<section className="py-10 sm:py-12 md:py-16">
+  <div className="max-w-[1400px] mx-auto">
+    <div
+      className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8"
+      style={{ perspective: "1600px" }}
+    >
       {[
         {
           name: isArabic ? "المدققون" : "Checkers",
@@ -617,10 +650,7 @@ return (
             : "Check overstay fines, travel bans, absconding, nawakas, and more.",
           cta: isArabic ? "تقديم" : "Apply",
           link: "/customer-dashboard",
-          gradient: "from-blue-500/20 via-cyan-500/10 to-blue-500/5",
-          borderColor: "hover:border-blue-500/40 dark:hover:border-blue-400/40",
-          iconColor: "text-blue-500",
-          badge: isArabic ? "تحقق" : "Verify",
+          accent: "#3B82F6",
         },
         {
           name: isArabic ? "الخدمات" : "Services",
@@ -630,10 +660,7 @@ return (
             : "Apply for entry permits, residence visa, emiratesid, renewals, etc.",
           cta: isArabic ? "تقديم" : "Apply",
           link: "/apply",
-          gradient: "from-emerald-500/20 via-teal-500/10 to-emerald-500/5",
-          borderColor: "hover:border-emerald-500/40 dark:hover:border-emerald-400/40",
-          iconColor: "text-emerald-500",
-          badge: isArabic ? "تقديم" : "Apply",
+          accent: "#10B981",
         },
         {
           name: isArabic ? "الباقات" : "Packages",
@@ -643,10 +670,7 @@ return (
             : "Packages allow you to choose bundled applications for your govt transactions",
           cta: isArabic ? "تقديم" : "Apply",
           link: "/packages",
-          gradient: "from-purple-500/20 via-pink-500/10 to-purple-500/5",
-          borderColor: "hover:border-purple-500/40 dark:hover:border-purple-400/40",
-          iconColor: "text-purple-500",
-          badge: isArabic ? "باقات" : "Bundles",
+          accent: "#8B5CF6",
         },
       ].map((card, idx) => {
         const { ref, isInView } = useInView({ threshold: 0.1 });
@@ -662,101 +686,76 @@ return (
               }
             }}
             className={`
-              group relative flex w-full flex-col 
-              rounded-3xl overflow-hidden 
-              cursor-pointer 
-              bg-white dark:bg-black/50 
-              border-2 border-slate-200/60 dark:border-slate-800/50 
-              transition-all duration-500 
-              backdrop-blur-sm
-              hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#14235E]/10 dark:hover:shadow-[#14235E]/10
-              ${card.borderColor}
-              ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+              group relative flex w-full flex-col
+              rounded-3xl overflow-hidden cursor-pointer
+              transition-all duration-500 ease-out
+              ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
             `}
-            style={{ transitionDelay: `${idx * 100}ms` }}
+            style={{
+              transitionDelay: `${idx * 100}ms`,
+            }}
           >
-
-            {/* Image Container */}
-            <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
-              <img
-                src={card.image}
-                alt={card.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-              />
+            <div className="relative flex flex-col w-full h-full rounded-3xl bg-white dark:bg-[#0c0c0c] overflow-hidden border border-gray-200 dark:border-zinc-800 hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30 transition-all duration-300 hover:-translate-y-2 ">
               
-              
-              {/* Badge */}
-              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-105">
-             
+              {/* Image Container */}
+              <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                <img
+                  src={card.image}
+                  alt={card.name}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+                
+                {/* Category Label */}
+                <div className="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span
+                    className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white text-[10px] font-medium border border-white/10"
+                  >
+                    {card.name}
+                  </span>
+                </div>
               </div>
 
-              {/* Category Label */}
-              <div className="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className={`px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] font-medium border border-white/10 flex items-center gap-1.5 ${card.iconColor}`}>
-                  {card.name}
-                </span>
+              {/* Content */}
+              <div className="relative z-10 p-5 sm:p-6 lg:p-7 flex flex-col flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white group-hover:text-[#14235E] dark:group-hover:text-[#14235E] transition-colors duration-300">
+                    {card.name}
+                  </h3>
+                </div>
+
+                <p className="text-sm text-black/60 dark:text-white/50 leading-relaxed font-light max-w-sm">
+                  {card.description}
+                </p>
+
+                <button
+                  className="
+                    group/btn relative inline-flex items-center justify-start gap-3
+                    overflow-hidden rounded-2xl
+                    px-8 sm:px-10
+                    py-2.5 sm:py-3
+                    text-[15px] sm:text-[17px] font-medium tracking-tight
+                    text-white mt-4 w-fit
+                    transition-all duration-300
+                    hover:-translate-y-0.5 active:translate-y-0
+                    bg-[#14235E] hover:bg-[#1A3A6E]
+                  "
+                >
+                  <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+
+                  <span className="relative z-10 whitespace-nowrap">{card.cta}</span>
+
+                  <div
+                    className="
+                      relative z-10 flex h-7 w-7 sm:h-8 sm:w-8
+                      items-center justify-center rounded-full bg-white
+                      transition-transform duration-300 group-hover/btn:translate-x-1
+                    "
+                  >
+                    <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-black" />
+                  </div>
+                </button>
               </div>
-            </div>
-
-            {/* Content */}
-            <div className="relative z-10 p-5 sm:p-6 lg:p-7">
-              <div className="flex items-center gap-2 mb-2">
-                <div className={`w-1 h-6 rounded-full ${card.iconColor} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
-                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white group-hover:text-[#14235E] dark:group-hover:text-[#14235E  ] transition-colors duration-300">
-                  {card.name}
-                </h3>
-              </div>
-              
-              <p className="text-sm text-black/60 dark:text-white/50 leading-relaxed font-light max-w-sm">
-                {card.description}
-              </p>
-<button
-  className="
-    group/btn relative inline-flex items-center justify-start gap-3
-    overflow-hidden rounded-2xl
-    px-9 sm:px-8
-    py-2.5 sm:py-1.6
-    text-[17px] sm:text-[19px]
-    font-medium tracking-tight
-    bg-[#14235E] text-white
-    dark:bg-[#14235E] dark:text-white
-    transition-all duration-300
-    mt-3
-    hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#14235E]/10 dark:hover:shadow-white/10
-    hover:border-[#14235E]/40 dark:hover:border-white/40
-  "
->
-  {/* Shimmer Effect */}
-  <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#14235E]/10 dark:via-white/20 to-transparent" />
-  
-  <span className="relative z-10 whitespace-nowrap">
-    {card.cta}
-  </span>
-
-  <div
-    className="
-      relative z-10
-      flex h-7 w-7 sm:h-8 sm:w-8
-      items-center justify-center
-      rounded-full
-      bg-white dark:bg-white
-      transition-transform duration-300
-      group-hover/btn:translate-x-1
-      hover:scale-110
-    "
-  >
-    <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-black dark:text-black" />
-  </div>
-</button>
-
-              {/* Bottom Accent Line */}
-              <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-            </div>
-
-            {/* Corner Decoration */}
-            <div className="absolute top-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#14235E]/30 dark:border-[#4A8ABF]/30 rounded-tr-2xl" />
             </div>
           </div>
         );
@@ -764,17 +763,10 @@ return (
     </div>
   </div>
 </section>
-
-  {/* ─── FULLSCREEN VIDEO MODAL (CSS only) ────────────────────────────────────── */}
+  {/* ─── FULLSCREEN VIDEO MODAL ────────────────────────────────────── */}
   {isVideoModalOpen && (
-    <div
-      className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
-      onClick={() => setIsVideoModalOpen(false)}
-    >
-      <div
-        className="relative w-full h-full bg-black"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center" onClick={() => setIsVideoModalOpen(false)}>
+      <div className="relative w-full h-full bg-black" onClick={(e) => e.stopPropagation()}>
         <video
           ref={modalVideoRef}
           className="w-full h-full object-cover"
@@ -786,7 +778,6 @@ return (
           onClick={(e) => e.stopPropagation()}
         />
 
-        {/* Close Button */}
         <button
           onClick={() => setIsVideoModalOpen(false)}
           className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-300 hover:scale-110 border border-white/10 z-20"
@@ -794,7 +785,6 @@ return (
           <X className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
 
-        {/* Fullscreen Toggle Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -811,7 +801,6 @@ return (
           </svg>
         </button>
 
-        {/* Close Hint */}
         <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/30 text-[10px] sm:text-xs bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full border border-white/5 pointer-events-none">
           Press ESC or click ✕ to close
         </div>
@@ -819,26 +808,12 @@ return (
     </div>
   )}
 
-      <TammatSupervisor
-      position="bottom-right"
-      size="md"
-      showTranscript={true}
-      
-      />
+  <TammatSupervisor position="bottom-right" size="md" showTranscript={true} />
 
-    {/* Voice Agent - Floating Button (uses shared context) */}
-    <TammatVoiceAgent
-      position="bottom-right"
-      size="md"
-      showTranscript={true}
-    />
+  <TammatVoiceAgent position="bottom-right" size="md" showTranscript={true} />
 
-<PackageApplicationDialog
-  open={open}
-  onOpenChange={setOpen}
-  // packages={packages}   // pass the array straight from your packages JSON
-/>
-  </section>
+  <PackageApplicationDialog open={open} onOpenChange={setOpen} />
+</section>
 );
 };
 
@@ -2057,87 +2032,145 @@ const ServiceJourney = () => {
   </div>
 </div>
 </div> 
-        {/* Right column */}
+
+
+
+
+{/* Right column */}
 <div className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-5">
-  {/* Featured image — passport-page framing */}
-  <div className="group relative col-span-2 w-full h-52 xs:h-60 sm:h-72 md:h-80 lg:h-[26rem] overflow-hidden rounded-2xl sm:rounded-[28px] bg-[#14235E] shadow-lg border border-white/5">
-    <img
-      src={currentImages[activeStep]}
-      alt={currentSteps[activeStep]?.title}
-      className="absolute inset-0 w-full h-full object-content transition-transform duration-1000 ease-out group-hover:scale-105"
-    />
-    {/* Base gradient so the whole image reads cleanly even without the panel */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+  {/* Featured image — passport-page framing, 3D tilt, gradient-border depth (no box-shadow) */}
+  <div
+    className="group relative col-span-2 w-full h-52 xs:h-60 sm:h-72 md:h-80 lg:h-[26rem] rounded-2xl sm:rounded-[28px] transition-transform duration-500 ease-out will-change-transform"
+    style={{
+      transformStyle: "preserve-3d",
+      background: "linear-gradient(155deg, #4A8ABF66, #14235E33)",
+      padding: "1.5px", // gradient "border" trick — fakes elevation without a shadow
+    }}
+    onMouseMove={(e) => {
+      const el = e.currentTarget;
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = `rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px)`;
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "rotateY(0deg) rotateX(0deg) translateY(0)";
+    }}
+  >
+    <div className="relative w-full h-full overflow-hidden rounded-[calc(1rem-1.5px)] sm:rounded-[26.5px] bg-[#14235E]">
+      <img
+        src={currentImages[activeStep]}
+        alt={currentSteps[activeStep]?.title}
+        className="absolute inset-0 w-full h-full object-content transition-transform duration-1000 ease-out group-hover:scale-105"
+      />
 
-    <div className="absolute bottom-0 left-0 right-0 p-0 sm:p-0 lg:p-0 z-0">
-      <div className="rounded-md p-1 sm:p-2 lg:p-3">
-        <h2 className="text-base sm:text-xl lg:text-2xl font-bold text-white tracking-tight leading-tight line-clamp-2">
-          {currentSteps[activeStep]?.title}
-        </h2>
-        <p className="mt-1 text-xs sm:text-sm text-white/70 leading-relaxed line-clamp-2">
-          {currentSteps[activeStep]?.description}
-        </p>
+      {/* Base gradient so the whole image reads cleanly even without the panel */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-        <div className="mt-1 flex items-center gap-1.5">
-          {currentSteps.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveStep(i)}
-              className="group/dot relative py-2"
-              aria-label={`Go to step ${i + 1}`}
-            >
-              <span
-                className={`block h-1 rounded-full transition-all duration-300 ${
-                  i === activeStep ? 'w-6 bg-[#FAFAFA]' : i < activeStep ? 'w-3 bg-white/50' : 'w-3 bg-white/15'
-                }`}
-              />
-            </button>
-          ))}
+      {/* Subtle depth wash along the top edge instead of a shadow */}
+      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/25 to-transparent pointer-events-none" />
+
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 lg:p-6 z-0">
+        <div className="rounded-md">
+          <h2 className="text-base sm:text-xl lg:text-2xl font-bold text-white tracking-tight leading-tight line-clamp-2">
+            {currentSteps[activeStep]?.title}
+          </h2>
+          <p className="mt-1 text-xs sm:text-sm text-white/70 leading-relaxed line-clamp-2">
+            {currentSteps[activeStep]?.description}
+          </p>
+
+          <div className="mt-2 flex items-center gap-1.5">
+            {currentSteps.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveStep(i)}
+                className="group/dot relative py-2"
+                aria-label={`Go to step ${i + 1}`}
+              >
+                <span
+                  className="block h-1 rounded-full transition-all duration-300"
+                  style={{
+                    width: i === activeStep ? "1.5rem" : "0.75rem",
+                    background:
+                      i === activeStep
+                        ? "linear-gradient(90deg, #4A8ABF, #FAFAFA)"
+                        : i < activeStep
+                        ? "rgba(255,255,255,0.5)"
+                        : "rgba(255,255,255,0.15)",
+                  }}
+                />
+              </button>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* Corner accent to match the service-card treatment */}
+      <div className="absolute top-0 right-0 w-14 h-14 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+        <div
+          className="absolute top-0 right-0 w-7 h-7 rounded-tr-2xl"
+          style={{ borderTop: "2px solid #4A8ABF", borderRight: "2px solid #14235E" }}
+        />
       </div>
     </div>
   </div>
-             {/* Success card — official seal */}
-            <div className="relative w-full col-span-2 md:col-span-1 rounded-3xl border border-[#14235E]/12 dark:border-white/10 bg-white dark:bg-white/[0.03] p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-md">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#14235E]/15 dark:border-white/10 bg-[#14235E]/[0.04] dark:bg-white/[0.03] px-3 py-1">
-                <ShieldCheck className="h-3.5 w-3.5 text-[#14235E] dark:text-[#14235E]" />
-                <p className="font-mono text-[9px] font-semibold uppercase tracking-wider text-[#0A0E14]/50 dark:text-white/40">
-                  {t('successCard.verified')}
-                </p>
-              </div>
- 
-              <h2 className="mt-4 flex items-start text-[42px] sm:text-[48px] font-bold tracking-tight leading-none text-[#0A0E14] dark:text-white">
-                99.8
-                <span className="ml-1.5 mt-1 text-base font-semibold text-[#0A0E14]/40 dark:text-white/40">%</span>
-              </h2>
-              <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#0A0E14]/50 dark:text-white/45">
-                {t('successCard.approvedText')}
-                <span className="font-medium text-[#14235E] dark:text-[#14235E]"> {t('successCard.expertReview')} </span>
-                {t('successCard.processText')}
-              </p>
- 
-              <div className="my-4 h-px border-t border-dashed border-[#14235E]/15 dark:border-white/10" />
- 
-              <div className="grid grid-cols-2 gap-2.5">
-                {[
-                  { Icon: TrendingUp, value: '99.8%', label: t('successCard.approval') },
-                  { Icon: Activity, value: '24/7', label: t('successCard.monitoring') },
-                  { Icon: Users, value: '250+', label: t('successCard.expertAdvisors') },
-                  { Icon: ShieldCheck, value: 'A+', label: t('successCard.rating') },
-                ].map(({ Icon, value, label }, i) => (
-                  <div key={i} className="rounded-xl border border-[#14235E]/10 dark:border-white/10 bg-[#14235E]/[0.02] dark:bg-white/[0.02] p-3">
-                    <Icon className="mb-2 h-3.5 w-3.5 text-[#14235E] dark:text-[#14235E]" />
-                    <p className="text-lg font-bold tracking-tight text-[#0A0E14] dark:text-white">{value}</p>
-                    <span className="text-[10px] text-[#0A0E14]/40 dark:text-white/35">{label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+{/* Success card — Modern Premium */}
+<div
+  className="group relative w-full col-span-2 md:col-span-1 rounded-3xl transition-all duration-500 ease-out will-change-transform"
+>
+  <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-[#0c0c0c] p-6 border border-gray-200 dark:border-zinc-800 htransition-all duration-300 shadow-sm ">
+    
+
+    {/* Verified badge */}
+    <div className="inline-flex items-center gap-2 rounded-full bg-[#14235E]/10 dark:bg-[#14235E]/20 px-3.5 py-1.5 border border-[#14235E]/20 dark:border-[#14235E]/30">
+      <ShieldCheck className="h-3.5 w-3.5 text-[#14235E] dark:text-[#14235E]" />
+      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#14235E] dark:text-[#14235E]">
+        {t("successCard.verified")}
+      </p>
+    </div>
+
+    {/* Headline stat */}
+    <h2 className="mt-4 flex items-end text-5xl sm:text-6xl font-bold tracking-tight leading-none text-black dark:text-white">
+      99.8
+      <span className="ml-1.5 mb-1 text-lg font-semibold text-gray-400 dark:text-white/40">%</span>
+    </h2>
+
+    <p className="mt-3 text-sm leading-relaxed text-gray-600 dark:text-white/60">
+      {t("successCard.approvedText")}
+      <span className="font-semibold text-[#14235E] dark:text-[#14235E]"> {t("successCard.expertReview")} </span>
+      {t("successCard.processText")}
+    </p>
+
+    <div className="my-5 h-px bg-gradient-to-r from-[#14235E]/20 via-[#14235E]/40 to-[#14235E]/20 dark:from-[#14235E]/30 dark:via-[#14235E]/50 dark:to-[#14235E]/30" />
+
+    {/* Stat grid */}
+    <div className="grid grid-cols-2 gap-3">
+      {[
+        { Icon: TrendingUp, value: "99.8%", label: t("successCard.approval") },
+        { Icon: Activity, value: "24/7", label: t("successCard.monitoring") },
+        { Icon: Users, value: "250+", label: t("successCard.expertAdvisors") },
+        { Icon: ShieldCheck, value: "A+", label: t("successCard.rating") },
+      ].map(({ Icon, value, label }, i) => (
+        <div
+          key={i}
+          className="group/tile rounded-xl bg-gray-50 dark:bg-[#141414] p-3.5 transition-all duration-300 hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/10 hover:-translate-y-0.5 border border-transparent hover:border-[#14235E]/20 dark:hover:border-[#14235E]/20"
+        >
+          <Icon
+            className="mb-2 h-4 w-4 text-[#14235E] dark:text-[#14235E] transition-transform duration-300 group-hover/tile:scale-110"
+          />
+          <p className="text-xl font-bold tracking-tight text-black dark:text-white">{value}</p>
+          <span className="text-[11px] text-gray-400 dark:text-white/40">{label}</span>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</div>
  
             {/* CTA card */}
             <div
               onClick={() => navigate('/apply')}
-              className="hidden md:flex relative h-full flex-col cursor-pointer overflow-hidden rounded-3xl border border-white/10 p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+              className="hidden md:flex relative h-full flex-col cursor-pointer overflow-hidden rounded-3xl border border-white/10 p-5 transition-all duration-500 hover:-translate-y-1"
             >
               <div
                 className="absolute inset-0 -z-20 bg-cover"
@@ -2155,7 +2188,7 @@ const ServiceJourney = () => {
                 <p className="mt-4 max-w-md text-sm leading-relaxed text-white/60 font-light">{t('ctaCard.description')}</p>
  
              <div className="mt-6">
-  <button className="inline-flex items-center gap-2.5 px-6 py-3 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group">
+  <button className="inline-flex items-center gap-2.5 px-6 py-3 text-white font-semibold text-sm transition-all duration-300 group">
     <span>{t('ctaCard.applyNow')}</span>
     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
   </button>
@@ -2189,11 +2222,8 @@ const ServiceJourney = () => {
     </section>
   );
 };
-
-
-
 // ============================================================================
-//  What Does TMMT Membership Include? – no Framer Motion
+//  What Does TMMT Membership Include? – Modern Simple Design
 // ============================================================================
 function MembershipSection() {
   const { t } = useTranslation();
@@ -2216,53 +2246,48 @@ function MembershipSection() {
 
   return (
     <section className="relative py-16 sm:py-20 lg:py-28 bg-white dark:bg-black overflow-hidden">
-      {/* ambient glows */}
+      {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#14235E]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#14235E]/3 dark:bg-[#4A8ABF]/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#14235E]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-[150px]" />
       </div>
-
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" style={{
-        backgroundImage: `
-          linear-gradient(rgba(10,50,105,0.2) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(10,50,105,0.2) 1px, transparent 1px)
-        `,
-        backgroundSize: '60px 60px'
-      }} />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-14 lg:mb-20">
-            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.05] tracking-[-0.02em] text-black dark:text-white" style={{ fontFamily: "'Poppins', sans-serif" }}>
-              <span className="font-bold text-[#1a1a1a] dark:text-white">
+            <h2
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.05] tracking-[-0.02em] text-black dark:text-white"
+              style={{ fontFamily: "'Poppins', sans-serif" }}
+            >
+              <span className="font-bold text-black dark:text-white">
                 {isArabic ? 'ماذا تشمل عضوية' : 'What Does TMMT Membership'}
               </span>
               <br className="hidden sm:block" />
-              <span className="text-[#14235E] dark:text-[#4A8ABF] font-light">
+              <span
+                className="font-light bg-clip-text text-transparent"
+                style={{ backgroundImage: 'linear-gradient(135deg, #14235E, #4A8ABF)' }}
+              >
                 {isArabic ? 'TMMT؟' : 'Include?'}
               </span>
             </h2>
 
-            <p className="mt-4 max-w-3xl mx-auto text-gray-500 dark:text-white/50 text-sm sm:text-base lg:text-[19px] leading-relaxed px-4 sm:px-0">
-              {isArabic 
+            <p className="mt-4 max-w-3xl mx-auto text-gray-500 dark:text-white/50 text-[10px] sm:text-base lg:text-[19px] leading-relaxed px-4 sm:px-0">
+              {isArabic
                 ? 'تمنحك TMMT وصولاً مباشراً إلى خبراء لديهم سنوات من الخبرة في الإجراءات والخدمات الحكومية في الإمارات، مما يساعدك على اتخاذ القرارات الصحيحة قبل اتخاذ أي إجراء.'
-                : 'TMMT gives you direct access to specialists with years of experience in UAE government procedures and services, helping you make the right decisions before taking action.'
-              }
+                : 'TMMT gives you direct access to specialists with years of experience in UAE government procedures and services, helping you make the right decisions before taking action.'}
             </p>
           </div>
 
-          {/* Service Cards – pure CSS transitions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-7">
+          {/* Service Cards – Modern Design */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-7">
             {[
               {
                 icon: Shield,
                 title: isArabic ? 'الإقامة والتأشيرات' : 'Residency & Visas',
-                items: isArabic 
+                items: isArabic
                   ? ['إصدار التأشيرات والتجديدات والإلغاءات', 'تأشيرات السياحة والزيارة', 'كفالة العائلة', 'تحويل الكفالة', 'تتبع الطلبات', 'الغرامات والقيود']
                   : ['Visa issuance, renewals & cancellations', 'Tourist & visit visas', 'Family sponsorship', 'Sponsorship transfers', 'Application tracking', 'Fines & restrictions'],
-                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
+                from: '#3B82F6',
+                to: '#06B6D4',
               },
               {
                 icon: Landmark,
@@ -2270,7 +2295,8 @@ function MembershipSection() {
                 items: isArabic
                   ? ['إصدار الهوية الإماراتية وتجديدها', 'تتبع الطلبات', 'تحديثات التوصيل', 'تجديد جوازات السفر والإرشاد']
                   : ['Emirates ID issuance & renewals', 'Application tracking', 'Delivery updates', 'Passport renewals & guidance'],
-                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
+                from: '#10B981',
+                to: '#14B8A6',
               },
               {
                 icon: Building2,
@@ -2278,7 +2304,8 @@ function MembershipSection() {
                 items: isArabic
                   ? ['اختيار النشاط التجاري المناسب', 'اختيار الترخيص التجاري المناسب', 'فهم تكاليف التأسيس', 'مراجعات السلطات والتصاريح', 'بطاقات المنشأة', 'تغييرات الشركاء والموافقات']
                   : ['Choosing the right business activity', 'Selecting the right trade license', 'Understanding setup costs', 'Authority & permission reviews', 'Establishment cards', 'Partner changes & approvals'],
-                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
+                from: '#A855F7',
+                to: '#EC4899',
               },
               {
                 icon: Car,
@@ -2286,7 +2313,8 @@ function MembershipSection() {
                 items: isArabic
                   ? ['شراء وبيع المركبات', 'نقل الملكية', 'التسجيل والتأمين والفحص', 'رخص القيادة', 'الإجراءات المرورية والغرامات']
                   : ['Buying & selling vehicles', 'Ownership transfers', 'Registration, insurance & testing', 'Driving licenses', 'Traffic procedures & fines'],
-                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
+                from: '#F59E0B',
+                to: '#EF4444',
               },
               {
                 icon: Users2,
@@ -2294,7 +2322,8 @@ function MembershipSection() {
                 items: isArabic
                   ? ['إجراءات الزواج', 'توثيق المستندات', 'الترجمة القانونية', 'طلبات العائلة والدعم']
                   : ['Marriage procedures', 'Document attestation', 'Legal translation', 'Family applications & support'],
-                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
+                from: '#4A8ABF',
+                to: '#14235E',
               },
               {
                 icon: Briefcase,
@@ -2302,83 +2331,93 @@ function MembershipSection() {
                 items: isArabic
                   ? ['تصاريح العمل', 'كفالة الموظفين', 'العمالة المنزلية', 'إجراءات التوظيف']
                   : ['Work permits', 'Employee sponsorship', 'Domestic workers', 'Employment procedures'],
-                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
-              }
+                from: '#06B6D4',
+                to: '#3B82F6',
+              },
             ].map((section, idx) => (
               <div
                 key={section.title}
-                className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-7 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.15)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1"
+                className="group relative rounded-2xl bg-white dark:bg-[#0c0c0c] p-6 sm:p-7 border border-gray-200 dark:border-zinc-800 hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30 transition-all duration-300"
                 style={{ transitionDelay: `${idx * 60}ms` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#14235E]/0 via-[#14235E]/0 to-[#1A4A8A]/0 group-hover:from-[#14235E]/5 group-hover:via-[#14235E]/3 group-hover:to-[#1A4A8A]/5 transition-all duration-700" />
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#14235E] via-[#1A4A8A] to-[#14235E] dark:from-[#4A8ABF] dark:via-[#4A8ABF] dark:to-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                {/* Top accent line */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-t-2xl"
+                  style={{ background: `linear-gradient(90deg, ${section.from}, ${section.to})` }}
+                />
+
                 <div className="relative">
-                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="p-2.5 sm:p-3 rounded-xl bg-gray-100 dark:bg-[#4A8ABF]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
-                    <section.icon className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
+                  <div className="flex items-center gap-3 sm:gap-4 mb-4">
+                    <div
+                      className="p-2.5 sm:p-3 rounded-xl transition-all duration-300"
+                      style={{ background: `${section.from}1a` }}
+                    >
+                      <section.icon
+                        className="w-5 h-5 sm:w-6 sm:h-6"
+                        style={{ color: section.from }}
+                        strokeWidth={1.75}
+                      />
+                    </div>
+                    <h4 className="font-bold text-black dark:text-white text-sm sm:text-lg">
+                      {section.title}
+                    </h4>
                   </div>
-                  <h4 className="font-bold text-black dark:text-white text-sm sm:text-lg group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
-                    {section.title}
-                  </h4>
+                  <ul className="space-y-2">
+                    {section.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-600 dark:text-white/60"
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 mt-0.5" style={{ color: section.from }} strokeWidth={2.5} />
+                        <span className="font-light">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-1.5 sm:space-y-2">
-                  {section.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500 dark:text-white/50 group-hover:text-gray-600 dark:group-hover:text-white/70 transition-colors duration-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14235E] dark:text-[#4A8ABF] shrink-0 mt-0.5" strokeWidth={2.5} />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
 
-          {/* Full Service + Smart Renewals - Premium Cards */}
+          {/* Full Service + Smart Renewals */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8 sm:mt-10">
-            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
-              <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
-                  <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
+            <div className="group relative rounded-2xl bg-white dark:bg-[#0c0c0c] p-6 sm:p-8 border border-gray-200 dark:border-zinc-800 hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30 transition-all duration-300">
+              <div className="flex items-center gap-3 sm:gap-4 mb-3">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-[#14235E]/10 dark:bg-[#14235E]/20">
+                  <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-[#14235E] dark:text-[#14235E]" strokeWidth={1.75} />
                 </div>
-                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
                   {isArabic ? 'معالجة الخدمة الكاملة' : 'Full Service Processing'}
                 </h4>
               </div>
-              <p className="text-xs sm:text-base text-gray-500 dark:text-white/50 leading-relaxed">
-                {isArabic 
+              <p className="text-sm text-gray-500 dark:text-white/50 leading-relaxed font-light">
+                {isArabic
                   ? 'إذا كنت تفضل عدم التعامل مع العملية بنفسك، يمكن لـ TMMT إكمال العملية بأكملها نيابة عنك مقابل رسوم الخدمة بالإضافة إلى الرسوم الحكومية.'
-                  : 'If you prefer not to handle the process yourself, TMMT can complete the entire process on your behalf for service fees plus government fees.'
-                }
+                  : 'If you prefer not to handle the process yourself, TMMT can complete the entire process on your behalf for service fees plus government fees.'}
               </p>
             </div>
 
-            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
-              <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
-                  <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
+            <div className="group relative rounded-2xl bg-white dark:bg-[#0c0c0c] p-6 sm:p-8 border border-gray-200 dark:border-zinc-800 hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30 transition-all duration-300">
+              <div className="flex items-center gap-3 sm:gap-4 mb-3">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-[#14235E]/10 dark:bg-[#14235E]/20">
+                  <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-[#14235E] dark:text-[#14235E]" strokeWidth={1.75} />
                 </div>
-                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
                   {isArabic ? 'تنبيهات التجديد الذكية' : 'Smart Renewal Alerts'}
                 </h4>
               </div>
-              <p className="text-xs sm:text-base text-gray-500 dark:text-white/50 leading-relaxed mb-3">
-                {isArabic 
+              <p className="text-sm text-gray-500 dark:text-white/50 leading-relaxed font-light mb-3">
+                {isArabic
                   ? 'تلقي تذكيرات عبر واتساب أو البريد الإلكتروني قبل انتهاء صلاحية:'
-                  : 'Receive reminders through WhatsApp or email before the expiry of:'
-                }
+                  : 'Receive reminders through WhatsApp or email before the expiry of:'}
               </p>
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                {isArabic 
+              <div className="flex flex-wrap gap-1.5">
+                {(isArabic
                   ? ['جوازات السفر', 'التأشيرات', 'الهوية الإماراتية', 'الرخص التجارية', 'بطاقات المنشأة', 'تصاريح العمل', 'رخص القيادة', 'تسجيلات المركبات']
                   : ['Passports', 'Visas', 'Emirates IDs', 'Trade licenses', 'Establishment cards', 'Work permits', 'Driving licenses', 'Vehicle registrations']
-                .map((item) => (
-                  <span 
-                    key={item} 
-                    className="text-[9px] sm:text-xs font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 dark:bg-[#4A8ABF]/10 text-black dark:text-white border border-gray-200 dark:border-[#4A8ABF]/20 group-hover:border-[#14235E]/30 dark:group-hover:border-[#4A8ABF]/30 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] group-hover:bg-[#14235E]/10 dark:group-hover:bg-[#4A8ABF]/10 transition-all duration-300"
+                ).map((item) => (
+                  <span
+                    key={item}
+                    className="text-[9px] sm:text-xs font-medium px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 dark:bg-zinc-800 text-black dark:text-white/70 border border-gray-200 dark:border-zinc-700 transition-all duration-300"
                   >
                     {item}
                   </span>
@@ -2387,30 +2426,53 @@ function MembershipSection() {
             </div>
           </div>
 
-          {/* How Can TMMT Help You? - Premium */}
-          <div className="mt-8 sm:mt-10 relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-8 lg:p-10 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
-            <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-[#14235E]/3 dark:bg-[#4A8ABF]/3 blur-3xl" />
-            <div className="relative">
-              <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-[#14235E]/10 dark:bg-[#4A8ABF]/10 shadow-md shadow-[#14235E]/10 dark:shadow-[#4A8ABF]/10">
-                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#14235E] dark:text-[#4A8ABF]" strokeWidth={1.75} />
+          {/* How Can TMMT Help You? */}
+          <div className="mt-8 sm:mt-10 relative rounded-2xl bg-white dark:bg-[#0c0c0c] p-6 sm:p-8 lg:p-10 border border-gray-200 dark:border-zinc-800 hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30 transition-all duration-300">
+            <div className="flex items-center gap-3 sm:gap-4 mb-5">
+              <div className="p-2.5 sm:p-3 rounded-xl bg-[#14235E]/10 dark:bg-[#14235E]/20">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#14235E] dark:text-[#14235E]" strokeWidth={1.75} />
+              </div>
+              <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
+                {isArabic ? 'كيف يمكن لـ' : 'How Can'}{' '}
+                <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(135deg, #14235E, #4A8ABF)' }}>
+                  TMMT
+                </span>{' '}
+                {isArabic ? 'مساعدتك؟' : 'Help You?'}
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {(isArabic
+                ? [
+                    'تجنب غرامات التجديد المتأخرة',
+                    'تجنب اختيار تأسيس الأعمال الخاطئ',
+                    'تجنب التكاليف والرسوم غير الضرورية',
+                    'تجنب الأخطاء المكلفة في الإجراءات الحكومية',
+                    'توفير الوقت والجهد',
+                    'اتخاذ قرارات مستنيرة بثقة قبل اتخاذ أي إجراء',
+                  ]
+                : [
+                    'Avoid late renewal fines',
+                    'Avoid choosing the wrong business setup',
+                    'Avoid unnecessary costs and fees',
+                    'Avoid costly mistakes in government procedures',
+                    'Save time and effort',
+                    'Make informed decisions with confidence before taking action',
+                  ]
+              ).map((text) => (
+                <div
+                  key={text}
+                  className="flex items-center gap-2.5 text-sm text-gray-600 dark:text-white/60 p-3 rounded-xl bg-gray-50/80 dark:bg-white/5 border border-gray-100 dark:border-white/5 transition-all duration-300"
+                >
+                  <CheckCircle2
+                    className="w-4 h-4 text-[#14235E] dark:text-[#4A8ABF] shrink-0"
+                    strokeWidth={2.5}
+                  />
+                  <span className="font-light">
+                    {text}
+                  </span>
                 </div>
-                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
-                  {isArabic ? 'كيف يمكن لـ' : 'How Can'} <span className="text-[#14235E] dark:text-[#4A8ABF]">TMMT</span> {isArabic ? 'مساعدتك؟' : 'Help You?'}
-                </h4>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
-                {isArabic 
-                  ? ['تجنب غرامات التجديد المتأخرة', 'تجنب اختيار تأسيس الأعمال الخاطئ', 'تجنب التكاليف والرسوم غير الضرورية', 'تجنب الأخطاء المكلفة في الإجراءات الحكومية', 'توفير الوقت والجهد', 'اتخاذ قرارات مستنيرة بثقة قبل اتخاذ أي إجراء']
-                  : ['Avoid late renewal fines', 'Avoid choosing the wrong business setup', 'Avoid unnecessary costs and fees', 'Avoid costly mistakes in government procedures', 'Save time and effort', 'Make informed decisions with confidence before taking action']
-                .map((text) => (
-                  <div key={text} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-white/60 p-2.5 sm:p-3 rounded-xl bg-gray-50/80 dark:bg-[#4A8ABF]/5 border border-gray-100 dark:border-[#4A8ABF]/10 hover:bg-[#14235E]/5 dark:hover:bg-[#4A8ABF]/10 hover:border-[#14235E]/20 dark:hover:border-[#4A8ABF]/20 transition-all duration-300 group">
-                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14235E] dark:text-[#4A8ABF] shrink-0 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
-                    <span>{text}</span>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -2418,9 +2480,6 @@ function MembershipSection() {
     </section>
   );
 }
-
-
-
 // FAQ Section - Smooth accordion animations (pure CSS)
 const FAQSection = () => {
   const { t } = useTranslation();
@@ -3681,9 +3740,6 @@ const Hero = () => {
   );
 };
 
-  /**
-  header section 
-  */
   export function SiteHeader() {
     const { t } = useTranslation();
     const { user, signOut } = useAuth();
@@ -3943,23 +3999,26 @@ const Hero = () => {
                 </Button>
               </SheetTrigger>
 
-             {/* Theme-aware mobile menu */}
+   {/* Theme-aware mobile menu - Modern Glass */}
 <SheetContent
   side="right"
   className="
     flex w-80 flex-col p-0
-    bg-white/95 dark:bg-[#000]/50
-    backdrop-blur-2xl
-    border-l border-gray-100 dark:border-white/10
+    bg-white dark:bg-[#0a0a0a]/95
+    backdrop-blur-2xl backdrop-saturate-150
+    border-l border-white/20 dark:border-white/5
+    shadow-[0_20px_60px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.6)]
   "
 >
- <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary z-50">
-    <X className="h-5 w-5 text-black dark:text-white" />
+  {/* ─── Close Button ────────────────────────────────────────────── */}
+  <SheetClose className="absolute right-2 top-1 rounded-full bg-black/5 dark:bg-white/5 backdrop-blur-xl border border-black/10 dark:border-white/10 p-2 transition-all duration-300 hover:scale-105 hover:bg-black/10 dark:hover:bg-white/10 z-50">
+    <X className="h-4 w-4 text-black dark:text-white" strokeWidth={2} />
     <span className="sr-only">Close</span>
   </SheetClose>
-  {/* Brand header — logo + title */}
-  <div className="relative flex items-center gap-3 border-b border-gray-100 dark:border-white/10 px-6 py-5 overflow-hidden">
-    <div className="pointer-events-none absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[#4A8ABF]/15 blur-3xl" />
+
+  {/* ─── Brand header ────────────────────────────────────────────── */}
+  <div className="relative flex items-center gap-3 border-b border-black/5 dark:border-white/5 px-6 py-5 overflow-hidden">
+    <div className="pointer-events-none absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[#14235E]/10 dark:bg-[#4A8ABF]/10 blur-3xl" />
     <div className="relative">
       <div className="absolute inset-0 bg-[#14235E]/10 dark:bg-[#4A8ABF]/15 rounded-full blur-lg" />
       <img
@@ -3977,30 +4036,27 @@ const Hero = () => {
     </div>
   </div>
 
-  {/* Navigation */}
-  <nav className="mt-4 flex flex-col gap-1.5 px-4">
+  {/* ─── Navigation ──────────────────────────────────────────────── */}
+  <nav className="mt-6 flex flex-col gap-1 px-4">
     {links.map((l) => (
-       <Link
+      <Link
         key={l.href}
         to={l.href}
         className="
           group relative flex items-center gap-4
-          rounded-2xl px-4 py-3.5
+          rounded-xl px-4 py-3
           transition-all duration-300
-          hover:bg-gray-50 dark:hover:bg-white/5
-          active:scale-[0.98]
+          hover:bg-black/5 dark:hover:bg-white/5
+          active:scale-[0.97]
         "
       >
-        <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#14235E] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#14235E]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
-          <l.icon className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+        <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-xl bg-black/5 dark:bg-white/5 transition-all duration-300 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] group-hover:scale-105">
+          <l.icon className="h-4 w-4 text-black/60 dark:text-white/60  transition-colors duration-300 group-hover:text-white" strokeWidth={1.8} />
         </div>
 
         <div className="relative z-10 flex flex-col">
-          <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]">
+          <span className="text-sm font-medium text-black dark:text-white transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]">
             {l.label}
-          </span>
-          <span className="text-[11px] text-black/40 dark:text-white/40">
-            Quick access
           </span>
         </div>
 
@@ -4013,22 +4069,19 @@ const Hero = () => {
       to={user?.role === 'amer' ? '/amer-dashboard' : '/user/dashboard'}
       className="
         group relative flex items-center gap-4
-        rounded-2xl px-4 py-3.5
+        rounded-xl px-4 py-3
         transition-all duration-300
-        hover:bg-gray-50 dark:hover:bg-white/5
-        active:scale-[0.98]
+        hover:bg-black/5 dark:hover:bg-white/5
+        active:scale-[0.97]
       "
     >
-      <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#14235E] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#14235E]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
-        <LayoutDashboard className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+      <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-xl bg-black/5 dark:bg-white/5 transition-all duration-300 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] group-hover:scale-105">
+        <LayoutDashboard className="h-4 w-4 text-black/60 dark:text-white/60 transition-colors duration-300 group-hover:text-white" strokeWidth={1.8} />
       </div>
 
       <div className="relative z-10 flex flex-col">
-        <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]">
+        <span className="text-sm font-medium text-black dark:text-white transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]">
           Dashboard
-        </span>
-        <span className="text-[11px] text-black/40 dark:text-white/40">
-          Manage your account
         </span>
       </div>
 
@@ -4036,31 +4089,31 @@ const Hero = () => {
     </Link>
   </nav>
 
-  {/* CTA buttons — bottom of sheet */}
-  <div className="mt-auto border-t border-gray-100 dark:border-white/10 p-5 space-y-3">
+  {/* ─── CTA buttons ──────────────────────────────────────────────── */}
+  <div className="mt-auto border-t border-black/5 dark:border-white/5 p-5 space-y-2.5">
     {/* Primary CTA */}
     <button
       onClick={() => setShowStartApplication(true)}
       className="
-        group relative overflow-hidden rounded-2xl w-full
-        bg-gradient-to-br from-[#14235E] to-[#08234F] dark:from-white dark:to-white
-        px-6 py-3.5 font-semibold text-sm
+        group relative overflow-hidden rounded-xl w-full
+        bg-[#14235E] dark:bg-white
+        px-6 py-3.5 font-medium text-sm
         text-white dark:text-[#14235E]
-        shadow-lg shadow-[#14235E]/20 dark:shadow-white/10
+        shadow-lg shadow-[#14235E]/25 dark:shadow-white/10
         transition-all duration-300
-        hover:shadow-xl hover:shadow-[#14235E]/30 dark:hover:shadow-white/20
-        flex items-center justify-center gap-3
-        hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]
+        hover:shadow-xl hover:shadow-[#14235E]/35 dark:hover:shadow-white/20
+        hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]
+        flex items-center justify-center gap-2.5
       "
     >
       <span
         className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"
         style={{
-          background: 'linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)',
+          background: 'linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%)',
         }}
       />
       <span className="relative z-10 flex items-center gap-2.5">
-        <Rocket className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
+        <Rocket className="h-4 w-4" strokeWidth={1.8} />
         <span>{t('hero.cta', 'Apply Now')}</span>
       </span>
     </button>
@@ -4070,9 +4123,9 @@ const Hero = () => {
       <button
         onClick={() => signOut()}
         className="
-          w-full rounded-2xl px-6 py-3 font-medium text-sm
-          border border-gray-200 dark:border-white/10
-          bg-white dark:bg-white/5
+          w-full rounded-xl px-6 py-3 font-medium text-sm
+          border border-black/10 dark:border-white/10
+          bg-transparent
           text-black dark:text-white
           hover:bg-red-50 dark:hover:bg-red-500/10
           hover:border-red-300 dark:hover:border-red-500/30
@@ -4088,16 +4141,14 @@ const Hero = () => {
       <button
         onClick={() => navigate('/auth')}
         className="
-          w-full rounded-2xl px-6 py-3 font-semibold text-sm
-          bg-white dark:bg-white/5
+          w-full rounded-xl px-6 py-3 font-medium text-sm
+          bg-black/5 dark:bg-white/5
           text-black dark:text-white
-          border border-gray-200 dark:border-white/10
+          border border-black/10 dark:border-white/10
           flex items-center justify-center gap-2.5
           transition-all duration-300
-          hover:bg-gray-50 dark:hover:bg-white/10
-          hover:border-gray-300 dark:hover:border-white/20
+          hover:bg-black/10 dark:hover:bg-white/10
           active:scale-[0.97]
-          shadow-sm hover:shadow-md
         "
       >
         <LogIn className="h-4 w-4" strokeWidth={1.8} />
@@ -4422,8 +4473,10 @@ const Hero = () => {
           <WhyTMMTSection />
           <VideoSection />
           <SubscriptionPage />
+
           <ServiceJourney />
           <FAQSection />
+          {/* <MembershipSection />  */}
           <EmailCapture />
           <TammatFooter />
           

@@ -12,12 +12,12 @@ import {
 
 // ─── Color system — every value derived from the single brand ink #14235E ──
 const INK = '#14235E';
-const INK_DEEPER = '#050A24';
+const INK_DEEPER = '#14235E';
 const INK_DARK = '#0A1440';
-const INK_MID = '#243B8C';
+const INK_MID = '#14235E';
 const INK_LIGHT = '#4457AE';
-const INK_LIGHTER = '#7C8CD6';
-const INK_PALE = '#EEF1FB';
+const INK_LIGHTER = '#14235E';
+const INK_PALE = '#14235E';
 
 const WhyTMMTSection = () => {
   const sectionRef = useRef(null);
@@ -406,14 +406,7 @@ const TiltCard = ({ idx, benefit, isDarkMode, isArabic, disableTilt }) => {
           className="mt-6 h-px w-full"
           style={{ backgroundColor: isDarkMode ? 'rgba(255,255,255,0.06)' : `${INK}14` }}
         />
-        <div
-          className="mt-3 flex items-center gap-1.5 text-xs font-medium opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-          style={{ color: isDarkMode ? INK_LIGHTER : INK }}
-        >
-          {isArabic ? 'اعرف المزيد' : 'Learn more'}
-          <span aria-hidden="true">{isArabic ? '←' : '→'}</span>
-        </div>
-
+      
         {/* Deep ambient glow anchored under the card */}
         <div
           className="absolute -bottom-16 -right-16 w-32 h-32 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"

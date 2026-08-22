@@ -56,7 +56,7 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
       {/* Header with gradient accent */}
       <div className="space-y-1.5 sm:space-y-2 relative">
         <div className="flex items-center gap-2">
-          <div className="h-5 sm:h-6 w-1 rounded-full bg-gradient-to-b from-[#0A3269] to-[#1A4A8A]" />
+          <div className="h-5 sm:h-6 w-1 rounded-full bg-gradient-to-b from-[#14235E] to-[#1A4A8A]" />
           <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-[#64748B] dark:text-white/40">
             {t('review.step', 'Review your application')}
           </p>
@@ -74,11 +74,11 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
       </div>
 
       {/* Service summary - Premium Card */}
-      <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-gradient-to-br dark:from-[#0A0A0F] dark:to-[#1A1A1F] p-4 sm:p-5 md:p-6 border border-[#F1F5F9] dark:border-white/10">
+      <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-gradient-to-br dark:from-[#0A0A0F] dark:to-[#0A0A0F] p-4 sm:p-5 md:p-6 border border-[#F1F5F9] dark:border-white/10">
         {/* Decorative elements - Dark blue accent */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#0A3269]/8 blur-2xl" />
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#0A3269]/3 dark:bg-[#0A3269]/5 blur-2xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-[#0A3269]/2 dark:bg-[#0A3269]/3 blur-3xl" />
+        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-[#14235E]/8 blur-2xl" />
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#14235E]/3 dark:bg-[#14235E]/5 blur-2xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-[#14235E]/2 dark:bg-[#14235E]/3 blur-3xl" />
         
         <div className="relative flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
           {/* Left side - Service info */}
@@ -96,9 +96,9 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
                   {data.service?.processingTime || '3-5 business days'}
                 </span>
               </div>
-              <div className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-[#0A3269]/20 dark:bg-[#0A3269]/30 border border-[#0A3269]/30 dark:border-[#0A3269]/40">
-                <TrendingUp className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-[#0A3269] dark:text-[#4A8ABF]" />
-                <span className="text-[8px] sm:text-[9px] md:text-[10px] text-[#0A3269] dark:text-[#4A8ABF] font-medium">High success</span>
+              <div className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-[#14235E]/10 dark:bg-[#14235E]/30 border border-[#14235E]/30 dark:border-[#14235E]/40">
+                <TrendingUp className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-[#14235E] dark:text-[#4A8ABF]" />
+                <span className="text-[8px] sm:text-[9px] md:text-[10px] text-[#14235E] dark:text-[#4A8ABF] font-medium">High success</span>
               </div>
             </div>
           </div>
@@ -139,10 +139,10 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
             <motion.div
               key={benefit.text}
               variants={fadeUp}
-              className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-xl bg-[#FAFBFC] dark:bg-[#1A1A1F] border border-[#F1F5F9] dark:border-white/10 hover:border-[#0A3269]/40 dark:hover:border-[#0A3269]/40 transition-all duration-300 hover:shadow-sm hover:shadow-[#0A3269]/10 dark:hover:shadow-[#0A3269]/10 group"
+              className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-xl bg-[#FAFBFC] dark:bg-[#0A0A0F] border border-[#F1F5F9] dark:border-white/10 hover:border-[#14235E]/40 dark:hover:border-[#14235E]/40 transition-all duration-300 hover:shadow-sm hover:shadow-[#14235E]/10 dark:hover:shadow-[#14235E]/10 group"
             >
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-[#0A3269]/20 to-[#0A3269]/5 dark:from-[#0A3269]/30 dark:to-[#0A3269]/10 flex items-center justify-center shrink-0 group-hover:from-[#0A3269]/30 group-hover:to-[#0A3269]/10 transition-all duration-300">
-                <benefit.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-[#14235E]/20 to-[#14235E]/5 dark:from-[#14235E]/30 dark:to-[#14235E]/10 flex items-center justify-center shrink-0 group-hover:from-[#14235E]/30 group-hover:to-[#14235E]/10 transition-all duration-300">
+                <benefit.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14235E] dark:text-[#4A8ABF]" />
               </div>
               <span className="text-[11px] sm:text-[12px] md:text-[13px] text-[#475569] dark:text-white/70 leading-snug group-hover:text-[#0F2A44] dark:group-hover:text-white transition-colors duration-300">
                 {benefit.text}
@@ -158,14 +158,14 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
           <motion.div
             key={label}
             whileHover={{ y: -2, transition: { duration: 0.2 } }}
-            className="relative rounded-xl overflow-hidden bg-[#FAFBFC] dark:bg-[#1A1A1F] border border-[#F1F5F9] dark:border-white/10 p-3 sm:p-4 text-center group hover:shadow-md hover:shadow-[#0A3269]/10 dark:hover:shadow-[#0A3269]/20 transition-all duration-300"
+            className="relative rounded-xl overflow-hidden bg-[#FAFBFC] dark:bg-[#0A0A0F] border border-[#F1F5F9] dark:border-white/10 p-3 sm:p-4 text-center group hover:shadow-md hover:shadow-[#14235E]/10 dark:hover:shadow-[#14235E]/20 transition-all duration-300"
           >
             <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${gradient} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
             <div className="relative">
               <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9] dark:from-[#2A2A2F] dark:to-[#1A1A1F] flex items-center justify-center mx-auto mb-1.5 sm:mb-2 border border-[#F1F5F9] dark:border-white/5">
-                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14235E] dark:text-[#4A8ABF]" />
               </div>
-              <p className="text-base sm:text-lg md:text-xl font-bold text-[#0A3269] dark:text-white tabular-nums leading-none">
+              <p className="text-base sm:text-lg md:text-xl font-bold text-[#14235E] dark:text-white tabular-nums leading-none">
                 {value}
               </p>
               <p className="text-[8px] sm:text-[9px] md:text-[10px] font-medium text-[#475569] dark:text-white/60 mt-1">
@@ -183,8 +183,8 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
       <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl overflow-hidden bg-white dark:bg-[#0A0A0F] border border-[#E2E8F0] dark:border-white/10">
         <div className="relative flex items-center gap-3 w-full sm:w-auto">
           <div className="relative shrink-0">
-            <div className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#0A3269] animate-pulse" />
-            <div className="absolute inset-0 w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#0A3269] animate-ping opacity-40" />
+            <div className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#14235E] animate-pulse" />
+            <div className="absolute inset-0 w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#14235E] animate-ping opacity-40" />
           </div>
           <p className="text-[11px] sm:text-[12px] md:text-[13px] text-[#475569] dark:text-white/70 leading-snug font-medium flex-1">
             {t('review.urgencyMsg', '92% of applications submitted today are processed within 3 days')}
@@ -193,10 +193,10 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
       </div>
 
       {/* Price + CTA - Premium Card */}
-      <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-[#1A1A1F] border border-[#F1F5F9] dark:border-white/10 p-4 sm:p-5 md:p-6">
+      <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-[#0A0A0F] border border-[#F1F5F9] dark:border-white/10 p-4 sm:p-5 md:p-6">
         {/* Premium accent glow - Dark blue */}
-        <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-[#0A3269]/5 dark:bg-[#0A3269]/8 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-32 -left-32 w-64 h-64 rounded-full bg-[#0A3269]/5 dark:bg-[#0A3269]/8 blur-3xl pointer-events-none" />
+        <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-[#0A0A0F]/5 dark:bg-[#0A0A0F]/8 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -left-32 w-64 h-64 rounded-full bg-[#0A0A0F]/5 dark:bg-[#0A0A0F]/8 blur-3xl pointer-events-none" />
         
         <div className="relative space-y-4 sm:space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
@@ -211,25 +211,25 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
                 <span className="text-xs sm:text-sm text-gray-400 dark:text-gray-500 line-through font-medium">
                   AED {(applicationFee * 1.2).toLocaleString()}
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#0A3269]/20 dark:bg-[#0A3269]/30 border border-[#0A3269]/30 dark:border-[#0A3269]/40">
-                  <span className="text-[7px] sm:text-[8px] font-bold text-[#0A3269] dark:text-[#4A8ABF]">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#0A0A0F]/20 dark:bg-[#0A0A0F]/30 border border-[#14235E]/30 dark:border-[#14235E]/40">
+                  <span className="text-[7px] sm:text-[8px] font-bold text-[#14235E] dark:text-[#4A8ABF]">
                     Save {Math.round(((applicationFee * 1.2 - applicationFee) / (applicationFee * 1.2)) * 100)}%
                   </span>
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0A3269]/10 dark:bg-[#0A3269]/20 border border-[#0A3269]/20 dark:border-[#0A3269]/30 shrink-0 w-fit">
-              <Sparkles className="w-3 h-3 text-[#0A3269] dark:text-[#4A8ABF]" />
-              <span className="text-[7px] sm:text-[8px] md:text-[9px] font-bold text-[#0A3269] dark:text-[#4A8ABF] uppercase tracking-wider">Best value</span>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0A0A0F]/10 dark:bg-[#0A0A0F]/20 border border-[#14235E]/20 dark:border-[#14235E]/30 shrink-0 w-fit">
+              <Sparkles className="w-3 h-3 text-[#14235E] dark:text-[#4A8ABF]" />
+              <span className="text-[7px] sm:text-[8px] md:text-[9px] font-bold text-[#14235E] dark:text-[#4A8ABF] uppercase tracking-wider">Best value</span>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] text-[#94A3B8] dark:text-white/40">
-            <Lock className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#0A3269] dark:text-[#4A8ABF]" />
+            <Lock className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#14235E] dark:text-[#4A8ABF]" />
             <span>{t('review.securedByStripe', 'Secured by Stripe · 256-bit SSL')}</span>
             <span className="hidden sm:inline w-1 h-1 rounded-full bg-[#E2E8F0] dark:bg-white/10" />
             <span className="hidden sm:flex items-center gap-1">
-              <Shield className="w-3 h-3 text-[#0A3269] dark:text-[#4A8ABF]" />
+              <Shield className="w-3 h-3 text-[#14235E] dark:text-[#4A8ABF]" />
               Money-back guarantee
             </span>
           </div>
@@ -238,11 +238,11 @@ export default function ReviewStep({ data, applicationFee, onNext }: ReviewStepP
             onClick={onNext}
             className="
               w-full h-12 sm:h-13 md:h-14 rounded-2xl font-bold text-[14px] sm:text-[15px] md:text-[16px]
-              bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] hover:from-[#1A4A8A] hover:to-[#2A5A9A]
+              bg-gradient-to-r from-[#14235E] to-[#1A4A8A] hover:from-[#1A4A8A] hover:to-[#2A5A9A]
               dark:from-white dark:to-[#F0F0F0] dark:hover:from-[#F0F0F0] dark:hover:to-white
-              text-white dark:text-[#0A3269]
-              shadow-lg shadow-[#0A3269]/25 dark:shadow-white/10
-              hover:shadow-xl hover:shadow-[#0A3269]/35 dark:hover:shadow-white/20
+              text-white dark:text-[#14235E]
+              shadow-lg shadow-[#14235E]/25 dark:shadow-white/10
+              hover:shadow-xl hover:shadow-[#14235E]/35 dark:hover:shadow-white/20
               active:scale-[0.97] transition-all duration-300
               flex items-center justify-center gap-2 sm:gap-3
               relative overflow-hidden group

@@ -45,18 +45,18 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="w-16 h-16 rounded-2xl bg-[#0A3269] dark:bg-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-[#0A3269]/20 dark:shadow-white/10"
+          className="w-16 h-16 rounded-2xl bg-[#14235E] dark:bg-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-[#14235E]/20 dark:shadow-white/10"
         >
-          <User className="w-8 h-8 text-white dark:text-[#0A3269]" />
+          <User className="w-8 h-8 text-white dark:text-[#14235E]" />
         </motion.div>
-        <h2 className="text-2xl font-bold text-[#0A3269] dark:text-white">Welcome Back</h2>
+        <h2 className="text-2xl font-bold text-[#14235E] dark:text-white">Welcome Back</h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Sign in to your account</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Email Field */}
         <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-sm font-medium text-[#0A3269] dark:text-white">
+          <Label htmlFor="email" className="text-sm font-medium text-[#14235E] dark:text-white">
             {t('common.email')}
           </Label>
           <div
@@ -65,14 +65,14 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
               bg-gray-50 dark:bg-white/5
               border transition-all duration-300
               ${emailFocused 
-                ? 'border-[#0A3269] dark:border-white shadow-lg shadow-[#0A3269]/10 dark:shadow-white/5' 
+                ? 'border-[#14235E] dark:border-white shadow-lg shadow-[#14235E]/10 dark:shadow-white/5' 
                 : 'border-gray-200 dark:border-white/10'
               }
             `}
           >
             <Mail
               className={`w-4 h-4 shrink-0 mr-3 rtl:mr-0 rtl:ml-3 transition-colors duration-300 ${
-                emailFocused ? 'text-[#0A3269] dark:text-white' : 'text-gray-400 dark:text-gray-500'
+                emailFocused ? 'text-[#14235E] dark:text-white' : 'text-gray-400 dark:text-gray-500'
               }`}
             />
             <input
@@ -87,7 +87,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
               style={{ fontSize: '16px', outline: 'none', boxShadow: 'none' }}
               className="
                 flex-1 min-w-0 bg-transparent border-0
-                text-[#0A3269] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
+                text-[#14235E] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
                 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0
               "
             />
@@ -96,7 +96,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
 
         {/* Password Field */}
         <div className="space-y-1.5">
-          <Label htmlFor="password" className="text-sm font-medium text-[#0A3269] dark:text-white">
+          <Label htmlFor="password" className="text-sm font-medium text-[#14235E] dark:text-white">
             {t('common.password')}
           </Label>
           <div
@@ -105,14 +105,14 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
               bg-gray-50 dark:bg-white/5
               border transition-all duration-300
               ${passwordFocused 
-                ? 'border-[#0A3269] dark:border-white shadow-lg shadow-[#0A3269]/10 dark:shadow-white/5' 
+                ? 'border-[#14235E] dark:border-white shadow-lg shadow-[#14235E]/10 dark:shadow-white/5' 
                 : 'border-gray-200 dark:border-white/10'
               }
             `}
           >
             <Lock
               className={`w-4 h-4 shrink-0 mr-3 rtl:mr-0 rtl:ml-3 transition-colors duration-300 ${
-                passwordFocused ? 'text-[#0A3269] dark:text-white' : 'text-gray-400 dark:text-gray-500'
+                passwordFocused ? 'text-[#14235E] dark:text-white' : 'text-gray-400 dark:text-gray-500'
               }`}
             />
             <input
@@ -127,14 +127,14 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
               style={{ fontSize: '16px', outline: 'none', boxShadow: 'none' }}
               className="
                 flex-1 min-w-0 bg-transparent border-0
-                text-[#0A3269] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
+                text-[#14235E] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
                 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0
               "
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="shrink-0 p-1 -m-1 text-gray-400 hover:text-[#0A3269] dark:hover:text-white transition-colors"
+              className="shrink-0 p-1 -m-1 text-gray-400 hover:text-[#14235E] dark:hover:text-white transition-colors"
               tabIndex={-1}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -163,8 +163,8 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
                 relative w-4.5 h-4.5 rounded-md flex items-center justify-center shrink-0
                 border-2 transition-all duration-200
                 ${remember 
-                  ? 'bg-[#0A3269] dark:bg-white border-[#0A3269] dark:border-white' 
-                  : 'border-gray-300 dark:border-white/20 bg-transparent group-hover:border-[#0A3269] dark:group-hover:border-white/40'
+                  ? 'bg-[#14235E] dark:bg-white border-[#14235E] dark:border-white' 
+                  : 'border-gray-300 dark:border-white/20 bg-transparent group-hover:border-[#14235E] dark:group-hover:border-white/40'
                 }
               `}
             >
@@ -176,7 +176,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
                     exit={{ scale: 0, opacity: 0 }}
                     transition={{ duration: 0.15 }}
                     viewBox="0 0 12 10"
-                    className="w-2.5 h-2.5 text-white dark:text-[#0A3269]"
+                    className="w-2.5 h-2.5 text-white dark:text-[#14235E]"
                     fill="none"
                   >
                     <path d="M1 5L4.5 8.5L11 1.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -184,14 +184,14 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
                 )}
               </AnimatePresence>
             </button>
-            <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-[#0A3269] dark:group-hover:text-white transition-colors">
+            <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-[#14235E] dark:group-hover:text-white transition-colors">
               {t('auth.rememberMe')}
             </span>
           </label>
           <button
             type="button"
             onClick={onForgotPassword}
-            className="text-sm text-gray-500 dark:text-gray-400 hover:text-[#0A3269] dark:hover:text-white transition-colors font-medium"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-[#14235E] dark:hover:text-white transition-colors font-medium"
           >
             {t('auth.forgotPasswordQuestion')}
           </button>
@@ -213,19 +213,19 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
               w-full
               overflow-hidden
               rounded-xl
-              bg-[#0A3269]
+              bg-[#14235E]
               dark:bg-white
               text-white
-              dark:text-[#0A3269]
+              dark:text-[#14235E]
               font-semibold
               text-[15px]
               shadow-lg
-              shadow-[#0A3269]/25
+              shadow-[#14235E]/25
               dark:shadow-white/10
               transition-all
               duration-300
               hover:shadow-xl
-              hover:shadow-[#0A3269]/35
+              hover:shadow-[#14235E]/35
               dark:hover:shadow-white/20
               hover:scale-[1.02]
               hover:bg-[#1a4a7a]
@@ -234,7 +234,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
               disabled:cursor-not-allowed
               disabled:opacity-60
               disabled:hover:scale-100
-              disabled:hover:bg-[#0A3269]
+              disabled:hover:bg-[#14235E]
               dark:disabled:hover:bg-white
             "
           >
@@ -257,7 +257,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
             />
 
             {/* Subtle Glow Effect */}
-            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#0A3269]/10 dark:bg-white/5 blur-xl" />
+            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#14235E]/10 dark:bg-white/5 blur-xl" />
 
             {/* Button Content */}
             <AnimatePresence mode="wait" initial={false}>
@@ -303,17 +303,17 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
           <button
             type="button"
             onClick={onSwitchToSignUp}
-            className="text-[#0A3269] dark:text-white font-semibold hover:underline transition-colors relative group"
+            className="text-[#14235E] dark:text-white font-semibold hover:underline transition-colors relative group"
           >
             {t('auth.signUp')}
-            <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-[#0A3269] dark:bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-[#14235E] dark:bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
           </button>
         </div>
 
         {/* Trust Badges */}
         <div className="flex items-center justify-center gap-5 pt-2">
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#0A3269] dark:text-gray-500" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#14235E] dark:text-gray-500" />
             <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">256-bit SSL</span>
           </div>
           <span className="w-px h-3.5 bg-gray-200 dark:bg-white/10" />
@@ -323,7 +323,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onSwitchToSignUp, onForg
           </div>
           <span className="w-px h-3.5 bg-gray-200 dark:bg-white/10" />
           <div className="flex items-center gap-1.5">
-            <CheckCircle className="w-3.5 h-3.5 text-[#0A3269] dark:text-blue-400" />
+            <CheckCircle className="w-3.5 h-3.5 text-[#14235E] dark:text-blue-400" />
             <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">Encrypted</span>
           </div>
         </div>

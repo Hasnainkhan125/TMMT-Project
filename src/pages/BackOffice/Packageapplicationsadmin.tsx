@@ -195,7 +195,7 @@ function DocumentPreview({ doc, appId, downloadUrl, previewUrl, accent, onApprov
         "group relative flex items-center gap-3 rounded-xl border p-3 transition-all hover:shadow-md",
         doc.status === 'approved' ? "border-emerald-300/50 dark:border-emerald-700/50 bg-emerald-50/30 dark:bg-emerald-950/10" :
         doc.status === 'rejected' ? "border-red-300/50 dark:border-red-700/50 bg-red-50/30 dark:bg-red-950/10" :
-        "border-border/50 bg-white/50 dark:bg-gray-800/30 hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30"
+        "border-border/50 bg-white/50 dark:bg-gray-800/30 hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30"
       )}>
         {/* Document Preview/Icon */}
         <div className="relative shrink-0">
@@ -471,7 +471,7 @@ export default function PackageApplicationsAdmin() {
       {/* ─── Filters ──────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         <div className="relative flex-1 w-full sm:min-w-[260px]">
-          <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${searchFocused ? 'text-[#0A3269] dark:text-[#4A8ABF]' : 'text-muted-foreground'}`} />
+          <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${searchFocused ? 'text-[#14235E] dark:text-[#14235E]' : 'text-muted-foreground'}`} />
           <input
             ref={searchRef}
             value={filters.q}
@@ -482,7 +482,7 @@ export default function PackageApplicationsAdmin() {
             className={cn(
               "w-full rounded-xl border bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm pl-9 pr-10 py-2.5 text-sm outline-none transition-all",
               searchFocused
-                ? "border-[#0A3269]/40 dark:border-[#4A8ABF]/40 ring-2 ring-[#0A3269]/20 dark:ring-[#4A8ABF]/20"
+                ? "border-[#14235E]/40 dark:border-[#14235E]/40 ring-2 ring-[#14235E]/20 dark:ring-[#14235E]/20"
                 : "border-border"
             )}
           />
@@ -499,7 +499,7 @@ export default function PackageApplicationsAdmin() {
         <select
           value={filters.status}
           onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
-          className="rounded-xl border border-border bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#0A3269]/20 dark:focus:ring-[#4A8ABF]/20 transition-all w-full sm:w-auto"
+          className="rounded-xl border border-border bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#14235E]/20 dark:focus:ring-[#14235E]/20 transition-all w-full sm:w-auto"
         >
           <option value="all">All statuses</option>
           {STATUS_FLOW.map((s) => (
@@ -521,7 +521,7 @@ export default function PackageApplicationsAdmin() {
               className={cn(
                 "px-3 py-1 rounded-full text-xs font-medium transition-all duration-200",
                 isActive
-                  ? "bg-[#0A3269] dark:bg-[#4A8ABF] text-white shadow-sm"
+                  ? "bg-[#14235E] dark:bg-[#14235E] text-white shadow-sm"
                   : "bg-gray-100/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200/60 dark:hover:bg-white/10"
               )}
             >
@@ -536,13 +536,13 @@ export default function PackageApplicationsAdmin() {
         <div className="flex flex-col items-center justify-center py-8 sm:py-16">
           <div className="relative h-8 w-8 sm:h-10 sm:w-10">
             <div className="absolute inset-0 rounded-full border-2 border-muted" />
-            <div className="absolute inset-0 rounded-full border-2 border-[#0A3269] dark:border-[#4A8ABF] border-t-transparent animate-spin" />
+            <div className="absolute inset-0 rounded-full border-2 border-[#14235E] dark:border-[#14235E] border-t-transparent animate-spin" />
           </div>
           <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-muted-foreground">Loading applications…</p>
         </div>
       ) : applications.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-8 sm:py-16 text-center border-2 border-dashed border-border rounded-2xl bg-muted/20 px-4 sm:px-8">
-          <Package className="h-10 w-10 sm:h-12 sm:w-14 text-[#0A3269] dark:text-[#0A3269]" strokeWidth={1.5} />
+          <Package className="h-10 w-10 sm:h-12 sm:w-14 text-[#14235E] dark:text-[#14235E]" strokeWidth={1.5} />
           <h4 className="mt-2 sm:mt-3 text-base sm:text-lg font-medium text-foreground">No package applications</h4>
           <p className="text-xs sm:text-sm text-muted-foreground max-w-[220px] sm:max-w-sm mx-auto">
             Applications submitted by customers will appear here.
@@ -589,14 +589,14 @@ function PackageRow({ app, isOpen, onToggle, actions, accent }) {
       className={cn(
         "rounded-2xl border transition-all duration-200",
         isOpen
-          ? "border-[#0A3269]/30 dark:border-[#4A8ABF]/30 shadow-lg shadow-[#0A3269]/5 dark:shadow-[#4A8ABF]/10 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm"
-          : "border-border/70 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm hover:shadow-md hover:border-[#0A3269]/20 dark:hover:border-[#4A8ABF]/20"
+          ? "border-[#14235E]/30 dark:border-[#14235E]/30 shadow-lg shadow-[#14235E]/5 dark:shadow-[#14235E]/10 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm"
+          : "border-border/70 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm hover:shadow-md hover:border-[#14235E]/20 dark:hover:border-[#14235E]/20"
       )}
     >
       {/* ─── Header / Toggle ──────────────────────────────────────────── */}
       <div
         onClick={onToggle}
-        className="flex items-center gap-3 px-4 py-3.5 cursor-pointer select-none transition-colors hover:bg-[#0A3269]/5 dark:hover:bg-[#4A8ABF]/5 rounded-t-2xl"
+        className="flex items-center gap-3 px-4 py-3.5 cursor-pointer select-none transition-colors hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/5 rounded-t-2xl"
       >
         <div
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
@@ -803,7 +803,7 @@ function DetailPanel({ app, actions, accent }) {
                 value={reqLabel}
                 onChange={(e) => setReqLabel(e.target.value)}
                 placeholder="e.g. Tenancy contract"
-                className="w-full rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 text-sm outline-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition"
+                className="w-full rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 text-sm outline-none focus:border-[#14235E]/40 dark:focus:border-[#14235E]/40 transition"
               />
               <button
                 onClick={() => {
@@ -829,7 +829,7 @@ function DetailPanel({ app, actions, accent }) {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 text-sm outline-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition"
+                className="w-full rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 text-sm outline-none focus:border-[#14235E]/40 dark:focus:border-[#14235E]/40 transition"
               >
                 {STATUS_FLOW.map((s) => (
                   <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
@@ -839,12 +839,12 @@ function DetailPanel({ app, actions, accent }) {
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Add a note (optional)"
-                className="w-full rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 text-sm outline-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition"
+                className="w-full rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2.5 text-sm outline-none focus:border-[#14235E]/40 dark:focus:border-[#14235E]/40 transition"
               />
               <button
                 onClick={() => handleAction(actions.updateStatus, app._id, status, note)}
                 disabled={isSubmitting}
-                className="w-full rounded-xl bg-[#0A3269] dark:bg-[#4A8ABF] text-white dark:text-black py-2.5 text-sm font-medium transition hover:opacity-90 disabled:opacity-50"
+                className="w-full rounded-xl bg-[#14235E] dark:bg-[#14235E] text-white dark:text-white py-2.5 text-sm font-medium transition hover:opacity-90 disabled:opacity-50"
               >
                 Update Status
               </button>
@@ -866,7 +866,7 @@ function DetailPanel({ app, actions, accent }) {
                   value={payLink}
                   onChange={(e) => setPayLink(e.target.value)}
                   placeholder="Payment link"
-                  className="flex-1 rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2 text-sm outline-none focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition"
+                  className="flex-1 rounded-xl border border-border/50 bg-white/50 dark:bg-gray-800/30 px-3 py-2 text-sm outline-none focus:border-[#14235E]/40 dark:focus:border-[#14235E]/40 transition"
                 />
                 <button
                   onClick={() => handleAction(actions.updatePayment, app._id, { status: 'pending', paymentLink: payLink })}

@@ -53,7 +53,7 @@ import {
 
 // ─── LIMITED TIME BADGE ──────────────────────────────────────────────────────
 const LimitedTimeBadge = () => (
-  <span className="inline-flex items-center gap-1.5 bg-[#0A3269] text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full whitespace-nowrap">
+  <span className="inline-flex items-center gap-1.5 bg-[#14235E] text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full whitespace-nowrap">
     <Zap className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
     Limited Time
   </span>
@@ -131,9 +131,9 @@ const LegalPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white dark:from-black dark:via-[#0A0A0F] dark:to-black">
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#0A3269]/5 dark:bg-[#0A3269]/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#0A3269]/3 dark:bg-[#0A3269]/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#0A3269]/3 dark:bg-[#0A3269]/5 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#14235E]/5 dark:bg-[#14235E]/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#14235E]/3 dark:bg-[#14235E]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#14235E]/3 dark:bg-[#14235E]/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 max-w-5xl">
@@ -142,7 +142,7 @@ const LegalPage = () => {
           to="/" 
           className="group inline-flex items-center gap-2.5 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-all duration-300 mb-8 sm:mb-10"
         >
-          <div className="p-2 rounded-full bg-black/5 dark:bg-white/10 group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#0A3269]/20 transition-all duration-300">
+          <div className="p-2 rounded-full bg-black/5 dark:bg-white/10 group-hover:bg-[#14235E]/10 dark:group-hover:bg-[#14235E]/20 transition-all duration-300">
             <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
           </div>
           <span className="text-sm font-medium">
@@ -195,7 +195,7 @@ const LegalPage = () => {
                         whitespace-nowrap
                         transition-all duration-300
                         ${isActive 
-                          ? 'bg-[#0A3269] text-white shadow-lg shadow-[#0A3269]/25' 
+                          ? 'bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25' 
                           : 'text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
                         }
                       `}
@@ -218,7 +218,7 @@ const LegalPage = () => {
                       
                       {/* Hover Underline */}
                       {!isActive && (
-                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] rounded-full transition-all duration-300 group-hover:w-1/2" />
+                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#14235E] rounded-full transition-all duration-300 group-hover:w-1/2" />
                       )}
                     </button>
                   );
@@ -233,7 +233,7 @@ const LegalPage = () => {
           {/* ─── SECTION 1: ABOUT TMMT ────────────────────────────────── */}
           <section id="about" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <Shield className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -289,7 +289,7 @@ const LegalPage = () => {
                 </div>
                 <div>
                   <p className="text-xs text-black/40 dark:text-white/40">{isArabic ? 'البريد الإلكتروني للدعم' : 'Support Email'}</p>
-                  <p className="text-sm font-medium text-[#0A3269]">support@tmmt.ae</p>
+                  <p className="text-sm font-medium text-[#14235E]">support@tmmt.ae</p>
                 </div>
               </div>
             </div>
@@ -323,7 +323,7 @@ const LegalPage = () => {
           {/* ─── SECTION 2: TERMS & CONDITIONS ────────────────────────── */}
           <section id="terms" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <FileText className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -384,7 +384,7 @@ const LegalPage = () => {
                     isArabic ? 'الامتثال لجميع قوانين ولوائح الإمارات' : 'Comply with all UAE laws and regulations'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <CheckCircle className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <CheckCircle className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -411,7 +411,7 @@ const LegalPage = () => {
           {/* ─── SECTION 3: PRIVACY POLICY ────────────────────────────── */}
           <section id="privacy" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <Lock className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -464,7 +464,7 @@ const LegalPage = () => {
                     isArabic ? 'لمنع الاحتيال والحفاظ على الأمان' : 'To prevent fraud and maintain security'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <CheckCircle className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <CheckCircle className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -492,7 +492,7 @@ const LegalPage = () => {
                     isArabic ? 'المحاكم أو الجهات التنظيمية أو السلطات عند الاقتضاء القانوني' : 'Courts, regulators, or authorities where legally required'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <CheckCircle className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <CheckCircle className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -514,7 +514,7 @@ const LegalPage = () => {
                     isArabic ? 'تسجيل خروج تلقائي لعدم النشاط' : 'Automated logout for inactivity'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <ShieldCheck className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <ShieldCheck className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -535,7 +535,7 @@ const LegalPage = () => {
                     isArabic ? 'تقديم شكوى' : 'Submit a complaint'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <UserCheck className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <UserCheck className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -547,7 +547,7 @@ const LegalPage = () => {
           {/* ─── SECTION 4: REFUND POLICY ────────────────────────────── */}
           <section id="refund" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <RefreshCw className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -645,7 +645,7 @@ const LegalPage = () => {
           {/* ─── SECTION 5: GOLDEN GUARANTEE ───────────────────────────── */}
           <section id="guarantee" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <Award className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -729,7 +729,7 @@ const LegalPage = () => {
           {/* ─── SECTION 6: AI POLICY ──────────────────────────────────── */}
           <section id="ai" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <MessageSquare className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -784,7 +784,7 @@ const LegalPage = () => {
                     isArabic ? 'لا ينبغي إدخال كلمات المرور والبيانات الحساسة في محادثة الذكاء الاصطناعي' : 'Passwords and sensitive data should not be entered into AI chat'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <ShieldCheck className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <ShieldCheck className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -796,7 +796,7 @@ const LegalPage = () => {
           {/* ─── SECTION 7: COOKIE POLICY ────────────────────────────── */}
           <section id="cookie" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <Cookie className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -834,7 +834,7 @@ const LegalPage = () => {
           {/* ─── SECTION 8: COMPLAINTS ─────────────────────────────────── */}
           <section id="complaints" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <Headphones className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -844,18 +844,18 @@ const LegalPage = () => {
 
             <div className="space-y-4 text-black/70 dark:text-white/60">
               <div className="bg-white/50 dark:bg-black/30 rounded-2xl p-5 sm:p-6 border border-black/5 dark:border-white/10 backdrop-blur-sm">
-                <h3 className="font-semibold text-black dark:text-white text-sm sm:text-base mb-2">
-                  {isArabic ? 'كيفية تقديم شكوى' : 'How to Submit a Complaint'}
-                </h3>
+                <h4 className="font-semibold text-black dark:text-white text-sm sm:text-base mb-2">
+                  {isArabic ? 'كيفية تقديم شكوى' : 'How Submit a Complaint'}
+                </h4>
                 <ul className="space-y-2 text-sm sm:text-base">
                   {[
-                    isArabic ? 'البريد الإلكتروني: complaints@tmmt.ae' : 'Email: complaints@tmmt.ae',
-                    isArabic ? 'الهاتف/واتساب: [INSERT NUMBER]' : 'Phone/WhatsApp: [INSERT NUMBER]',
+                    isArabic ? 'البريد الإلكتروني: Tmmt.aecontact@gmail.com' : 'Email: Tmmt.aecontact@gmail.com',
+                    isArabic ? 'الهاتف/واتساب: [+971 50 167 6916]' : 'Phone/WhatsApp: +971 50 167 6916',
                     isArabic ? 'نموذج عبر الإنترنت متاح على المنصة' : 'Online form available on the platform',
                     isArabic ? 'قم بتضمين اسمك ورقم الطلب ومرجع الدفع ووصف المشكلة والأدلة الداعمة' : 'Include your name, request number, payment reference, issue description, and supporting evidence'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <Mail className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <Mail className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -875,7 +875,7 @@ const LegalPage = () => {
                     isArabic ? 'يحتفظ العملاء بالحق في الاتصال بسلطات حماية المستهلك' : 'Customers retain the right to contact consumer protection authorities'
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <Clock className="h-4 w-4 text-[#0A3269] shrink-0 mt-0.5" strokeWidth={2} />
+                      <Clock className="h-4 w-4 text-[#14235E] shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -887,7 +887,7 @@ const LegalPage = () => {
           {/* ─── SECTION 9: FINAL DISCLAIMER ──────────────────────────── */}
           <section id="disclaimer" className="mb-12 sm:mb-16 scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-[#0A3269] text-white">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white">
                 <AlertCircle className="h-5 w-5 text-white" strokeWidth={1.75} />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white" style={{ fontWeight: 600 }}>
@@ -919,7 +919,7 @@ const LegalPage = () => {
                     isArabic ? 'دور TMMT هو المساعدة، وليس ضمان النتائج.' : "TMMT's role is to assist, not to guarantee results."
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0A3269] text-white text-xs font-bold">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#14235E] text-white text-xs font-bold">
                         {idx + 1}
                       </span>
                       <span className="leading-relaxed">{item}</span>

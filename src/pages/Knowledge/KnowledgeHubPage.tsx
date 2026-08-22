@@ -148,7 +148,7 @@ const KnowledgeHubPage: React.FC = () => {
           <CardHeader className="pb-2">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-[#0A3269]/10 p-2.5 text-[#0A3269] dark:bg-[#4A8ABF]/20 dark:text-[#4A8ABF]">
+                <div className="rounded-xl bg-[#14235E]/10 p-2.5 text-[#14235E] dark:bg-[#4A8ABF]/20 dark:text-[#4A8ABF]">
                   <Icon className="h-5 w-5" />
                 </div>
                 <div>
@@ -209,7 +209,7 @@ const KnowledgeHubPage: React.FC = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 gap-1 text-xs text-[#0A3269] hover:text-[#0A3269]/80 hover:bg-[#0A3269]/10 dark:text-[#4A8ABF] dark:hover:bg-[#4A8ABF]/20 dark:hover:text-[#4A8ABF]/80"
+                className="h-7 gap-1 text-xs text-[#14235E] hover:text-[#14235E]/80 hover:bg-[#14235E]/10 dark:text-[#4A8ABF] dark:hover:bg-[#4A8ABF]/20 dark:hover:text-[#4A8ABF]/80"
                 onClick={() => navigate('/apply')}
               >
                 Learn More
@@ -227,7 +227,7 @@ const KnowledgeHubPage: React.FC = () => {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <div className="text-center">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-[#0A3269] dark:text-[#4A8ABF]" />
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-[#14235E] dark:text-[#4A8ABF]" />
           <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">Loading knowledge base...</p>
         </div>
       </div>
@@ -245,7 +245,8 @@ const KnowledgeHubPage: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            className="mt-4 border-[#0A3269]/30 text-[#0A3269] hover:bg-[#0A3269]/10 dark:border-[#4A8ABF]/30 dark:text-[#4A8ABF] dark:hover:bg-[#4A8ABF]/20"
+            className="mt-4 border-[#14235E]/30 text-[#14235E] hover:bg-[#14235E
+]/10 dark:border-[#4A8ABF]/30 dark:text-[#4A8ABF] dark:hover:bg-[#4A8ABF]/20"
             onClick={() => fetchServices()}
           >
             Try Again
@@ -286,7 +287,8 @@ const KnowledgeHubPage: React.FC = () => {
         <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <Input
-            className="h-11 pl-9 pr-4 rounded-xl border-gray-200/70 bg-white/80 text-sm shadow-sm focus:border-[#0A3269] focus:ring-[#0A3269] dark:border-white/10 dark:bg-black/40 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-[#4A8ABF] dark:focus:ring-[#4A8ABF]"
+            className="h-11 pl-9 pr-4 rounded-xl border-gray-200/70 bg-white/80 text-sm shadow-sm focus:border-[#14235E
+] focus:ring-[#14235E] dark:border-white/10 dark:bg-black/40 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-[#4A8ABF] dark:focus:ring-[#4A8ABF]"
             placeholder="Search for visa types, requirements, documents..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -307,7 +309,7 @@ const KnowledgeHubPage: React.FC = () => {
             <TabsList className="inline-flex h-auto flex-wrap gap-1 bg-transparent p-0">
               <TabsTrigger
                 value="all"
-                className="rounded-full border border-gray-200/70 px-4 py-1.5 text-xs data-[state=active]:border-[#0A3269] data-[state=active]:bg-[#0A3269]/10 data-[state=active]:text-[#0A3269] dark:border-white/10 dark:data-[state=active]:border-[#4A8ABF] dark:data-[state=active]:bg-[#4A8ABF]/20 dark:data-[state=active]:text-[#4A8ABF]"
+                className="rounded-full border border-gray-200/70 px-4 py-1.5 text-xs data-[state=active]:border-[#14235E] data-[state=active]:bg-[#14235E]/10 data-[state=active]:text-[#14235E] dark:border-white/10 dark:data-[state=active]:border-[#4A8ABF] dark:data-[state=active]:bg-[#4A8ABF]/20 dark:data-[state=active]:text-[#4A8ABF]"
               >
                 All ({categoryCounts.all || 0})
               </TabsTrigger>
@@ -319,7 +321,7 @@ const KnowledgeHubPage: React.FC = () => {
                     <TabsTrigger
                       key={key}
                       value={key}
-                      className="rounded-full border border-gray-200/70 px-4 py-1.5 text-xs data-[state=active]:border-[#0A3269] data-[state=active]:bg-[#0A3269]/10 data-[state=active]:text-[#0A3269] dark:border-white/10 dark:data-[state=active]:border-[#4A8ABF] dark:data-[state=active]:bg-[#4A8ABF]/20 dark:data-[state=active]:text-[#4A8ABF]"
+                      className="rounded-full border border-gray-200/70 px-4 py-1.5 text-xs data-[state=active]:border-[#14235E] data-[state=active]:bg-[#14235E]/10 data-[state=active]:text-[#14235E] dark:border-white/10 dark:data-[state=active]:border-[#4A8ABF] dark:data-[state=active]:bg-[#4A8ABF]/20 dark:data-[state=active]:text-[#4A8ABF]"
                     >
                       {label} ({count})
                     </TabsTrigger>

@@ -412,9 +412,9 @@ const FAQsPage: React.FC = () => {
 
   // Check if dark mode
   const isDark = document.documentElement.classList.contains('dark')
-  const primaryColor = '#0A3269' // Use #0A3269 in both modes
-  const primaryColorLight = '#0A3269' + '30'
-  const primaryColorLighter = '#0A3269' + '15'
+  const primaryColor = '#14235E' // Use #14235E in both modes
+  const primaryColorLight = '#14235E' + '30'
+  const primaryColorLighter = '#14235E' + '15'
 
   const filteredFAQs = FAQS.filter(faq => {
     const matchesSearch = !searchQuery || 
@@ -996,7 +996,6 @@ const FAQsPage: React.FC = () => {
                   whileHover={{ scale: 1.03, y: -4 }}
                   className="p-5 rounded-2xl text-center"
                   style={{ 
-                    backgroundColor: theme.surface,
                     border: `1px solid ${theme.border}`,
                   }}
                   initial={{ opacity: 0, y: 20 }}
@@ -1042,7 +1041,6 @@ const FAQsPage: React.FC = () => {
                   whileHover={{ scale: 1.03, y: -4 }}
                   className="p-5 rounded-2xl text-center"
                   style={{ 
-                    backgroundColor: theme.surface,
                     border: `1px solid ${theme.border}`,
                   }}
                   initial={{ opacity: 0, y: 20 }}
@@ -1075,7 +1073,6 @@ const FAQsPage: React.FC = () => {
                     size="sm"
                     className="rounded-full w-full text-xs h-auto py-2"
                     style={{
-                      backgroundColor: primaryColorLighter,
                       border: `1px solid ${primaryColor}`,
                       color: primaryColor
                     }}
@@ -1088,7 +1085,6 @@ const FAQsPage: React.FC = () => {
                   whileHover={{ scale: 1.03, y: -4 }}
                   className="p-5 rounded-2xl text-center"
                   style={{ 
-                    backgroundColor: theme.surface,
                     border: `1px solid ${theme.border}`,
                   }}
                   initial={{ opacity: 0, y: 20 }}

@@ -102,10 +102,9 @@ import { usePackageAdmin } from '@/hooks/usePackageAdmin';
 import ProfilePage from './ProfilePage';
 import DocumentPage from './DocumentPage';
 import CompliancePage from './CompliancePage';
-
-// ─── Design Tokens ──────────────────────────────────────────────────────────
+import GuideSubmissionSuccess from './GuideSubmissionSuccess'; // same folder// ─── Design Tokens ──────────────────────────────────────────────────────────
 const ACCENT = {
-  primary: '#0A3269',
+  primary: '#14235E',
   primaryLight: '#1a4a7a',
   primaryDark: '#082a5a',
   teal: '#0d9488',
@@ -139,6 +138,12 @@ const NAV_GROUPS: {
       { path: '/user/profile', label: 'Profile', icon: User, key: 'profile' },
     ],
   },
+{
+  label: 'Guide',
+  items: [
+    { path: '/investor/success', label: 'Guide Submission', icon: BookOpen, key: 'guide-submission' },
+  ],
+},
 ];
 
 const NAV_ITEMS = NAV_GROUPS.flatMap((g) => g.items);
@@ -172,9 +177,10 @@ const GOV_SERVICES = [
     url: 'https://www.moh.gov.ae',
     icon: Heart,
   },
+  
 ];
 
-type TabKey = 'dashboard' | 'documents' | 'compliance' | 'profile';
+type TabKey = 'dashboard' | 'documents' | 'compliance' | 'profile' | 'guide-submission';
 type CheckFilter = 'all' | 'pending' | 'processing' | 'completed' | 'failed';
 type ApplicationFilter = 'all' | 'submitted' | 'under_review' | 'docs_required' | 'approved';
 type DataView = 'checks' | 'applications' | 'packages' | null;
@@ -198,14 +204,13 @@ const AdvancedInvestorPortfolio = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  const getTabFromPath = (path: string): TabKey => {
-    if (path.includes('/user/documents')) return 'documents';
-    if (path.includes('/investor/compliance')) return 'compliance';
-    if (path.includes('/user/profile')) return 'profile';
-    return 'dashboard';
-  };
-
+const getTabFromPath = (path: string): TabKey => {
+  if (path.includes('/user/documents')) return 'documents';
+  if (path.includes('/investor/compliance')) return 'compliance';
+  if (path.includes('/user/profile')) return 'profile';
+  if (path === '/success' || path === '/investor/success') return 'guide-submission';
+  return 'dashboard';
+};
   const handleEmailClick = () => {
     const email = 'support@tammat.ae';
     window.location.href = `mailto:${email}`;
@@ -244,9 +249,9 @@ const AdvancedInvestorPortfolio = () => {
   const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
 
   // ─── Brand Color ──────────────────────────────────────────────────────────
-  const primaryColor = '#0A3269';
-  const primaryColorLight = '#0A3269' + '30';
-  const primaryColorLighter = '#0A3269' + '15';
+  const primaryColor = '#14235E';
+  const primaryColorLight = '#14235E' + '30';
+  const primaryColorLighter = '#14235E' + '15';
 
   useEffect(() => {
     setActiveTab(getTabFromPath(location.pathname));
@@ -523,8 +528,8 @@ const AdvancedInvestorPortfolio = () => {
   const pillBtnClass = (active: boolean) => `
     px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-medium transition-all duration-200 border whitespace-nowrap
     ${active
-      ? 'bg-[#0A3269] text-white border-[#0A3269] shadow-[0_0_0_1px_rgba(10,50,105,0.35)]'
-      : 'bg-gray-100 dark:bg-white/[0.03] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#0A3269]/40 hover:text-[#0A3269]'
+      ? 'bg-[#14235E] text-white border-[#14235E] shadow-[0_0_0_1px_rgba(10,50,105,0.35)]'
+      : 'bg-gray-100 dark:bg-white/[0.03] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-[#14235E]/40 hover:text-[#14235E]'
     }
   `;
 
@@ -750,8 +755,8 @@ const AdvancedInvestorPortfolio = () => {
             text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
             border
             ${dataView === 'checks'
-              ? 'bg-[#0A3269] text-white border-[#0A3269]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 hover:text-[#0A3269]'
+              ? 'bg-[#14235E] text-white border-[#14235E]'
+              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#14235E]/40 hover:text-[#14235E]'
             }
           `}
         >
@@ -775,8 +780,8 @@ const AdvancedInvestorPortfolio = () => {
             text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
             border
             ${dataView === 'applications'
-              ? 'bg-[#0A3269] text-white border-[#0A3269]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 hover:text-[#0A3269]'
+              ? 'bg-[#14235E] text-white border-[#14235E]'
+              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#14235E]/40 hover:text-[#14235E]'
             }
           `}
         >
@@ -800,8 +805,8 @@ const AdvancedInvestorPortfolio = () => {
             text-[10px] sm:text-xs font-medium transition-all duration-300 whitespace-nowrap
             border
             ${dataView === 'packages'
-              ? 'bg-[#0A3269] text-white border-[#0A3269]'
-              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#0A3269]/40 hover:text-[#0A3269]'
+              ? 'bg-[#14235E] text-white border-[#14235E]'
+              : 'bg-white dark:bg-[#12121c] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/[0.06] hover:border-[#14235E]/40 hover:text-[#14235E]'
             }
           `}
         >
@@ -836,8 +841,8 @@ const AdvancedInvestorPortfolio = () => {
           <CardHeader className="flex flex-col items-start justify-between gap-4 p-3 sm:p-4 md:p-6">
             <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
               <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 border border-[#0A3269]/25">
-                  <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" />
+                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#14235E]/10 border border-[#14235E]/25">
+                  <ClipboardCheck className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#14235E]" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -852,7 +857,7 @@ const AdvancedInvestorPortfolio = () => {
                 </div>
               </div>
               <Button
-                className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
+                className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
                 onClick={() => navigate('/customer-dashboard')}
               >
                 <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
@@ -895,7 +900,7 @@ const AdvancedInvestorPortfolio = () => {
               </div>
             ) : filteredChecks.length === 0 ? (
               <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-12 sm:py-16 text-center">
-                <ClipboardCheck className="text-[#0A3269] mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
+                <ClipboardCheck className="text-[#14235E] mx-auto mb-4 h-14 w-14 sm:h-16 sm:w-16 opacity-30" />
                 <h3 className="text-gray-900 dark:text-white mb-2 text-lg sm:text-xl font-medium">
                   {checks.length === 0 ? 'No checks yet' : 'No checks match filter'}
                 </h3>
@@ -906,7 +911,7 @@ const AdvancedInvestorPortfolio = () => {
                 </p>
                 {checks.length === 0 && (
                   <Button
-                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-medium"
+                    className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-11 px-5 sm:px-6 text-sm sm:text-base font-medium"
                     onClick={() => navigate('/customer-dashboard')}
                   >
                     <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
@@ -957,8 +962,8 @@ const AdvancedInvestorPortfolio = () => {
           <CardHeader className="flex flex-col items-start justify-between gap-3 sm:gap-4 p-3 sm:p-4 md:p-6">
             <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
               <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 border border-[#0A3269]/25">
-                  <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" />
+                <div className="flex h-8 w-8 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#14235E]/10 border border-[#14235E]/25">
+                  <ClipboardList className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#14235E]" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <CardTitle className="flex flex-wrap items-center gap-1.5 text-sm sm:text-base md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -1001,7 +1006,7 @@ const AdvancedInvestorPortfolio = () => {
 
             {filteredApplications.length === 0 ? (
               <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
-                <ClipboardList className="text-[#0A3269] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+                <ClipboardList className="text-[#14235E] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
                 <h4 className="text-gray-900 dark:text-white mb-1 sm:mb-1.5 text-sm sm:text-base md:text-lg font-medium">
                   {applications.length === 0 ? 'No applications yet' : 'No applications match'}
                 </h4>
@@ -1012,7 +1017,7 @@ const AdvancedInvestorPortfolio = () => {
                 </p>
                 {applications.length === 0 && (
                   <Button
-                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
+                    className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
                     onClick={() => setShowStartApplication(true)}
                   >
                     <Plus className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
@@ -1077,8 +1082,8 @@ const AdvancedInvestorPortfolio = () => {
           <CardHeader className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:p-6">
             <div className="flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
               <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A3269]/10 border border-[#0A3269]/25">
-                  <Package className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" />
+                <div className="flex h-9 w-9 sm:h-8 sm:w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-[#14235E]/10 border border-[#14235E]/25">
+                  <Package className="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#14235E]" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <CardTitle className="flex flex-wrap items-center gap-1.5 text-base sm:text-lg md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -1093,7 +1098,7 @@ const AdvancedInvestorPortfolio = () => {
                 </div>
               </div>
               <Button
-                className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
+                className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-10 sm:h-9 md:h-10 px-5 sm:px-4 md:px-5 text-sm sm:text-sm md:text-base font-medium tracking-wide"
                 onClick={() => navigate('/packages')}
               >
                 <Plus className="mr-2 h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5" />
@@ -1144,7 +1149,7 @@ const AdvancedInvestorPortfolio = () => {
               </div>
             ) : filteredPackages.length === 0 ? (
               <div className="border border-dashed border-gray-200/60 dark:border-white/10 rounded-2xl py-6 sm:py-8 md:py-10 text-center">
-                <Package className="text-[#0A3269] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
+                <Package className="text-[#14235E] mx-auto mb-2 sm:mb-3 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 opacity-30" />
                 <h3 className="text-gray-900 dark:text-white mb-1 text-sm sm:text-base md:text-lg font-medium">
                   {packageApps.length === 0 ? 'No packages yet' : 'No packages match filter'}
                 </h3>
@@ -1155,7 +1160,7 @@ const AdvancedInvestorPortfolio = () => {
                 </p>
                 {packageApps.length === 0 && (
                   <Button
-                    className="w-full sm:w-auto bg-[#0A3269] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
+                    className="w-full sm:w-auto bg-[#14235E] hover:bg-[#1a4a7a] rounded-xl text-white transition-colors duration-300 h-8 sm:h-9 md:h-10 px-3 sm:px-4 md:px-5 text-[10px] sm:text-xs md:text-sm font-medium"
                     onClick={() => navigate('/packages')}
                   >
                     <Package className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
@@ -1191,18 +1196,18 @@ const AdvancedInvestorPortfolio = () => {
         >
           <div className="absolute inset-0 opacity-[0.03]">
             <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle at 20px 20px, #0A3269 1.5px, transparent 1.5px)`,
+              backgroundImage: `radial-gradient(circle at 20px 20px, #14235E 1.5px, transparent 1.5px)`,
               backgroundSize: '40px 40px'
             }} />
           </div>
 
           <div className="relative flex flex-col items-center gap-4">
             <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-[#0A3269]/10 blur-xl animate-pulse" />
-              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#0A3269]/10 border border-[#0A3269]/25">
-                <FileText className="h-7 w-7 text-[#0A3269] opacity-80" strokeWidth={1.5} />
+              <div className="absolute inset-0 rounded-full bg-[#14235E]/10 blur-xl animate-pulse" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#14235E]/10 border border-[#14235E]/25">
+                <FileText className="h-7 w-7 text-[#14235E] opacity-80" strokeWidth={1.5} />
               </div>
-              <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] text-white text-[8px] font-medium animate-pulse">
+              <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#14235E] to-[#1a4a7a] text-white text-[8px] font-medium animate-pulse">
                 <span>✦</span>
               </div>
             </div>
@@ -1212,7 +1217,7 @@ const AdvancedInvestorPortfolio = () => {
                 Select a section to view
               </h3>
               <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto font-light leading-relaxed">
-                Click on <span className="font-medium text-[#0A3269]">Checks</span>, <span className="font-medium text-[#0A3269]">Applications</span>, or <span className="font-medium text-[#0A3269]">Packages</span> to see your data
+                Click on <span className="font-medium text-[#14235E]">Checks</span>, <span className="font-medium text-[#14235E]">Applications</span>, or <span className="font-medium text-[#14235E]">Packages</span> to see your data
               </p>
             </div>
 
@@ -1221,7 +1226,7 @@ const AdvancedInvestorPortfolio = () => {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setDataView('checks')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A3269] text-white transition-all duration-300 hover:bg-[#1a4a7a]"
+                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#14235E] text-white transition-all duration-300 hover:bg-[#1a4a7a]"
               >
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                 <ClipboardCheck className="h-4 w-4 relative z-10" />
@@ -1233,7 +1238,7 @@ const AdvancedInvestorPortfolio = () => {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setDataView('applications')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#0A3269]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
+                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#14235E]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
               >
                 <ClipboardList className="h-4 w-4 relative z-10" />
                 <span className="relative z-10 text-sm font-medium">View Applications</span>
@@ -1244,7 +1249,7 @@ const AdvancedInvestorPortfolio = () => {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setDataView('packages')}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#0A3269]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
+                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200/60 dark:border-white/10 bg-white dark:bg-white/[0.02] text-gray-700 dark:text-gray-300 hover:border-[#14235E]/40 hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300"
               >
                 <Package className="h-4 w-4 relative z-10" />
                 <span className="relative z-10 text-sm font-medium">View Packages</span>
@@ -1254,8 +1259,8 @@ const AdvancedInvestorPortfolio = () => {
 
             <div className="flex flex-wrap items-center justify-center gap-5 mt-1 pt-3 border-t border-gray-200/30 dark:border-white/5">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10">
-                  <ClipboardCheck className="h-3.5 w-3.5 text-[#0A3269]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14235E]/10">
+                  <ClipboardCheck className="h-3.5 w-3.5 text-[#14235E]" />
                 </div>
                 <div className="text-left">
                   <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Checks</p>
@@ -1264,8 +1269,8 @@ const AdvancedInvestorPortfolio = () => {
               </div>
               <div className="h-6 w-px bg-gray-200/50 dark:bg-white/10" />
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10">
-                  <ClipboardList className="h-3.5 w-3.5 text-[#0A3269]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14235E]/10">
+                  <ClipboardList className="h-3.5 w-3.5 text-[#14235E]" />
                 </div>
                 <div className="text-left">
                   <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Applications</p>
@@ -1274,8 +1279,8 @@ const AdvancedInvestorPortfolio = () => {
               </div>
               <div className="h-6 w-px bg-gray-200/50 dark:bg-white/10" />
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0A3269]/10">
-                  <Package className="h-3.5 w-3.5 text-[#0A3269]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14235E]/10">
+                  <Package className="h-3.5 w-3.5 text-[#14235E]" />
                 </div>
                 <div className="text-left">
                   <p className="text-[10px] text-gray-400 dark:text-gray-500 font-light uppercase tracking-wider">Packages</p>
@@ -1292,8 +1297,8 @@ const AdvancedInvestorPortfolio = () => {
         <Card className="rounded-2xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-[#12121c]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg text-gray-900 dark:text-white">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0A3269]/10 border border-[#0A3269]/25">
-                <Building2 className="h-4 w-4 text-[#0A3269]" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#14235E]/10 border border-[#14235E]/25">
+                <Building2 className="h-4 w-4 text-[#14235E]" />
               </div>
               Government Services
             </CardTitle>
@@ -1307,10 +1312,10 @@ const AdvancedInvestorPortfolio = () => {
                 <button
                   key={key}
                   onClick={() => window.open(url, '_blank')}
-                  className="group relative flex flex-col items-start gap-2.5 overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A3269]/40"
+                  className="group relative flex flex-col items-start gap-2.5 overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#14235E]/40"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A3269]/10">
-                    <Icon className="h-5 w-5 text-[#0A3269]" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#14235E]/10">
+                    <Icon className="h-5 w-5 text-[#14235E]" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-gray-900 dark:text-white text-sm font-semibold leading-tight">
@@ -1320,7 +1325,7 @@ const AdvancedInvestorPortfolio = () => {
                       {sub}
                     </p>
                   </div>
-                  <ArrowUpRight className="absolute right-3 top-3 h-3.5 w-3.5 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#0A3269]" />
+                  <ArrowUpRight className="absolute right-3 top-3 h-3.5 w-3.5 text-gray-400 dark:text-gray-600 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#14235E]" />
                 </button>
               ))}
             </div>
@@ -1407,24 +1412,25 @@ const AdvancedInvestorPortfolio = () => {
     </>
   );
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'documents':
-        return <DocumentPage />;
-      case 'compliance':
-        return <CompliancePage />;
-      case 'profile':
-        return <ProfilePage />;
-      default:
-        return <DashboardContent />;
-    }
-  };
-
+const renderContent = () => {
+  switch (activeTab) {
+    case 'documents':
+      return <DocumentPage />;
+    case 'compliance':
+      return <CompliancePage />;
+    case 'profile':
+      return <ProfilePage />;
+    case 'guide-submission':
+      return <GuideSubmissionSuccess />;
+    default:
+      return <DashboardContent />;
+  }
+};
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50/50 dark:bg-[#0a0a0f] px-4">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-14 w-14 animate-spin rounded-full border-2 border-[#0A3269] border-t-transparent sm:h-16 sm:w-16"></div>
+          <div className="mx-auto mb-4 h-14 w-14 animate-spin rounded-full border-2 border-[#14235E] border-t-transparent sm:h-16 sm:w-16"></div>
           <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg">
             Loading your dashboard...
           </p>
@@ -1531,14 +1537,14 @@ const AdvancedInvestorPortfolio = () => {
                         transition-all duration-300 ease-out border
                         ${
                           isActiveTab(key as TabKey)
-                            ? 'bg-[#0A3269]/10 text-[#0A3269] border-[#0A3269]/30'
+                            ? 'bg-[#14235E]/10 text-[#14235E] border-[#14235E]/30'
                             : 'text-gray-500 dark:text-gray-400 border-transparent hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-gray-200'
                         }
                       `}
                     >
                       <Icon
                         className={`h-[18px] w-[18px] shrink-0 transition-colors duration-300 ${
-                          isActiveTab(key as TabKey) ? 'text-[#0A3269]' : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+                          isActiveTab(key as TabKey) ? 'text-[#14235E]' : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
                         }`}
                       />
                       <motion.span
@@ -1556,7 +1562,7 @@ const AdvancedInvestorPortfolio = () => {
                         <motion.span
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
-                          className="ml-auto flex h-1.5 w-1.5 rounded-full bg-[#0A3269]"
+                          className="ml-auto flex h-1.5 w-1.5 rounded-full bg-[#14235E]"
                         />
                       )}
                     </div>
@@ -1666,18 +1672,18 @@ const AdvancedInvestorPortfolio = () => {
               <p className="hidden sm:flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-500 font-light">
                 TMMT Portal <ChevronRight className="h-3 w-3" /> Overview
               </p>
-              <h3 className="truncate text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-white">
-                Welcome, <span className="text-[#0A3269]">{userDetails?.firstName || user?.name || 'User'}</span>
-              </h3>
+              <h4 className="truncate text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-white">
+                Welcome, <span className="text-[#14235E]">{userDetails?.firstName || user?.name || 'User'}</span>
+              </h4>
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0A3269] text-white">
+              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#14235E] text-white">
                 <Crown className="h-3 w-3 text-amber-200" />
                 <span className="text-[9px] sm:text-[10px] font-medium tracking-wide">Level {userLevel}</span>
               </div>
 
-              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] text-white">
+              <div className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#14235E] to-[#1a4a7a] text-white">
                 <Sparkles className="h-2.5 w-2.5" />
                 <span className="text-[9px] sm:text-[10px] font-medium tracking-wide">{rewardPoints.toLocaleString()} pts</span>
               </div>
@@ -1706,7 +1712,7 @@ const AdvancedInvestorPortfolio = () => {
 
               <Avatar className="h-8 w-8 sm:h-9 sm:w-9 border border-gray-200/60 dark:border-white/10">
                 <AvatarImage src={userDetails?.avatar} />
-                <AvatarFallback className="bg-[#0A3269] text-white text-[10px] sm:text-xs font-medium">
+                <AvatarFallback className="bg-[#14235E] text-white text-[10px] sm:text-xs font-medium">
                   {userDetails?.firstName?.[0]}
                   {userDetails?.lastName?.[0]}
                 </AvatarFallback>
@@ -1728,7 +1734,7 @@ const AdvancedInvestorPortfolio = () => {
                 </>
               ) : (
                 <>
-                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#0A3269]/10 text-[#0A3269]">
+                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#14235E]/10 text-[#14235E]">
                     <Rocket className="h-2.5 w-2.5" />
                   </span>
                   <span>Start your journey with TMMT today</span>
@@ -1755,18 +1761,18 @@ const AdvancedInvestorPortfolio = () => {
             <div
               className={`flex w-full flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[11px] transition-all duration-200 ${
                 isActiveTab(key as TabKey)
-                  ? 'text-[#0A3269] font-semibold'
+                  ? 'text-[#14235E] font-semibold'
                   : 'text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
             >
               {isActiveTab(key as TabKey) && (
                 <motion.div
                   layoutId="mobile-tab-indicator"
-                  className="absolute -top-0.5 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#0A3269]"
+                  className="absolute -top-0.5 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#14235E]"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
-              <Icon className={`h-5 w-5 ${isActiveTab(key as TabKey) ? 'text-[#0A3269]' : ''}`} />
+              <Icon className={`h-5 w-5 ${isActiveTab(key as TabKey) ? 'text-[#14235E]' : ''}`} />
               <span className="text-[10px]">{label}</span>
             </div>
           </button>
@@ -2048,7 +2054,7 @@ const AdvancedInvestorPortfolio = () => {
                                 key={index}
                                 className="flex items-start gap-3"
                               >
-                                <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#0A3269]" />
+                                <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#14235E]" />
                                 <div className="min-w-0 flex-1">
                                   <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
                                     {event.action

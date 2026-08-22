@@ -220,7 +220,7 @@ const handleFraudAlert = async () => {
     toast.success(data.message || 'Fraud alert added successfully!', { id: toastId });
     setFraudAlertOpen(false);
     setFraudAlertData({ type: 'document_verification', severity: 'medium', description: '' });
-    toast.info('Fraud alert recorded and will be reviewed', { duration: 4000, icon: '🔒' });
+    toast.info('Fraud alert recorded and will be reviewed', { duration: 4000, });
   } catch (error: any) {
     console.error('Fraud alert error:', error);
     toast.error(error.message || 'Failed to add fraud alert', { id: toastId });
@@ -258,7 +258,7 @@ const handleIssuePenalty = async () => {
     });
     setPenaltyOpen(false);
     setPenaltyData({ type: 'late_submission', amount: 0, description: '' });
-    toast.info(`Penalty Amount: AED ${penaltyData.amount}`, { duration: 3000, icon: '💰' });
+    toast.info(`Penalty Amount: AED ${penaltyData.amount}`, { duration: 3000,});
   } catch (error: any) {
     console.error('Penalty error:', error);
     toast.error(error.message || 'Failed to issue penalty', { id: toastId });
@@ -293,7 +293,7 @@ const handleRequestOTP = async () => {
     toast.success(data.message || `OTP sent to ${otpData.phone}!`, { id: toastId, duration: 5000 });
     setOtpOpen(false);
     setOtpData({ phone: '', minutes: 5 });
-    toast.info(`OTP valid for ${otpData.minutes} minutes`, { duration: 3000, icon: '⏱️' });
+    toast.info(`OTP valid for ${otpData.minutes} minutes`, { duration: 3000,});
   } catch (error: any) {
     console.error('OTP error:', error);
     toast.error(error.message || 'Failed to send OTP', { id: toastId });
@@ -327,7 +327,7 @@ const handleRequestOTP = async () => {
 
   const getDocumentIcon = (mimeType: string) => {
     if (mimeType?.startsWith('image/')) {
-      return <Image className="w-4 h-4 sm:w-5 sm:h-5 text-[#0A3269]" />;
+      return <Image className="w-4 h-4 sm:w-5 sm:h-5 text-[#14235E]" />;
     } else if (mimeType === 'application/pdf') {
       return <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />;
     } else {
@@ -352,13 +352,13 @@ const handleRequestOTP = async () => {
   className="relative overflow-hidden rounded-2xl bg-white dark:bg-gray-900 p-5  border border-gray-200/60 dark:border-white/10"
 >
   {/* ─── Background Accents ──────────────────────────────────── */}
-  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-white/5 blur-2xl" />
-  <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-white/5 blur-2xl" />
+  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-white/5 blur-2xl" />
+  <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-white/5 blur-2xl" />
   
   <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div className="space-y-2">
       <div className="flex items-center gap-2.5">
-        <div className="p-2 rounded-xl bg-gradient-to-br from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 shadow-lg shadow-[#0A3269]/20 dark:shadow-white/10">
+        <div className="p-2 rounded-xl bg-gradient-to-br from-[#14235E] to-[#1A4A8A] dark:from-white dark:to-gray-200 shadow-lg shadow-[#14235E]/20 dark:shadow-white/10">
           <Crown className="w-4 h-4 text-white dark:text-gray-900" />
         </div>
         <h3 className="text-base sm:text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
@@ -397,7 +397,7 @@ const handleRequestOTP = async () => {
       variant="outline"
       size="sm"
       onClick={() => setEditOpen(true)}
-      className="rounded-xl border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/30 px-4 h-9 text-xs font-medium transition-all duration-300"
+      className="rounded-xl border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-[#14235E]/30 dark:hover:border-white/30 px-4 h-9 text-xs font-medium transition-all duration-300"
     >
       <Edit className="w-3.5 h-3.5 mr-1.5" />
       Edit Details
@@ -409,8 +409,8 @@ const handleRequestOTP = async () => {
         <CollapsibleSection title="Sponsor Information" defaultOpen={true}>
           <div className="space-y-4">
             <div className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 shadow-sm">
-              <div className="p-3 rounded-xl bg-[#0A3269]/10 dark:bg-white/10">
-                <User className="w-6 h-6 text-[#0A3269] dark:text-white" />
+              <div className="p-3 rounded-xl bg-[#14235E]/10 dark:bg-white/10">
+                <User className="w-6 h-6 text-[#14235E] dark:text-white" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -504,7 +504,7 @@ const handleRequestOTP = async () => {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.04 }}
-                    className="group flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/30 transition-all duration-300"
+                    className="group flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 hover:border-[#14235E]/30 dark:hover:border-white/30 transition-all duration-300"
                   >
                     <div className="flex items-center gap-3 w-full sm:w-auto">
                       <div className="relative flex-shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-gray-100 dark:bg-white/5">
@@ -539,7 +539,7 @@ const handleRequestOTP = async () => {
                             variant="ghost" 
                             size="sm"
                             onClick={() => handleDocumentView(doc)}
-                            className="h-7 w-7 p-0 rounded-lg hover:bg-[#0A3269]/10 dark:hover:bg-white/10"
+                            className="h-7 w-7 p-0 rounded-lg hover:bg-[#14235E]/10 dark:hover:bg-white/10"
                           >
                             <Eye className="w-3.5 h-3.5 text-gray-500 dark:text-white/60" />
                           </Button>
@@ -547,7 +547,7 @@ const handleRequestOTP = async () => {
                             variant="ghost" 
                             size="sm"
                             onClick={() => handleDocumentDownload(doc)}
-                            className="h-7 w-7 p-0 rounded-lg hover:bg-[#0A3269]/10 dark:hover:bg-white/10"
+                            className="h-7 w-7 p-0 rounded-lg hover:bg-[#14235E]/10 dark:hover:bg-white/10"
                           >
                             <Download className="w-3.5 h-3.5 text-gray-500 dark:text-white/60" />
                           </Button>
@@ -576,14 +576,14 @@ const handleRequestOTP = async () => {
             <div className="grid grid-cols-2 gap-2">
               <Button 
                 variant="outline" 
-                className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-[#0A3269]/30 dark:hover:border-white/30 hover:text-[#0A3269] dark:hover:text-white"
+                className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 hover:border-[#14235E]/30 dark:hover:border-white/30 hover:text-[#14235E] dark:hover:text-white"
                 onClick={() => onDocumentUpload((application as any)?._id || (application as any)?.id)}
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Upload
               </Button>
               <Button 
-                className="rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl transition-all duration-300"
+                className="rounded-xl bg-[#14235E] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#14235E]/25 dark:shadow-white/20 hover:shadow-xl transition-all duration-300"
                 onClick={() => setDocReqOpen(true)}
               >
                 <Send className="w-4 h-4 mr-2" />
@@ -609,7 +609,7 @@ const handleRequestOTP = async () => {
                   transition={{ delay: index * 0.04 }}
                   className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-200"
                 >
-                  <div className="w-2 h-2 rounded-full bg-[#0A3269] dark:bg-white mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-[#14235E] dark:bg-white mt-2 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-gray-900 dark:text-white">
                       {entry.action?.replace(/_/g, ' ').toUpperCase() || 'Action'}
@@ -732,7 +732,7 @@ const handleRequestOTP = async () => {
             <div className="space-y-2">
               <label className="text-xs font-medium text-gray-700 dark:text-white/80">New Status</label>
               <Select value={newStatus} onValueChange={setNewStatus}>
-                <SelectTrigger className="rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-black text-gray-900 dark:text-white hover:border-[#0A3269]/40 dark:hover:border-white/40 transition-colors">
+                <SelectTrigger className="rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-black text-gray-900 dark:text-white hover:border-[#14235E]/40 dark:hover:border-white/40 transition-colors">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-black border-gray-200 dark:border-white/10 shadow-lg">
@@ -767,14 +767,14 @@ const handleRequestOTP = async () => {
                 onChange={(e) => setStatusNote(e.target.value)}
                 placeholder="Add a note about this status change..."
                 rows={2}
-                className="text-xs rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-black text-gray-900 dark:text-white resize-none focus:border-[#0A3269]/40 dark:focus:border-white/40 transition-colors"
+                className="text-xs rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-black text-gray-900 dark:text-white resize-none focus:border-[#14235E]/40 dark:focus:border-white/40 transition-colors"
               />
             </div>
             
             <Button 
               onClick={handleStatusUpdate}
               disabled={!newStatus || newStatus === application.status || isUpdating}
-              className="w-full rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+              className="w-full rounded-xl bg-[#14235E] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#14235E]/25 dark:shadow-white/20 hover:shadow-xl transition-all duration-300 disabled:opacity-50"
             >
               {isUpdating ? (
                 <>
@@ -799,8 +799,8 @@ const handleRequestOTP = async () => {
           >
             <div className="flex items-center justify-between sticky top-0 bg-white dark:bg-black pb-3 border-b border-gray-200 dark:border-white/10">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
-                  <Edit className="w-4 h-4 text-[#0A3269] dark:text-white" />
+                <div className="p-1.5 rounded-lg bg-[#14235E]/10 dark:bg-white/10">
+                  <Edit className="w-4 h-4 text-[#14235E] dark:text-white" />
                 </div>
                 <span className="text-base font-bold text-gray-900 dark:text-white">Edit Application Details</span>
               </div>
@@ -867,7 +867,7 @@ const handleRequestOTP = async () => {
                 } catch {
                   toast.error('Failed to update details')
                 }
-              }} className="rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20">Save Changes</Button>
+              }} className="rounded-xl bg-[#14235E] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#14235E]/25 dark:shadow-white/20">Save Changes</Button>
             </div>
           </motion.div>
         </div>
@@ -883,8 +883,8 @@ const handleRequestOTP = async () => {
           >
             <div className="flex items-center justify-between sticky top-0 bg-white dark:bg-black pb-3 border-b border-gray-200 dark:border-white/10">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-[#0A3269]/10 dark:bg-white/10">
-                  <Send className="w-4 h-4 text-[#0A3269] dark:text-white" />
+                <div className="p-1.5 rounded-lg bg-[#14235E]/10 dark:bg-white/10">
+                  <Send className="w-4 h-4 text-[#14235E] dark:text-white" />
                 </div>
                 <span className="text-base font-bold text-gray-900 dark:text-white">Request Documents</span>
               </div>
@@ -914,7 +914,7 @@ const handleRequestOTP = async () => {
             <div className="flex gap-2 justify-end pt-3 border-t border-gray-200 dark:border-white/10">
               <Button variant="outline" onClick={() => setDocReqOpen(false)} className="rounded-xl border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80">Cancel</Button>
               <Button 
-                className="rounded-xl bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20"
+                className="rounded-xl bg-[#14235E] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-black shadow-lg shadow-[#14235E]/25 dark:shadow-white/20"
                 onClick={async ()=>{
                   const id = (application as any)?._id || (application as any)?.id
                   const requested = Object.entries(docReq).filter(([,v])=>v).map(([k])=>k)
@@ -938,7 +938,7 @@ const handleRequestOTP = async () => {
     {/* ─── Header ───────────────────────────────────────────────────── */}
     <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-white/10 bg-gray-50/80 dark:bg-gray-900/80">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="p-1.5 sm:p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
+        <div className="p-1.5 sm:p-2 rounded-xl bg-[#14235E]/10 dark:bg-[#14235E]/20">
           {selectedDocument && getDocumentIcon(selectedDocument.mimeType)}
         </div>
         <div className="min-w-0">
@@ -999,7 +999,7 @@ const handleRequestOTP = async () => {
                   fallback.innerHTML = `
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                     <p class="text-sm font-medium">Unable to load preview</p>
-                    <button onclick="window.open('${fileUrl}', '_blank')" class="mt-3 px-4 py-2 bg-[#0A3269] text-white rounded-lg text-sm hover:bg-[#1A4A8A] transition-colors">
+                    <button onclick="window.open('${fileUrl}', '_blank')" class="mt-3 px-4 py-2 bg-[#14235E] text-white rounded-lg text-sm hover:bg-[#1A4A8A] transition-colors">
                       Open in new tab
                     </button>
                   `;
@@ -1029,7 +1029,7 @@ const handleRequestOTP = async () => {
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">This file type cannot be previewed</p>
             <Button 
               onClick={() => handleDocumentDownload(selectedDocument)}
-              className="mt-4 bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 rounded-xl"
+              className="mt-4 bg-[#14235E] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#14235E]/25 rounded-xl"
             >
               <Download className="w-4 h-4 mr-2" />
               Download File
@@ -1071,7 +1071,7 @@ const handleRequestOTP = async () => {
           <Button 
             size="sm" 
             onClick={() => handleDocumentDownload(selectedDocument)} 
-            className="bg-[#0A3269] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-[#0A3269] rounded-lg text-xs px-4 shadow-lg shadow-[#0A3269]/20 dark:shadow-white/20"
+            className="bg-[#14235E] dark:bg-white hover:bg-[#1A4A8A] dark:hover:bg-gray-100 text-white dark:text-[#14235E] rounded-lg text-xs px-4 shadow-lg shadow-[#14235E]/20 dark:shadow-white/20"
           >
             <Download className="w-3.5 h-3.5 mr-1.5" />
             Download

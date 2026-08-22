@@ -126,9 +126,9 @@ const ProfilePage: React.FC = () => {
   const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'
   
   // ─── Brand Color ──────────────────────────────────────────────────────────
-  const primaryColor = '#0A3269'
-  const primaryColorLight = '#0A3269' + '30'
-  const primaryColorLighter = '#0A3269' + '15'
+  const primaryColor = '#14235E'
+  const primaryColorLight = '#14235E' + '30'
+  const primaryColorLighter = '#14235E' + '15'
 
   const [profileData, setProfileData] = useState({
     firstName: "",
@@ -821,7 +821,7 @@ const ProfilePage: React.FC = () => {
       <Layout>
         <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-black">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0A3269] mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#14235E] mx-auto mb-4"></div>
             <p className="text-gray-600 dark:text-gray-400">Loading profile...</p>
           </div>
         </div>
@@ -837,7 +837,7 @@ const ProfilePage: React.FC = () => {
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2.5 mb-0.5">
-                <div className="p-1.5 rounded-lg bg-[#0A3269]">
+                <div className="p-1.5 rounded-lg bg-[#14235E]">
                   <User className="h-4 w-4 text-white" />
                 </div>
                 <h2 className="text-2xl md:text-3xl text-gray-900 dark:text-white tracking-tight">
@@ -864,7 +864,7 @@ const ProfilePage: React.FC = () => {
                   <Button 
                     onClick={handleSave} 
                     disabled={isSaving} 
-                    className="bg-[#0A3269] text-white hover:bg-[#1A4A8A] transition-all duration-300 shadow-sm hover:shadow-md h-9 px-4 text-sm font-medium rounded-lg"
+                    className="bg-[#14235E] text-white hover:bg-[#1A4A8A] transition-all duration-300 shadow-sm hover:shadow-md h-9 px-4 text-sm font-medium rounded-lg"
                   >
                     {isSaving ? (
                       <>
@@ -898,7 +898,7 @@ const ProfilePage: React.FC = () => {
                 <div className="relative">
                   <Avatar className="h-24 w-24 border-2 border-gray-200/60 dark:border-white/10">
                     <AvatarImage src={profileData.avatar} alt="Profile" />
-                    <AvatarFallback className="text-xl bg-[#0A3269] text-white">
+                    <AvatarFallback className="text-xl bg-[#14235E] text-white">
                       {profileData.firstName.charAt(0)}
                       {profileData.lastName.charAt(0)}
                     </AvatarFallback>
@@ -906,7 +906,7 @@ const ProfilePage: React.FC = () => {
                   {isEditing && (
                     <Button
                       size="sm"
-                      className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0 bg-[#0A3269] text-white hover:bg-[#1A4A8A]"
+                      className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0 bg-[#14235E] text-white hover:bg-[#1A4A8A]"
                       onClick={() => toast.info('Opening image picker...')}
                     >
                       <Camera className="h-3.5 w-3.5" />
@@ -932,15 +932,15 @@ const ProfilePage: React.FC = () => {
                   </div>
                   <div className="flex flex-wrap items-center gap-3 mt-1.5 justify-center md:justify-start">
                     <span className="flex items-center text-sm text-gray-600 dark:text-gray-400 font-light">
-                      <Mail className="mr-1 h-3.5 w-3.5 text-[#0A3269]" />
+                      <Mail className="mr-1 h-3.5 w-3.5 text-[#14235E]" />
                       {profileData.email}
                     </span>
                     <span className="flex items-center text-sm text-gray-600 dark:text-gray-400 font-light">
-                      <Phone className="mr-1 h-3.5 w-3.5 text-[#0A3269]" />
+                      <Phone className="mr-1 h-3.5 w-3.5 text-[#14235E]" />
                       {profileData.phone}
                     </span>
                     <span className="flex items-center text-sm text-gray-600 dark:text-gray-400 font-light">
-                      <MapPin className="mr-1 h-3.5 w-3.5 text-[#0A3269]" />
+                      <MapPin className="mr-1 h-3.5 w-3.5 text-[#14235E]" />
                       {profileData.country || 'Not set'}
                     </span>
                   </div>
@@ -986,7 +986,7 @@ const ProfilePage: React.FC = () => {
                         shrink-0 rounded-xl whitespace-nowrap transition-all duration-300 h-9 px-4 text-sm font-light
                         ${
                           isActive
-                            ? 'bg-[#0A3269] text-white shadow-sm hover:bg-[#1A4A8A]'
+                            ? 'bg-[#14235E] text-white shadow-sm hover:bg-[#1A4A8A]'
                             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
                         }
                       `}
@@ -1027,7 +1027,7 @@ const ProfilePage: React.FC = () => {
               >
                 <div className="border-b border-gray-200/50 dark:border-white/5 px-5 py-3.5">
                   <h3 className="text-base font-light flex items-center gap-2 text-gray-900 dark:text-white">
-                    <User className="h-4 w-4 text-[#0A3269]" />
+                    <User className="h-4 w-4 text-[#14235E]" />
                     Personal Information
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 font-light">Update your basic profile details</p>
@@ -1041,7 +1041,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.firstName}
                         onChange={(e) => setProfileData(prev => ({ ...prev, firstName: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1051,7 +1051,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.lastName}
                         onChange={(e) => setProfileData(prev => ({ ...prev, lastName: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1062,7 +1062,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.email}
                         onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1072,7 +1072,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.phone}
                         onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1082,7 +1082,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.country}
                         onChange={(e) => setProfileData(prev => ({ ...prev, country: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1092,7 +1092,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.company}
                         onChange={(e) => setProfileData(prev => ({ ...prev, company: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1102,7 +1102,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.jobTitle}
                         onChange={(e) => setProfileData(prev => ({ ...prev, jobTitle: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1112,7 +1112,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.website}
                         onChange={(e) => setProfileData(prev => ({ ...prev, website: e.target.value }))}
                         disabled={!isEditing}
-                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 rounded-lg"
+                        className="h-9 bg-white dark:bg-black/10 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white text-sm font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 rounded-lg"
                       />
                     </div>
                     <div className="md:col-span-2 space-y-1.5">
@@ -1122,7 +1122,7 @@ const ProfilePage: React.FC = () => {
                         value={profileData.bio}
                         onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
                         disabled={!isEditing}
-                        className="w-full min-h-[80px] rounded-lg border border-gray-300/60 dark:border-white/10 bg-white dark:bg-black/10 px-3 py-2 text-sm text-gray-900 dark:text-white font-light focus:border-[#0A3269] focus:ring-0 focus:ring-[#0A3269]/20 placeholder:text-gray-400 dark:placeholder:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="w-full min-h-[80px] rounded-lg border border-gray-300/60 dark:border-white/10 bg-white dark:bg-black/10 px-3 py-2 text-sm text-gray-900 dark:text-white font-light focus:border-[#14235E] focus:ring-0 focus:ring-[#14235E]/20 placeholder:text-gray-400 dark:placeholder:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Tell us about yourself..."
                       />
                     </div>
@@ -1144,7 +1144,7 @@ const ProfilePage: React.FC = () => {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <h3 className="text-base font-light flex items-center gap-2 text-gray-900 dark:text-white">
-                        <FileText className="h-4 w-4 text-[#0A3269]" />
+                        <FileText className="h-4 w-4 text-[#14235E]" />
                         Personal Documents
                       </h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 font-light">Manage your identity and official documents</p>
@@ -1179,7 +1179,7 @@ const ProfilePage: React.FC = () => {
                             ? 'bg-green-500' 
                             : stats.verificationProgress >= 50 
                               ? 'bg-orange-500' 
-                              : 'bg-[#0A3269]'
+                              : 'bg-[#14235E]'
                         }`}
                         style={{ width: `${stats.verificationProgress}%` }}
                       />
@@ -1234,7 +1234,7 @@ const ProfilePage: React.FC = () => {
                                 size="sm"
                                 variant={isUploaded ? "outline" : "default"}
                                 onClick={() => handleUploadDocument(docType)}
-                                className={`h-8 px-3 text-xs font-light rounded-lg ${isUploaded ? "border-gray-300/60 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5" : "bg-[#0A3269] text-white hover:bg-[#1A4A8A]"}`}
+                                className={`h-8 px-3 text-xs font-light rounded-lg ${isUploaded ? "border-gray-300/60 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5" : "bg-[#14235E] text-white hover:bg-[#1A4A8A]"}`}
                               >
                                 {isUploaded ? <RefreshCw className="w-3.5 h-3.5" /> : <Upload className="w-3.5 h-3.5" />}
                               </Button>
@@ -1282,7 +1282,7 @@ const ProfilePage: React.FC = () => {
               >
                 <div className="border-b border-gray-200/50 dark:border-white/5 px-5 py-3.5">
                   <h3 className="text-base font-light flex items-center gap-2 text-gray-900 dark:text-white">
-                    <CreditCard className="h-4 w-4 text-[#0A3269]" />
+                    <CreditCard className="h-4 w-4 text-[#14235E]" />
                     Payment Methods
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 font-light">Manage your credit and debit cards</p>
@@ -1294,7 +1294,7 @@ const ProfilePage: React.FC = () => {
                         <CreditCard className="h-8 w-8 text-gray-700 dark:text-gray-300" />
                       </div>
                       <p className="text-gray-500 dark:text-gray-400 font-light mb-3">No payment methods added yet</p>
-                      <Button onClick={() => toast.info('Opening payment method dialog...')} className="bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
+                      <Button onClick={() => toast.info('Opening payment method dialog...')} className="bg-[#14235E] text-white hover:bg-[#1A4A8A] rounded-lg h-9 px-4 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300">
                         <Plus className="w-3.5 h-3.5 mr-2" />
                         Add Credit/Debit Card
                       </Button>
@@ -1337,7 +1337,7 @@ const ProfilePage: React.FC = () => {
               >
                 <div className="border-b border-gray-200/50 dark:border-white/5 px-5 py-3.5">
                   <h3 className="text-base font-light flex items-center gap-2 text-gray-900 dark:text-white">
-                    <Shield className="h-4 w-4 text-[#0A3269]" />
+                    <Shield className="h-4 w-4 text-[#14235E]" />
                     Security Settings
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 font-light">Manage your account security</p>
@@ -1368,7 +1368,7 @@ const ProfilePage: React.FC = () => {
                     <Switch 
                       checked={twoFactorEnabled}
                       onCheckedChange={handleTwoFactorToggle}
-                      className="data-[state=checked]:bg-[#0A3269]"
+                      className="data-[state=checked]:bg-[#14235E]"
                     />
                   </div>
 
@@ -1390,7 +1390,7 @@ const ProfilePage: React.FC = () => {
                         </>
                       ) : (
                         <>
-                          <Eye className="mr-2 h-3.5 w-3.5 text-[#0A3269]" />
+                          <Eye className="mr-2 h-3.5 w-3.5 text-[#14235E]" />
                           Show
                         </>
                       )}
@@ -1411,7 +1411,7 @@ const ProfilePage: React.FC = () => {
                         checked={fingerprintEnabled}
                         onCheckedChange={handleFingerprintToggle}
                         disabled={!isFingerprintSupported}
-                        className="data-[state=checked]:bg-[#0A3269]"
+                        className="data-[state=checked]:bg-[#14235E]"
                       />
                     </div>
                   </div>
@@ -1446,7 +1446,7 @@ const ProfilePage: React.FC = () => {
               >
                 <div className="border-b border-gray-200/50 dark:border-white/5 px-5 py-3.5">
                   <h3 className="text-base font-light flex items-center gap-2 text-gray-900 dark:text-white">
-                    <Bell className="h-4 w-4 text-[#0A3269]" />
+                    <Bell className="h-4 w-4 text-[#14235E]" />
                     Notification Preferences
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 font-light">Choose how you want to receive updates</p>
@@ -1473,7 +1473,7 @@ const ProfilePage: React.FC = () => {
                       <Switch
                         checked={notifications[item.id as keyof typeof notifications]}
                         onCheckedChange={(checked) => setNotifications(prev => ({ ...prev, [item.id]: checked }))}
-                        className="data-[state=checked]:bg-[#0A3269]"
+                        className="data-[state=checked]:bg-[#14235E]"
                       />
                     </div>
                   ))}
@@ -1492,7 +1492,7 @@ const ProfilePage: React.FC = () => {
               >
                 <div className="border-b border-gray-200/50 dark:border-white/5 px-5 py-3.5">
                   <h3 className="text-base font-light flex items-center gap-2 text-gray-900 dark:text-white">
-                    <Activity className="h-4 w-4 text-[#0A3269]" />
+                    <Activity className="h-4 w-4 text-[#14235E]" />
                     Activity Log
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 font-light">Recent account activity and connected devices</p>
@@ -1500,7 +1500,7 @@ const ProfilePage: React.FC = () => {
                 <div className="p-5 space-y-5">
                   <div>
                     <h4 className="text-sm font-light mb-2.5 flex items-center gap-2 text-gray-900 dark:text-white">
-                      <Smartphone className="h-3.5 w-3.5 text-[#0A3269]" />
+                      <Smartphone className="h-3.5 w-3.5 text-[#14235E]" />
                       Connected Devices
                     </h4>
                     <div className="space-y-2.5">
@@ -1519,7 +1519,7 @@ const ProfilePage: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-2">
                               {device.isCurrent && (
-                                <Badge className="bg-[#0A3269]/10 text-[#0A3269] dark:bg-[#0A3269]/30 text-[#4A8ABF] border-0 text-[10px] font-light">
+                                <Badge className="bg-[#14235E]/10 text-[#14235E] dark:bg-[#14235E]/30 text-[#4A8ABF] border-0 text-[10px] font-light">
                                   Current
                                 </Badge>
                               )}
@@ -1537,7 +1537,7 @@ const ProfilePage: React.FC = () => {
 
                   <div>
                     <h4 className="text-sm font-light mb-2.5 flex items-center gap-2 text-gray-900 dark:text-white">
-                      <Clock className="h-3.5 w-3.5 text-[#0A3269]" />
+                      <Clock className="h-3.5 w-3.5 text-[#14235E]" />
                       Recent Activity
                     </h4>
                     <div className="space-y-2.5">
@@ -1576,11 +1576,11 @@ const ProfilePage: React.FC = () => {
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
         <DialogContent className="bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 max-w-md rounded-xl shadow-xl p-0 overflow-hidden backdrop-blur-sm">
           <div className="relative">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269]" />
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#14235E]" />
             <DialogHeader className="p-5 pb-2">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#0A3269]/10">
-                  <Lock className="h-4 w-4 text-[#0A3269]" />
+                <div className="p-2 rounded-lg bg-[#14235E]/10">
+                  <Lock className="h-4 w-4 text-[#14235E]" />
                 </div>
                 <div>
                   <DialogTitle className="text-lg font-light text-gray-900 dark:text-white">
@@ -1603,7 +1603,7 @@ const ProfilePage: React.FC = () => {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter your current password"
-                  className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] pr-10"
+                  className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#14235E] pr-10"
                 />
                 <button
                   type="button"
@@ -1623,7 +1623,7 @@ const ProfilePage: React.FC = () => {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter your new password"
-                  className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269] pr-10"
+                  className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#14235E] pr-10"
                 />
                 <button
                   type="button"
@@ -1666,7 +1666,7 @@ const ProfilePage: React.FC = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm your new password"
-                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#0A3269]"
+                className="bg-white dark:bg-black border-gray-200/50 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 rounded-lg h-10 text-sm font-light focus:ring-[#14235E]"
               />
             </div>
 
@@ -1674,7 +1674,7 @@ const ProfilePage: React.FC = () => {
               <Button 
                 onClick={handlePasswordChange} 
                 disabled={isLoadingPassword || !canChangePassword()}
-                className="flex-1 bg-[#0A3269] text-white hover:bg-[#1A4A8A] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
+                className="flex-1 bg-[#14235E] text-white hover:bg-[#1A4A8A] rounded-lg h-10 text-sm font-light shadow-sm hover:shadow-md transition-all duration-300"
               >
                 {isLoadingPassword ? (
                   <>
@@ -1709,11 +1709,11 @@ const ProfilePage: React.FC = () => {
       <Dialog open={showSessionsDialog} onOpenChange={setShowSessionsDialog}>
         <DialogContent className="bg-white dark:bg-black/95 border border-gray-200/50 dark:border-white/10 max-w-md rounded-xl shadow-xl p-0 overflow-hidden backdrop-blur-sm">
           <div className="relative">
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269]" />
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#14235E]" />
             <DialogHeader className="p-5 pb-2">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#0A3269]/10">
-                  <Monitor className="h-4 w-4 text-[#0A3269]" />
+                <div className="p-2 rounded-lg bg-[#14235E]/10">
+                  <Monitor className="h-4 w-4 text-[#14235E]" />
                 </div>
                 <div>
                   <DialogTitle className="text-lg font-light text-gray-900 dark:text-white">

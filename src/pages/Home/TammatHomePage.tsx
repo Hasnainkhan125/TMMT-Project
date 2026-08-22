@@ -3,6 +3,7 @@ import SEO from '@/components/SEO/SEO';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { AuthDrawer } from '@/components/auth/AuthDrawer';
+import { SheetClose } from '@/components/ui/sheet';
 import TammatVoiceAgent from '@/components/VoiceAgent/TammatVoiceAgent';
 import { useVoiceAgent } from '@/contexts/VoiceAgentContext';
 import './smooth-scroll.css';
@@ -29,6 +30,7 @@ import { cn } from '@/lib/utils';
 import {
   TrendingUp,
   Activity,
+  ChevronLeft,
   CircleCheckBig ,
   Wallet,
   CreditCard
@@ -60,6 +62,7 @@ import servicesImage3 from './images/servicesCombo.png';
 import servicesImageDark from './images/servicesComboDark.png';
 import TammatFlowDialog from '@/components/Applications/TammatFlowDialog';
 import { Home, Users, Star, IdCard, Building2,  ArrowRight as ArrowRightLucide, Zap, ShieldCheck, Headphones } from 'lucide-react';
+import EmailCapture from './EmailCapture';
 
 import ApplicationFlow from '@/components/Applications/ApplicationFlow';
 import WhyTMMTSection from './WhyTMMTSection';
@@ -585,7 +588,7 @@ return (
           <div className="aspect-video w-full bg-black rounded-lg overflow-hidden">
             <video
               ref={modalVideoRef}
-              className="w-full h-full"
+              className="w-full h-full object-cover cursor-pointer"
               src="/images/laptop/subscription-video.mp4"
               controls
               playsInline
@@ -662,21 +665,16 @@ return (
               group relative flex w-full flex-col 
               rounded-3xl overflow-hidden 
               cursor-pointer 
-              bg-white dark:bg-black/60 
+              bg-white dark:bg-black/50 
               border-2 border-slate-200/60 dark:border-slate-800/50 
               transition-all duration-500 
               backdrop-blur-sm
-              hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#0A3269]/10 dark:hover:shadow-[#0A3269]/10
+              hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#14235E]/10 dark:hover:shadow-[#14235E]/10
               ${card.borderColor}
               ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
             `}
             style={{ transitionDelay: `${idx * 100}ms` }}
           >
-            {/* Premium Glow Effect */}
-            <div className={`absolute -inset-0.5 rounded-3xl bg-gradient-to-r ${card.gradient} opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-700`} />
-
-            {/* Top Accent Line */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             {/* Image Container */}
             <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
@@ -687,8 +685,6 @@ return (
                 loading="lazy"
               />
               
-              {/* Image Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
               {/* Badge */}
               <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-105">
@@ -707,7 +703,7 @@ return (
             <div className="relative z-10 p-5 sm:p-6 lg:p-7">
               <div className="flex items-center gap-2 mb-2">
                 <div className={`w-1 h-6 rounded-full ${card.iconColor} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
-                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269  ] transition-colors duration-300">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white group-hover:text-[#14235E] dark:group-hover:text-[#14235E  ] transition-colors duration-300">
                   {card.name}
                 </h3>
               </div>
@@ -718,21 +714,21 @@ return (
 <button
   className="
     group/btn relative inline-flex items-center justify-start gap-3
-    overflow-hidden rounded-md
-    px-6 sm:px-8
+    overflow-hidden rounded-2xl
+    px-9 sm:px-8
     py-2.5 sm:py-1.6
     text-[17px] sm:text-[19px]
     font-medium tracking-tight
-    bg-[#0A3269] text-white
-    dark:bg-[#0A3269] dark:text-white
+    bg-[#14235E] text-white
+    dark:bg-[#14235E] dark:text-white
     transition-all duration-300
     mt-3
-    hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0A3269]/10 dark:hover:shadow-white/10
-    hover:border-[#0A3269]/40 dark:hover:border-white/40
+    hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#14235E]/10 dark:hover:shadow-white/10
+    hover:border-[#14235E]/40 dark:hover:border-white/40
   "
 >
   {/* Shimmer Effect */}
-  <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#0A3269]/10 dark:via-white/20 to-transparent" />
+  <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#14235E]/10 dark:via-white/20 to-transparent" />
   
   <span className="relative z-10 whitespace-nowrap">
     {card.cta}
@@ -760,7 +756,7 @@ return (
 
             {/* Corner Decoration */}
             <div className="absolute top-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#0A3269]/30 dark:border-[#4A8ABF]/30 rounded-tr-2xl" />
+              <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#14235E]/30 dark:border-[#4A8ABF]/30 rounded-tr-2xl" />
             </div>
           </div>
         );
@@ -1787,11 +1783,11 @@ const ServiceJourney = () => {
   return (
     <section
       ref={containerRef}
-      className="relative py-10 sm:py-2 md:py-2 bg-white dark:bg-black/90 border-t-2 border-x-2 border-[#0A3269]/20 rounded-t-[2rem] overflow-hidden px-0"
+      className="relative py-10 sm:py-2 md:py-2 bg-white dark:bg-black/90 border-t-2 border-x-2 border-[#14235E]/20 rounded-t-[2rem] overflow-hidden px-0"
     >
    {/* ================= Premium Hero Header ================= */}
 <div className="pointer-events-none absolute inset-0 overflow-hidden">
-  <div className="absolute right-[-6rem] bottom-[-6rem] h-[18rem] w-[18rem] sm:h-[24rem] sm:w-[24rem] lg:h-[28rem] lg:w-[28rem] rounded-full bg-[#0A3269]/10 blur-[100px] sm:blur-[120px] lg:blur-[150px] animate-float-slower" />
+  <div className="absolute right-[-6rem] bottom-[-6rem] h-[18rem] w-[18rem] sm:h-[24rem] sm:w-[24rem] lg:h-[28rem] lg:w-[28rem] rounded-full bg-[#14235E]/10 blur-[100px] sm:blur-[120px] lg:blur-[150px] animate-float-slower" />
   <div
     className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
     style={{
@@ -1823,7 +1819,7 @@ const ServiceJourney = () => {
         >
           {t("serviceJourney.headline")}
           <br />
-          <span className="text-[#0A3269] font-normal">
+          <span className="text-[#14235E] font-normal">
             {t("serviceJourney.headlineHighlight")}
           </span>
         </h2>
@@ -1840,9 +1836,9 @@ const ServiceJourney = () => {
 >
   <div
     className="relative flex w-full max-w-full sm:max-w-fit overflow-x-auto scrollbar-hide 
-      rounded-lg sm:rounded-xl lg:rounded-2xl 
+      rounded-3xl sm:rounded-2xl lg:rounded-3xl 
       border border-black/10 dark:border-white/10 
-      p-2 sm:p-3 shadow-inner shadow-black/5 dark:shadow-white/5"
+      p-0 sm:p-3 shadow-inner shadow-black/5 dark:shadow-white/5"
   >
     {tabs.map((tab) => {
       const active = activeTab === tab.id;
@@ -1858,7 +1854,7 @@ const ServiceJourney = () => {
               group relative flex shrink-0 items-center gap-1 sm:gap-2 lg:gap-2.5 
               rounded-lg sm:rounded-xl 
               px-5 sm:px-5 lg:px-5 xl:px-10
-              py-2 sm:py-2 lg:py-3.5 
+              py-3.5 sm:py-2 lg:py-3.5 
               transition-all duration-300
               ${active 
                 ? "text-white dark:text-white" 
@@ -1868,7 +1864,7 @@ const ServiceJourney = () => {
           >
             {/* ─── Active Background ──────────────────────────────────────── */}
             {active && (
-              <div className="absolute inset-0 overflow-hidden rounded-lg sm:rounded-xl bg-[#0A3269] dark:bg-[#0A3269] shadow-[0_4px_15px_rgba(10,50,105,.15)] dark:shadow-[0_4px_15px_rgba(10,50,105,.25)] -z-10">
+              <div className="absolute inset-0 overflow-hidden rounded-lg sm:rounded-2xl bg-[#14235E] dark:bg-[#14235E] shadow-[0_4px_15px_rgba(10,50,105,.15)] dark:shadow-[0_4px_15px_rgba(10,50,105,.25)] -z-10">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
               </div>
             )}
@@ -1944,12 +1940,12 @@ const ServiceJourney = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
           {/* Timeline card — steps as ink stamps on a dashed flight path */}
           <div
-            className="lg:col-span-7 bg-white dark:bg-white/[0.03] rounded-3xl p-5 sm:p-8 shadow-sm border border-[#0A3269]/12 dark:border-white/10 relative transition-all duration-500"
+            className="lg:col-span-7 bg-white dark:bg-white/[0.03] rounded-2xl p-5 sm:p-8 shadow-sm border border-[#14235E]/12 dark:border-white/10 relative transition-all duration-500"
             style={{ transitionDelay: '200ms' }}
           >
-            <div className="mb-6 flex items-center justify-between gap-3 border-b border-solid border-[#0A3269]/20 dark:border-white/15 pb-5">
+            <div className="mb-6 flex items-center justify-between gap-3 border-b border-solid border-[#14235E]/20 dark:border-white/15 pb-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#0A3269] dark:bg-[#0A3269] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#14235E] dark:bg-[#14235E] flex items-center justify-center shrink-0">
                   <activeTabMeta.Icon className="w-5 h-5 text-[#fff] dark:text-[#fff]" />
                 </div>
                 <div>
@@ -1964,7 +1960,7 @@ const ServiceJourney = () => {
                   </p>
                 </div>
               </div>
-              <div className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-full border border-[#0A3269]/20 dark:border-[#0A3269]/25 px-3 py-1.5 font-mono text-[11px] font-semibold text-[#0A3269] dark:text-[#0A3269]">
+              <div className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-full border border-[#14235E]/20 dark:border-[#14235E]/25 px-3 py-1.5 font-mono text-[11px] font-semibold text-[#14235E] dark:text-[#14235E]">
                 {t(`serviceJourney.${activeTab}.totalDuration`)}
               </div>
             </div>
@@ -1977,7 +1973,7 @@ const ServiceJourney = () => {
                   <div key={`${activeTab}-step-${index}`} className="relative flex gap-4 sm:gap-3">
                     {/* connecting dashed "flight path" */}
                     {index < currentSteps.length - 1 && (
-                      <div className="absolute left-[19px] sm:left-[23px] top-11 sm:top-12 bottom-0 w-px border-l-2 border-solid border-[#0A3269]/15 dark:border-white/10" />
+                      <div className="absolute left-[19px] sm:left-[23px] top-11 sm:top-12 bottom-0 w-px border-l-2 border-solid border-[#14235E]/15 dark:border-white/10" />
                     )}
  
                     <button
@@ -1990,10 +1986,10 @@ const ServiceJourney = () => {
                           flex h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-solid font-mono text-xs font-bold transition-all duration-300
                           ${
                             done
-                              ? 'border-[#0A3269] bg-[#0a3269] text-[#fff] rotate-[-6deg]'
+                              ? 'border-[#14235E] bg-[#14235E] text-[#fff] rotate-[-6deg]'
                               : active
-                              ? 'border-[#0A3269] bg-[#0A3269] text-white scale-105 shadow-md shadow-[#0A3269]/25'
-                              : 'border-[#0A3269]/20 dark:border-white/15 text-[#0A0E14]/30 dark:text-white/25'
+                              ? 'border-[#14235E] bg-[#14235E] text-white scale-105 shadow-md shadow-[#14235E]/25'
+                              : 'border-[#14235E]/20 dark:border-white/15 text-[#0A0E14]/30 dark:text-white/25'
                           }
                         `}
                       >
@@ -2007,8 +2003,8 @@ const ServiceJourney = () => {
                         group mb-2 flex-1 min-w-0 cursor-pointer rounded-2xl border px-4 sm:px-5 py-3.5 sm:py-4 transition-all duration-300
                         ${
                           active
-                            ? 'border-[#0A3269]/30 bg-[#0A3269]/[0.04] dark:bg-[#0A3269]/10'
-                            : 'border-transparent hover:border-[#0A3269]/15 hover:bg-black/[0.015] dark:hover:bg-white/[0.02]'
+                            ? 'border-[#14235E]/30 bg-[#14235E]/[0.04] dark:bg-[#14235E]/10'
+                            : 'border-transparent hover:border-[#14235E]/15 hover:bg-black/[0.015] dark:hover:bg-white/[0.02]'
                         }
                       `}
                     >
@@ -2031,11 +2027,11 @@ const ServiceJourney = () => {
 
 
 {/* ─── Completion strip — ticket stub styling ────────────────────────────── */}
-<div className="relative mt-2 sm:mt-8 lg:mt-9 flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl border border-[#0A3269]/15 dark:border-white/10 bg-[#0A3269]/[0.03] dark:bg-white/[0.02] p-3 sm:p-4 lg:p-5">
+<div className="relative mt-2 sm:mt-8 lg:mt-9 flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl border border-[#14235E]/15 dark:border-white/10 bg-[#14235E]/[0.03] dark:bg-white/[0.02] p-3 sm:p-4 lg:p-5">
   
   {/* ─── Icon ────────────────────────────────────────────────────────────── */}
-  <div className="flex h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-full border-2 border-solid border-[#0A3269] bg-[#0A3269]/10">
-    <Award className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-[#0A3269]" />
+  <div className="flex h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-full border-2 border-solid border-[#14235E] bg-[#14235E]/10">
+    <Award className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-[#14235E]" />
   </div>
   
   {/* ─── Content ──────────────────────────────────────────────────────────── */}
@@ -2053,7 +2049,7 @@ const ServiceJourney = () => {
     {/* ─── Button ────────────────────────────────────────────────────────── */}
     <button
       onClick={() => navigate('/apply')}
-      className="mt-1.5 sm:mt-2 inline-flex items-center gap-1.5 sm:gap-2 text-[#0A3269] font-semibold text-[10px] sm:text-sm transition-all hover:gap-2 sm:hover:gap-3 group"
+      className="mt-1.5 sm:mt-2 inline-flex items-center gap-1.5 sm:gap-2 text-[#14235E] font-semibold text-[10px] sm:text-sm transition-all hover:gap-2 sm:hover:gap-3 group"
     >
       <span>Continue Application</span>
       <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
@@ -2061,56 +2057,50 @@ const ServiceJourney = () => {
   </div>
 </div>
 </div> 
-          {/* Right column */}
-          <div className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-5">
-            {/* Featured image — passport-page framing */}
-            <div className="group relative col-span-2 w-full h-52 xs:h-60 sm:h-72 md:h-80 lg:h-[26rem] overflow-hidden rounded-2xl sm:rounded-[28px] bg-[#0a3269] shadow-lg border border-white/5">
-              <img
-                src={currentImages[activeStep]}
-                alt={currentSteps[activeStep]?.title}
-                className="absolute inset-0 w-full h-full object-content transition-transform duration-1000 ease-out group-hover:scale-105"
+        {/* Right column */}
+<div className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-5">
+  {/* Featured image — passport-page framing */}
+  <div className="group relative col-span-2 w-full h-52 xs:h-60 sm:h-72 md:h-80 lg:h-[26rem] overflow-hidden rounded-2xl sm:rounded-[28px] bg-[#14235E] shadow-lg border border-white/5">
+    <img
+      src={currentImages[activeStep]}
+      alt={currentSteps[activeStep]?.title}
+      className="absolute inset-0 w-full h-full object-content transition-transform duration-1000 ease-out group-hover:scale-105"
+    />
+    {/* Base gradient so the whole image reads cleanly even without the panel */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+    <div className="absolute bottom-0 left-0 right-0 p-0 sm:p-0 lg:p-0 z-0">
+      <div className="rounded-md p-1 sm:p-2 lg:p-3">
+        <h2 className="text-base sm:text-xl lg:text-2xl font-bold text-white tracking-tight leading-tight line-clamp-2">
+          {currentSteps[activeStep]?.title}
+        </h2>
+        <p className="mt-1 text-xs sm:text-sm text-white/70 leading-relaxed line-clamp-2">
+          {currentSteps[activeStep]?.description}
+        </p>
+
+        <div className="mt-1 flex items-center gap-1.5">
+          {currentSteps.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveStep(i)}
+              className="group/dot relative py-2"
+              aria-label={`Go to step ${i + 1}`}
+            >
+              <span
+                className={`block h-1 rounded-full transition-all duration-300 ${
+                  i === activeStep ? 'w-6 bg-[#FAFAFA]' : i < activeStep ? 'w-3 bg-white/50' : 'w-3 bg-white/15'
+                }`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
- 
-              <div className="absolute left-4 top-3 z-10 flex items-center gap-1.5 rounded-full border border-[#0a3269]/20 bg-[#0a3269]/20 backdrop-blur-md px-3 py-1">
-                <span className="font-mono text-[11px] font-semibold text-white/90">
-                  <span className="text-[#fff]">{String(activeStep + 1).padStart(2, '0')}</span>
-                  <span className="mx-1 text-white/25">/</span>
-                  <span className="text-white/40">{String(currentSteps.length).padStart(2, '0')}</span>
-                </span>
-              </div>
- 
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 z-10">
-                <h2 className="text-base sm:text-xl lg:text-2xl font-bold text-white tracking-tight leading-tight line-clamp-2">
-                  {currentSteps[activeStep]?.title}
-                </h2>
-                <p className="mt-1.5 max-w-[90%] text-xs sm:text-sm text-white/55 leading-relaxed line-clamp-2">
-                  {currentSteps[activeStep]?.description}
-                </p>
- 
-                <div className="mt-4 flex items-center gap-1.5">
-                  {currentSteps.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setActiveStep(i)}
-                      className="group/dot relative py-2"
-                      aria-label={`Go to step ${i + 1}`}
-                    >
-                      <span
-                        className={`block h-1 rounded-full transition-all duration-300 ${
-                          i === activeStep ? 'w-6 bg-[#0a3269]' : i < activeStep ? 'w-3 bg-white/50' : 'w-3 bg-white/15'
-                        }`}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
- 
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
              {/* Success card — official seal */}
-            <div className="relative w-full col-span-2 md:col-span-1 rounded-3xl border border-[#0A3269]/12 dark:border-white/10 bg-white dark:bg-white/[0.03] p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-md">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#0A3269]/15 dark:border-white/10 bg-[#0A3269]/[0.04] dark:bg-white/[0.03] px-3 py-1">
-                <ShieldCheck className="h-3.5 w-3.5 text-[#0A3269] dark:text-[#0a3269]" />
+            <div className="relative w-full col-span-2 md:col-span-1 rounded-3xl border border-[#14235E]/12 dark:border-white/10 bg-white dark:bg-white/[0.03] p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-md">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#14235E]/15 dark:border-white/10 bg-[#14235E]/[0.04] dark:bg-white/[0.03] px-3 py-1">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#14235E] dark:text-[#14235E]" />
                 <p className="font-mono text-[9px] font-semibold uppercase tracking-wider text-[#0A0E14]/50 dark:text-white/40">
                   {t('successCard.verified')}
                 </p>
@@ -2122,11 +2112,11 @@ const ServiceJourney = () => {
               </h2>
               <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#0A0E14]/50 dark:text-white/45">
                 {t('successCard.approvedText')}
-                <span className="font-medium text-[#0A3269] dark:text-[#0a3269]"> {t('successCard.expertReview')} </span>
+                <span className="font-medium text-[#14235E] dark:text-[#14235E]"> {t('successCard.expertReview')} </span>
                 {t('successCard.processText')}
               </p>
  
-              <div className="my-4 h-px border-t border-dashed border-[#0A3269]/15 dark:border-white/10" />
+              <div className="my-4 h-px border-t border-dashed border-[#14235E]/15 dark:border-white/10" />
  
               <div className="grid grid-cols-2 gap-2.5">
                 {[
@@ -2135,8 +2125,8 @@ const ServiceJourney = () => {
                   { Icon: Users, value: '250+', label: t('successCard.expertAdvisors') },
                   { Icon: ShieldCheck, value: 'A+', label: t('successCard.rating') },
                 ].map(({ Icon, value, label }, i) => (
-                  <div key={i} className="rounded-xl border border-[#0A3269]/10 dark:border-white/10 bg-[#0A3269]/[0.02] dark:bg-white/[0.02] p-3">
-                    <Icon className="mb-2 h-3.5 w-3.5 text-[#0A3269] dark:text-[#0a3269]" />
+                  <div key={i} className="rounded-xl border border-[#14235E]/10 dark:border-white/10 bg-[#14235E]/[0.02] dark:bg-white/[0.02] p-3">
+                    <Icon className="mb-2 h-3.5 w-3.5 text-[#14235E] dark:text-[#14235E]" />
                     <p className="text-lg font-bold tracking-tight text-[#0A0E14] dark:text-white">{value}</p>
                     <span className="text-[10px] text-[#0A0E14]/40 dark:text-white/35">{label}</span>
                   </div>
@@ -2164,17 +2154,17 @@ const ServiceJourney = () => {
                 </h4>
                 <p className="mt-4 max-w-md text-sm leading-relaxed text-white/60 font-light">{t('ctaCard.description')}</p>
  
-                <div className="mt-6">
-                  <div className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#0a3269] text-[#fff] font-semibold text-sm transition-all duration-300 hover:scale-105 group">
-                    <span>{t('ctaCard.applyNow')}</span>
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
-                  </div>
-                </div>
+             <div className="mt-6">
+  <button className="inline-flex items-center gap-2.5 px-6 py-3 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group">
+    <span>{t('ctaCard.applyNow')}</span>
+    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+  </button>
+</div>
  
                 <div className="mt-auto pt-5 border-t border-dashed border-white/15 flex items-center gap-6 text-[11px] text-white/55 font-light">
                   <span>{t('ctaCard.applications')}</span>
                   <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
                     {t('ctaCard.successRate')}
                   </span>
                 </div>
@@ -2228,9 +2218,9 @@ function MembershipSection() {
     <section className="relative py-16 sm:py-20 lg:py-28 bg-white dark:bg-black overflow-hidden">
       {/* ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-[150px]" />
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#14235E]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#14235E]/3 dark:bg-[#4A8ABF]/8 rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#14235E]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-[150px]" />
       </div>
 
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" style={{
@@ -2250,7 +2240,7 @@ function MembershipSection() {
                 {isArabic ? 'ماذا تشمل عضوية' : 'What Does TMMT Membership'}
               </span>
               <br className="hidden sm:block" />
-              <span className="text-[#0A3269] dark:text-[#4A8ABF] font-light">
+              <span className="text-[#14235E] dark:text-[#4A8ABF] font-light">
                 {isArabic ? 'TMMT؟' : 'Include?'}
               </span>
             </h2>
@@ -2272,7 +2262,7 @@ function MembershipSection() {
                 items: isArabic 
                   ? ['إصدار التأشيرات والتجديدات والإلغاءات', 'تأشيرات السياحة والزيارة', 'كفالة العائلة', 'تحويل الكفالة', 'تتبع الطلبات', 'الغرامات والقيود']
                   : ['Visa issuance, renewals & cancellations', 'Tourist & visit visas', 'Family sponsorship', 'Sponsorship transfers', 'Application tracking', 'Fines & restrictions'],
-                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
               },
               {
                 icon: Landmark,
@@ -2280,7 +2270,7 @@ function MembershipSection() {
                 items: isArabic
                   ? ['إصدار الهوية الإماراتية وتجديدها', 'تتبع الطلبات', 'تحديثات التوصيل', 'تجديد جوازات السفر والإرشاد']
                   : ['Emirates ID issuance & renewals', 'Application tracking', 'Delivery updates', 'Passport renewals & guidance'],
-                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
               },
               {
                 icon: Building2,
@@ -2288,7 +2278,7 @@ function MembershipSection() {
                 items: isArabic
                   ? ['اختيار النشاط التجاري المناسب', 'اختيار الترخيص التجاري المناسب', 'فهم تكاليف التأسيس', 'مراجعات السلطات والتصاريح', 'بطاقات المنشأة', 'تغييرات الشركاء والموافقات']
                   : ['Choosing the right business activity', 'Selecting the right trade license', 'Understanding setup costs', 'Authority & permission reviews', 'Establishment cards', 'Partner changes & approvals'],
-                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
               },
               {
                 icon: Car,
@@ -2296,7 +2286,7 @@ function MembershipSection() {
                 items: isArabic
                   ? ['شراء وبيع المركبات', 'نقل الملكية', 'التسجيل والتأمين والفحص', 'رخص القيادة', 'الإجراءات المرورية والغرامات']
                   : ['Buying & selling vehicles', 'Ownership transfers', 'Registration, insurance & testing', 'Driving licenses', 'Traffic procedures & fines'],
-                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
               },
               {
                 icon: Users2,
@@ -2304,7 +2294,7 @@ function MembershipSection() {
                 items: isArabic
                   ? ['إجراءات الزواج', 'توثيق المستندات', 'الترجمة القانونية', 'طلبات العائلة والدعم']
                   : ['Marriage procedures', 'Document attestation', 'Legal translation', 'Family applications & support'],
-                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
               },
               {
                 icon: Briefcase,
@@ -2312,30 +2302,30 @@ function MembershipSection() {
                 items: isArabic
                   ? ['تصاريح العمل', 'كفالة الموظفين', 'العمالة المنزلية', 'إجراءات التوظيف']
                   : ['Work permits', 'Employee sponsorship', 'Domestic workers', 'Employment procedures'],
-                gradient: 'from-[#0A3269]/5 to-[#1A4A8A]/5'
+                gradient: 'from-[#14235E]/5 to-[#1A4A8A]/5'
               }
             ].map((section, idx) => (
               <div
                 key={section.title}
-                className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-7 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.15)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1"
+                className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-7 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.15)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1"
                 style={{ transitionDelay: `${idx * 60}ms` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0A3269]/0 via-[#0A3269]/0 to-[#1A4A8A]/0 group-hover:from-[#0A3269]/5 group-hover:via-[#0A3269]/3 group-hover:to-[#1A4A8A]/5 transition-all duration-700" />
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0A3269] via-[#1A4A8A] to-[#0A3269] dark:from-[#4A8ABF] dark:via-[#4A8ABF] dark:to-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#14235E]/0 via-[#14235E]/0 to-[#1A4A8A]/0 group-hover:from-[#14235E]/5 group-hover:via-[#14235E]/3 group-hover:to-[#1A4A8A]/5 transition-all duration-700" />
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#14235E] via-[#1A4A8A] to-[#14235E] dark:from-[#4A8ABF] dark:via-[#4A8ABF] dark:to-[#4A8ABF] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="relative">
                   <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="p-2.5 sm:p-3 rounded-xl bg-gray-100 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
+                    <div className="p-2.5 sm:p-3 rounded-xl bg-gray-100 dark:bg-[#4A8ABF]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
                     <section.icon className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
                   </div>
-                  <h4 className="font-bold text-black dark:text-white text-sm sm:text-lg group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                  <h4 className="font-bold text-black dark:text-white text-sm sm:text-lg group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
                     {section.title}
                   </h4>
                 </div>
                 <ul className="space-y-1.5 sm:space-y-2">
                   {section.items.map((item) => (
                     <li key={item} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500 dark:text-white/50 group-hover:text-gray-600 dark:group-hover:text-white/70 transition-colors duration-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF] shrink-0 mt-0.5" strokeWidth={2.5} />
+                      <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14235E] dark:text-[#4A8ABF] shrink-0 mt-0.5" strokeWidth={2.5} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -2347,13 +2337,13 @@ function MembershipSection() {
 
           {/* Full Service + Smart Renewals - Premium Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8 sm:mt-10">
-            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
-              <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
+              <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
                   <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
                 </div>
-                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
                   {isArabic ? 'معالجة الخدمة الكاملة' : 'Full Service Processing'}
                 </h4>
               </div>
@@ -2365,13 +2355,13 @@ function MembershipSection() {
               </p>
             </div>
 
-            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
-              <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="group relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-gray-50/80 to-white dark:from-[#0A1628] dark:to-black p-5 sm:p-8 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-gray-200 dark:bg-[#4A8ABF]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#4A8ABF] transition-all duration-500 shadow-md group-hover:shadow-[0_8px_24px_-8px_rgba(10,50,105,0.3)] dark:group-hover:shadow-[0_8px_24px_-8px_rgba(74,138,191,0.3)]">
                   <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-300" strokeWidth={1.75} />
                 </div>
-                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
+                <h4 className="font-bold text-black dark:text-white text-base sm:text-xl group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] transition-colors duration-300">
                   {isArabic ? 'تنبيهات التجديد الذكية' : 'Smart Renewal Alerts'}
                 </h4>
               </div>
@@ -2388,7 +2378,7 @@ function MembershipSection() {
                 .map((item) => (
                   <span 
                     key={item} 
-                    className="text-[9px] sm:text-xs font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 dark:bg-[#4A8ABF]/10 text-black dark:text-white border border-gray-200 dark:border-[#4A8ABF]/20 group-hover:border-[#0A3269]/30 dark:group-hover:border-[#4A8ABF]/30 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 transition-all duration-300"
+                    className="text-[9px] sm:text-xs font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 dark:bg-[#4A8ABF]/10 text-black dark:text-white border border-gray-200 dark:border-[#4A8ABF]/20 group-hover:border-[#14235E]/30 dark:group-hover:border-[#4A8ABF]/30 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF] group-hover:bg-[#14235E]/10 dark:group-hover:bg-[#4A8ABF]/10 transition-all duration-300"
                   >
                     {item}
                   </span>
@@ -2398,16 +2388,16 @@ function MembershipSection() {
           </div>
 
           {/* How Can TMMT Help You? - Premium */}
-          <div className="mt-8 sm:mt-10 relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-8 lg:p-10 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
-            <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[#0A3269]/5 dark:bg-[#4A8ABF]/5 blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-[#0A3269]/3 dark:bg-[#4A8ABF]/3 blur-3xl" />
+          <div className="mt-8 sm:mt-10 relative rounded-2xl border border-gray-200 dark:border-[#4A8ABF]/10 bg-gradient-to-br from-white to-gray-50/50 dark:from-black dark:to-[#0A1628] p-5 sm:p-8 lg:p-10 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:shadow-[0_20px_60px_-20px_rgba(10,50,105,0.12)] dark:hover:shadow-[0_20px_60px_-20px_rgba(74,138,191,0.15)] transition-all duration-500 overflow-hidden hover:-translate-y-1">
+            <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[#14235E]/5 dark:bg-[#4A8ABF]/5 blur-3xl" />
+            <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-[#14235E]/3 dark:bg-[#4A8ABF]/3 blur-3xl" />
             <div className="relative">
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 shadow-md shadow-[#0A3269]/10 dark:shadow-[#4A8ABF]/10">
-                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#0A3269] dark:text-[#4A8ABF]" strokeWidth={1.75} />
+                <div className="p-2.5 sm:p-3 rounded-xl bg-[#14235E]/10 dark:bg-[#4A8ABF]/10 shadow-md shadow-[#14235E]/10 dark:shadow-[#4A8ABF]/10">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#14235E] dark:text-[#4A8ABF]" strokeWidth={1.75} />
                 </div>
                 <h4 className="font-bold text-black dark:text-white text-base sm:text-xl">
-                  {isArabic ? 'كيف يمكن لـ' : 'How Can'} <span className="text-[#0A3269] dark:text-[#4A8ABF]">TMMT</span> {isArabic ? 'مساعدتك؟' : 'Help You?'}
+                  {isArabic ? 'كيف يمكن لـ' : 'How Can'} <span className="text-[#14235E] dark:text-[#4A8ABF]">TMMT</span> {isArabic ? 'مساعدتك؟' : 'Help You?'}
                 </h4>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
@@ -2415,8 +2405,8 @@ function MembershipSection() {
                   ? ['تجنب غرامات التجديد المتأخرة', 'تجنب اختيار تأسيس الأعمال الخاطئ', 'تجنب التكاليف والرسوم غير الضرورية', 'تجنب الأخطاء المكلفة في الإجراءات الحكومية', 'توفير الوقت والجهد', 'اتخاذ قرارات مستنيرة بثقة قبل اتخاذ أي إجراء']
                   : ['Avoid late renewal fines', 'Avoid choosing the wrong business setup', 'Avoid unnecessary costs and fees', 'Avoid costly mistakes in government procedures', 'Save time and effort', 'Make informed decisions with confidence before taking action']
                 .map((text) => (
-                  <div key={text} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-white/60 p-2.5 sm:p-3 rounded-xl bg-gray-50/80 dark:bg-[#4A8ABF]/5 border border-gray-100 dark:border-[#4A8ABF]/10 hover:bg-[#0A3269]/5 dark:hover:bg-[#4A8ABF]/10 hover:border-[#0A3269]/20 dark:hover:border-[#4A8ABF]/20 transition-all duration-300 group">
-                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269] dark:text-[#4A8ABF] shrink-0 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
+                  <div key={text} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-white/60 p-2.5 sm:p-3 rounded-xl bg-gray-50/80 dark:bg-[#4A8ABF]/5 border border-gray-100 dark:border-[#4A8ABF]/10 hover:bg-[#14235E]/5 dark:hover:bg-[#4A8ABF]/10 hover:border-[#14235E]/20 dark:hover:border-[#4A8ABF]/20 transition-all duration-300 group">
+                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14235E] dark:text-[#4A8ABF] shrink-0 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
                     <span>{text}</span>
                   </div>
                 ))}
@@ -2472,7 +2462,7 @@ const FAQSection = () => {
             style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             {t('faq.headline')}{' '}
-            <span className="text-primary">{t('faq.headlineHighlight')}</span>
+            <span className="text-[#14235E]">{t('faq.headlineHighlight')}</span>
           </div>
         </div>
 
@@ -2516,478 +2506,6 @@ const FAQSection = () => {
         </div>
       </div>
     </section>
-  );
-};
-// Email Capture Section - Modern, Premium Design (no Framer Motion)
-const EmailCapture = () => {
-  const { t } = useTranslation();
-  const [email, setEmail] = useState('');
-  const [focused, setFocused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const modalVideoRef = useRef<HTMLVideoElement>(null);
-  const modalContainerRef = useRef<HTMLDivElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isHovering, setIsHovering] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-  const [isArabic, setIsArabic] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Check dark mode
-  useEffect(() => {
-    const checkDarkMode = () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      setIsDarkMode(isDark);
-    };
-    checkDarkMode();
-    const observer = new MutationObserver(() => {
-      checkDarkMode();
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  // Check language
-  useEffect(() => {
-    const checkLanguage = () => {
-      const lang = localStorage.getItem('i18nextLng');
-      const htmlLang = document.documentElement.lang;
-      const isAr = lang === 'ar' || lang === 'ar-AE' || htmlLang === 'ar' || htmlLang === 'ar-AE';
-      setIsArabic(isAr);
-    };
-    
-    checkLanguage();
-    
-    const handleChange = () => {
-      const newLang = localStorage.getItem('i18nextLng');
-      const newHtmlLang = document.documentElement.lang;
-      setIsArabic(newLang === 'ar' || newLang === 'ar-AE' || newHtmlLang === 'ar' || newHtmlLang === 'ar-AE');
-    };
-    
-    window.addEventListener('storage', handleChange);
-    window.addEventListener('languageChanged', handleChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleChange);
-      window.removeEventListener('languageChanged', handleChange);
-    };
-  }, []);
-
-  // ─── Translation Constants ──────────────────────────────────────────
-  const translations = {
-    en: {
-      eyebrow: 'Free Guidance',
-      heading: 'Get Your Free',
-      headingHighlight: 'Government Guidance',
-      description: 'Everything you need to know about UAE visas, Emirates ID, fines, business setup, and all government procedures. Expert insights from professionals with 10+ years of experience.',
-      placeholder: 'Enter your email address',
-      cta: 'Get Free Guide',
-      terms: 'By downloading, you agree to our',
-      termsLink: 'Terms & Conditions',
-      privacyLink: 'Privacy Policy',
-      unsubscribe: 'Unsubscribe anytime.',
-      mute: 'Mute',
-      unmute: 'Unmute',
-      muted: 'Muted',
-      unmuted: 'Unmuted',
-      watchHint: 'Watch the 90-second guide',
-    },
-    ar: {
-      eyebrow: 'تحميل مجاني',
-      heading: 'احصل على',
-      headingHighlight: 'إرشاد حكومي مجاني',
-      description: 'كل ما تحتاج معرفته عن تأشيرات الإمارات، الهوية الإماراتية، الغرامات، تأسيس الأعمال، وجميع الإجراءات الحكومية. رؤى خبراء من محترفين لديهم أكثر من 10 سنوات من الخبرة.',
-      placeholder: 'أدخل بريدك الإلكتروني',
-      cta: 'احصل على الدليل المجاني',
-      terms: 'بتحميلك، فإنك توافق على',
-      termsLink: 'الشروط والأحكام',
-      privacyLink: 'سياسة الخصوصية',
-      unsubscribe: 'يمكنك إلغاء الاشتراك في أي وقت.',
-      mute: 'كتم الصوت',
-      unmute: 'إلغاء كتم الصوت',
-      muted: 'مكتوم',
-      unmuted: 'غير مكتوم',
-      watchHint: 'شاهد الدليل المختصر',
-    }
-  };
-
-  const lang = translations[isArabic ? 'ar' : 'en'];
-
-  // Intersection Observer to detect when section is in view
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          if (videoRef.current && !hasStarted) {
-            videoRef.current.play().catch(() => {});
-            setHasStarted(true);
-          }
-        } else {
-          if (videoRef.current && hasStarted) {
-            videoRef.current.pause();
-          }
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, [hasStarted]);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && videoRef.current) {
-        videoRef.current.pause();
-      } else if (!document.hidden && videoRef.current) {
-        const rect = containerRef.current?.getBoundingClientRect();
-        if (rect && rect.top < window.innerHeight && rect.bottom > 0) {
-          videoRef.current.play().catch(() => {});
-        }
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
-
-  const toggleSound = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-    }
-  };
-
-  // Handle modal open with auto-fullscreen
-  const openModal = () => {
-    setIsModalOpen(true);
-    setTimeout(() => {
-      if (modalVideoRef.current) {
-        modalVideoRef.current.play().catch(() => {});
-        requestFullscreen();
-      }
-    }, 100);
-  };
-
-  // Handle modal close
-  const closeModal = () => {
-    if (modalVideoRef.current) {
-      modalVideoRef.current.pause();
-    }
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    }
-    setIsModalOpen(false);
-  };
-
-  // Request fullscreen
-  const requestFullscreen = () => {
-    try {
-      if (modalContainerRef.current) {
-        if (modalContainerRef.current.requestFullscreen) {
-          modalContainerRef.current.requestFullscreen();
-        }
-      }
-    } catch (err) {
-      try {
-        document.documentElement.requestFullscreen();
-      } catch (e) {
-        console.log('Fullscreen not supported');
-      }
-    }
-  };
-
-  // Handle fullscreen change
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      if (!document.fullscreenElement && isModalOpen) {
-        setTimeout(() => {
-          if (isModalOpen && modalContainerRef.current) {
-            try {
-              modalContainerRef.current.requestFullscreen();
-            } catch (e) {}
-          }
-        }, 100);
-      }
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, [isModalOpen]);
-
-  return (
-    <>
-<section
-  ref={containerRef}
-  className={`relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 ${
-    isDarkMode ? 'bg-black/70' : 'bg-white'
-  }`}
->
-    <div
-      className={`absolute inset-0 ${isDarkMode ? 'opacity-[0.05]' : 'opacity-[0.035]'}`}
-      style={{
-        backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
-        backgroundSize: '24px 24px',
-        color: '#0A3269',
-      }}
-    />
-
-  <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 xl:gap-16 py-4 sm:py-6 lg:py-8">
-      {/* ─── Left - Content ──────────── */}
-      <div className="flex-1 max-w-2xl order-2 lg:order-1">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-[#0A3269]/40 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#0A3269]">
-          <Mail className="h-2.5 w-2.5" />
-          {lang.eyebrow}
-        </span>
-
-        <h1
-          className={`
-            mt-3 sm:mt-4
-            font-black
-            leading-[1.05]
-            tracking-[-0.03em]
-            text-[2rem]
-            xs:text-[2.5rem]
-            sm:text-[3.2rem]
-            md:text-[4rem]
-            lg:text-[4.5rem]
-            xl:text-[5rem]
-            max-w-3xl
-            ${isDarkMode ? 'text-[#0A3269]' : 'text-gray-900'}
-          `}
-          style={{ fontFamily: "'Fraunces', serif" }}
-        >
-          {lang.heading}
-          <span className={`block mt-1 sm:mt-2 font-normal italic ${isDarkMode ? 'text-white' : 'text-[#0A3269]'}`}>
-            {lang.headingHighlight}
-          </span>
-        </h1>
-
-        <p
-          className={`
-            mt-3 sm:mt-4
-            max-w-xl
-            text-sm
-            sm:text-base
-            lg:text-lg
-            leading-relaxed
-            ${isDarkMode ? 'text-white/60' : 'text-gray-500'}
-          `}
-        >
-          {lang.description}
-        </p>
-
-        {/* Email Capture — styled as a single ticket stub with a perforated divider */}
-        <div className="mt-6 sm:mt-8 w-full max-w-lg">
-          <div
-            className={`
-              relative flex flex-col sm:flex-row items-stretch
-              rounded-xl sm:rounded-2xl overflow-hidden
-              border ${isDarkMode ? 'border-white/10' : 'border-[#0A3269]/12'}
-              ${focused ? 'ring-2 ring-[#0A3269]/30' : ''}
-              ${isDarkMode ? 'bg-white/[0.04]' : 'bg-gray-50'}
-              transition-all duration-300
-            `}
-          >
-            {/* Email Input */}
-            <div className="group relative flex-1 flex items-center gap-3 px-4 sm:px-5 py-3.5">
-              <div
-                className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                  isDarkMode ? 'bg-[#0A3269]/20 text-[#0A3269]' : 'bg-[#0A3269]/10 text-[#0A3269]'
-                }`}
-              >
-                <Mail className="h-4.5 w-4.5" />
-              </div>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                placeholder={lang.placeholder}
-                className={`
-                  relative w-full bg-transparent text-[15px] sm:text-base font-medium outline-none
-                  placeholder:text-gray-400 dark:placeholder:text-white/40
-                  ${isDarkMode ? 'text-white' : 'text-gray-900'}
-                  caret-[#0A3269]
-                `}
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              />
-            </div>
-
-            {/* Perforated divider — punch-hole notches, ticket-stub tear line */}
-            <div className="relative hidden sm:flex items-stretch">
-              <div
-                className={`w-px my-3 border-l-2 border-dashed ${isDarkMode ? 'border-white/15' : 'border-[#0A3269]/15'}`}
-              />
-              <span
-                className={`absolute -top-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rounded-full ${
-                  isDarkMode ? 'bg-black' : 'bg-white'
-                }`}
-              />
-              <span
-                className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rounded-full ${
-                  isDarkMode ? 'bg-black' : 'bg-white'
-                }`}
-              />
-            </div>
-
-         {/* CTA Button */}
-<button
-  className="
-    group relative overflow-hidden flex items-center justify-center gap-2.5
-    w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold whitespace-nowrap
-    transition-all duration-300 bg-[#0A3269] text-white hover:bg-[#1A4A8A]
-  "
->
-  {/* Shimmer Effect */}
-  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-  
-  <span className="relative z-10 flex items-center gap-2.5">
-    {lang.cta}
-    
-    {/* Arrow with solid white background and black icon */}
-    <div
-      className="
-        flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full
-        bg-white
-        transition-colors duration-300
-        group-hover:bg-gray-100
-      "
-    >
-      <ArrowRight 
-        className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-black transition-transform duration-300 group-hover:translate-x-1" 
-        strokeWidth={2.5}
-      />
-    </div>
-  </span>
-</button>
-          </div>
-
-          {/* Terms */}
-          <p className={`mt-3 sm:mt-4 px-1 text-[10px] sm:text-xs leading-5 ${isDarkMode ? 'text-white/30' : 'text-gray-400'}`}>
-            {lang.terms}
-            <a href="/t&c" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]">
-              {lang.termsLink}
-            </a>
-            {isArabic ? 'و' : 'and'}
-            <a href="/privacy" className="mx-1 font-medium transition-colors underline underline-offset-2 text-[#0A3269] hover:text-[#1A4A8A]">
-              {lang.privacyLink}
-            </a>
-            . {lang.unsubscribe}
-          </p>
-        </div>
-      </div>
-
-      {/* ─── Right - Video ────────────── */}
-      <div className="flex-1 w-full lg:w-auto order-1 lg:order-2">
-        <div className="relative max-w-md mx-auto lg:ml-auto w-full">
-          {/* dashed outer frame, offset behind the card — reads like a boarding-pass stub sitting in a sleeve */}
-          <div className="absolute -inset-2.5 rounded-[26px] border-2 border-dashed border-[#0a3269]/20 pointer-events-none hidden sm:block" />
-
-          <div
-            className="relative rounded-2xl overflow-hidden bg-black w-full h-[240px] sm:h-[280px] md:h-[360px] lg:h-[480px] xl:h-[580px] cursor-pointer group ring-1 shadow-xl ring-[#0A3269]/15"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-            onClick={openModal}
-          >
-            <video
-              ref={videoRef}
-              src="/images/laptop/sufiyan.mp4"
-              className="w-full h-full object-cover"
-              loop
-              muted
-              playsInline
-              preload="metadata"
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A3269]/10 via-transparent to-transparent" />
-
-            {/* Play Button */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div
-                className="
-                  w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-2xl
-                  transition-all duration-300 bg-white/20 backdrop-blur-sm
-                  group-hover:bg-[#0A3269] group-hover:scale-110
-                  border border-white/30 group-hover:border-[#0A3269]
-                "
-              >
-                <Play className="h-8 w-8 sm:h-10 sm:w-10 text-white ml-1 transition-all duration-300 group-hover:text-white" strokeWidth={2.5} />
-              </div>
-            </div>
-
-            {/* Sound Toggle Button */}
-            {isHovering && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleSound();
-                }}
-                className="absolute bottom-4 right-4 z-10"
-                aria-label={isMuted ? lang.unmute : lang.mute}
-              >
-                <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-300 hover:bg-black/80 hover:scale-110">
-                  {isMuted ? (
-                    <VolumeX className="h-4 w-4 text-white" strokeWidth={1.5} />
-                  ) : (
-                    <Volume2 className="h-4 w-4 text-white" strokeWidth={1.5} />
-                  )}
-                </div>
-              </button>
-            )}
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-{/* ─── FULLSCREEN VIDEO MODAL ────────────────────────────────────── */}
-{isModalOpen && (
-  <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center" onClick={closeModal}>
-    <div ref={modalContainerRef} className="relative w-full h-full bg-black" onClick={(e) => e.stopPropagation()}>
-      <video
-        ref={modalVideoRef}
-        className="w-full h-full object-contain"
-        src="/images/laptop/sufiyan.mp4"
-        controls
-        autoPlay
-        playsInline
-        controlsList="nodownload"
-      />
-
-      <button
-        onClick={closeModal}
-        className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-all duration-300 hover:scale-110 z-20 border border-white/20"
-      >
-        <X className="h-6 w-6" />
-      </button>
-
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white/40 text-xs bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 pointer-events-none">
-        Press ESC or click ✕ to exit
-      </div>
-    </div>
-  </div>
-)}
-    </>
   );
 };
 
@@ -3621,19 +3139,15 @@ const serviceData = [
   },
 ];
 
-
-// Modern Laptop Showcase - Clean Images Only with Pause/Play (no Framer Motion)
 const LaptopShowcase = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView({ threshold: 0.2 });
   const [activeScreen, setActiveScreen] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [showPauseIcon, setShowPauseIcon] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [manualPause, setManualPause] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isArabic, setIsArabic] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -3655,25 +3169,25 @@ const LaptopShowcase = () => {
       const isAr = lang === 'ar' || lang === 'ar-AE' || htmlLang === 'ar' || htmlLang === 'ar-AE';
       setIsArabic(isAr);
     };
-    
+
     checkLanguage();
-    
+
     const handleChange = () => {
       const newLang = localStorage.getItem('i18nextLng');
       const newHtmlLang = document.documentElement.lang;
       setIsArabic(newLang === 'ar' || newLang === 'ar-AE' || newHtmlLang === 'ar' || newHtmlLang === 'ar-AE');
     };
-    
+
     window.addEventListener('storage', handleChange);
     window.addEventListener('languageChanged', handleChange);
-    
+
     return () => {
       window.removeEventListener('storage', handleChange);
       window.removeEventListener('languageChanged', handleChange);
     };
   }, []);
 
-  // Image paths for laptop screenshots
+  // Image paths
   const screens = [
     { id: 'img1', image: '/images/laptop/img1.png' },
     { id: 'img2', image: '/images/laptop/img2.png' },
@@ -3684,20 +3198,18 @@ const LaptopShowcase = () => {
     { id: 'img7', image: '/images/laptop/img7.png' },
   ];
 
-  // Auto-slide with pause functionality
+  // Auto-slide – changes every 2 seconds
   useEffect(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
 
-    if (isPaused) {
-      return;
-    }
+    if (isPaused) return;
 
     intervalRef.current = setInterval(() => {
       setActiveScreen((prev) => (prev + 1) % screens.length);
-    }, 5000);
+    }, 3000); // ← changed from 5000 to 2000
 
     return () => {
       if (intervalRef.current) {
@@ -3707,7 +3219,7 @@ const LaptopShowcase = () => {
     };
   }, [isPaused, screens.length]);
 
-  // Handle manual navigation
+  // Navigation handlers (unchanged)
   const goToScreen = (index: number) => {
     setActiveScreen(index);
     setIsPaused(true);
@@ -3718,69 +3230,38 @@ const LaptopShowcase = () => {
     resumeTimeoutRef.current = setTimeout(() => {
       setIsPaused(false);
       setManualPause(false);
-      setShowPauseIcon(false);
     }, 8000);
   };
 
-  // Toggle pause/play
+  const goToPrev = () => {
+    const prevIndex = (activeScreen - 1 + screens.length) % screens.length;
+    goToScreen(prevIndex);
+  };
+
+  const goToNext = () => {
+    const nextIndex = (activeScreen + 1) % screens.length;
+    goToScreen(nextIndex);
+  };
+
   const togglePause = (e?: React.MouseEvent) => {
-    if (e) {
-      e.stopPropagation();
-    }
-    
+    if (e) e.stopPropagation();
+
     if (resumeTimeoutRef.current) {
       clearTimeout(resumeTimeoutRef.current);
       resumeTimeoutRef.current = null;
     }
-    
+
     const newPauseState = !isPaused;
     setIsPaused(newPauseState);
     setManualPause(newPauseState);
-    
-    if (!isMobile) {
-      setShowPauseIcon(true);
-      setTimeout(() => {
-        if (!isHovering) {
-          setShowPauseIcon(false);
-        }
-      }, 1500);
-    }
   };
-
-  const handleMouseEnter = () => {
-    if (isMobile) return;
-    setIsHovering(true);
-    if (!manualPause) {
-      setIsPaused(true);
-      setShowPauseIcon(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (isMobile) return;
-    setIsHovering(false);
-    if (!manualPause) {
-      setIsPaused(false);
-      setShowPauseIcon(false);
-    }
-  };
-
-  const handleScreenClick = () => {
-    togglePause();
-  };
-
-  return (
-   <section
+return (
+    <section
   ref={sectionRef}
   className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden bg-gray-50/80 dark:bg-black/95"
 >
   {/* Background */}
   <div className="absolute inset-0">
-    <div className="absolute top-1/4 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-[#0A3269]/5 dark:bg-[#4A8ABF]/10 rounded-full blur-2xl sm:blur-3xl" />
-    <div className="absolute bottom-1/4 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-[#B8873B]/5 dark:bg-[#B8873B]/10 rounded-full blur-2xl sm:blur-3xl" />
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-[#0A3269]/3 dark:bg-[#4A8ABF]/5 rounded-full blur-3xl" />
- 
-    {/* dot grain, same texture as the journey/hero sections */}
     <div
       className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04]"
       style={{
@@ -3789,122 +3270,191 @@ const LaptopShowcase = () => {
       }}
     />
   </div>
- 
+
   <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
     {/* Header */}
+    
     <div
-      className={`text-center mb-10 sm:mb-14 md:mb-16 transition-all duration-700 ${
+      className={`text-center mb-8 sm:mb-12 md:mb-16 transition-all duration-700 ${
         isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
     >
-  
- 
+      
+    
       <h2
         className="font-bold text-black dark:text-white leading-[1.05] tracking-[-0.02em]"
-        style={{ fontFamily: "'Inter', sans-serif", fontSize: 'clamp(2rem, 8vw, 3rem)' }}
+        style={{ fontFamily: "'Inter', sans-serif", fontSize: 'clamp(1.8rem, 8vw, 3rem)' }}
       >
         {isArabic ? (
           <>
             شاهد كيف
             <br />
-            <span className="text-[#0A3269] dark:text-[#0A3269] italic font-light">تعمل TMMT</span>
+            <span
+              className="italic font-light"
+              style={{
+                backgroundImage: 'linear-gradient(100deg, #14235E, #4457AE 55%, #14235E)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
+              تعمل TMMT
+            </span>
           </>
         ) : (
           <>
             See how
             <br />
-            <span className="text-[#0A3269] dark:text-[#0A3269] italic font-light">TMMT works</span>
+            <span
+              className="italic font-light"
+              style={{
+                backgroundImage: 'linear-gradient(100deg, #14235E, #14235E 55%, #14235E)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
+              TMMT works
+            </span>
           </>
         )}
       </h2>
- 
-      <p className="text-black/50 dark:text-white/40 text-sm sm:text-base mt-3 max-w-2xl mx-auto font-light">
+     <p className="text-black/50 dark:text-white/40 text-sm sm:text-base mt-3 max-w-2xl mx-auto font-light px-4">
         {isArabic
           ? 'اختبر معالجة التأشيرات السلسة مع منصتنا البديهية'
           : 'Experience seamless visa processing with our intuitive platform'}
       </p>
     </div>
- 
-    {/* Laptop Mockup */}
+ {/* ─── Laptop Mockup ───────────────────────────────────────────── */}
     <div
       className={`relative max-w-6xl mx-auto transition-all duration-700 ${
         isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
-      <span className="absolute -top-1.5 left-8 hidden sm:block h-3 w-3 rounded-full bg-gray-50 dark:bg-black" />
-      <span className="absolute -top-1.5 right-8 hidden sm:block h-3 w-3 rounded-full bg-gray-50 dark:bg-black" />
- 
-      <div className="relative transition-all duration-300 hover:-translate-y-1">
-        {/* Bezel */}
-        <div className="relative bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 rounded-xl sm:rounded-2xl md:rounded-3xl p-1.5 sm:p-2 md:p-3 shadow-2xl shadow-black/50 dark:shadow-black/70">
-          {/* Top Bar with Camera */}
-          <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-10">
-            <div className="w-2 h-2 sm:w-2.5 md:w-3 bg-neutral-700 rounded-full border border-neutral-600/50">
-              <div className="absolute inset-0 m-auto w-0.5 h-0.5 sm:w-1 sm:h-1 bg-neutral-500 rounded-full" />
+      <div className="relative">
+        {/* Gradient-ring frame — border only, no box-shadow */}
+        <div className="tmmt-ring relative rounded-xl sm:rounded-2xl md:rounded-3xl p-[1.5px]">
+          <div className="relative bg-gradient-to-br from-[#1a1a1a] via-[#0d0d0d] to-[#050505] rounded-xl sm:rounded-2xl md:rounded-3xl p-1.5 sm:p-1.5 md:p-1">
+            {/* Camera */}
+            <div className="absolute top-2 sm:top-3 md:top-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 rounded-full border border-white/10 bg-black/40 px-2 py-0.5">
+              <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#FAFAFA]/40 rounded-full" />
             </div>
-            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#0a3269]" />
-          </div>
  
-          {/* Screen Container */}
-          <div
-            className="relative bg-black rounded-lg sm:rounded-xl md:rounded-3xl overflow-hidden aspect-[16/11] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/9] cursor-pointer group"
-            onClick={handleScreenClick}
-          >
-            <div className="absolute inset-0 transition-opacity duration-700">
-              <div className="w-full h-full flex items-center justify-center p-0 sm:p-1 md:p-1.5 lg:p-2">
-                <div className="relative w-full h-full rounded-none sm:rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden">
-                  <img
-                    src={screens[activeScreen].image}
-                    alt={`Screenshot ${activeScreen + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Screen */}
+            <div
+              className="relative bg-black rounded-lg sm:rounded-xl md:rounded-3xl overflow-hidden aspect-video cursor-pointer group w-full min-h-[250px] sm:min-h-[340px] md:min-h-[420px] lg:min-h-[480px]"
+              onClick={togglePause}
+            >
+              <div className="absolute inset-0 transition-opacity duration-700">
+                <div className="w-full h-full flex items-center justify-center p-0 sm:p-1 md:p-1.5 lg:p-2">
+                  <div className="relative w-full h-full rounded-none sm:rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden">
+                    <img
+                      src={screens[activeScreen].image}
+                      alt={`Screenshot ${activeScreen + 1}`}
+                      className="w-full h-full object-content transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
                 </div>
               </div>
-            </div>
  
-            {/* Pause/Play Status */}
-            {isPaused && (
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
-                <span className="text-white text-[10px] sm:text-xs font-medium bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5">
-                  <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={2} />
-                  Paused
-                </span>
-              </div>
-            )}
+              {/* Pause indicator */}
+              {isPaused && (
+                <div className="absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 z-20">
+                  <span className="text-white text-[8px] sm:text-xs font-medium bg-black/60 backdrop-blur-sm px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/10 flex items-center gap-1 sm:gap-1.5">
+                    <Pause className="w-2.5 h-2.5 sm:w-3 sm:h-3" strokeWidth={2} />
+                    Paused
+                  </span>
+                </div>
+              )}
  
-            {/* Tap/Click Hint */}
-            {!isPaused && (
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-                <span className="text-white/40 text-[8px] sm:text-[9px] font-medium bg-black/30 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/5 flex items-center gap-1.5">
-                  Click to pause
-                </span>
-              </div>
-            )}
- 
-            {/* Screen Glare */}
-            <div className="absolute inset-0 pointer-events-none rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden">
-              <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-white/5 via-transparent to-transparent rotate-12" />
+              {/* Screen glare — a lighting overlay, not a shadow */}
             </div>
           </div>
         </div>
  
-        {/* Laptop Base */}
+        {/* Laptop Base — border only, no shadow */}
         <div className="relative">
-          <div className="relative h-2 sm:h-3 md:h-4 bg-gradient-to-b from-neutral-700 to-neutral-800 rounded-b-lg sm:rounded-b-xl md:rounded-b-2xl">
-            <div className="absolute left-1/2 top-0 -translate-x-1/2 w-12 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-neutral-500 to-transparent rounded-b" />
+          <div className="relative h-1.5 sm:h-2 md:h-3 lg:h-4 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] rounded-b-lg sm:rounded-b-xl md:rounded-b-2xl border-x border-b border-white/[0.06]">
+            <div className="absolute left-1/2 top-0 -translate-x-1/2 w-12 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-[#4457AE]/30 to-transparent rounded-b" />
           </div>
         </div>
       </div>
     </div>
+ 
+    {/* ─── Navigation Controls ────────────────────────────────────── */}
+    <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 md:mt-10">
+      {/* Prev Button */}
+      <button
+        onClick={goToPrev}
+        className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full border border-[#14235E]/20 dark:border-white/10 bg-white dark:bg-black/60 hover:bg-[#14235E] dark:hover:bg-[#14235E] hover:border-[#14235E] dark:hover:border-[#14235E] active:scale-95 transition-all duration-300 group"
+        aria-label="Previous"
+      >
+        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#14235E] dark:text-white/70 group-hover:text-white group-hover:-translate-x-0.5 transition-all duration-300" strokeWidth={2} />
+      </button>
+ 
+      {/* Segmented indicator track — modern replacement for plain dots */}
+      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-2.5">
+        {screens.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToScreen(index)}
+            className={`relative h-1.5 sm:h-2 rounded-full overflow-hidden transition-all duration-300 ${
+              index === activeScreen ? 'w-7 sm:w-9 md:w-10' : 'w-2 sm:w-2.5 md:w-3'
+            }`}
+            style={{
+              backgroundColor: index === activeScreen ? 'rgba(20,35,94,0.14)' : 'rgba(20,35,94,0.18)',
+            }}
+            aria-label={`Go to slide ${index + 1}`}
+          >
+            {index === activeScreen && (
+              <span
+                className="tmmt-fill-bar absolute inset-y-0 left-0 rounded-full"
+                style={{
+                  width: '100%',
+                  backgroundImage: 'linear-gradient(90deg, #14235E, #4457AE)',
+                  animation: isPaused ? 'none' : 'tmmt-fill 6s linear infinite',
+                }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+ 
+      {/* Next Button */}
+      <button
+        onClick={goToNext}
+        className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full border border-[#14235E]/20 dark:border-white/10 bg-white dark:bg-black/60 hover:bg-[#14235E] dark:hover:bg-[#14235E] hover:border-[#14235E] dark:hover:border-[#14235E] active:scale-95 transition-all duration-300 group"
+        aria-label="Next"
+      >
+        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#14235E] dark:text-white/70 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300" strokeWidth={2} />
+      </button>
+    </div>
+ 
+    {/* Slide counter */}
+    <div className="text-center mt-2 sm:mt-3 text-[10px] sm:text-xs text-black/30 dark:text-white/20 font-light tabular-nums">
+      {String(activeScreen + 1).padStart(2, '0')} / {String(screens.length).padStart(2, '0')}
+    </div>
   </div>
-</section> );
+ 
+  {/* ─── Styles: gradient ring (border-only) + indicator fill anim ──── */}
+  <style>{`
+    .tmmt-ring {
+      background: linear-gradient(140deg, rgba(80,80,80,0.45), rgba(60,60,60,0.25) 45%, rgba(40,40,40,0.15) 100%);
+    }
+    @keyframes tmmt-fill {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(0%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tmmt-fill-bar { animation: none !important; }
+    }
+  `}</style>
+</section>
+
+  );
 };
-
-
 
 // 7 Emirates Section with smooth reveal animation like goodhand.ae (pure CSS)
 const EmiratesSection = () => {
@@ -4260,11 +3810,11 @@ const Hero = () => {
               onClick={() => setShowStartApplication(true)}
               className="
                 group relative overflow-hidden rounded-full
-                bg-gradient-to-br from-[#0A3269] to-[#08234F] text-white
+                bg-gradient-to-br from-[#14235E] to-[#08234F] text-white
                 px-6 py-2.5 font-semibold text-sm
-                shadow-lg shadow-[#0A3269]/25
+                shadow-lg shadow-[#14235E]/25
                 transition-all duration-300
-                hover:shadow-xl hover:shadow-[#0A3269]/35
+                hover:shadow-xl hover:shadow-[#14235E]/35
                 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]
               "
             >
@@ -4393,166 +3943,169 @@ const Hero = () => {
                 </Button>
               </SheetTrigger>
 
-              {/* Theme-aware mobile menu */}
-              <SheetContent
-                side="right"
-                className="
-                  flex w-80 flex-col p-0
-                  bg-white/95 dark:bg-[#000]/50
-                  backdrop-blur-2xl
-                  border-l border-gray-100 dark:border-white/10
-                  shadow-2xl shadow-black/10 dark:shadow-black/40
-                "
-              >
-                {/* Brand header — logo + title */}
-                <div className="relative flex items-center gap-3 border-b border-gray-100 dark:border-white/10 px-6 py-5 overflow-hidden">
-                  <div className="pointer-events-none absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[#4A8ABF]/15 blur-3xl" />
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/15 rounded-full blur-lg" />
-                    <img
-                      src={TammatLogoWhite}
-                      alt="Tammat logo"
-                      width={32}
-                      height={32}
-                      className="relative h-13 w-10 dark:brightness-0 dark:invert"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-lg font-bold tracking-tight text-black dark:text-white">
-                      TMMT
-                    </span>
-                  </div>
-                </div>
+             {/* Theme-aware mobile menu */}
+<SheetContent
+  side="right"
+  className="
+    flex w-80 flex-col p-0
+    bg-white/95 dark:bg-[#000]/50
+    backdrop-blur-2xl
+    border-l border-gray-100 dark:border-white/10
+  "
+>
+ <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary z-50">
+    <X className="h-5 w-5 text-black dark:text-white" />
+    <span className="sr-only">Close</span>
+  </SheetClose>
+  {/* Brand header — logo + title */}
+  <div className="relative flex items-center gap-3 border-b border-gray-100 dark:border-white/10 px-6 py-5 overflow-hidden">
+    <div className="pointer-events-none absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[#4A8ABF]/15 blur-3xl" />
+    <div className="relative">
+      <div className="absolute inset-0 bg-[#14235E]/10 dark:bg-[#4A8ABF]/15 rounded-full blur-lg" />
+      <img
+        src={TammatLogoWhite}
+        alt="Tammat logo"
+        width={32}
+        height={32}
+        className="relative h-13 w-10 dark:brightness-0 dark:invert"
+      />
+    </div>
+    <div>
+      <span className="text-lg font-bold tracking-tight text-black dark:text-white">
+        TMMT
+      </span>
+    </div>
+  </div>
 
-                {/* Navigation */}
-                <nav className="mt-4 flex flex-col gap-1.5 px-4">
-                  {links.map((l) => (
-                    <Link
-                      key={l.href}
-                      to={l.href}
-                      className="
-                        group relative flex items-center gap-4
-                        rounded-2xl px-4 py-3.5
-                        transition-all duration-300
-                        hover:bg-gray-50 dark:hover:bg-white/5
-                        active:scale-[0.98]
-                      "
-                    >
-                      <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
-                        <l.icon className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
-                      </div>
+  {/* Navigation */}
+  <nav className="mt-4 flex flex-col gap-1.5 px-4">
+    {links.map((l) => (
+       <Link
+        key={l.href}
+        to={l.href}
+        className="
+          group relative flex items-center gap-4
+          rounded-2xl px-4 py-3.5
+          transition-all duration-300
+          hover:bg-gray-50 dark:hover:bg-white/5
+          active:scale-[0.98]
+        "
+      >
+        <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#14235E] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#14235E]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
+          <l.icon className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+        </div>
 
-                      <div className="relative z-10 flex flex-col">
-                        <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
-                          {l.label}
-                        </span>
-                        <span className="text-[11px] text-black/40 dark:text-white/40">
-                          Quick access
-                        </span>
-                      </div>
+        <div className="relative z-10 flex flex-col">
+          <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]">
+            {l.label}
+          </span>
+          <span className="text-[11px] text-black/40 dark:text-white/40">
+            Quick access
+          </span>
+        </div>
 
-                      <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
-                    </Link>
-                  ))}
+        <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]" />
+      </Link>
+    ))}
 
-                  {/* Dashboard Link - Mobile */}
-                  <Link
-                    to={user?.role === 'amer' ? '/amer-dashboard' : '/user/dashboard'}
-                    className="
-                      group relative flex items-center gap-4
-                      rounded-2xl px-4 py-3.5
-                      transition-all duration-300
-                      hover:bg-gray-50 dark:hover:bg-white/5
-                      active:scale-[0.98]
-                    "
-                  >
-                    <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#0A3269] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#0A3269]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
-                      <LayoutDashboard className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
-                    </div>
+    {/* Dashboard Link - Mobile */}
+    <Link
+      to={user?.role === 'amer' ? '/amer-dashboard' : '/user/dashboard'}
+      className="
+        group relative flex items-center gap-4
+        rounded-2xl px-4 py-3.5
+        transition-all duration-300
+        hover:bg-gray-50 dark:hover:bg-white/5
+        active:scale-[0.98]
+      "
+    >
+      <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 group-hover:border-[#14235E] dark:group-hover:border-[#4A8ABF] group-hover:bg-[#14235E]/10 dark:group-hover:bg-[#4A8ABF]/10 group-hover:scale-105">
+        <LayoutDashboard className="h-5 w-5 text-black/70 dark:text-white/70 transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]" strokeWidth={1.8} />
+      </div>
 
-                    <div className="relative z-10 flex flex-col">
-                      <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]">
-                        Dashboard
-                      </span>
-                      <span className="text-[11px] text-black/40 dark:text-white/40">
-                        Manage your account
-                      </span>
-                    </div>
+      <div className="relative z-10 flex flex-col">
+        <span className="text-[15px] font-semibold text-black dark:text-white transition-colors duration-300 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]">
+          Dashboard
+        </span>
+        <span className="text-[11px] text-black/40 dark:text-white/40">
+          Manage your account
+        </span>
+      </div>
 
-                    <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#0A3269] dark:group-hover:text-[#4A8ABF]" />
-                  </Link>
-                </nav>
+      <ChevronRight className="ml-auto h-4 w-4 text-black/20 dark:text-white/20 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#14235E] dark:group-hover:text-[#4A8ABF]" />
+    </Link>
+  </nav>
 
-                {/* CTA buttons — bottom of sheet */}
-                <div className="mt-auto border-t border-gray-100 dark:border-white/10 p-5 space-y-3">
-                  {/* Primary CTA */}
-                  <button
-                    onClick={() => setShowStartApplication(true)}
-                    className="
-                      group relative overflow-hidden rounded-2xl w-full
-                      bg-gradient-to-br from-[#0A3269] to-[#08234F] dark:from-white dark:to-white
-                      px-6 py-3.5 font-semibold text-sm
-                      text-white dark:text-[#0A3269]
-                      shadow-lg shadow-[#0A3269]/20 dark:shadow-white/10
-                      transition-all duration-300
-                      hover:shadow-xl hover:shadow-[#0A3269]/30 dark:hover:shadow-white/20
-                      flex items-center justify-center gap-3
-                      hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]
-                    "
-                  >
-                    <span
-                      className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"
-                      style={{
-                        background: 'linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)',
-                      }}
-                    />
-                    <span className="relative z-10 flex items-center gap-2.5">
-                      <Rocket className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
-                      <span>{t('hero.cta', 'Apply Now')}</span>
-                    </span>
-                  </button>
+  {/* CTA buttons — bottom of sheet */}
+  <div className="mt-auto border-t border-gray-100 dark:border-white/10 p-5 space-y-3">
+    {/* Primary CTA */}
+    <button
+      onClick={() => setShowStartApplication(true)}
+      className="
+        group relative overflow-hidden rounded-2xl w-full
+        bg-gradient-to-br from-[#14235E] to-[#08234F] dark:from-white dark:to-white
+        px-6 py-3.5 font-semibold text-sm
+        text-white dark:text-[#14235E]
+        shadow-lg shadow-[#14235E]/20 dark:shadow-white/10
+        transition-all duration-300
+        hover:shadow-xl hover:shadow-[#14235E]/30 dark:hover:shadow-white/20
+        flex items-center justify-center gap-3
+        hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]
+      "
+    >
+      <span
+        className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"
+        style={{
+          background: 'linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)',
+        }}
+      />
+      <span className="relative z-10 flex items-center gap-2.5">
+        <Rocket className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
+        <span>{t('hero.cta', 'Apply Now')}</span>
+      </span>
+    </button>
 
-                  {/* Secondary CTA */}
-                  {user ? (
-                    <button
-                      onClick={() => signOut()}
-                      className="
-                        w-full rounded-2xl px-6 py-3 font-medium text-sm
-                        border border-gray-200 dark:border-white/10
-                        bg-white dark:bg-white/5
-                        text-black dark:text-white
-                        hover:bg-red-50 dark:hover:bg-red-500/10
-                        hover:border-red-300 dark:hover:border-red-500/30
-                        transition-all duration-300
-                        active:scale-[0.97]
-                        flex items-center justify-center gap-2
-                      "
-                    >
-                      <LogOut className="h-4 w-4" strokeWidth={1.8} />
-                      {t('header.signOut')}
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => navigate('/auth')}
-                      className="
-                        w-full rounded-2xl px-6 py-3 font-semibold text-sm
-                        bg-white dark:bg-white/5
-                        text-black dark:text-white
-                        border border-gray-200 dark:border-white/10
-                        flex items-center justify-center gap-2.5
-                        transition-all duration-300
-                        hover:bg-gray-50 dark:hover:bg-white/10
-                        hover:border-gray-300 dark:hover:border-white/20
-                        active:scale-[0.97]
-                        shadow-sm hover:shadow-md
-                      "
-                    >
-                      <LogIn className="h-4 w-4" strokeWidth={1.8} />
-                      {t('header.signIn')}
-                    </button>
-                  )}
-                </div>
-              </SheetContent>
+    {/* Secondary CTA */}
+    {user ? (
+      <button
+        onClick={() => signOut()}
+        className="
+          w-full rounded-2xl px-6 py-3 font-medium text-sm
+          border border-gray-200 dark:border-white/10
+          bg-white dark:bg-white/5
+          text-black dark:text-white
+          hover:bg-red-50 dark:hover:bg-red-500/10
+          hover:border-red-300 dark:hover:border-red-500/30
+          transition-all duration-300
+          active:scale-[0.97]
+          flex items-center justify-center gap-2
+        "
+      >
+        <LogOut className="h-4 w-4" strokeWidth={1.8} />
+        {t('header.signOut')}
+      </button>
+    ) : (
+      <button
+        onClick={() => navigate('/auth')}
+        className="
+          w-full rounded-2xl px-6 py-3 font-semibold text-sm
+          bg-white dark:bg-white/5
+          text-black dark:text-white
+          border border-gray-200 dark:border-white/10
+          flex items-center justify-center gap-2.5
+          transition-all duration-300
+          hover:bg-gray-50 dark:hover:bg-white/10
+          hover:border-gray-300 dark:hover:border-white/20
+          active:scale-[0.97]
+          shadow-sm hover:shadow-md
+        "
+      >
+        <LogIn className="h-4 w-4" strokeWidth={1.8} />
+        {t('header.signIn')}
+      </button>
+    )}
+  </div>
+</SheetContent>
             </Sheet>
           </div>
         </div>

@@ -274,12 +274,12 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-6xl max-h-[95vh] overflow-hidden bg-white dark:bg-gray-900 border-0 shadow-2xl rounded-2xl p-0">
+      <DialogContent className="w-[95vw] max-w-6xl max-h-[95vh] overflow-hidden bg-white dark:bg-gray-900 border-0 rounded-2xl p-0">
         {/* ─── Premium Header ───────────────────────────────────────── */}
-        <div className="sticky top-0 z-20 bg-gradient-to-r from-[#0A3269] via-[#1a4a7a] to-[#0A3269] dark:from-[#0A1628] dark:via-[#0A3269] dark:to-[#0A1628] px-4 sm:px-8 py-4 sm:py-5 rounded-t-2xl">
+        <div className="sticky top-0 z-20 bg-gradient-to-r from-[#14235E] via-[#14235E] to-[#14235E] dark:from-[#14235E]px-4 sm:px-8 py-4 sm:py-5 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-2 sm:p-2.5 rounded-xl bg-white/10 backdrop-blur-sm shadow-lg shadow-black/20">
+              <div className="p-2 sm:p-2.5 rounded-xl bg-white/10 backdrop-blur-sm ">
                 <FileCheck className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
@@ -330,13 +330,13 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
           )}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                <FolderOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0A3269]" />
+                <FolderOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14235E]" />
                 Documents
                 <span className="text-[10px] sm:text-xs font-normal text-gray-400 dark:text-gray-500">
                   ({documents.length})
                 </span>
               </h3>
-              <Badge className="bg-[#0A3269]/10 text-[#0A3269] dark:bg-[#0A3269]/20 dark:text-[#4A8ABF] border-0 text-[8px] sm:text-[9px] px-2 py-0.5 flex items-center gap-1">
+              <Badge className="bg-[#14235E]/10 text-[#14235E] dark:bg-[#14235E]/20 dark:text-[#4A8ABF] border-0 text-[8px] sm:text-[9px] px-2 py-0.5 flex items-center gap-1">
                 <Lock className="w-2.5 h-2.5" />
                 <span className="hidden xs:inline">Encrypted</span>
               </Badge>
@@ -354,16 +354,16 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                     className={cn(
                       'group p-3 sm:p-4 rounded-xl border-2 cursor-pointer transition-all duration-300',
                       selectedDoc?._id === doc._id && !isMobile
-                        ? 'border-[#0A3269] bg-[#0A3269]/5 dark:bg-[#0A3269]/10 shadow-lg shadow-[#0A3269]/10'
-                        : 'border-gray-200/60 dark:border-gray-800/60 bg-white dark:bg-gray-900/80 hover:border-[#0A3269]/30 hover:shadow-md hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/10'
+                        ? 'border-[#14235E] bg-[#14235E]/5 dark:bg-[#14235E]/10'
+                        : 'border-gray-200/60 dark:border-gray-800/60 bg-white dark:bg-gray-900/80 hover:border-[#14235E]/30 dark:hover:bg-[#14235E]/10'
                     )}
                   >
                     <div className="flex items-start gap-3">
                       <div className={cn(
                         'p-2 rounded-xl transition-all duration-300 flex-shrink-0',
                         selectedDoc?._id === doc._id && !isMobile
-                          ? 'bg-[#0A3269]/15 text-[#0A3269]'
-                          : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover:bg-[#0A3269]/10 group-hover:text-[#0A3269]'
+                          ? 'bg-[#14235E]/15 text-[#14235E]'
+                          : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover:bg-[#14235E]/10 group-hover:text-[#14235E]'
                       )}>
                         {getDocumentIcon(doc.mimeType)}
                       </div>
@@ -432,7 +432,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                   {/* ─── Preview Header ─────────────────────────────── */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-[#0A3269]/10 dark:bg-[#0A3269]/20">
+                      <div className="p-2 rounded-xl bg-[#14235E]/10 dark:bg-[#14235E]/20">
                         {getDocumentIcon(selectedDoc.mimeType)}
                       </div>
                       <div>
@@ -447,7 +447,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                         size="sm" 
                         variant="outline"
                         onClick={() => handleView(selectedDoc)}
-                        className="h-8 sm:h-9 px-3 sm:px-4 text-[10px] sm:text-xs rounded-xl border-gray-300 dark:border-gray-700 hover:border-[#0A3269] hover:text-[#0A3269] hover:bg-[#0A3269]/5 transition-all duration-300"
+                        className="h-8 sm:h-9 px-3 sm:px-4 text-[10px] sm:text-xs rounded-xl border-gray-300 dark:border-gray-700 hover:border-[#14235E] hover:text-[#14235E] hover:bg-[#14235E]/5 transition-all duration-300"
                       >
                         <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5" />
                         View
@@ -456,7 +456,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                         size="sm" 
                         variant="outline"
                         onClick={() => handleDownload(selectedDoc)}
-                        className="h-8 sm:h-9 px-3 sm:px-4 text-[10px] sm:text-xs rounded-xl border-gray-300 dark:border-gray-700 hover:border-[#0A3269] hover:text-[#0A3269] hover:bg-[#0A3269]/5 transition-all duration-300"
+                        className="h-8 sm:h-9 px-3 sm:px-4 text-[10px] sm:text-xs rounded-xl border-gray-300 dark:border-gray-700 hover:border-[#14235E] hover:text-[#14235E] hover:bg-[#14235E]/5 transition-all duration-300"
                       >
                         <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5" />
                         Download
@@ -495,7 +495,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                               <img 
                                 src={fileUrl}
                                 alt={selectedDoc.originalName || 'Document'}
-                                className="max-w-full max-h-[250px] sm:max-h-[350px] object-contain rounded-xl shadow-lg"
+                                className="max-w-full max-h-[250px] sm:max-h-[350px] object-contain rounded-xl"
                                 onError={() => setImageError(true)}
                                 onLoad={() => setImageError(false)}
                               />
@@ -507,7 +507,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                                 </p>
                                 <Button 
                                   onClick={() => handleView(selectedDoc)}
-                                  className="mt-3 bg-[#0A3269] hover:bg-[#1a4a7a] text-white rounded-xl text-xs h-9"
+                                  className="mt-3 bg-[#14235E] hover:bg-[#1a4a7a] text-white rounded-xl text-xs h-9"
                                 >
                                   <Eye className="w-3.5 h-3.5 mr-1.5" />
                                   Open in new tab
@@ -541,7 +541,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                           </p>
                           <Button 
                             onClick={() => handleDownload(selectedDoc)}
-                            className="mt-4 bg-[#0A3269] hover:bg-[#1a4a7a] text-white rounded-xl text-xs h-9"
+                            className="mt-4 bg-[#14235E] hover:bg-[#1a4a7a] text-white rounded-xl text-xs h-9"
                           >
                             <Download className="w-3.5 h-3.5 mr-1.5" />
                             Download
@@ -575,7 +575,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                   {selectedDoc.extractedData && (
                     <div className="p-3 rounded-xl bg-gray-50/80 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50">
                       <p className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-                        <Sparkles className="w-3 h-3 text-[#0A3269]" />
+                        <Sparkles className="w-3 h-3 text-[#14235E]" />
                         Extracted Info
                       </p>
                       <pre className="mt-1 text-[8px] sm:text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap bg-white dark:bg-gray-900 p-2 rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto max-h-[80px]">
@@ -586,9 +586,9 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
 
                   {/* ─── Review Actions ──────────────────────────────── */}
                   {selectedDoc.status === 'pending' ? (
-                    <div className="bg-gradient-to-br from-[#0A3269]/5 to-transparent dark:from-[#0A3269]/10 rounded-2xl border border-[#0A3269]/10 dark:border-[#0A3269]/20 p-4 sm:p-5">
+                    <div className="bg-gradient-to-br from-[#14235E]/5 to-transparent dark:from-[#14235E]/10 rounded-2xl border border-[#14235E]/10 dark:border-[#14235E]/20 p-4 sm:p-5">
                       <div className="flex items-center gap-2 mb-3">
-                        <UserCheck className="w-4 h-4 text-[#0A3269]" />
+                        <UserCheck className="w-4 h-4 text-[#14235E]" />
                         <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">Review Document</h4>
                       </div>
                       
@@ -597,7 +597,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                           value={rejectionReason}
                           onChange={(e) => setRejectionReason(e.target.value)}
                           placeholder="Provide reason for rejection (if rejecting)..."
-                          className="text-xs sm:text-sm border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#0A3269]/20 focus:border-[#0A3269] rounded-xl resize-none h-16 sm:h-20 bg-white dark:bg-gray-900"
+                          className="text-xs sm:text-sm border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#14235E]/20 focus:border-[#14235E] rounded-xl resize-none h-16 sm:h-20 bg-white dark:bg-gray-900"
                         />
 
                         <div className="flex gap-2">
@@ -607,7 +607,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                             disabled={loading}
                             className={cn(
                               'flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white transition-all duration-300',
-                              'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:shadow-lg hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98]'
+                              'bg-gradient-to-r from-emerald-500 to-emerald-600  hover:scale-[1.02] active:scale-[0.98]'
                             )}
                           >
                             {loading ? (
@@ -625,7 +625,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
                             disabled={loading || !rejectionReason.trim()}
                             className={cn(
                               'flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white transition-all duration-300',
-                              'bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg hover:shadow-red-500/30 hover:scale-[1.02] active:scale-[0.98]',
+                              'bg-gradient-to-r from-red-500 to-red-600  hover:scale-[1.02] active:scale-[0.98]',
                               (loading || !rejectionReason.trim()) && 'opacity-50 cursor-not-allowed'
                             )}
                           >
@@ -688,7 +688,7 @@ export const DocumentReviewDialog: React.FC<DocumentReviewDialogProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => onOpenChange(false)}
-              className="h-7 sm:h-8 px-3 sm:px-4 text-[9px] sm:text-xs rounded-xl hover:bg-[#0A3269]/5 hover:text-[#0A3269] transition-all duration-300"
+              className="h-7 sm:h-8 px-3 sm:px-4 text-[9px] sm:text-xs rounded-xl hover:bg-[#14235E]/5 hover:text-[#14235E] transition-all duration-300"
             >
               Close
             </Button>

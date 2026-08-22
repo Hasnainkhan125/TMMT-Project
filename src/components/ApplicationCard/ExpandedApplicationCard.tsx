@@ -1759,7 +1759,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                             "h-9 sm:h-10 text-[10px] sm:text-xs font-semibold rounded-xl transition-all duration-300 gap-1.5 sm:gap-2 shrink-0 relative overflow-hidden px-3 sm:px-4",
                             !uploadFile || uploading || uploadStatus === 'uploading'
                               ? "bg-gray-100/70 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-200 dark:border-white/5"
-                              : "bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] hover:shadow-lg hover:shadow-[#0A3269]/25 dark:hover:shadow-white/20 hover:scale-[1.02] active:scale-95 shadow-md"
+                              : "bg-gradient-to-r from-[#14235E] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#14235E] hover:shadow-lg hover:shadow-[#14235E]/25 dark:hover:shadow-white/20 hover:scale-[1.02] active:scale-95 shadow-md"
                           )}
                         >
                           {uploading || uploadStatus === 'uploading' ? (
@@ -2054,20 +2054,20 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
 
       {/* ─── Boost Dialog ────────────────────────────────────────────────── */}
       <Dialog open={showBoostDialog} onOpenChange={setShowBoostDialog}>
-        <DialogContent className="max-w-md bg-white/95 dark:bg-[#0A1628] backdrop-blur-sm border border-[#0A3269]/20 dark:border-[#0A3269]/30 rounded-2xl p-0 shadow-2xl shadow-[#0A3269]/10 dark:shadow-[#0A3269]/20 overflow-hidden">
-          <div className="relative px-6 pt-6 pb-4 border-b border-[#0A3269]/10 dark:border-[#0A3269]/20 bg-gradient-to-br from-[#0A3269]/5 to-[#1A4A8A]/5 dark:from-[#0A3269]/10 dark:to-[#1A4A8A]/10">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#0A3269]/10 rounded-full blur-3xl -translate-y-12 translate-x-12" />
+        <DialogContent className="max-w-md bg-white/95 dark:bg-[#0A1628] backdrop-blur-sm border border-[#14235E]/20 dark:border-[#14235E]/30 rounded-2xl p-0 shadow-2xl shadow-[#14235E]/10 dark:shadow-[#14235E]/20 overflow-hidden">
+          <div className="relative px-6 pt-6 pb-4 border-b border-[#14235E]/10 dark:border-[#14235E]/20 bg-gradient-to-br from-[#14235E]/5 to-[#1A4A8A]/5 dark:from-[#14235E]/10 dark:to-[#1A4A8A]/10">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#14235E]/10 rounded-full blur-3xl -translate-y-12 translate-x-12" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#1A4A8A]/10 rounded-full blur-2xl translate-y-8 -translate-x-8" />
             
             <DialogHeader className="relative">
               <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-white">
-                <div className="p-2 rounded-xl bg-[#0A3269] shadow-lg shadow-[#0A3269]/25">
+                <div className="p-2 rounded-xl bg-[#14235E] shadow-lg shadow-[#14235E]/25">
                   <Rocket className="h-5 w-5 text-white" strokeWidth={1.8} />
                 </div>
                 <span>Priority Boost</span>
               </DialogTitle>
               <DialogDescription className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0A3269]/10 dark:bg-[#0A3269]/20 text-[#0A3269] dark:text-[#4A8ABF] text-[10px] font-medium">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#14235E]/10 dark:bg-[#14235E]/20 text-[#14235E] dark:text-[#4A8ABF] text-[10px] font-medium">
                   <Sparkles className="h-3 w-3" />
                   {boostCount < 3 
                     ? `${3 - boostCount} free boost${3 - boostCount > 1 ? 's' : ''} remaining` 
@@ -2089,7 +2089,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 <div 
                   className={cn(
                     "h-full rounded-full transition-all duration-500",
-                    boostCount >= 3 ? "bg-red-500" : "bg-[#0A3269]"
+                    boostCount >= 3 ? "bg-red-500" : "bg-[#14235E]"
                   )}
                   style={{ width: `${Math.min((boostCount / 3) * 100, 100)}%` }}
                 />
@@ -2100,7 +2100,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
               {boostCount < 3 ? (
                 <Button
                   onClick={handlePriorityBoost}
-                  className="w-full group relative overflow-hidden rounded-xl bg-[#0A3269] hover:bg-[#1A4A8A] text-white font-semibold h-12 px-4 shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 border-0"
+                  className="w-full group relative overflow-hidden rounded-xl bg-[#14235E] hover:bg-[#1A4A8A] text-white font-semibold h-12 px-4 shadow-lg shadow-[#14235E]/25 hover:shadow-xl hover:shadow-[#14235E]/30 transition-all duration-300 border-0"
                 >
                   <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                   <div className="flex items-center justify-center gap-2.5 relative z-10">
@@ -2129,7 +2129,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             </div>
 
             <div className="bg-gray-50/80 dark:bg-white/5 rounded-xl p-3.5 border border-gray-200/50 dark:border-white/5">
-              <p className="text-[10px] font-semibold text-[#0A3269] dark:text-[#4A8ABF] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+              <p className="text-[10px] font-semibold text-[#14235E] dark:text-[#4A8ABF] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                 <Award className="h-3.5 w-3.5" />
                 Boost Benefits
               </p>
@@ -2147,7 +2147,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                   <span>24/7 support</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-                  <TrendingUp className="h-3 w-3 text-[#0A3269]" />
+                  <TrendingUp className="h-3 w-3 text-[#14235E]" />
                   <span>Higher visibility</span>
                 </div>
               </div>
@@ -2156,7 +2156,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
             <Button
               variant="ghost"
               onClick={() => setShowBoostDialog(false)}
-              className="w-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/10 rounded-xl h-10 text-sm font-medium transition-all duration-200"
+              className="w-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/10 rounded-xl h-10 text-sm font-medium transition-all duration-200"
             >
               Cancel
             </Button>
@@ -2225,7 +2225,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                   <Input
                     id="editFirstName"
                     defaultValue={application.sponsor?.firstName || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                     placeholder="John"
                   />
                 </div>
@@ -2234,7 +2234,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                   <Input
                     id="editLastName"
                     defaultValue={application.sponsor?.lastName || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                     placeholder="Doe"
                   />
                 </div>
@@ -2247,7 +2247,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     id="editEmail"
                     type="email"
                     defaultValue={application.sponsor?.email || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -2257,7 +2257,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                     id="editPhone"
                     type="tel"
                     defaultValue={application.sponsor?.phone || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                     placeholder="+971 50 123 4567"
                   />
                 </div>
@@ -2269,7 +2269,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                   <Input
                     id="editEmiratesId"
                     defaultValue={application.sponsor?.emiratesId || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                     placeholder="784-1234-5678900-1"
                   />
                 </div>
@@ -2278,7 +2278,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                   <Input
                     id="editPassport"
                     defaultValue={application.sponsor?.passportNumber || ''}
-                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                    className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                     placeholder="A1234567"
                   />
                 </div>
@@ -2299,7 +2299,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       <Input
                         id="editSponsoredFirstName"
                         defaultValue={application.sponsored?.firstName || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                         placeholder="Jane"
                       />
                     </div>
@@ -2308,7 +2308,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       <Input
                         id="editSponsoredLastName"
                         defaultValue={application.sponsored?.lastName || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                         placeholder="Smith"
                       />
                     </div>
@@ -2319,7 +2319,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       <Input
                         id="editSponsoredNationality"
                         defaultValue={application.sponsored?.nationality || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                         placeholder="British"
                       />
                     </div>
@@ -2328,7 +2328,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                       <Input
                         id="editSponsoredPassport"
                         defaultValue={application.sponsored?.passportNumber || ''}
-                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#0A3269] focus:ring-[#0A3269]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
+                        className="rounded-xl border-gray-200/60 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:border-[#14235E] focus:ring-[#14235E]/20 transition-all duration-200 h-9 sm:h-10 text-xs sm:text-sm"
                         placeholder="B7654321"
                       />
                     </div>
@@ -2351,7 +2351,7 @@ const ExpandedApplicationCard: React.FC<ExpandedApplicationCardProps> = ({
                 toast.success('Application updated successfully');
                 setShowEditDialog(false);
               }}
-              className="rounded-xl bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] font-semibold shadow-lg shadow-[#0A3269]/25 dark:shadow-white/20 hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 order-1 sm:order-2 h-9 sm:h-10 text-xs sm:text-sm px-4 sm:px-6"
+              className="rounded-xl bg-gradient-to-r from-[#14235E] to-[#1A4A8A] dark:from-white dark:to-gray-200 text-white dark:text-[#14235E] font-semibold shadow-lg shadow-[#14235E]/25 dark:shadow-white/20 hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 order-1 sm:order-2 h-9 sm:h-10 text-xs sm:text-sm px-4 sm:px-6"
             >
               <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
               Save Changes

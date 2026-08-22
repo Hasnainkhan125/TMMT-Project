@@ -743,7 +743,7 @@ function UserInfoStep({ onNext }: { onNext: () => void }) {
         >
           <Button
             onClick={onNext}
-            className="w-full h-12 sm:h-13 md:h-14 rounded-2xl font-semibold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[var(--primary)]/25 hover:shadow-xl hover:shadow-[var(--primary)]/35 relative overflow-hidden group"
+            className="w-full h-12 sm:h-13 md:h-14 rounded-2xl font-semibold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-[0.98]  relative overflow-hidden group"
             style={{ 
               backgroundColor: 'var(--primary)', 
               color: 'white',

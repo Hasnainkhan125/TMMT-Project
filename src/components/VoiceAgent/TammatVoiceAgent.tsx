@@ -120,10 +120,10 @@ export default function TammatVoiceAgent({
             transition-all duration-300 ease-out
             shadow-lg
             ${isConnected 
-              ? 'bg-[#0A3269] text-white shadow-[#0A3269]/30' 
+              ? 'bg-[#14235E] text-white shadow-[#14235E]/30' 
               : isDarkMode 
-                ? 'bg-[#0A3269] text-white hover:bg-[#1A4A8A]' 
-                : 'bg-white text-[#0A3269] border border-[#0A3269]/20 hover:bg-gray-50'
+                ? 'bg-[#14235E] text-white hover:bg-[#1A4A8A]' 
+                : 'bg-white text-[#14235E] border border-[#14235E]/20 hover:bg-gray-50'
             }
           `}
         >
@@ -181,11 +181,11 @@ export default function TammatVoiceAgent({
             `}
           >
             {/* ─── Header ─────────────────────────────────────────────── */}
-            <div className="relative px-5 pt-5 pb-4 bg-[#0A3269] dark:bg-[#0A3269]/90 overflow-hidden">
+            <div className="relative px-5 pt-5 pb-4 bg-[#14235E] dark:bg-[#14235E]/90 overflow-hidden">
               <div className="relative flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 rounded-2xl bg-white flex items-center justify-center shadow-lg shadow-black/90">
-                    <Sparkles className="w-4.5 h-4.5 text-[#0A3269]" />
+                    <Sparkles className="w-4.5 h-4.5 text-[#14235E]" />
                     {isConnected && (
                       <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -220,7 +220,7 @@ export default function TammatVoiceAgent({
             {/* ─── Live command chip ──────────────────────────────────── */}
             {state.lastVoiceCommand && (
               <div className="px-4 pt-3">
-                <div className="flex items-center gap-1.5 text-[11.5px] text-[#0A3269] dark:text-white/90 bg-[#0A3269]/8 dark:bg-white/10 px-3 py-1.5 rounded-xl w-fit max-w-full">
+                <div className="flex items-center gap-1.5 text-[11.5px] text-[#14235E] dark:text-white/90 bg-[#14235E]/8 dark:bg-white/10 px-3 py-1.5 rounded-xl w-fit max-w-full">
                   <Radio className="w-3 h-3 shrink-0" />
                   <span className="truncate">{state.lastVoiceCommand}</span>
                 </div>
@@ -241,8 +241,8 @@ export default function TammatVoiceAgent({
                     transition={{ delay: i * 0.03, duration: 0.2 }}
                     className="flex items-start gap-2 px-3 py-2.5 rounded-2xl rounded-tl-md bg-white dark:bg-black/60 border border-gray-100 dark:border-white/10"
                   >
-                    <div className="h-6 w-6 mt-0.5 rounded-full bg-[#0A3269]/10 dark:bg-white/20 flex items-center justify-center flex-shrink-0">
-                      <MessageSquare className="w-3 h-3 text-[#0A3269] dark:text-white/90" />
+                    <div className="h-6 w-6 mt-0.5 rounded-full bg-[#14235E]/10 dark:bg-white/20 flex items-center justify-center flex-shrink-0">
+                      <MessageSquare className="w-3 h-3 text-[#14235E] dark:text-white/90" />
                     </div>
                     <p className="text-[13px] text-slate-700 dark:text-white/80 leading-relaxed">
                       {msg}
@@ -254,7 +254,7 @@ export default function TammatVoiceAgent({
 
             {/* ─── Service Info ────────────────────────────────────────── */}
             {state.selectedService && (
-              <div className="mx-4 mb-1 px-3.5 py-2.5 rounded-xl bg-[#0A3269]/6 dark:bg-white/5 border border-[#0A3269]/10 dark:border-white/10">
+              <div className="mx-4 mb-1 px-3.5 py-2.5 rounded-xl bg-[#14235E]/6 dark:bg-white/5 border border-[#14235E]/10 dark:border-white/10">
                 <div className="flex items-center justify-between text-[11.5px]">
                   <span className="text-slate-500 dark:text-white/60">
                     <span className="font-semibold text-slate-700 dark:text-white/90">Service</span>{' '}
@@ -330,10 +330,10 @@ export default function TammatVoiceAgent({
             transition-all duration-300 ease-out
             shadow-lg
             ${isConnected 
-              ? 'bg-[#0A3269] text-white shadow-[0_8px_24px_-4px_rgba(10,50,105,0.5)]' 
+              ? 'bg-[#14235E] text-white shadow-[0_8px_24px_-4px_rgba(10,50,105,0.5)]' 
               : isDarkMode
-                ? 'bg-[#0A3269] text-white hover:bg-[#0A3269] shadow-[0_8px_24px_-4px_rgba(10,50,105,0.4)]'
-                : 'bg-[#0A3269] text-white border border-[#0A3269]/20 hover:bg-[#0A3269] shadow-[0_8px_24px_-4px_rgba(0,0,0,0.1)]'
+                ? 'bg-[#14235E] text-white hover:bg-[#14235E] shadow-[0_8px_24px_-4px_rgba(10,50,105,0.4)]'
+                : 'bg-[#14235E] text-white border border-[#14235E]/20 hover:bg-[#14235E] shadow-[0_8px_24px_-4px_rgba(0,0,0,0.1)]'
             }
             ${state.isVoiceConnecting ? 'opacity-70 cursor-not-allowed' : ''}
           `}
@@ -375,9 +375,9 @@ export default function TammatVoiceAgent({
 
 function VoiceRings({ active, speaking }: { active: boolean; speaking: boolean }) {
   const isDark = document.documentElement.classList.contains('dark')
-  const ringColor = isDark ? 'border-white/30' : 'border-[#0A3269]/30'
+  const ringColor = isDark ? 'border-white/30' : 'border-[#14235E]/30'
   const centerBg = active ? (isDark ? 'bg-black' : 'bg-white') : 'bg-white/15'
-  const iconColor = active ? (isDark ? 'text-white' : 'text-[#0A3269]') : 'text-white/50'
+  const iconColor = active ? (isDark ? 'text-white' : 'text-[#14235E]') : 'text-white/50'
 
   return (
     <div className="relative flex items-center justify-center w-14 h-14">

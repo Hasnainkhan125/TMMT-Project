@@ -50,7 +50,7 @@ const useSafeTheme = () => {
     return {
       background: '#ffffff',
       text: '#0a0a0a',
-      primary: '#0A3269',
+      primary: '#14235E',
       border: '#e2e8f0',
       surface: '#f8fafc',
       textSecondary: '#64748b',
@@ -275,13 +275,12 @@ const getImageUrl = (name: string): string => {
   return SERVICE_IMAGE_URLS.default
 }
 
-// ─── Golden Guarantee Card ──────────────────────────────────────────────
+
+// ─── Section: Golden Guarantee ──────────────────────────────────────────────
 const GoldenGuaranteeCard = () => {
-  const { t, i18n } = useTranslation()
-  const language = i18n.language
-  const isArabic = language === 'ar'
-  const { theme } = useSafeTheme()
-  const isDark = theme.isDark ?? false
+  const { t, i18n } = useTranslation();
+  const language = i18n.language;
+  const isArabic = language === 'ar';
 
   return (
     <motion.div
@@ -290,35 +289,40 @@ const GoldenGuaranteeCard = () => {
       transition={{ duration: 0.5, delay: 0.3 }}
       className="mt-6 sm:mt-8 max-w-3xl mx-auto"
     >
-      <a href="/legal#guarantee" target="_blank" rel="noopener noreferrer" className="block">
-        <div className="relative rounded-2xl border border-amber-500/25 dark:border-amber-500/20 bg-amber-50/40 dark:bg-amber-500/[0.04] p-4 sm:p-5 transition-all duration-300 group hover:border-amber-500/40 cursor-pointer">
-          <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-3">
-            <div className="p-2 sm:p-2.5 rounded-xl bg-amber-500 flex-shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-sm">
-              <Award className="h-5 w-5 sm:h-6 sm:w-6 text-white" strokeWidth={1.75} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
-                {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-                <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[9px] px-2 py-0.5 rounded-full font-semibold">
-                  ✓ Trusted
-                </Badge>
-              </h4>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-white/50 leading-relaxed mt-1 max-w-2xl">
-                {isArabic
-                  ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
-                  : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
-              </p>
-              <span className="inline-flex items-center gap-1 mt-2 text-xs sm:text-sm text-amber-600 dark:text-amber-400 font-medium transition-all duration-300 group-hover:gap-1.5">
-                <span>{isArabic ? 'اقرأ المزيد عن الضمان' : 'Read more about the guarantee'}</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+      <div className="relative rounded-xl border border-amber-500/30 bg-white/50 dark:bg-black/70 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5">
+        <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
+          <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+            <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400" strokeWidth={1.5} />
+          </div>
+          
+          <div className="flex-1 min-w-0">
+            <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
+              {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
+              <span className="border-amber-500/40 text-amber-400 text-[7px] sm:text-[8px] px-1.5 sm:px-2">
+                ✓ Trusted
               </span>
-            </div>
+            </h4>
+            <p className="text-[10px] sm:text-xs text-gray-500 dark:text-white/50 leading-relaxed mt-0.5 max-w-2xl font-light">
+              {isArabic 
+                ? 'إذا حدث خطأ بسبب TMMT، سنقوم بتصحيحه دون أي رسوم خدمة إضافية وفقاً لسياسة الضمان الخاصة بنا.'
+                : 'If an issue is caused by TMMT, we will correct it at no additional service fee according to our guarantee policy.'}
+            </p>
+            <a
+              href="/legal#guarantee"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-400 hover:text-amber-700 font-light transition-all duration-300 group/link hover:gap-1.5"
+            >
+              {isArabic ? 'اقرأ المزيد' : 'Read more'}
+              <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover/link:translate-x-0.5" />
+            </a>
           </div>
         </div>
-      </a>
+      </div>
     </motion.div>
-  )
-}
+  );
+};
+
 
 export default function ServiceStep({ services, loading, onSelect, onRetry }: ServiceStepProps) {
   const { t } = useTranslation()
@@ -373,8 +377,8 @@ export default function ServiceStep({ services, loading, onSelect, onRetry }: Se
 
   const isDark = theme.isDark ?? (typeof document !== 'undefined' && document.documentElement.classList.contains('dark'))
 
-  // Use #0A3269 for both light and dark mode
-  const accent = '#0A3269'
+  // Use #14235E for both light and dark mode
+  const accent = '#14235E'
 
   const hasNoServices = !loading && (!effectiveServices || effectiveServices.length === 0)
 

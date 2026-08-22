@@ -86,9 +86,9 @@ const ApplicantPortfolio: React.FC = () => {
 >
   <div className="flex items-center gap-4">
     <div className="relative">
-      <Avatar className="h-16 w-16 ring-2 ring-[#0A3269]/20 dark:ring-white/20">
+      <Avatar className="h-16 w-16 ring-2 ring-[#14235E]/20 dark:ring-white/20">
         <AvatarImage src={userDetails?.avatar} />
-        <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] text-xl font-bold">
+        <AvatarFallback className="bg-[#14235E] dark:bg-white text-white dark:text-[#14235E] text-xl font-bold">
           {userDetails?.firstName?.[0]}{userDetails?.lastName?.[0]}
         </AvatarFallback>
       </Avatar>
@@ -99,7 +99,7 @@ const ApplicantPortfolio: React.FC = () => {
         Welcome back, {userDetails?.firstName || user?.name || 'User'}!
       </h1>
       <div className="flex flex-wrap items-center gap-2 mt-1">
-        <Badge className="bg-[#0A3269]/10 dark:bg-white/10 text-[#0A3269] dark:text-white border-[#0A3269]/20 dark:border-white/20">
+        <Badge className="bg-[#14235E]/10 dark:bg-white/10 text-[#14235E] dark:text-white border-[#14235E]/20 dark:border-white/20">
           <Crown className="w-3 h-3 mr-1" />
           Level {userLevel} Member
         </Badge>
@@ -121,7 +121,7 @@ const ApplicantPortfolio: React.FC = () => {
       <span className="hidden sm:inline">Notifications</span>
     </Button>
     <Button 
-      className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] hover:bg-[#0A3269]/90 dark:hover:bg-white/90 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+      className="bg-[#14235E] dark:bg-white text-white dark:text-[#14235E] hover:bg-[#14235E]/90 dark:hover:bg-white/90 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
       onClick={() => setShowStartApplication(true)}
     >
       <Plus className="w-4 h-4 mr-2" />
@@ -136,11 +136,11 @@ const ApplicantPortfolio: React.FC = () => {
     initial={{ opacity: 0, scale: 0.95 }}
     animate={{ opacity: 1, scale: 1 }}
   >
-    <Card className="border-[#0A3269]/20 dark:border-white/10 bg-[#0A3269]/5 dark:bg-white/5">
+    <Card className="border-[#14235E]/20 dark:border-white/10 bg-[#14235E]/5 dark:bg-white/5">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-[#0A3269] dark:text-white" />
+            <TrendingUp className="w-5 h-5 text-[#14235E] dark:text-white" />
             <span className="font-medium text-gray-900 dark:text-white">Level Progress</span>
           </div>
           <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -149,7 +149,7 @@ const ApplicantPortfolio: React.FC = () => {
         </div>
         <Progress 
           value={nextLevelProgress} 
-          className="h-2 bg-gray-200 dark:bg-gray-700 [&>div]:bg-[#0A3269] dark:[&>div]:bg-white" 
+          className="h-2 bg-gray-200 dark:bg-gray-700 [&>div]:bg-[#14235E] dark:[&>div]:bg-white" 
         />
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
           Complete {3 - (approvedApplications % 3)} more application(s) to unlock Level {userLevel + 1} benefits!

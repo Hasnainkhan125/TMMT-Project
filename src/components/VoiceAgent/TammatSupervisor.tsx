@@ -781,7 +781,7 @@ const TammatSupervisor = ({
       >
         <button
           onClick={() => setIsCollapsed(false)}
-className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269] to-[#0A3269] dark:from-[#0A3269] dark:to-[#0A3269]/80 hover:shadow-lg hover:shadow-[#0A3269]/30 dark:hover:shadow-[#4A8ABF]/30 transition-all hover:scale-105"          aria-label="Open chat"
+className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#14235E] to-[#14235E] dark:from-[#14235E] dark:to-[#14235E]/80 hover:shadow-lg hover:shadow-[#14235E]/30 dark:hover:shadow-[#4A8ABF]/30 transition-all hover:scale-105"          aria-label="Open chat"
         >
           <MessageSquare className="absolute inset-0 m-auto h-6 w-6 text-white" strokeWidth={1.5} />
           {connectionStatus === 'connected' && (
@@ -823,7 +823,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed bottom-20 right-6 z-50 w-[min(420px,calc(100vw-2rem))] h-[min(640px,calc(100vh-3rem))] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-[#0A3269]/25 bg-white dark:bg-slate-950 border border-[#0A3269]/20 dark:border-slate-800/60"
+      className="fixed bottom-20 right-6 z-50 w-[min(420px,calc(100vw-2rem))] h-[min(640px,calc(100vh-3rem))] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-[#14235E]/25 bg-white dark:bg-slate-950 border border-[#14235E]/20 dark:border-slate-800/60"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       {/* ─── HEADER ─────────────────────────────────────────────────────── */}
@@ -869,7 +869,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
 
       {/* ─── MESSAGES ───────────────────────────────────────────────────── */}
       <div
-        className="flex-1 overflow-y-auto bg-gradient-to-b from-[#0A3269]/5 via-white/50 to-white dark:from-[#0A3269]/10 dark:via-slate-950/80 dark:to-slate-950 relative"
+        className="flex-1 overflow-y-auto bg-gradient-to-b from-[#14235E]/5 via-white/50 to-white dark:from-[#14235E]/10 dark:via-slate-950/80 dark:to-slate-950 relative"
         onDragOver={(e) => {
           e.preventDefault();
           setIsDragOver(true);
@@ -943,7 +943,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
 
       {/* ─── FILE PREVIEWS AT BOTTOM ────────────────────────────────────── */}
       {filePreviews.length > 0 && (
-        <div className="px-3 py-2 flex gap-2 overflow-x-auto border-t border-[#0A3269]/15 dark:border-slate-800/60 bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm">
+        <div className="px-3 py-2 flex gap-2 overflow-x-auto border-t border-[#14235E]/15 dark:border-slate-800/60 bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm">
           {filePreviews.map((preview) => (
             <FilePreviewItem
               key={preview.id}
@@ -955,12 +955,12 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
       )}
 
       {/* ─── INPUT BAR ──────────────────────────────────────────────────── */}
-      <div className="border-t border-[#0A3269]/15 dark:border-slate-800/60 bg-white dark:bg-slate-950">
+      <div className="border-t border-[#14235E]/15 dark:border-slate-800/60 bg-white dark:bg-slate-950">
         <div className="px-4 py-2 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 border-b border-slate-100/60 dark:border-slate-800/60">
           <div className="flex items-center gap-1.5">
             {chatMode === 'ai' ? (
               <>
-                <Sparkles className="h-3 w-3 text-[#0A3269]" />
+                <Sparkles className="h-3 w-3 text-[#14235E]" />
                 <span className="font-medium">AI Assistant</span>
                 {!isSubscribed && user && (
                   <span className="text-[9px] text-amber-600 bg-amber-100 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-full">
@@ -1036,7 +1036,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
                   ? 'Subscribe for specialist access'
                   : 'Tap "Talk to Specialist" to start'
               }
-              className="h-10 px-4 rounded-xl border-[#0A3269]/15 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-900 focus:border-[#0A3269]/30 dark:focus:border-slate-600 transition placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="h-10 px-4 rounded-xl border-[#14235E]/15 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-900 focus:border-[#14235E]/30 dark:focus:border-slate-600 transition placeholder:text-slate-400 dark:placeholder:text-slate-500"
               disabled={chatMode === 'specialist' && (connectionStatus !== 'connected' || (!isSubscribed && !canEscalate(isSubscribed)))}
             />
           </div>
@@ -1047,7 +1047,7 @@ className="group relative h-14 w-14 rounded-full bg-gradient-to-br from-[#0A3269
             className={cn(
               'shrink-0 h-10 w-10 rounded-xl flex items-center justify-center transition-all',
               input.trim() && !isAIStreaming
-                ? 'bg-[#0A3269] dark:bg-slate-700 text-white hover:bg-[#1a4a7a] dark:hover:bg-slate-600 shadow-md'
+                ? 'bg-[#14235E] dark:bg-slate-700 text-white hover:bg-[#1a4a7a] dark:hover:bg-slate-600 shadow-md'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed'
             )}
             aria-label="Send"
@@ -1098,7 +1098,7 @@ const FilePreviewItem = ({
           ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30'
           : isUploaded
           ? 'border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/30'
-          : 'border-[#0A3269]/20 dark:border-slate-700/60'
+          : 'border-[#14235E]/20 dark:border-slate-700/60'
       )}
     >
       {/* File Icon or Image Preview */}
@@ -1118,11 +1118,11 @@ const FilePreviewItem = ({
       ) : (
         <div className={cn(
           'h-8 w-8 rounded flex items-center justify-center flex-shrink-0',
-          isError ? 'bg-red-100 dark:bg-red-900/30' : 'bg-[#0A3269]/10 dark:bg-slate-700/30'
+          isError ? 'bg-red-100 dark:bg-red-900/30' : 'bg-[#14235E]/10 dark:bg-slate-700/30'
         )}>
           <FileIconComponent className={cn(
             'h-4 w-4',
-            isError ? 'text-red-500' : 'text-[#0A3269] dark:text-slate-400'
+            isError ? 'text-red-500' : 'text-[#14235E] dark:text-slate-400'
           )} />
         </div>
       )}
@@ -1140,7 +1140,7 @@ const FilePreviewItem = ({
             <div className="flex items-center gap-1.5">
               <div className="w-12 h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-[#0A3269] dark:bg-slate-500 rounded-full transition-all duration-300"
+                  className="h-full bg-[#14235E] dark:bg-slate-500 rounded-full transition-all duration-300"
                   style={{ width: `${preview.progress}%` }}
                 />
               </div>
@@ -1192,20 +1192,20 @@ const ChatHeader = ({
   isSubscribed: boolean;
   onClose: () => void;
 }) => (
-  <div className="relative bg-gradient-to-br from-[#0A3269] via-[#0A3269] to-[#1a4a7a] text-white px-5 py-4">
+  <div className="relative bg-gradient-to-br from-[#14235E] via-[#14235E] to-[#1a4a7a] text-white px-5 py-4">
     <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="relative">
-          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-white to-white/80 flex items-center justify-center text-[#0A3269] font-semibold text-sm shadow-lg shadow-white/20">
+          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-white to-white/80 flex items-center justify-center text-[#14235E] font-semibold text-sm shadow-lg shadow-white/20">
             T
           </div>
           {connectionStatus === 'connected' && (
-            <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 bg-emerald-500 border-2 border-[#0A3269] rounded-full shadow-sm" />
+            <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 bg-emerald-500 border-2 border-[#14235E] rounded-full shadow-sm" />
           )}
           {!isSubscribed && (
-            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 bg-amber-400 border border-[#0A3269] rounded-full shadow-sm" />
+            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 bg-amber-400 border border-[#14235E] rounded-full shadow-sm" />
           )}
         </div>
         <div>
@@ -1271,7 +1271,7 @@ const TrialStatusBanner = ({
           </div>
           <button 
             onClick={onSubscribe}
-            className="text-xs font-medium text-[#0A3269] dark:text-white hover:underline transition"
+            className="text-xs font-medium text-[#14235E] dark:text-white hover:underline transition"
           >
             Subscribe →
           </button>
@@ -1293,7 +1293,7 @@ const TrialStatusBanner = ({
         </div>
         <button 
           onClick={onSubscribe}
-          className="text-xs font-medium text-[#0A3269] dark:text-white hover:underline flex items-center gap-1"
+          className="text-xs font-medium text-[#14235E] dark:text-white hover:underline flex items-center gap-1"
         >
           Subscribe
           <ArrowUp className="h-3 w-3 rotate-45" />
@@ -1334,7 +1334,7 @@ const ChatModeSwitcher = ({
   ];
 
   return (
-    <div className="px-3 py-2 bg-[#0A3269]/5 dark:bg-slate-900/30 border-b border-[#0A3269]/10 dark:border-slate-800/60">
+    <div className="px-3 py-2 bg-[#14235E]/5 dark:bg-slate-900/30 border-b border-[#14235E]/10 dark:border-slate-800/60">
       <div className="grid grid-cols-3 gap-1.5">
         {modes.map((m) => {
           const isActive = chatMode === m.id;
@@ -1357,7 +1357,7 @@ const ChatModeSwitcher = ({
               className={cn(
                 'flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all relative',
                 isActive
-                  ? 'bg-[#0A3269] dark:bg-slate-700 text-white shadow-md'
+                  ? 'bg-[#14235E] dark:bg-slate-700 text-white shadow-md'
                   : isLocked
                   ? 'bg-slate-100/60 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 cursor-not-allowed'
                   : 'bg-white/60 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white'
@@ -1430,7 +1430,7 @@ const EmptyState = ({
       className="space-y-5 py-2"
     >
       <div className="text-center space-y-3 pt-2 pb-4">
-        <div className="inline-flex h-16 w-16 rounded-full bg-gradient-to-br from-[#0A3269] to-[#0A3269] items-center justify-center text-white text-2xl font-bold shadow-lg shadow-[#0A3269]/20">
+        <div className="inline-flex h-16 w-16 rounded-full bg-gradient-to-br from-[#14235E] to-[#14235E] items-center justify-center text-white text-2xl font-bold shadow-lg shadow-[#14235E]/20">
           <GraduationCap className="h-8 w-8" />
         </div>
         <div>
@@ -1451,7 +1451,7 @@ const EmptyState = ({
           {!isSubscribed && !hasFreeTrials && (
             <button
               onClick={() => window.location.href = '/subscription'}
-              className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0A3269] text-white text-sm font-medium hover:bg-[#1a4a7a] transition"
+              className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#14235E] text-white text-sm font-medium hover:bg-[#1a4a7a] transition"
             >
               <Crown className="h-3.5 w-3.5" />
               Subscribe for unlimited access
@@ -1469,12 +1469,12 @@ const EmptyState = ({
             <button
               key={s}
               onClick={() => onSuggestionClick(s)}
-              className="group flex items-center justify-between px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700/60 hover:border-[#0A3269]/40 dark:hover:border-[#0A3269]/30 hover:bg-[#0A3269]/5 dark:hover:bg-slate-800/50 transition text-left"
+              className="group flex items-center justify-between px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700/60 hover:border-[#14235E]/40 dark:hover:border-[#14235E]/30 hover:bg-[#14235E]/5 dark:hover:bg-slate-800/50 transition text-left"
             >
               <span className="text-sm text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white">
                 {s}
               </span>
-              <Send className="h-3 w-3 text-slate-400 group-hover:text-[#0A3269] transition" />
+              <Send className="h-3 w-3 text-slate-400 group-hover:text-[#14235E] transition" />
             </button>
           ))}
         </div>
@@ -1523,7 +1523,7 @@ const EscalationCard = ({
   <motion.div
     initial={{ opacity: 0, y: 8, scale: 0.96 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
-    className="mx-auto max-w-[85%] rounded-xl border border-[#0A3269]/30 bg-gradient-to-br from-[#0A3269]/10 to-[#0A3269]/5 dark:from-[#0A3269]/30 dark:to-[#0A3269]/10 p-4 shadow-sm"
+    className="mx-auto max-w-[85%] rounded-xl border border-[#14235E]/30 bg-gradient-to-br from-[#14235E]/10 to-[#14235E]/5 dark:from-[#14235E]/30 dark:to-[#14235E]/10 p-4 shadow-sm"
   >
     <div className="flex items-start gap-3">
       <div className="h-8 w-8 shrink-0 rounded-full bg-amber-500/20 dark:bg-amber-500/30 flex items-center justify-center">
@@ -1543,7 +1543,7 @@ const EscalationCard = ({
         {canEscalate ? (
           <button
             onClick={onEscalate}
-            className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0A3269] dark:bg-slate-700 text-white text-xs font-medium hover:bg-[#1a4a7a] dark:hover:bg-slate-600 transition"
+            className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#14235E] dark:bg-slate-700 text-white text-xs font-medium hover:bg-[#1a4a7a] dark:hover:bg-slate-600 transition"
           >
             Escalate to Specialist
             <Send className="h-3 w-3 rotate-45" />
@@ -1551,7 +1551,7 @@ const EscalationCard = ({
         ) : (
           <button
             onClick={() => window.location.href = '/subscription'}
-            className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0A3269] dark:bg-slate-700 text-white text-xs font-medium hover:bg-[#1a4a7a] dark:hover:bg-slate-600 transition"
+            className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#14235E] dark:bg-slate-700 text-white text-xs font-medium hover:bg-[#1a4a7a] dark:hover:bg-slate-600 transition"
           >
             Subscribe to Escalate
             <Crown className="h-3 w-3" />

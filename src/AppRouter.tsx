@@ -54,6 +54,9 @@ import SubscriptionPage from './pages/subscription/SubscriptionPage';
 import MembershipDetailsPage from './pages/Membership/MembershipDetailsPage';
 import LegalPage from './pages/LegalPage';
 
+// ✨ NEW: Import the UserSuccess page
+import UserSuccess from './pages/Home/UserSuccess';
+
 // Import the DashboardContent from AdvancedInvestorPortfolio or create a wrapper
 // If you can't export DashboardContent, create a wrapper component
 const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -82,6 +85,9 @@ function AppRouter() {
               <Route path="/faqs" element={<FAQsPage />} />
               <Route path="/services/enhanced/:id" element={<EnhancedServicePage />} />
               <Route path="/brand" element={<Brand />} />
+
+              {/* ✨ NEW: Success page (public) */}
+<Route path="/success" element={<UserSuccess />} />
 
               {/* Legal Routes - All pointing to LegalPage */}
               <Route path="/legal" element={<LegalPage />} />
@@ -124,6 +130,11 @@ function AppRouter() {
                   <AdvancedInvestorPortfolio />
                 </UserRoute>
               } />
+              <Route path="/investor/success" element={
+  <UserRoute>
+    <AdvancedInvestorPortfolio />
+  </UserRoute>
+} />
 
               <Route path="/user/documents" element={
                 <UserRoute>
@@ -272,7 +283,7 @@ function AnnouncementBanner() {
       try {
         const base = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:5001'
         const token = localStorage.getItem('authToken') || ''
-        const res = await fetch(`${base}/api/v1/admin/announcements`, { headers: token ? { Authorization: `Bearer ${token}` } : {} })
+        const res = await fetch(`${base}/api/v1/admsin/announcements`, { headers: token ? { Authorization: `Bearer ${token}` } : {} })
         const data = await res.json()
         if (res.ok) setAnnouncements(data?.data?.announcements || [])
       } catch {}

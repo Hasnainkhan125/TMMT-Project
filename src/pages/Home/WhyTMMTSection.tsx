@@ -1,5 +1,5 @@
 // src/components/Home/WhyTMMTSection.jsx
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import {
   Clock,
   Shield,
@@ -10,10 +10,20 @@ import {
   Award,
 } from 'lucide-react';
 
+// ─── Color system — every value derived from the single brand ink #14235E ──
+const INK = '#14235E';
+const INK_DEEPER = '#050A24';
+const INK_DARK = '#0A1440';
+const INK_MID = '#243B8C';
+const INK_LIGHT = '#4457AE';
+const INK_LIGHTER = '#7C8CD6';
+const INK_PALE = '#EEF1FB';
+
 const WhyTMMTSection = () => {
   const sectionRef = useRef(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isArabic, setIsArabic] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   // ─── Detect dark mode ──────────────────────────────────────────
   useEffect(() => {
@@ -89,11 +99,17 @@ const WhyTMMTSection = () => {
     };
   }, []);
 
-  // ─── Use #0A3269 in both light and dark mode ──────────────────────────
-  const accent = '#0A3269';
+  // ─── Respect reduced motion ─────────────────────────────────────
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   // ─── Benefits for "Why TMMT?" section ──────────────────────────────────
- const benefits = [
+  const benefits = [
     {
       icon: Clock,
       text: isArabic ? 'وفّر وقتك وجهدك' : 'Save time and effort',
@@ -138,56 +154,37 @@ const WhyTMMTSection = () => {
     },
   ];
 
-
   return (
     <section
       ref={sectionRef}
       className={`relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-28 w-full ${
-        isDarkMode ? 'bg-black' : 'bg-white'
+        isDarkMode ? 'bg-[#000]' : 'bg-white'
       }`}
+      style={{ perspective: '1800px' }}
     >
-      {/* Premium Background Effects with Floating Animations */}
-      <div className="absolute inset-0 pointer-events-none">
+    
+   
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              border: `1px solid ${isDarkMode ? INK_LIGHTER + '1f' : INK + '0d'}`,
+              transform: 'rotateX(72deg) rotateZ(20deg)',
+            }}
+          />
         <div
-          className={`absolute top-0 -right-20 w-[500px] h-[500px] rounded-full blur-3xl animate-float-slow ${
-            isDarkMode ? 'bg-white/3' : 'bg-black/3'
-          }`}
-        />
-        <div
-          className={`absolute bottom-0 -left-20 w-[500px] h-[500px] rounded-full blur-3xl animate-float-medium ${
-            isDarkMode ? 'bg-white/3' : 'bg-black/3'
-          }`}
-        />
-        <div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl animate-float-fast ${
-            isDarkMode ? 'bg-white/2' : 'bg-black/2'
-          }`}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
+          className={`absolute inset-0 ${isDarkMode ? 'opacity-[0.04]' : 'opacity-[0.03]'}`}
           style={{
             backgroundImage: `radial-gradient(circle at 1px 1px, ${
-              isDarkMode ? '#ffffff' : '#000000'
+              isDarkMode ? '#ffffff' : INK
             } 1px, transparent 0)`,
-            backgroundSize: '40px 40px',
+            backgroundSize: '38px 38px',
           }}
         />
-      </div>
 
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 relative z-10 max-w-7xl mx-auto">
         {/* ─── Header ──────────────────────────────────────────────── */}
         <div className="text-center max-w-4xl mx-auto mb-14 md:mb-16">
-          <div
-            className={`inline-flex items-center gap-2 rounded-full border backdrop-blur-sm px-4 py-2 mb-5 transition-all duration-300 hover:scale-105 ${
-              isDarkMode ? 'border-white/10 bg-black/40' : 'border-black/10 bg-white/80 shadow-sm'
-            }`}
-          >
-            <Award className="h-4 w-4" style={{ color: accent }} />
-            <span className="text-xs font-semibold tracking-wider" style={{ color: accent }}>
-              {isArabic ? 'لماذا TMMT؟' : 'WHY TMMT?'}
-            </span>
-          </div>
-
+   
           <h2
             className={`font-bold leading-[1.1] ${isDarkMode ? 'text-white' : 'text-black'}`}
             style={{
@@ -199,7 +196,16 @@ const WhyTMMTSection = () => {
               <>
                 شريكك الموثوق لـ
                 <br className="hidden md:block" />
-                <span className="font-light" style={{ color: accent, fontSize: 'clamp(1.8rem, 7vw, 2.8rem)' }}>
+                <span
+                  className="font-light"
+                  style={{
+                    fontSize: 'clamp(1.8rem, 7vw, 2.8rem)',
+                    backgroundImage: `linear-gradient(100deg, ${INK}, ${INK_LIGHT} 55%, ${INK})`,
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                  }}
+                >
                   الخدمات الحكومية
                 </span>
               </>
@@ -207,103 +213,45 @@ const WhyTMMTSection = () => {
               <>
                 <span className="font-bold">Your Trusted Partner for</span>
                 <br className="hidden md:block" />
-                <span className="font-light" style={{ color: accent, fontSize: 'clamp(1.8rem, 7vw, 2.8rem)' }}>
+                <span
+                  className="font-light"
+                  style={{
+                    fontSize: 'clamp(1.8rem, 7vw, 2.8rem)',
+                    backgroundImage: `linear-gradient(100deg, ${INK})`,
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: '#14235E',
+                  }}
+                >
                   Government Services
                 </span>
               </>
             )}
           </h2>
 
-          <p className={`text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed mt-4 ${
-            isDarkMode ? 'text-white/50' : 'text-gray-600'
-          }`}>
+          <p
+            className={`text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed mt-4 ${
+              isDarkMode ? 'text-white/50' : 'text-gray-600'
+            }`}
+          >
             {isArabic
               ? 'نحن نعيد تعريف تجربة الخدمات الحكومية في الإمارات من خلال الجمع بين التكنولوجيا المتطورة والخبرة البشرية.'
               : 'We are redefining the UAE government service experience by combining cutting-edge technology with human expertise.'}
           </p>
         </div>
 
-        {/* ─── Benefits Grid ───────────────────────────────────────── */}
+        {/* ─── Benefits Grid — 3D tilt cards ──────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 max-w-7xl mx-auto w-full">
-          {benefits.map((benefit, idx) => {
-            const Icon = benefit.icon;
-            return (
-              <div
-                key={idx}
-                className={`group relative rounded-2xl p-7 md:p-8 transition-all duration-300 ease-out
-                  hover:-translate-y-1
-                  ${isDarkMode ? 'bg-zinc-900' : 'bg-white'}
-                `}
-                style={{
-                  border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(10,50,105,0.08)'}`,
-                  animation: `fade-up-stagger ${0.35 + idx * 0.08}s cubic-bezier(0.22, 1, 0.36, 1) both`,
-                }}
-            
-              >
-                {/* Animated Line - Shows ONLY on hover (hidden by default) */}
-                <div
-                  className={`absolute top-0 left-1/2 h-[2px] -translate-x-1/2 rounded-full 
-                    w-0 group-hover:w-full transition-all duration-700 ease-out group-hover:animate-line-expand
-                    ${isDarkMode ? 'bg-[#0A3269]' : 'bg-[#0A3269]'}
-                  `}
-                />
-
-                {/* Glass Reflection Overlay */}
-                <div
-                  className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${
-                    isDarkMode
-                      ? 'bg-gradient-to-br from-white/10 to-transparent'
-                      : 'bg-gradient-to-br from-[#0A3269]/5 to-transparent'
-                  }`}
-                />
-
-                {/* Corner index tag */}
-                <span
-                  className={`absolute top-6 right-7 text-[11px] font-semibold tabular-nums ${
-                    isDarkMode ? 'text-white/25' : 'text-black/20'
-                  }`}
-                >
-                  {String(idx + 1).padStart(2, '0')}
-                </span>
-
-                {/* Solid icon tile */}
-                <div
-                  className="flex h-12 w-12 items-center justify-center rounded-xl mb-5 shadow-sm transition-transform duration-300 group-hover:scale-105"
-                  style={{ backgroundColor: accent }}
-                >
-                  <Icon className="h-5.5 w-5.5 text-white" strokeWidth={1.9} />
-                </div>
-
-                <h3 className={`text-base sm:text-lg font-semibold mb-2.5 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                  {benefit.text}
-                </h3>
-
-                <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-zinc-400' : 'text-gray-500'}`}>
-                  {benefit.description}
-                </p>
-
-                {/* Thin baseline accent */}
-                <div
-                  className="mt-6 h-px w-full"
-                  style={{ backgroundColor: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(10,50,105,0.08)' }}
-                />
-                <div
-                  className="mt-3 flex items-center gap-1.5 text-xs font-medium opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-                  style={{ color: accent }}
-                >
-                  {isArabic ? 'اعرف المزيد' : 'Learn more'}
-                  <span aria-hidden="true">{isArabic ? '←' : '→'}</span>
-                </div>
-
-                {/* Subtle Glow Effect */}
-                <div
-                  className={`absolute -bottom-16 -right-16 w-32 h-32 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${
-                    isDarkMode ? 'bg-[#0A3269]/5' : 'bg-[#0A3269]/5'
-                  }`}
-                />
-              </div>
-            );
-          })}
+          {benefits.map((benefit, idx) => (
+            <TiltCard
+              key={idx}
+              idx={idx}
+              benefit={benefit}
+              isDarkMode={isDarkMode}
+              isArabic={isArabic}
+              disableTilt={prefersReducedMotion}
+            />
+          ))}
         </div>
       </div>
 
@@ -313,43 +261,172 @@ const WhyTMMTSection = () => {
           0% { opacity: 0; transform: translateY(30px) scale(0.98); }
           100% { opacity: 1; transform: translateY(0) scale(1); }
         }
-        
-        @keyframes float-slow {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-          33% { transform: translate(30px, -20px) scale(1.1); opacity: 0.5; }
-          66% { transform: translate(-20px, 10px) scale(0.9); opacity: 0.2; }
+
+        @keyframes wt-orb-drift-a {
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          50% { transform: translate3d(-3%, 4%, 40px) scale(1.08); }
         }
-        @keyframes float-medium {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
-          33% { transform: translate(-20px, 30px) scale(1.2); opacity: 0.4; }
-          66% { transform: translate(20px, -10px) scale(0.85); opacity: 0.1; }
+        @keyframes wt-orb-drift-b {
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          50% { transform: translate3d(4%, -3%, 20px) scale(1.06); }
         }
-        @keyframes float-fast {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
-          33% { transform: translate(-40%, -60%) scale(1.3); opacity: 0.4; }
-          66% { transform: translate(-60%, -40%) scale(0.8); opacity: 0.1; }
+        @keyframes wt-ring-spin {
+          0% { transform: rotateX(72deg) rotateZ(0deg); }
+          100% { transform: rotateX(72deg) rotateZ(360deg); }
         }
-        
-        @keyframes line-expand {
-          0% { width: 0%; opacity: 0; }
-          50% { width: 80%; opacity: 1; }
-          100% { width: 100%; opacity: 1; }
+        @keyframes wt-ring-wrap-spin {
+          0% { transform: rotateZ(0deg); }
+          100% { transform: rotateZ(-360deg); }
         }
 
-        .animate-float-slow {
-          animation: float-slow 12s ease-in-out infinite;
-        }
-        .animate-float-medium {
-          animation: float-medium 10s ease-in-out infinite;
-        }
-        .animate-float-fast {
-          animation: float-fast 8s ease-in-out infinite;
-        }
-        .animate-line-expand {
-          animation: line-expand 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        .wt-orb-a { animation: wt-orb-drift-a 13s ease-in-out infinite; }
+        .wt-orb-b { animation: wt-orb-drift-b 16s ease-in-out infinite; }
+        .wt-ring { animation: wt-ring-wrap-spin 60s linear infinite; }
+        .wt-ring > div { animation: wt-ring-spin 40s linear infinite; }
+
+        .wt-badge-3d { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
+        .wt-badge-3d:hover { transform: translateY(-2px) scale(1.03); }
+
+        @media (prefers-reduced-motion: reduce) {
+          .wt-orb-a, .wt-orb-b, .wt-ring, .wt-ring > div { animation: none !important; }
         }
       `}</style>
     </section>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// ─── TiltCard — pointer-tracked 3D card with parallax icon & glare ──
+// ═══════════════════════════════════════════════════════════════════
+const TiltCard = ({ idx, benefit, isDarkMode, isArabic, disableTilt }) => {
+  const cardRef = useRef(null);
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
+  const [fastTransition, setFastTransition] = useState(false);
+  const Icon = benefit.icon;
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (disableTilt || !cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const ry = ((x - cx) / cx) * 9;
+      const rx = -((y - cy) / cy) * 9;
+      setTilt({ rx, ry });
+      setGlare({ x: (x / rect.width) * 100, y: (y / rect.height) * 100, opacity: 1 });
+      setFastTransition(true);
+    },
+    [disableTilt]
+  );
+
+  const handleMouseLeave = () => {
+    setTilt({ rx: 0, ry: 0 });
+    setGlare((g) => ({ ...g, opacity: 0 }));
+    setFastTransition(false);
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="group relative"
+      style={{
+        transformStyle: 'preserve-3d',
+        transform: `perspective(1000px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) translateZ(0px)`,
+        transition: fastTransition
+          ? 'transform 0.08s ease-out'
+          : 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+        animation: `fade-up-stagger ${0.35 + idx * 0.08}s cubic-bezier(0.22, 1, 0.36, 1) both`,
+      }}
+    >
+      <div
+        className="relative rounded-2xl p-7 md:p-8 h-full overflow-hidden"
+        style={{
+          transformStyle: 'preserve-3d',
+          background: isDarkMode ? '#0c0c0c' : '#ffffff',
+          border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.06)' : INK + '14'}`,
+        }}
+      >
+        {/* Cursor-following glare sweep */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"
+          style={{
+            opacity: glare.opacity * (isDarkMode ? 0.06 : 0.5),
+            background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, ${isDarkMode ? '#ffffff' : '#ffffff'}, transparent 42%)`,
+          }}
+        />
+
+          {/* Animated top edge line — reveals on hover */}
+          <div
+            className="absolute top-0 left-1/2 h-[2px] -translate-x-1/2 rounded-full w-0 group-hover:w-full transition-all duration-700 ease-out"
+            style={{ backgroundColor: isDarkMode ? INK_LIGHTER : INK }}
+          />
+
+       
+
+        {/* Icon tile — floats above card plane on hover for parallax depth */}
+        <div
+          className="relative flex h-12 w-12 items-center justify-center rounded-xl mb-5 transition-transform duration-500 ease-out group-hover:-translate-y-1"
+          style={{
+            transformStyle: 'preserve-3d',
+            transform: 'translateZ(28px)',
+            background: `linear-gradient(155deg, ${INK_MID}, ${INK_DARK})`,
+          }}
+        >
+          <div
+            className="absolute inset-0 rounded-xl opacity-60"
+            style={{ background: `linear-gradient(160deg, ${INK_LIGHTER}55, transparent 55%)` }}
+          />
+          <Icon className="relative h-5 w-5 text-white" strokeWidth={1.9} />
+        </div>
+
+        <h3
+          className="text-base sm:text-lg font-semibold mb-2.5"
+          style={{
+            color: isDarkMode ? '#ffffff' : '#0b1030',
+            transform: 'translateZ(14px)',
+          }}
+        >
+          {benefit.text}
+        </h3>
+
+        <p
+          className="text-sm leading-relaxed"
+          style={{ color: isDarkMode ? '#ffffffcc' : '#5b6280', transform: 'translateZ(8px)' }}
+        >
+          {benefit.description}
+        </p>
+
+        {/* Thin baseline accent */}
+        <div
+          className="mt-6 h-px w-full"
+          style={{ backgroundColor: isDarkMode ? 'rgba(255,255,255,0.06)' : `${INK}14` }}
+        />
+        <div
+          className="mt-3 flex items-center gap-1.5 text-xs font-medium opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+          style={{ color: isDarkMode ? INK_LIGHTER : INK }}
+        >
+          {isArabic ? 'اعرف المزيد' : 'Learn more'}
+          <span aria-hidden="true">{isArabic ? '←' : '→'}</span>
+        </div>
+
+        {/* Deep ambient glow anchored under the card */}
+        <div
+          className="absolute -bottom-16 -right-16 w-32 h-32 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+          style={{ backgroundColor: isDarkMode ? 'rgba(255,255,255,0.03)' : `${INK_LIGHTER}22` }}
+        />
+      </div>
+
+      {/* Contact shadow beneath the card — grows as the card 'lifts' */}
+      <div
+        className="pointer-events-none absolute -inset-x-3 -bottom-3 h-8 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ backgroundColor: isDarkMode ? '#000000' : `${INK}30` }}
+      />
+    </div>
   );
 };
 

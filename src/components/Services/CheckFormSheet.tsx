@@ -21,6 +21,11 @@ import {
   ShieldCheck,
   CheckCircle,
   Crown,
+  Sparkles,
+  FileText,
+  Image,
+  FileSpreadsheet,
+  FileArchive,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -48,9 +53,8 @@ interface CheckFormSheetProps {
   onClose: () => void;
 }
 
-// Always 3 steps now — Docs / Speed / Review. Payment happens via /subscribe page.
 const STEPS = [
-  { id: 1, label: 'Docs' },
+  { id: 1, label: 'Documents' },
   { id: 2, label: 'Speed' },
   { id: 3, label: 'Review' },
 ];
@@ -61,6 +65,15 @@ const slideVariants = {
   exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -30 : 30 }),
 };
 
+const getFileIcon = (file: File) => {
+  const type = file.type;
+  if (type.startsWith('image/')) return Image;
+  if (type === 'application/pdf') return FileText;
+  if (type.includes('spreadsheet')) return FileSpreadsheet;
+  if (type.includes('zip') || type.includes('rar')) return FileArchive;
+  return File;
+};
+
 export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -68,8 +81,6 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
   const { isActive: hasActiveSubscription, subscription, loading: loadingSub } = useSubscription();
 
   const isFreeService = FREE_SERVICES.includes(service.id);
-
-  // No trial access for paid services
   const canSubmit = isFreeService || hasActiveSubscription;
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -227,47 +238,49 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
     <Sheet open={isOpen} onOpenChange={handleClose}>
       <SheetContent
         side="right"
-        className="w-full sm:max-w-xl p-0 flex flex-col bg-background overflow-hidden"
+        className="w-full sm:max-w-xl p-0 flex flex-col bg-white dark:bg-black border-l border-border/40 overflow-hidden shadow-2xl"
       >
-        {/* Header */}
-        <SheetHeader className="px-6 py-4 border-b border-border bg-card shrink-0">
+        {/* ─── Header ─── */}
+        <SheetHeader className="px-6 py-5 shrink-0 bg-[#14235E] dark:bg-black border-b border-white/10 dark:border-white/10">
           <div className="flex items-center gap-4">
-            <div className="relative h-12 w-12 rounded-xl overflow-hidden bg-muted shrink-0">
+            <div className="relative h-14 w-14 rounded-2xl overflow-hidden bg-white/10 border border-white/20 dark:border-white/10">
               <img
                 src={service.image}
                 alt={service.title}
-                width={48}
-                height={48}
+                width={56}
+                height={56}
                 className="object-cover w-full h-full"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <SheetTitle className="text-base leading-tight truncate">{service.title}</SheetTitle>
-              <p className="text-xs text-muted-foreground mt-0.5">
+              <SheetTitle className="text-lg font-bold text-white tracking-tight truncate">
+                {service.title}
+              </SheetTitle>
+              <p className="text-xs text-white/70 mt-0.5">
                 {t('checks.via')} {service.authority}
               </p>
             </div>
 
             {hasActiveSubscription ? (
-              <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 shrink-0 gap-1">
-                <Crown className="h-3 w-3" />
+              <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 shrink-0 gap-1.5 px-3 py-1">
+                <Crown className="h-3.5 w-3.5" />
                 Member
               </Badge>
             ) : isFreeService ? (
-              <Badge className="bg-green-500/15 text-green-600 border-green-500/30 shrink-0">
+              <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shrink-0 px-3 py-1">
                 {t('checks.step3.freeService')}
               </Badge>
             ) : null}
           </div>
         </SheetHeader>
 
-        {/* Step Indicator */}
-        <div className="px-6 py-3 border-b border-border bg-muted/30 shrink-0">
-          <div className="w-full h-1 bg-border rounded-full mb-3 overflow-hidden">
+        {/* ─── Step Indicator ─── */}
+        <div className="px-6 py-4 border-b border-border/40 bg-white dark:bg-black shrink-0">
+          <div className="w-full h-1.5 bg-muted rounded-full mb-4 overflow-hidden">
             <motion.div
-              className="h-full bg-black dark:bg-white rounded-full"
+              className="h-full bg-[#14235E] dark:bg-[#14235E] rounded-full"
               animate={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
             />
           </div>
           <div className="flex items-center justify-between">
@@ -276,20 +289,20 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                 <div className="flex flex-col items-center">
                   <div
                     className={cn(
-                      'flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition-all duration-200',
+                      'flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300',
                       currentStep === step.id
-                        ? 'bg-black dark:bg-white text-white dark:text-black shadow-sm'
+                        ? 'bg-[#14235E] text-white shadow-lg shadow-[#14235E]/30 scale-110'
                         : currentStep > step.id
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-emerald-500 text-white'
                         : 'bg-muted text-muted-foreground'
                     )}
                   >
-                    {currentStep > step.id ? <Check className="h-3.5 w-3.5" /> : step.id}
+                    {currentStep > step.id ? <Check className="h-4 w-4" /> : step.id}
                   </div>
                   <span
                     className={cn(
-                      'text-[10px] mt-1 hidden sm:block font-medium transition-colors',
-                      currentStep === step.id ? 'text-black dark:text-white' : 'text-muted-foreground'
+                      'text-[10px] mt-1.5 hidden sm:block font-medium',
+                      currentStep === step.id ? 'text-[#14235E] dark:text-white' : 'text-muted-foreground'
                     )}
                   >
                     {step.label}
@@ -298,8 +311,8 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                 {index < STEPS.length - 1 && (
                   <div
                     className={cn(
-                      'h-px w-8 sm:w-14 mx-2 transition-colors duration-300',
-                      currentStep > step.id ? 'bg-green-500' : 'bg-border'
+                      'h-0.5 w-10 sm:w-16 mx-2 rounded-full transition-colors duration-500',
+                      currentStep > step.id ? 'bg-emerald-500' : 'bg-muted'
                     )}
                   />
                 )}
@@ -308,8 +321,8 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
           </div>
         </div>
 
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto">
+        {/* ─── Scrollable Content ─── */}
+        <div className="flex-1 overflow-y-auto bg-white dark:bg-black">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={currentStep}
@@ -318,15 +331,19 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="px-6 py-6"
             >
               {/* ── Step 1: Documents ── */}
               {currentStep === 1 && (
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">{t('checks.step2.title')}</h3>
-                    <p className="text-sm text-muted-foreground">{t('checks.step2.subtitle')}</p>
+                    <h3 className="text-xl font-bold tracking-tight text-black dark:text-white">
+                      {t('checks.step2.title')}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t('checks.step2.subtitle')}
+                    </p>
                   </div>
 
                   <div className="space-y-5">
@@ -336,19 +353,19 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
 
                       return (
                         <div key={doc.id} className="space-y-2">
-                          <Label className="flex items-center gap-1 text-sm font-medium">
+                          <Label className="flex items-center gap-1.5 text-sm font-medium text-black dark:text-white">
                             {doc.label}
                             {doc.required && <span className="text-destructive">*</span>}
                           </Label>
 
                           <div
                             className={cn(
-                              'relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all duration-200',
+                              'relative border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all duration-300',
                               isDragging
-                                ? 'border-black dark:border-white bg-black/5 dark:bg-white/5 scale-[1.01]'
+                                ? 'border-[#14235E] bg-[#14235E]/5 dark:bg-[#14235E]/10 scale-[1.02]'
                                 : docFiles.length > 0
-                                ? 'border-green-500 bg-green-500/5'
-                                : 'border-border hover:border-black/60 dark:hover:border-white/60 hover:bg-black/5 dark:hover:bg-white/5'
+                                ? 'border-emerald-500 bg-emerald-500/5'
+                                : 'border-muted-foreground/30 hover:border-[#14235E]/60 hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/10'
                             )}
                             onClick={() => document.getElementById(`file-${doc.id}`)?.click()}
                             onDragOver={(e) => handleDragOver(e, doc.id)}
@@ -363,40 +380,53 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                               className="hidden"
                               onChange={(e) => handleFileInputChange(doc.id, e.target.files)}
                             />
-                            <Upload
-                              className={cn(
-                                'h-7 w-7 mx-auto mb-2 transition-colors',
-                                docFiles.length > 0 ? 'text-green-500' : 'text-muted-foreground'
+                            <div className="flex flex-col items-center justify-center py-2">
+                              <div
+                                className={cn(
+                                  'rounded-full p-3 mb-3 transition-colors',
+                                  docFiles.length > 0
+                                    ? 'bg-emerald-500/15 text-emerald-500'
+                                    : 'bg-muted/30 text-muted-foreground group-hover:bg-[#14235E]/10'
+                                )}
+                              >
+                                <Upload className="h-6 w-6" strokeWidth={1.5} />
+                              </div>
+                              <p className="text-sm font-medium text-black dark:text-white">
+                                {docFiles.length > 0
+                                  ? `${docFiles.length} ${t('checks.files')} uploaded`
+                                  : t('checks.step2.dragDrop')}
+                              </p>
+                              {doc.helpText && (
+                                <p className="text-xs text-muted-foreground mt-1.5 max-w-xs mx-auto">
+                                  {doc.helpText}
+                                </p>
                               )}
-                            />
-                            <p className="text-sm font-medium">
-                              {docFiles.length > 0
-                                ? `${docFiles.length} ${t('checks.files')}`
-                                : t('checks.step2.dragDrop')}
-                            </p>
-                            {doc.helpText && (
-                              <p className="text-xs text-muted-foreground mt-1">{doc.helpText}</p>
-                            )}
+                            </div>
                           </div>
 
                           {docFiles.length > 0 && (
-                            <div className="space-y-2">
+                            <div className="space-y-2 mt-3">
                               {docFiles.map((file, index) => {
                                 const key = fileProgressKey(doc.id, file);
                                 const progress = fileProgress[key] ?? 100;
                                 const isUploading = progress < 100;
+                                const FileIcon = getFileIcon(file);
 
                                 return (
                                   <motion.div
                                     key={`${file.name}-${index}`}
-                                    initial={{ opacity: 0, y: -4 }}
+                                    initial={{ opacity: 0, y: -6 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="rounded-lg border border-border bg-muted/40 overflow-hidden"
+                                    className="rounded-xl border border-border bg-white dark:bg-black shadow-sm overflow-hidden"
                                   >
                                     <div className="flex items-center gap-3 px-3 py-2.5">
-                                      <File className="h-4 w-4 text-black dark:text-white shrink-0" />
+                                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#14235E]/10 text-[#14235E] dark:bg-[#14235E]/20">
+                                        <FileIcon className="h-4 w-4" />
+                                      </div>
                                       <div className="flex-1 min-w-0">
-                                        <p className="text-sm truncate font-medium">{file.name}</p>
+                                        <p className="text-sm truncate font-medium text-black dark:text-white">
+                                          {file.name}
+                                        </p>
                                         <p className="text-xs text-muted-foreground">
                                           {isUploading
                                             ? `${t('checks.step2.uploading')} ${progress}%`
@@ -407,7 +437,7 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                                         <Button
                                           variant="ghost"
                                           size="icon"
-                                          className="h-7 w-7 shrink-0 hover:bg-black/5 dark:hover:bg-white/10 text-destructive"
+                                          className="h-7 w-7 shrink-0 hover:bg-destructive/10 hover:text-destructive transition-colors"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             removeFile(doc.id, index);
@@ -418,11 +448,11 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                                       )}
                                     </div>
                                     {isUploading && (
-                                      <div className="h-0.5 bg-border">
+                                      <div className="h-0.5 bg-muted">
                                         <motion.div
-                                          className="h-full bg-black dark:bg-white"
+                                          className="h-full bg-[#14235E]"
                                           animate={{ width: `${progress}%` }}
-                                          transition={{ duration: 0.1 }}
+                                          transition={{ duration: 0.2 }}
                                         />
                                       </div>
                                     )}
@@ -442,65 +472,79 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
               {currentStep === 2 && (
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">{t('checks.step3.title')}</h3>
-                    <p className="text-sm text-muted-foreground">{t('checks.step3.subtitle')}</p>
+                    <h3 className="text-xl font-bold tracking-tight text-black dark:text-white">
+                      {t('checks.step3.title')}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t('checks.step3.subtitle')}
+                    </p>
                   </div>
 
                   {isFreeService ? (
-                    <div className="rounded-xl border-2 border-green-500 bg-green-500/8 p-6 text-center space-y-2">
-                      <div className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-green-500/15">
-                        <Check className="h-6 w-6 text-green-600" />
+                    <div className="rounded-2xl border-2 border-emerald-500/30 bg-emerald-500/10 p-6 text-center space-y-3">
+                      <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-emerald-500/20">
+                        <Sparkles className="h-8 w-8 text-emerald-600" />
                       </div>
-                      <h4 className="font-semibold text-green-700 dark:text-green-400">
+                      <h4 className="text-xl font-bold text-emerald-700 dark:text-emerald-400">
                         {t('checks.step3.freeService')}
                       </h4>
-                      <p className="text-sm text-muted-foreground">{t('checks.step3.freeDesc')}</p>
+                      <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                        {t('checks.step3.freeDesc')}
+                      </p>
                     </div>
                   ) : (
                     <RadioGroup
                       value={speedTier}
                       onValueChange={(v) => setSpeedTier(v as 'standard' | 'fast-track')}
-                      className="space-y-3"
+                      className="space-y-4"
                     >
                       <label
                         className={cn(
-                          'flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all',
+                          'flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200',
                           speedTier === 'standard'
-                            ? 'border-black dark:border-white bg-black/5 dark:bg-white/5'
-                            : 'border-border hover:border-black/60 dark:hover:border-white/60'
+                            ? 'border-[#14235E] bg-[#14235E]/5 shadow-sm'
+                            : 'border-muted hover:border-[#14235E]/40'
                         )}
                       >
                         <RadioGroupItem value="standard" />
                         <div className="flex-1">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2.5">
                             <Clock className="h-4 w-4 text-muted-foreground" />
-                            <span className="font-semibold">{t('checks.step3.standard')}</span>
+                            <span className="font-semibold text-black dark:text-white">
+                              {t('checks.step3.standard')}
+                            </span>
                           </div>
-                          <p className="text-sm text-muted-foreground">{t('checks.standard.time')}</p>
+                          <p className="text-sm text-muted-foreground mt-0.5">
+                            {t('checks.standard.time')}
+                          </p>
                         </div>
                         {hasActiveSubscription ? (
-                          <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 gap-1 shrink-0">
+                          <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 gap-1.5 shrink-0">
                             <Crown className="h-3 w-3" />
                             Included
                           </Badge>
                         ) : (
-                          <p className="text-xl font-bold shrink-0">AED {service.priceStandard}</p>
+                          <p className="text-xl font-bold text-black dark:text-white shrink-0">
+                            AED {service.priceStandard}
+                          </p>
                         )}
                       </label>
 
                       <label
                         className={cn(
-                          'flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all',
+                          'flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200',
                           speedTier === 'fast-track'
-                            ? 'border-amber-500 bg-amber-500/8'
-                            : 'border-border hover:border-amber-500/50'
+                            ? 'border-amber-500 bg-amber-500/5 shadow-amber-500/20'
+                            : 'border-muted hover:border-amber-500/40'
                         )}
                       >
                         <RadioGroupItem value="fast-track" />
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 flex-wrap">
+                          <div className="flex items-center gap-2.5 flex-wrap">
                             <Zap className="h-4 w-4 text-amber-500" />
-                            <span className="font-semibold">{t('checks.step3.fastTrack')}</span>
+                            <span className="font-semibold text-black dark:text-white">
+                              {t('checks.step3.fastTrack')}
+                            </span>
                             {!hasActiveSubscription && (
                               <Badge
                                 variant="secondary"
@@ -510,21 +554,24 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                               </Badge>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground">{t('checks.fastTrack.time')}</p>
+                          <p className="text-sm text-muted-foreground mt-0.5">
+                            {t('checks.fastTrack.time')}
+                          </p>
                         </div>
                         {hasActiveSubscription ? (
-                          <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 gap-1 shrink-0">
+                          <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 gap-1.5 shrink-0">
                             <Crown className="h-3 w-3" />
                             Included
                           </Badge>
                         ) : (
-                          <p className="text-xl font-bold shrink-0">AED {service.priceFastTrack}</p>
+                          <p className="text-xl font-bold text-black dark:text-white shrink-0">
+                            AED {service.priceFastTrack}
+                          </p>
                         )}
                       </label>
                     </RadioGroup>
                   )}
 
-                  {/* Subscription upsell — only for logged-in non-subscribers on paid services */}
                   {user && !isFreeService && !hasActiveSubscription && !loadingSub && (
                     <SubscriptionUpsellCard
                       currentCheckPrice={totalPrice}
@@ -539,18 +586,23 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                 <div className="space-y-6">
                   {submitSuccess ? (
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
+                      initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="flex flex-col items-center justify-center py-12 text-center space-y-4"
+                      transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                      className="flex flex-col items-center justify-center py-12 text-center space-y-5"
                     >
-                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500/15">
-                        <CheckCircle className="h-10 w-10 text-green-500" />
+                      <div className="flex h-24 w-24 items-center justify-center rounded-full bg-emerald-500/15">
+                        <CheckCircle className="h-12 w-12 text-emerald-500" strokeWidth={1.5} />
                       </div>
-                      <h3 className="text-2xl font-bold">{t('checks.successTitle')}</h3>
-                      <p className="text-muted-foreground max-w-xs">{t('checks.successDesc')}</p>
-                      <Button 
-                        onClick={handleClose} 
-                        className="mt-2 rounded-full px-8 bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80"
+                      <h3 className="text-2xl font-bold text-black dark:text-white">
+                        {t('checks.successTitle')}
+                      </h3>
+                      <p className="text-muted-foreground max-w-xs">
+                        {t('checks.successDesc')}
+                      </p>
+                      <Button
+                        onClick={handleClose}
+                        className="mt-2 rounded-full px-8 bg-[#14235E] text-white hover:bg-[#1a4a7a] transition-all duration-300"
                       >
                         {t('common.close')}
                       </Button>
@@ -558,18 +610,23 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                   ) : (
                     <>
                       <div>
-                        <h3 className="text-lg font-semibold mb-1">{t('checks.step4.title')}</h3>
-                        <p className="text-sm text-muted-foreground">{t('checks.step4.subtitle')}</p>
+                        <h3 className="text-xl font-bold tracking-tight text-black dark:text-white">
+                          {t('checks.step4.title')}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {t('checks.step4.subtitle')}
+                        </p>
                       </div>
 
-                      {/* Member banner */}
                       {hasActiveSubscription && subscription && (
-                        <div className="rounded-xl border-2 border-amber-500/40 bg-gradient-to-r from-amber-500/10 to-amber-500/5 p-3 flex items-center gap-3">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
-                            <Crown className="h-4 w-4 text-amber-600" />
+                        <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-500/10 p-4 flex items-center gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
+                            <Crown className="h-5 w-5 text-amber-600" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold">{subscription.productName} Member</p>
+                            <p className="text-sm font-semibold text-black dark:text-white">
+                              {subscription.productName} Member
+                            </p>
                             <p className="text-xs text-muted-foreground">
                               This check is included in your subscription
                             </p>
@@ -577,32 +634,34 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                         </div>
                       )}
 
-                      <div className="rounded-xl border border-border overflow-hidden">
-                        <div className="p-4 bg-muted/40 flex items-center gap-3">
-                          <div className="h-11 w-11 rounded-lg overflow-hidden shrink-0">
+                      <div className="rounded-2xl border border-border bg-white dark:bg-black overflow-hidden shadow-sm">
+                        <div className="p-5 bg-[#14235E]/5 flex items-center gap-4">
+                          <div className="h-12 w-12 rounded-xl overflow-hidden shrink-0 border border-white/20">
                             <img
                               src={service.image}
                               alt={service.title}
-                              width={44}
-                              height={44}
+                              width={48}
+                              height={48}
                               className="object-cover w-full h-full"
                             />
                           </div>
                           <div className="min-w-0">
-                            <p className="font-semibold truncate">{service.title}</p>
+                            <p className="font-bold text-black dark:text-white truncate">
+                              {service.title}
+                            </p>
                             <p className="text-xs text-muted-foreground">
                               {t('checks.authority')}: {service.authority}
                             </p>
                           </div>
                         </div>
 
-                        <div className="p-4 space-y-2.5 divide-y divide-border/60">
+                        <div className="p-5 space-y-3 divide-y divide-border/60">
                           {Object.entries(formData).slice(0, 4).map(([key, value]) => (
                             <div key={key} className="flex justify-between text-sm pt-2 first:pt-0">
                               <span className="text-muted-foreground capitalize">
                                 {key.replace(/([A-Z])/g, ' $1').trim()}
                               </span>
-                              <span className="font-medium text-right max-w-[55%] truncate">
+                              <span className="font-medium text-black dark:text-white text-right max-w-[55%] truncate">
                                 {typeof value === 'boolean'
                                   ? value ? 'Yes' : 'No'
                                   : typeof value === 'object' && value !== null
@@ -613,14 +672,22 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                           ))}
                           <div className="flex justify-between text-sm pt-2">
                             <span className="text-muted-foreground">{t('checks.step4.documents')}</span>
-                            <span className="font-medium">
+                            <span className="font-medium text-black dark:text-white">
                               {Object.values(files).flat().length} {t('checks.files')}
                             </span>
                           </div>
                           {!isFreeService && (
                             <div className="flex justify-between text-sm pt-2">
                               <span className="text-muted-foreground">Speed</span>
-                              <Badge variant="outline" className="text-xs">
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  'text-xs border-0',
+                                  speedTier === 'fast-track'
+                                    ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
+                                    : 'bg-muted text-muted-foreground'
+                                )}
+                              >
                                 {speedTier === 'fast-track'
                                   ? t('checks.step3.fastTrack')
                                   : t('checks.step3.standard')}
@@ -629,35 +696,42 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                           )}
                         </div>
 
-                        <div className="p-4 border-t border-border bg-muted/30 flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground">{t('checks.step4.total')}</span>
+                        <div className="p-5 border-t border-border bg-muted/20 flex justify-between items-center">
+                          <span className="text-sm font-medium text-muted-foreground">
+                            {t('checks.step4.total')}
+                          </span>
                           {isFreeService ? (
-                            <Badge className="bg-green-500/15 text-green-600 border-green-500/30 text-base px-3 py-1">
+                            <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-base px-4 py-1.5">
                               {t('checks.step4.free')}
                             </Badge>
                           ) : hasActiveSubscription ? (
-                            <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 text-base px-3 py-1 gap-1">
-                              <Crown className="h-3.5 w-3.5" />
+                            <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 text-base px-4 py-1.5 gap-1.5">
+                              <Crown className="h-4 w-4" />
                               Included
                             </Badge>
                           ) : (
-                            <span className="text-2xl font-bold">AED {totalPrice}</span>
+                            <span className="text-2xl font-bold text-[#14235E] dark:text-white">
+                              AED {totalPrice}
+                            </span>
                           )}
                         </div>
                       </div>
 
-                      {/* Auth / subscription gate */}
                       {!user ? (
-                        <div className="rounded-xl border border-border bg-card p-6 text-center space-y-4">
-                          <ShieldCheck className="h-10 w-10 mx-auto text-black dark:text-white" />
+                        <div className="rounded-2xl border border-border bg-white dark:bg-black p-6 text-center space-y-4 shadow-sm">
+                          <ShieldCheck className="h-10 w-10 mx-auto text-[#14235E]" />
                           <div>
-                            <h3 className="font-semibold">{t('checks.loginRequired')}</h3>
-                            <p className="text-sm text-muted-foreground mt-1">{t('checks.loginDesc')}</p>
+                            <h3 className="font-bold text-black dark:text-white">
+                              {t('checks.loginRequired')}
+                            </h3>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {t('checks.loginDesc')}
+                            </p>
                           </div>
                           <div className="flex gap-3 justify-center flex-wrap">
-                            <Button 
-                              onClick={() => navigate('/auth')} 
-                              className="rounded-full px-6 bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80"
+                            <Button
+                              onClick={() => navigate('/auth')}
+                              className="rounded-full px-6 bg-[#14235E] text-white hover:bg-[#1a4a7a] transition-all duration-300"
                             >
                               {t('checks.signIn')}
                             </Button>
@@ -671,24 +745,29 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                           </div>
                         </div>
                       ) : !canSubmit ? (
-                        // ✅ Paid service + no subscription → show full upsell card
                         <SubscriptionUpsellCard
                           currentCheckPrice={totalPrice}
                           serviceTitle={service.title}
                         />
                       ) : (
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Shield className="h-4 w-4 text-green-500 shrink-0" />
-                            <span>Submitted to ICP-authorized typing centre</span>
+                        <div className="space-y-3 bg-muted/20 rounded-xl p-4 border border-border/40">
+                          <div className="flex items-center gap-2.5 text-sm">
+                            <Shield className="h-4 w-4 text-emerald-500 shrink-0" />
+                            <span className="text-muted-foreground">
+                              Submitted to ICP-authorized typing centre
+                            </span>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <CreditCard className="h-4 w-4 text-black dark:text-white shrink-0" />
-                            <span>Stripe secure payment</span>
+                          <div className="flex items-center gap-2.5 text-sm">
+                            <CreditCard className="h-4 w-4 text-[#14235E] shrink-0" />
+                            <span className="text-muted-foreground">
+                              Stripe secure payment
+                            </span>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-2.5 text-sm">
                             <AlertCircle className="h-4 w-4 text-muted-foreground shrink-0" />
-                            <span>Results delivered to dashboard, email &amp; WhatsApp</span>
+                            <span className="text-muted-foreground">
+                              Results delivered to dashboard, email &amp; WhatsApp
+                            </span>
                           </div>
                         </div>
                       )}
@@ -700,15 +779,15 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
           </AnimatePresence>
         </div>
 
-        {/* Footer */}
+        {/* ─── Footer ─── */}
         {!submitSuccess && (
-          <div className="px-6 py-4 border-t border-border bg-card shrink-0">
+          <div className="px-6 py-4 border-t border-border/40 bg-white dark:bg-black shrink-0">
             <div className="flex items-center justify-between gap-3">
               {currentStep > 1 ? (
-                <Button 
-                  variant="outline" 
-                  onClick={goBack} 
-                  className="gap-2 border-border text-foreground hover:bg-black/5 dark:hover:bg-white/10 hover:text-foreground" 
+                <Button
+                  variant="ghost"
+                  onClick={goBack}
+                  className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
                   disabled={isSubmitting}
                 >
                   <ArrowLeft className="h-4 w-4" />
@@ -718,54 +797,50 @@ export function CheckFormSheet({ service, isOpen, onClose }: CheckFormSheetProps
                 <div />
               )}
 
-              {/* Steps 1 & 2 — continue */}
               {currentStep < 3 && (
-                <Button 
-                  onClick={goNext} 
-                  className="gap-2 min-w-[120px] bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80 transition-all duration-200"
+                <Button
+                  onClick={goNext}
+                  className="gap-2 min-w-[120px] bg-[#14235E] text-white hover:bg-[#1a4a7a] transition-all duration-300 group"
                 >
                   {t('checks.continue')}
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Button>
               )}
 
-              {/* Step 3 (Review) — submit OR redirect to subscribe */}
               {currentStep === 3 && (
                 <>
                   {!user ? (
-                    <Button 
-                      disabled 
+                    <Button
+                      disabled
                       className="gap-2 min-w-[160px] opacity-50 bg-muted text-muted-foreground cursor-not-allowed"
                     >
                       {t('checks.step4.submitFree')}
                     </Button>
                   ) : !canSubmit ? (
-                    // ✅ Paid service + not subscribed → CTA goes to /subscribe
                     <Button
                       onClick={() => navigate('/subscription')}
-                      className="gap-2 min-w-[180px] bg-amber-500 text-white hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 transition-all duration-200"
+                      className="gap-2 min-w-[180px] bg-amber-500 text-white hover:bg-amber-600 transition-all duration-300 group"
                     >
                       <Crown className="h-4 w-4" />
                       Subscribe to Submit
                     </Button>
                   ) : (
-                    // Free service OR subscribed → submit directly
                     <Button
                       onClick={submitCheck}
                       disabled={isSubmitting}
-                      className="gap-2 min-w-[160px] bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80 transition-all duration-200"
+                      className="gap-2 min-w-[160px] bg-[#14235E] text-white hover:bg-[#1a4a7a] transition-all duration-300 group"
                     >
                       {isSubmitting ? (
                         <motion.span
                           animate={{ opacity: [1, 0.4, 1] }}
-                          transition={{ repeat: Infinity, duration: 1 }}
+                          transition={{ repeat: Infinity, duration: 1.2 }}
                         >
                           {t('checks.step4.submitting')}
                         </motion.span>
                       ) : (
                         <>
                           Submit Check
-                          <ArrowRight className="h-4 w-4" />
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                         </>
                       )}
                     </Button>

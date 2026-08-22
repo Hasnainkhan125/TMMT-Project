@@ -211,9 +211,9 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-white/10 shadow-2xl rounded-2xl p-0">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-white/10 rounded-2xl p-0">
         {/* ─── Premium Header ────────────────────────────────────────── */}
-        <div className="sticky top-0 z-10 bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] dark:from-[#0A1628] dark:to-[#0A3269] px-6 py-5 rounded-t-2xl">
+        <div className="sticky top-0 z-10 bg-gradient-to-r from-[#14235E] to-[#14235E]  px-6 py-5 rounded-t-2xl">
           <div className="flex items-start gap-4">
             <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm shadow-lg shadow-black/20">
               {isResultDocument ? (
@@ -256,7 +256,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                   'relative p-4 rounded-xl border-2 transition-all duration-300',
                   doc.file 
                     ? 'border-emerald-200/80 dark:border-emerald-800/50 bg-emerald-50/30 dark:bg-emerald-950/10'
-                    : 'border-gray-200/60 dark:border-white/10 bg-gray-50/30 dark:bg-gray-900/30 hover:border-[#0A3269]/30 dark:hover:border-white/30'
+                    : 'border-gray-200/60 dark:border-white/10 bg-gray-50/30 dark:bg-gray-900/30 hover:border-[#14235E]/30 dark:hover:border-white/30'
                 )}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -299,7 +299,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                     <select
                       value={doc.type}
                       onChange={(e) => updateDocument(doc.id, 'type', e.target.value)}
-                      className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-white/10 rounded-lg bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-[#0A3269]/20 focus:border-[#0A3269] transition-all"
+                      className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-white/10 rounded-lg bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-[#14235E]/20 focus:border-[#14235E] transition-all"
                     >
                       {documentTypes.map(type => (
                         <option key={type.value} value={type.value}>
@@ -317,7 +317,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                       value={doc.name}
                       onChange={(e) => updateDocument(doc.id, 'name', e.target.value)}
                       placeholder="e.g., ICP Receipt - Jan 2024"
-                      className="mt-1 text-sm border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#0A3269]/20 focus:border-[#0A3269] transition-all"
+                      className="mt-1 text-sm border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#14235E]/20 focus:border-[#14235E] transition-all"
                     />
                   </div>
                 </div>
@@ -329,7 +329,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                   <div 
                     className={cn(
                       'mt-1 relative',
-                      dragOver === doc.id && 'ring-2 ring-[#0A3269] ring-offset-2'
+                      dragOver === doc.id && 'ring-2 ring-[#14235E] ring-offset-2'
                     )}
                     onDragOver={(e) => { e.preventDefault(); setDragOver(doc.id); }}
                     onDragLeave={() => setDragOver(null)}
@@ -348,7 +348,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                         'flex items-center justify-center w-full px-4 py-4 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300',
                         doc.file
                           ? 'border-emerald-300 dark:border-emerald-700 bg-emerald-50/50 dark:bg-emerald-950/20'
-                          : 'border-gray-300 dark:border-white/20 hover:border-[#0A3269]/50 dark:hover:border-white/40 hover:bg-[#0A3269]/5 dark:hover:bg-white/5'
+                          : 'border-gray-300 dark:border-white/20 hover:border-[#14235E]/50 dark:hover:border-white/40 hover:bg-[#14235E]/5 dark:hover:bg-white/5'
                       )}
                     >
                       {doc.file ? (
@@ -370,8 +370,8 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                         </div>
                       ) : (
                         <div className="flex flex-col items-center gap-2 text-gray-500 dark:text-white/40">
-                          <div className="p-3 rounded-xl bg-[#0A3269]/10 dark:bg-white/5">
-                            <Paperclip className="w-6 h-6 text-[#0A3269] dark:text-white/60" />
+                          <div className="p-3 rounded-xl bg-[#14235E]/10 dark:bg-white/5">
+                            <Paperclip className="w-6 h-6 text-[#14235E] dark:text-white/60" />
                           </div>
                           <div className="flex items-center gap-2">
                             <Upload className="w-4 h-4" />
@@ -393,7 +393,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
             variant="outline"
             size="sm"
             onClick={addDocumentSlot}
-            className="w-full border-dashed border-2 border-gray-300 dark:border-white/20 text-gray-600 dark:text-white/60 hover:border-[#0A3269] hover:text-[#0A3269] dark:hover:text-white hover:bg-[#0A3269]/5 dark:hover:bg-white/5 rounded-xl py-6 transition-all"
+            className="w-full border-dashed border-2 border-gray-300 dark:border-white/20 text-gray-600 dark:text-white/60 hover:border-[#14235E] hover:text-[#14235E] dark:hover:text-white hover:bg-[#14235E]/5 dark:hover:bg-white/5 rounded-xl py-6 transition-all"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Another Document
@@ -403,7 +403,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
             <Button
               onClick={handleUpload}
               disabled={uploading || !documents.some(d => d.file && d.name.trim())}
-              className="flex-1 bg-gradient-to-r from-[#0A3269] to-[#1a4a7a] dark:from-white dark:to-gray-200 text-white dark:text-[#0A3269] hover:shadow-lg hover:shadow-[#0A3269]/25 dark:hover:shadow-white/20 border-0 rounded-xl py-6 transition-all disabled:opacity-50"
+              className="flex-1 bg-gradient-to-r from-[#14235E] to-[#14235E] dark:from-white dark:to-gray-200 text-white dark:text-[#14235E] hover:shadow-lg hover:shadow-[#14235E]/25 dark:hover:shadow-white/20 border-0 rounded-xl py-6 transition-all disabled:opacity-50"
             >
               {uploading ? (
                 <>
@@ -439,7 +439,7 @@ export const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
             </span>
             <span className="w-px h-3 bg-gray-300 dark:bg-white/10" />
             <span className="flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-[#0A3269] dark:text-white/60" />
+              <Sparkles className="w-3 h-3 text-[#14235E] dark:text-white/60" />
               All documents are encrypted and securely stored
             </span>
           </div>

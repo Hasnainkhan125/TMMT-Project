@@ -46,19 +46,19 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.05 }}
-          className="w-20 h-20 rounded-2xl bg-[#0A3269] dark:bg-white flex items-center justify-center mx-auto shadow-xl shadow-[#0A3269]/20 dark:shadow-white/10"
+          className="w-20 h-20 rounded-2xl bg-[#14235E] dark:bg-white flex items-center justify-center mx-auto shadow-xl shadow-[#14235E]/20 dark:shadow-white/10"
         >
-          <CheckCircle2 className="w-10 h-10 text-white dark:text-[#0A3269]" strokeWidth={2} />
+          <CheckCircle2 className="w-10 h-10 text-white dark:text-[#14235E]" strokeWidth={2} />
         </motion.div>
         <div>
-          <h3 className="text-xl font-bold text-[#0A3269] dark:text-white">Check your email</h3>
+          <h3 className="text-xl font-bold text-[#14235E] dark:text-white">Check your email</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
             We've sent a password reset link to{" "}
-            <span className="font-semibold text-[#0A3269] dark:text-white">{email}</span>
+            <span className="font-semibold text-[#14235E] dark:text-white">{email}</span>
           </p>
         </div>
         <div className="flex items-center gap-3 justify-center text-xs text-gray-400 dark:text-gray-500">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#0A3269] dark:text-gray-400" />
+          <ShieldCheck className="w-3.5 h-3.5 text-[#14235E] dark:text-gray-400" />
           <span>Secure link sent</span>
           <span className="w-px h-3 bg-gray-200 dark:bg-white/10" />
           <span>Expires in 24 hours</span>
@@ -69,18 +69,18 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
             w-full
             h-12
             rounded-xl
-            bg-[#0A3269]
+            bg-[#14235E]
             dark:bg-white
             text-white
-            dark:text-[#0A3269]
+            dark:text-[#14235E]
             font-semibold
             shadow-lg
-            shadow-[#0A3269]/25
+            shadow-[#14235E]/25
             dark:shadow-white/10
             transition-all
             duration-300
             hover:shadow-xl
-            hover:shadow-[#0A3269]/35
+            hover:shadow-[#14235E]/35
             dark:hover:shadow-white/20
             hover:scale-[1.02]
             hover:bg-[#1a4a7a]
@@ -104,18 +104,18 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
-          className="w-16 h-16 rounded-2xl bg-[#0A3269] dark:bg-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-[#0A3269]/20 dark:shadow-white/10"
+          className="w-16 h-16 rounded-2xl bg-[#14235E] dark:bg-white flex items-center justify-center mx-auto mb-4 shadow-xl shadow-[#14235E]/20 dark:shadow-white/10"
         >
-          <Mail className="w-8 h-8 text-white dark:text-[#0A3269]" />
+          <Mail className="w-8 h-8 text-white dark:text-[#14235E]" />
         </motion.div>
-        <h2 className="text-2xl font-bold text-[#0A3269] dark:text-white">Reset Password</h2>
+        <h2 className="text-2xl font-bold text-[#14235E] dark:text-white">Reset Password</h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Enter your email to receive a reset link</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Email Field */}
         <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-sm font-medium text-[#0A3269] dark:text-white">
+          <Label htmlFor="email" className="text-sm font-medium text-[#14235E] dark:text-white">
             {t('common.email')}
           </Label>
           <div
@@ -124,14 +124,14 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
               bg-gray-50 dark:bg-white/5
               border transition-all duration-300
               ${emailFocused 
-                ? 'border-[#0A3269] dark:border-white shadow-lg shadow-[#0A3269]/10 dark:shadow-white/5' 
+                ? 'border-[#14235E] dark:border-white shadow-lg shadow-[#14235E]/10 dark:shadow-white/5' 
                 : 'border-gray-200 dark:border-white/10'
               }
             `}
           >
             <Mail
               className={`w-4 h-4 shrink-0 mr-3 rtl:mr-0 rtl:ml-3 transition-colors duration-300 ${
-                emailFocused ? 'text-[#0A3269] dark:text-white' : 'text-gray-400 dark:text-gray-500'
+                emailFocused ? 'text-[#14235E] dark:text-white' : 'text-gray-400 dark:text-gray-500'
               }`}
             />
             <input
@@ -146,7 +146,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
               style={{ fontSize: '16px', outline: 'none', boxShadow: 'none' }}
               className="
                 flex-1 min-w-0 bg-transparent border-0
-                text-[#0A3269] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
+                text-[#14235E] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
                 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0
               "
             />
@@ -169,18 +169,18 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
               w-full
               overflow-hidden
               rounded-xl
-              bg-[#0A3269]
+              bg-[#14235E]
               dark:bg-white
               text-white
-              dark:text-[#0A3269]
+              dark:text-[#14235E]
               font-semibold
               shadow-lg
-              shadow-[#0A3269]/25
+              shadow-[#14235E]/25
               dark:shadow-white/10
               transition-all
               duration-300
               hover:shadow-xl
-              hover:shadow-[#0A3269]/35
+              hover:shadow-[#14235E]/35
               dark:hover:shadow-white/20
               hover:scale-[1.02]
               hover:bg-[#1a4a7a]
@@ -189,7 +189,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
               disabled:cursor-not-allowed
               disabled:opacity-60
               disabled:hover:scale-100
-              disabled:hover:bg-[#0A3269]
+              disabled:hover:bg-[#14235E]
               dark:disabled:hover:bg-white
             "
           >
@@ -212,7 +212,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
             />
 
             {/* Clean Hover Glow */}
-            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#0A3269]/10 dark:bg-white/5 blur-xl" />
+            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#14235E]/10 dark:bg-white/5 blur-xl" />
 
             <AnimatePresence mode="wait" initial={false}>
               {loading ? (
@@ -262,15 +262,15 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
             rounded-xl
             border-2 border-gray-200 dark:border-white/10
             bg-transparent
-            text-[#0A3269]
+            text-[#14235E]
             dark:text-white
             font-medium
             transition-all
             duration-300
             hover:scale-[1.02]
-            hover:border-[#0A3269]
+            hover:border-[#14235E]
             dark:hover:border-white/30
-            hover:bg-[#0A3269]/5
+            hover:bg-[#14235E]/5
             dark:hover:bg-white/5
             active:scale-[0.98]
           "
@@ -282,7 +282,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
         {/* Trust Badges */}
         <div className="flex items-center justify-center gap-5 pt-2">
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#0A3269] dark:text-gray-500" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#14235E] dark:text-gray-500" />
             <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">256-bit SSL</span>
           </div>
           <span className="w-px h-3.5 bg-gray-200 dark:bg-white/10" />
@@ -292,7 +292,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBackTo
           </div>
           <span className="w-px h-3.5 bg-gray-200 dark:bg-white/10" />
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#0A3269] dark:bg-blue-400" />
+            <div className="w-1.5 h-1.5 rounded-full bg-[#14235E] dark:bg-blue-400" />
             <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">Encrypted</span>
           </div>
         </div>

@@ -1032,14 +1032,14 @@ const GoldenGuaranteeCard = () => {
       <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
         {/* Icon */}
         <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-          <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" strokeWidth={1.5} />
+          <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400 dark:text-amber-400" strokeWidth={1.5} />
         </div>
         
         {/* Content */}
         <div className="flex-1 min-w-0">
           <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
             {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-            <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
+            <Badge className="bg-amber-500/20 text-amber-400 dark:text-amber-300 border-0 text-[7px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
               ✓ Trusted
             </Badge>
           </h4>

@@ -24,8 +24,8 @@ import { cn } from '@/lib/utils';
 import type { Service } from '@/lib/services';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
-// Primary accent color - #0A3269 (Deep Navy)
-const PRIMARY_COLOR = '#0A3269';
+// Primary accent color - #14235E (Deep Navy)
+const PRIMARY_COLOR = '#14235E';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   'calendar-clock': CalendarClock,
@@ -38,27 +38,27 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   'clock-alert': Clock,
 };
 
-// Premium color gradients for cards - Using #0A3269 variants
+// Premium color gradients for cards - Using #14235E variants
 const GRADIENT_MAP: Record<string, string> = {
-  'calendar-clock': 'from-[#0A3269] to-[#1A4A8A]',
-  'plane-off': 'from-[#0A3269] to-[#2A5A9A]',
-  'briefcase-off': 'from-[#0A3269] to-[#3A6AAA]',
-  'map-pin': 'from-[#0A3269] to-[#1A4A8A]',
-  'file-search': 'from-[#0A3269] to-[#2A5A9A]',
-  'file-warning': 'from-[#0A3269] to-[#4A7ABA]',
-  'building-2': 'from-[#0A3269] to-[#1A4A8A]',
-  'clock-alert': 'from-[#0A3269] to-[#3A6AAA]',
+  'calendar-clock': 'from-[#14235E] to-[#1A4A8A]',
+  'plane-off': 'from-[#14235E] to-[#2A5A9A]',
+  'briefcase-off': 'from-[#14235E] to-[#3A6AAA]',
+  'map-pin': 'from-[#14235E] to-[#1A4A8A]',
+  'file-search': 'from-[#14235E] to-[#2A5A9A]',
+  'file-warning': 'from-[#14235E] to-[#4A7ABA]',
+  'building-2': 'from-[#14235E] to-[#1A4A8A]',
+  'clock-alert': 'from-[#14235E] to-[#3A6AAA]',
 };
 
 const SHADOW_MAP: Record<string, string> = {
-  'calendar-clock': 'shadow-[#0A3269]/20',
-  'plane-off': 'shadow-[#0A3269]/20',
-  'briefcase-off': 'shadow-[#0A3269]/20',
-  'map-pin': 'shadow-[#0A3269]/20',
-  'file-search': 'shadow-[#0A3269]/20',
-  'file-warning': 'shadow-[#0A3269]/20',
-  'building-2': 'shadow-[#0A3269]/20',
-  'clock-alert': 'shadow-[#0A3269]/20',
+  'calendar-clock': 'shadow-[#14235E]/20',
+  'plane-off': 'shadow-[#14235E]/20',
+  'briefcase-off': 'shadow-[#14235E]/20',
+  'map-pin': 'shadow-[#14235E]/20',
+  'file-search': 'shadow-[#14235E]/20',
+  'file-warning': 'shadow-[#14235E]/20',
+  'building-2': 'shadow-[#14235E]/20',
+  'clock-alert': 'shadow-[#14235E]/20',
 };
 
 interface ServiceCardProps {
@@ -95,8 +95,8 @@ function AnimatedPrice({ value }: { value: number | string }) {
 
 export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
   const Icon = iconMap[service.icon] || FileSearch;
-  const gradient = GRADIENT_MAP[service.icon] || 'from-[#0A3269] to-[#1A4A8A]';
-  const shadow = SHADOW_MAP[service.icon] || 'shadow-[#0A3269]/20';
+  const gradient = GRADIENT_MAP[service.icon] || 'from-[#14235E] to-[#1A4A8A]';
+  const shadow = SHADOW_MAP[service.icon] || 'shadow-[#14235E]/20';
 
   // Optional trust signals — only render if the data actually carries them,
   // so cards without this data fall back to today's layout untouched.
@@ -199,7 +199,7 @@ export function ServiceCard({ service, onSelect, index }: ServiceCardProps) {
       {/* Background Glow - subtle on hover */}
       <div className="absolute -inset-px pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
         <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-[var(--primary)]/10 dark:bg-[var(--primary)]/20 blur-2xl" />
-        <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-[#0A3269]/10 dark:bg-[#0A3269]/20 blur-2xl" />
+        <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-[#14235E]/10 dark:bg-[#14235E]/20 blur-2xl" />
       </div>
 
       {/* Popular Badge - Premium */}

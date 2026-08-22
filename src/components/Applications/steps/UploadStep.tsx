@@ -188,8 +188,6 @@ function SkipConfirmDialog({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md p-0 gap-0 overflow-hidden rounded-3xl border-0 shadow-2xl bg-white dark:bg-zinc-950">
         <div className="relative p-8 sm:p-10">
-          <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-indigo-500/10 dark:bg-indigo-500/5 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
             <div className="relative w-20 h-20 mx-auto">
@@ -197,7 +195,7 @@ function SkipConfirmDialog({
                 initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                className="relative z-10 w-20 h-20 rounded-2xl bg-zinc-900 dark:bg-white flex items-center justify-center shadow-2xl shadow-zinc-900/30 dark:shadow-white/10"
+                className="relative z-10 w-20 h-20 rounded-2xl bg-zinc-900 dark:bg-white flex items-center justify-center"
               >
                 <FileUp className="w-10 h-10 text-white dark:text-zinc-900" strokeWidth={1.5} />
               </motion.div>

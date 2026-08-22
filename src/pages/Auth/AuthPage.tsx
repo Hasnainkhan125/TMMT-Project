@@ -69,7 +69,7 @@ const TRUST_CARDS = [
     title: "24/7 Expert Support",
     description: "Dedicated visa assistance team",
     icon: Headphones,
-    color: "from-[#4A8ABF] to-[#0A3269]"
+    color: "from-[#4A8ABF] to-[#14235E]"
   },
   {
     id: 3,
@@ -152,8 +152,8 @@ const AuthPage: React.FC = () => {
       <div className="min-h-screen bg-white dark:bg-[#050d1c] flex items-center justify-center">
         <div className="text-center">
           <div className="relative inline-flex mb-4">
-            <div className="absolute inset-0 rounded-full bg-[#0A3269]/20 blur-xl" />
-            <Loader2 className="relative w-10 h-10 animate-spin text-[#0A3269] dark:text-[#4A8ABF]" />
+            <div className="absolute inset-0 rounded-full bg-[#14235E]/20 blur-xl" />
+            <Loader2 className="relative w-10 h-10 animate-spin text-[#14235E] dark:text-[#4A8ABF]" />
           </div>
           <p className="text-gray-500 dark:text-white/40 font-light text-sm">{t('common.loading')}</p>
         </div>
@@ -220,7 +220,7 @@ const AuthPage: React.FC = () => {
               >
                 <span className="text-white">Your Visa</span>
                 <br />
-                <span className="text-2xl sm:text-2xl md:text-2xl lg:text-5xl font-bold leading-[1.05] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#0a3269] to-[#0a3269]">
+                <span className="text-2xl sm:text-2xl md:text-2xl lg:text-5xl font-bold leading-[1.05] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#14235E] to-[#14235E]">
                   Journey Starts Here
                 </span>
               </motion.h1>
@@ -287,7 +287,7 @@ const AuthPage: React.FC = () => {
                     icon: Upload,
                     label: 'Smart Upload',
                     desc: 'AI-powered document validation',
-                    iconBg: 'from-[#4A8ABF] to-[#0A3269]',
+                    iconBg: 'from-[#4A8ABF] to-[#14235E]',
                   },
                   {
                     icon: UserCheck,
@@ -373,7 +373,7 @@ const AuthPage: React.FC = () => {
             {/* Mobile Logo */}
             <div className="lg:hidden text-center mb-6 sm:mb-8">
               <div className="relative mx-auto w-16 h-16 flex items-center justify-center mb-3">
-                <div className="absolute inset-0 bg-[#0A3269]/10 dark:bg-[#4A8ABF]/15 rounded-full blur-xl" />
+                <div className="absolute inset-0 bg-[#14235E]/10 dark:bg-[#4A8ABF]/15 rounded-full blur-xl" />
                 <img src={TMMTLogo} alt="Tammat" className="relative h-14 w-14 object-contain dark:brightness-0 dark:invert" />
               </div>
               <p className="text-sm text-gray-500 dark:text-white/40 font-light">{t('auth.nextGenUaeSmartServices')}</p>

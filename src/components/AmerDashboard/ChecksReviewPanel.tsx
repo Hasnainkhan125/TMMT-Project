@@ -293,7 +293,7 @@ function DocumentThumbnail({ doc, checkId, onPreview, onDownload }: DocumentThum
 
   return (
     <div 
-      className="relative rounded border border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800/50 overflow-hidden cursor-pointer hover:border-[#0a3269] dark:hover:border-[#0a3269]/50 transition-colors"
+      className="relative rounded border border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800/50 overflow-hidden cursor-pointer hover:border-[#14235E] dark:hover:border-[#14235E]/50 transition-colors"
       onClick={handleClick}
       title={`Click to preview: ${filename}`}
     >
@@ -303,7 +303,7 @@ function DocumentThumbnail({ doc, checkId, onPreview, onDownload }: DocumentThum
           <>
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="h-3 w-3 animate-spin rounded-full border-2 border-[#0a3269] border-t-transparent" />
+                <div className="h-3 w-3 animate-spin rounded-full border-2 border-[#14235E] border-t-transparent" />
               </div>
             )}
             <img
@@ -517,7 +517,7 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
         >
           <div className="flex items-center justify-between p-4 border-b border-slate-200/60 dark:border-slate-800/60 bg-gradient-to-r from-slate-50/50 to-white dark:from-slate-900 dark:to-slate-800/50">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="p-2 rounded-xl bg-[#0a3269] text-white shadow-lg shadow-[#0a3269]/25">
+              <div className="p-2 rounded-xl bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25">
                 {isImage ? <ImageIcon className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
               </div>
               <div className="min-w-0">
@@ -553,7 +553,7 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
               <div className="flex items-center justify-center h-64">
                 <div className="relative h-16 w-16">
                   <div className="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-700"></div>
-                  <div className="absolute inset-0 rounded-full border-4 border-t-[#0a3269] animate-spin"></div>
+                  <div className="absolute inset-0 rounded-full border-4 border-t-[#14235E] animate-spin"></div>
                 </div>
               </div>
             )}
@@ -578,7 +578,7 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
                   <Button
                     size="sm"
                     onClick={handleDownload}
-                    className="gap-2 bg-[#0a3269] text-white shadow-lg shadow-[#0a3269]/25 hover:shadow-[#0a3269]/40"
+                    className="gap-2 bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25 hover:shadow-[#14235E]/40"
                   >
                     <Download className="h-4 w-4" />
                     Download
@@ -625,7 +625,7 @@ function DocumentPreviewModal({ url, filename, isOpen, onClose }: DocumentPrevie
                   <Button
                     size="sm"
                     onClick={handleDownload}
-                    className="gap-2 bg-[#0a3269] text-white shadow-lg shadow-[#0a3269]/25 hover:shadow-[#0a3269]/40"
+                    className="gap-2 bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25 hover:shadow-[#14235E]/40"
                   >
                     <Download className="h-4 w-4" />
                     Download
@@ -660,7 +660,7 @@ function ChatMessage({ message, isAdmin }: ChatMessageProps) {
     >
       {isAdmin && (
         <div className="flex-shrink-0 mt-1">
-          <div className="h-8 w-8 rounded-full bg-[#0a3269] flex items-center justify-center text-white text-xs font-bold shadow-md shadow-[#0a3269]/20">
+          <div className="h-8 w-8 rounded-full bg-[#14235E] flex items-center justify-center text-white text-xs font-bold shadow-md shadow-[#14235E]/20">
             A
           </div>
         </div>
@@ -682,7 +682,7 @@ function ChatMessage({ message, isAdmin }: ChatMessageProps) {
             {senderName}
           </p>
           {isAdmin ? (
-            <span className="text-[8px] bg-[#0a3269] text-white px-2 py-0.5 rounded-full font-medium">
+            <span className="text-[8px] bg-[#14235E] text-white px-2 py-0.5 rounded-full font-medium">
               Admin
             </span>
           ) : (
@@ -1168,10 +1168,10 @@ const ChecksReviewPanel: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* ─── Modern Header with Stats ──────────────────────────────────────── */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-50 dark:from-slate-900 dark:via-[#0a3269]/20 dark:to-slate-900 p-2 border border-slate-200/50 dark:border-slate-700/30">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-50 dark:from-slate-900 dark:via-[#14235E]/20 dark:to-slate-900 p-2 border border-slate-200/50 dark:border-slate-700/30">
         <div className="relative z-10 flex flex-col gap-4 md:gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
-            <div className="rounded-2xl bg-[#0a3269] p-2.5 sm:p-3 shadow-lg shadow-[#0a3269]/20">
+            <div className="rounded-2xl bg-[#14235E] p-2.5 sm:p-3 shadow-lg shadow-[#14235E]/20">
               <ShieldCheck className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
             </div>
             <div className="min-w-0">
@@ -1228,11 +1228,11 @@ const ChecksReviewPanel: React.FC = () => {
               placeholder="Search by ID, service, or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 sm:pl-10 h-9 sm:h-10 text-sm bg-white/70 dark:bg-white/10 border-slate-200 dark:border-white/20 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-[#0a3269] focus:ring-[#0a3269]/20 backdrop-blur-sm"
+              className="pl-9 sm:pl-10 h-9 sm:h-10 text-sm bg-white/70 dark:bg-white/10 border-slate-200 dark:border-white/20 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-[#14235E] focus:ring-[#14235E]/20 backdrop-blur-sm"
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-44 md:w-48 h-9 sm:h-10 bg-white/70 dark:bg-white/10 border-slate-200 dark:border-white/20 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-[#0a3269] focus:ring-[#0a3269]/20 backdrop-blur-sm text-sm">
+            <SelectTrigger className="w-full sm:w-44 md:w-48 h-9 sm:h-10 bg-white/70 dark:bg-white/10 border-slate-200 dark:border-white/20 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-400 focus:border-[#14235E] focus:ring-[#14235E]/20 backdrop-blur-sm text-sm">
               <Filter className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 dark:text-slate-500" />
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
@@ -1299,7 +1299,7 @@ const ChecksReviewPanel: React.FC = () => {
         <div className="py-20 text-center">
           <div className="relative mx-auto h-16 w-16">
             <div className="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-700"></div>
-            <div className="absolute inset-0 rounded-full animate-spin border-4 border-t-[#0a3269]"></div>
+            <div className="absolute inset-0 rounded-full animate-spin border-4 border-t-[#14235E]"></div>
           </div>
           <p className="mt-4 text-sm font-medium text-slate-500 dark:text-slate-400">Loading checks…</p>
         </div>
@@ -1348,7 +1348,7 @@ const ChecksReviewPanel: React.FC = () => {
                   className={cn(
                     "border transition-all duration-300 bg-white/90 backdrop-blur-sm dark:bg-slate-900/90",
                     isExpanded
-                      ? "border-[#0a3269] shadow-xl shadow-[#0a3269]/10 dark:border-[#0a3269]"
+                      ? "border-[#14235E] shadow-xl shadow-[#14235E]/10 dark:border-[#14235E]"
                       : "border-slate-200/70 hover:border-slate-300 dark:border-slate-700/70 dark:hover:border-slate-600"
                   )}
                 >
@@ -1598,7 +1598,7 @@ const ChecksReviewPanel: React.FC = () => {
                                 <div className="flex-1 relative">
                                   <Input
                                     placeholder="Document label *"
-                                    className="h-10 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#0a3269] focus:ring-[#0a3269]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                                    className="h-10 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#14235E] focus:ring-[#14235E]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                                     value={docLabel[check._id] || ''}
                                     onChange={e => setDocLabel(prev => ({ ...prev, [check._id]: e.target.value }))}
                                   />
@@ -1606,7 +1606,7 @@ const ChecksReviewPanel: React.FC = () => {
                                 <div className="flex-1 relative">
                                   <Input
                                     placeholder="Description (optional)"
-                                    className="h-10 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#0a3269] focus:ring-[#0a3269]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                                    className="h-10 flex-1 border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#14235E] focus:ring-[#14235E]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                                     value={docDesc[check._id] || ''}
                                     onChange={e => setDocDesc(prev => ({ ...prev, [check._id]: e.target.value }))}
                                   />
@@ -1638,7 +1638,7 @@ const ChecksReviewPanel: React.FC = () => {
                                 className="w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200/50 dark:border-blue-800/30 hover:bg-blue-100/50 dark:hover:bg-blue-900/20 transition-all duration-300 group"
                               >
                                 <div className="flex items-center gap-3">
-                                  <div className="p-2 rounded-lg bg-[#0a3269] text-white shadow-lg shadow-[#0a3269]/20">
+                                  <div className="p-2 rounded-lg bg-[#14235E] text-white shadow-lg shadow-[#14235E]/20">
                                     <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                                   </div>
                                   <div className="text-left">
@@ -1678,7 +1678,7 @@ const ChecksReviewPanel: React.FC = () => {
                                       {/* ─── Chat Header ───────────────────────────────────── */}
                                       <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-100 to-white dark:from-slate-800 dark:to-slate-800/50 border-b border-slate-200/50 dark:border-white/5">
                                         <div className="flex items-center gap-3">
-                                          <div className="h-9 w-9 rounded-full bg-[#0a3269] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#0a3269]/20">
+                                          <div className="h-9 w-9 rounded-full bg-[#14235E] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#14235E]/20">
                                             A
                                           </div>
                                           <div>
@@ -1738,13 +1738,13 @@ const ChecksReviewPanel: React.FC = () => {
                                                 handleSendChatMessage(check);
                                               }
                                             }}
-                                            className="flex-1 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0a3269] focus:ring-2 focus:ring-[#0a3269]/20 focus:outline-none transition-all"
+                                            className="flex-1 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#14235E] focus:ring-2 focus:ring-[#14235E]/20 focus:outline-none transition-all"
                                             disabled={sendingMessage[check._id]}
                                           />
                                           <Button
                                             onClick={() => handleSendChatMessage(check)}
                                             disabled={sendingMessage[check._id] || !chatMessage[check._id]?.trim()}
-                                            className="h-10 w-10 p-0 rounded-full bg-[#0a3269] text-white shadow-lg shadow-[#0a3269]/25 hover:shadow-[#0a3269]/40 transition-all disabled:opacity-50"
+                                            className="h-10 w-10 p-0 rounded-full bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25 hover:shadow-[#14235E]/40 transition-all disabled:opacity-50"
                                           >
                                             {sendingMessage[check._id] ? (
                                               <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -1825,7 +1825,7 @@ const ChecksReviewPanel: React.FC = () => {
                                       setNewStatus((prev) => ({ ...prev, [check._id]: val }))
                                     }
                                   >
-                                    <SelectTrigger className="h-11 w-full border-slate-200 bg-white text-sm font-medium text-slate-900 transition hover:border-[#0a3269] focus:ring-2 focus:ring-[#0a3269]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:border-[#0a3269]">
+                                    <SelectTrigger className="h-11 w-full border-slate-200 bg-white text-sm font-medium text-slate-900 transition hover:border-[#14235E] focus:ring-2 focus:ring-[#14235E]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:border-[#14235E]">
                                       <SelectValue placeholder="Choose a new status…" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -1890,7 +1890,7 @@ const ChecksReviewPanel: React.FC = () => {
                                 <div>
                                   <Textarea
                                     placeholder="Add a note (optional)…"
-                                    className="min-h-[72px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-[#0a3269] focus:ring-2 focus:ring-[#0a3269]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
+                                    className="min-h-[72px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-[#14235E] focus:ring-2 focus:ring-[#14235E]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                                     value={statusNote[check._id] || ''}
                                     onChange={(e) =>
                                       setStatusNote((prev) => ({ ...prev, [check._id]: e.target.value }))
@@ -1907,7 +1907,7 @@ const ChecksReviewPanel: React.FC = () => {
                                   size="sm"
                                   disabled={isActing || !newStatus[check._id]}
                                   onClick={() => handleStatusUpdate(check)}
-                                  className="relative w-full gap-2 bg-[#0a3269] text-white shadow-lg shadow-[#0a3269]/25 transition-all hover:scale-[1.01] hover:shadow-[#0a3269]/40 disabled:opacity-60 disabled:hover:scale-100 sm:w-auto"
+                                  className="relative w-full gap-2 bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25 transition-all hover:scale-[1.01] hover:shadow-[#14235E]/40 disabled:opacity-60 disabled:hover:scale-100 sm:w-auto"
                                 >
                                   {isActing ? (
                                     <>
@@ -1935,7 +1935,7 @@ const ChecksReviewPanel: React.FC = () => {
                               <div className="space-y-3">
                                 <Textarea
                                   placeholder="Write a comment visible to the applicant…"
-                                  className="min-h-[60px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#0a3269] focus:ring-[#0a3269]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                                  className="min-h-[60px] resize-none border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#14235E] focus:ring-[#14235E]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                                   value={commentText[check._id] || ''}
                                   onChange={e => setCommentText(prev => ({ ...prev, [check._id]: e.target.value }))}
                                 />
@@ -1943,7 +1943,7 @@ const ChecksReviewPanel: React.FC = () => {
                                   size="sm"
                                   disabled={isActing || !commentText[check._id]?.trim()}
                                   onClick={() => handleAddComment(check)}
-                                  className="w-full gap-2 bg-[#0a3269] text-white shadow-lg shadow-[#0a3269]/25 hover:shadow-[#0a3269]/40 sm:w-auto"
+                                  className="w-full gap-2 bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25 hover:shadow-[#14235E]/40 sm:w-auto"
                                 >
                                   <Send className="h-4 w-4" /> Send Comment
                                 </Button>

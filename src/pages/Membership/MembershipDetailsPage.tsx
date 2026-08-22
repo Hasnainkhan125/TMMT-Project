@@ -226,7 +226,7 @@ export function MembershipDetailsPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mb-8 sm:mb-10 md:mb-12 overflow-hidden rounded-3xl sm:rounded-4xl border-2 border-solid border-[#0A3269]/20 dark:border-white/10 bg-white/60 dark:bg-white/[0.02] p-5 sm:p-8 md:p-10 lg:p-12"
+          className="relative mb-8 sm:mb-10 md:mb-12 overflow-hidden rounded-3xl sm:rounded-4xl border-2 border-solid border-[#14235E]/20 dark:border-white/10 bg-white/60 dark:bg-white/[0.02] p-5 sm:p-8 md:p-10 lg:p-12"
         >
 
           <div
@@ -244,16 +244,16 @@ export function MembershipDetailsPage() {
               <div className={cn(
                 'flex h-16 w-16 sm:h-20 sm:w-20 shrink-0 items-center justify-center rounded-full border-2 border-solid transition-all duration-300 hover:scale-105',
                 selectedPlan.popular
-                  ? 'border-[#0A3269] bg-[#0A3269]/8'
+                  ? 'border-[#14235E] bg-[#14235E]/8'
                   : 'border-black/15 dark:border-white/15 bg-black/[0.02] dark:bg-white/[0.02]'
               )}>
                 <PlanIcon className={cn(
                   'h-7 w-7 sm:h-9 sm:w-9 transition-all duration-300',
-                  selectedPlan.popular ? 'text-[#0A3269]' : 'text-black/60 dark:text-white/60'
+                  selectedPlan.popular ? 'text-[#14235E]' : 'text-black/60 dark:text-white/60'
                 )} />
               </div>
               <div className="flex-1 min-w-0">
-                <span className=" text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0A3269]/60 dark:text-white/40">
+                <span className=" text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] text-[#14235E]/60 dark:text-white/40">
                   {isArabic ? 'خطة العضوية' : 'Membership Plan'}
                 </span>
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1">
@@ -261,7 +261,7 @@ export function MembershipDetailsPage() {
                     {selectedPlan.label}
                   </h1>
                   {selectedPlan.popular && (
-                    <Badge className="bg-[#0A3269] text-white border-0 px-3 sm:px-4 py-1 text-[10px] sm:text-xs rounded-full">
+                    <Badge className="bg-[#14235E] text-white border-0 px-3 sm:px-4 py-1 text-[10px] sm:text-xs rounded-full">
                       <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1 fill-current" />
                       {isArabic ? 'الأكثر شعبية' : 'Most Popular'}
                     </Badge>
@@ -278,7 +278,7 @@ export function MembershipDetailsPage() {
               onClick={() => handleSubscribe(selectedPlan)}
               className={cn(
                 'w-full sm:w-auto rounded-full px-6 sm:px-8 md:px-10 py-5 sm:py-6 text-sm sm:text-base font-light gap-2 transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] relative overflow-hidden group/hero',
-                'bg-[#0A3269] text-white hover:bg-[#0A3269] shadow-lg hover:shadow-xl shadow-[#0A3269]/20'
+                'bg-[#14235E] text-white hover:bg-[#14235E] shadow-lg hover:shadow-xl shadow-[#14235E]/20'
               )}
             >
               <span className="absolute inset-0 -translate-x-full group-hover/hero:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -295,7 +295,7 @@ export function MembershipDetailsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="mb-8 sm:mb-10 md:mb-12 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-[#0A3269]/12 dark:border-white/10 bg-white dark:bg-white/[0.02]"
+          className="mb-8 sm:mb-10 md:mb-12 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-[#14235E]/12 dark:border-white/10 bg-white dark:bg-white/[0.02]"
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <div className="flex flex-wrap items-baseline gap-2 sm:gap-4">
@@ -316,7 +316,7 @@ export function MembershipDetailsPage() {
                 </Badge>
               )}
               {selectedPlan.interval !== 'month' && (
-                <span className=" text-xs sm:text-sm text-[#0A3269]">
+                <span className=" text-xs sm:text-sm text-[#14235E]">
                   ≈ AED {getPerMonthAmount(selectedPlan)}/month
                 </span>
               )}
@@ -333,12 +333,12 @@ export function MembershipDetailsPage() {
         >
           <div className="flex items-center justify-between mb-4 sm:mb-5 md:mb-6">
             <h2 className="text-lg sm:text-xl font-light text-black dark:text-white flex items-center gap-2">
-              <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10">
-                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-[#0A3269]" />
+              <div className="p-1.5 sm:p-2 rounded-lg bg-[#14235E]/10">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-[#14235E]" />
               </div>
               {isArabic ? 'الميزات الرئيسية' : 'Key Features'}
             </h2>
-            <Badge variant="outline" className="text-[9px] sm:text-[10px] font-medium border-solid border-[#0A3269]/40 text-[#0A3269] rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 bg-[#0A3269]/5">
+            <Badge variant="outline" className="text-[9px] sm:text-[10px] font-medium border-solid border-[#14235E]/40 text-[#14235E] rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 bg-[#14235E]/5">
               {selectedPlan.label}
             </Badge>
           </div>
@@ -356,7 +356,7 @@ export function MembershipDetailsPage() {
                   className={cn(
                     'group relative p-3 sm:p-4 rounded-xl border-2 border-solid text-center transition-all duration-300',
                     selectedPlan.popular
-                      ? 'border-[#0A3269]/30 bg-[#0A3269]/[0.04] dark:bg-[#0A3269]/10'
+                      ? 'border-[#14235E]/30 bg-[#14235E]/[0.04] dark:bg-[#14235E]/10'
                       : 'border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/30 hover:border-black/25 dark:hover:border-white/25'
                   )}
                 >
@@ -364,13 +364,13 @@ export function MembershipDetailsPage() {
                     <div className={cn(
                       'flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full mx-auto mb-1.5 sm:mb-2 transition-all duration-300',
                       selectedPlan.popular
-                        ? 'bg-[#0A3269]/10 group-hover:bg-[#0A3269]'
+                        ? 'bg-[#14235E]/10 group-hover:bg-[#14235E]'
                         : 'bg-black/5 dark:bg-white/5 group-hover:bg-black/10 dark:group-hover:bg-white/10'
                     )}>
                       <Icon className={cn(
                         'h-4 w-4 sm:h-5 sm:w-5 transition-all duration-300',
                         selectedPlan.popular
-                          ? 'text-[#0A3269] group-hover:text-white'
+                          ? 'text-[#14235E] group-hover:text-white'
                           : 'text-black/60 dark:text-white/60 group-hover:text-black dark:group-hover:text-white'
                       )} />
                     </div>
@@ -390,7 +390,7 @@ export function MembershipDetailsPage() {
             initial={{ width: 0 }}
             animate={{ width: '100%' }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="mt-4 sm:mt-5 border-t border-solid border-[#0A3269]/20"
+            className="mt-4 sm:mt-5 border-t border-solid border-[#14235E]/20"
           />
         </motion.div>
 
@@ -403,23 +403,23 @@ export function MembershipDetailsPage() {
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-5 md:mb-6 gap-2">
             <h2 className="text-lg sm:text-xl font-light text-black dark:text-white flex items-center gap-2">
-              <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10">
-                <Layers className="h-4 w-4 sm:h-5 sm:w-5 text-[#0A3269]" />
+              <div className="p-1.5 sm:p-2 rounded-lg bg-[#14235E]/10">
+                <Layers className="h-4 w-4 sm:h-5 sm:w-5 text-[#14235E]" />
               </div>
               {isArabic ? 'مقارنة الخطط' : 'Plan Comparison'}
             </h2>
-            <Badge variant="outline" className=" text-[9px] sm:text-[10px] font-medium border-solid border-[#0A3269]/40 text-[#0A3269] rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 bg-[#0A3269]/5">
+            <Badge variant="outline" className=" text-[9px] sm:text-[10px] font-medium border-solid border-[#14235E]/40 text-[#14235E] rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 bg-[#14235E]/5">
               {isArabic ? 'جميع الميزات مضمنة' : 'All features included'}
             </Badge>
           </div>
 
-          <div className="w-full overflow-x-auto rounded-xl sm:rounded-2xl border border-[#0A3269]/10 dark:border-white/5 bg-white/60 dark:bg-black/30 backdrop-blur-sm">
+          <div className="w-full overflow-x-auto rounded-xl sm:rounded-2xl border border-[#14235E]/10 dark:border-white/5 bg-white/60 dark:bg-black/30 backdrop-blur-sm">
             <table className="w-full sm:min-w-full text-xs sm:text-sm">
               <thead>
-                <tr className="border-b-2 border-solid border-[#0A3269]/15 dark:border-white/10 bg-[#0A3269]/5">
+                <tr className="border-b-2 border-solid border-[#14235E]/15 dark:border-white/10 bg-[#14235E]/5">
                   <th className="p-2 sm:p-3 md:p-4 text-left font-medium text-black/50 dark:text-white/50 text-[8px] sm:text-[10px] uppercase tracking-wider sticky left-0 bg-white/90 dark:bg-black/90 backdrop-blur-sm z-10 min-w-[80px] sm:min-w-[100px] md:min-w-[120px]">
                     <span className="flex items-center gap-1.5 sm:gap-2">
-                      <span className="w-1 h-4 rounded-full bg-[#0A3269]" />
+                      <span className="w-1 h-4 rounded-full bg-[#14235E]" />
                       {isArabic ? 'الميزة' : 'Feature'}
                     </span>
                   </th>
@@ -429,19 +429,19 @@ export function MembershipDetailsPage() {
                       className={cn(
                         'p-2 sm:p-3 md:p-4 text-center font-light text-[8px] sm:text-xs transition-all duration-300 min-w-[60px] sm:min-w-[80px] md:min-w-[100px] relative',
                         plan.id === selectedPlan.id
-                          ? 'bg-[#0A3269]/8 text-[#0A3269]'
+                          ? 'bg-[#14235E]/8 text-[#14235E]'
                           : 'text-black/60 dark:text-white/60 hover:bg-black/5 dark:hover:bg-white/5'
                       )}
                     >
                       {plan.id === selectedPlan.id && (
-                        <div className="absolute inset-x-0 top-0 h-0.5 bg-[#0A3269]" />
+                        <div className="absolute inset-x-0 top-0 h-0.5 bg-[#14235E]" />
                       )}
                       <div className="flex flex-col items-center gap-0.5 sm:gap-1">
                         <span className="font-light text-[9px] sm:text-xs md:text-sm text-black dark:text-white">
                           {plan.label}
                         </span>
                         {plan.popular && (
-                          <Badge className="bg-[#0A3269] text-white text-[6px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
+                          <Badge className="bg-[#14235E] text-white text-[6px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-full font-light">
                             ★ {isArabic ? 'الأفضل' : 'Best'}
                           </Badge>
                         )}
@@ -463,15 +463,15 @@ export function MembershipDetailsPage() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.03 * idx, duration: 0.3 }}
                       className={cn(
-                        'border-b border-solid border-[#0A3269]/10 dark:border-white/10 last:border-0 transition-all duration-300 hover:bg-black/5 dark:hover:bg-white/5',
+                        'border-b border-solid border-[#14235E]/10 dark:border-white/10 last:border-0 transition-all duration-300 hover:bg-black/5 dark:hover:bg-white/5',
                         idx % 2 === 0 ? 'bg-black/[0.015] dark:bg-white/[0.02]' : '',
                         (benefit.id === 'personalCaseReviews' || benefit.id === 'statusChecks') &&
-                          'bg-[#0A3269]/5'
+                          'bg-[#14235E]/5'
                       )}
                     >
                       <td className="p-2 sm:p-3 md:p-4 text-black/70 dark:text-white/70 font-light text-[8px] sm:text-[11px] md:text-xs flex items-center gap-1.5 sm:gap-2 sticky left-0 bg-white/90 dark:bg-black/90 backdrop-blur-sm z-10">
-                        <div className="p-1 rounded-md bg-[#0A3269]/10">
-                          <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0A3269]" />
+                        <div className="p-1 rounded-md bg-[#14235E]/10">
+                          <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#14235E]" />
                         </div>
                         <span className="font-light whitespace-nowrap">{benefit.label}</span>
                       </td>
@@ -484,7 +484,7 @@ export function MembershipDetailsPage() {
                             className={cn(
                               'p-2 sm:p-3 md:p-4 text-center text-[8px] sm:text-[11px] md:text-xs transition-all duration-300 ',
                               isSelected
-                                ? 'text-[#0A3269] font-medium bg-[#0A3269]/5'
+                                ? 'text-[#14235E] font-medium bg-[#14235E]/5'
                                 : 'text-black/60 dark:text-white/60 font-light'
                             )}
                           >
@@ -511,7 +511,7 @@ export function MembershipDetailsPage() {
             initial={{ width: 0 }}
             animate={{ width: '100%' }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="mt-3 border-t border-solid border-[#0A3269]/20"
+            className="mt-3 border-t border-solid border-[#14235E]/20"
           />
         </motion.div>
 
@@ -523,7 +523,7 @@ export function MembershipDetailsPage() {
           className="mb-8 sm:mb-10 md:mb-12"
         >
           <h2 className="text-lg sm:text-xl font-light text-black dark:text-white mb-4 sm:mb-5 md:mb-6 flex items-center gap-2">
-            <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-[#0A3269]" />
+            <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-[#14235E]" />
             {isArabic ? 'الخدمات المشمولة' : 'Included Services'}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
@@ -536,11 +536,11 @@ export function MembershipDetailsPage() {
                 className={cn(
                   'flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border border-solid transition-all hover:shadow-sm',
                   selectedPlan.popular
-                    ? 'border-[#0A3269]/30 bg-[#0A3269]/5'
+                    ? 'border-[#14235E]/30 bg-[#14235E]/5'
                     : 'border-black/10 dark:border-white/10 bg-white dark:bg-black/30'
                 )}
               >
-                <service.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#0A3269]" />
+                <service.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#14235E]" />
                 <span className="text-[10px] sm:text-xs text-black/70 dark:text-white/70 font-light">{service.label}</span>
               </motion.div>
             ))}
@@ -552,10 +552,10 @@ export function MembershipDetailsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.5 }}
-          className="mb-8 sm:mb-10 md:mb-12 p-4 sm:p-5 rounded-xl border border-solid border-[#0A3269]/25 bg-[#0A3269]/5"
+          className="mb-8 sm:mb-10 md:mb-12 p-4 sm:p-5 rounded-xl border border-solid border-[#14235E]/25 bg-[#14235E]/5"
         >
           <div className="flex items-start gap-2.5 sm:gap-3">
-            <Info className="h-4 w-4 sm:h-5 sm:w-5 text-[#0A3269] mt-0.5 shrink-0" />
+            <Info className="h-4 w-4 sm:h-5 sm:w-5 text-[#14235E] mt-0.5 shrink-0" />
             <div>
               <p className="text-xs sm:text-sm font-light text-black dark:text-white">
                 {isArabic ? 'ما هي مراجعات الحالة الشخصية؟' : 'What are Personal Case Reviews?'}
@@ -577,14 +577,14 @@ export function MembershipDetailsPage() {
         >
           <div className="flex items-center justify-between mb-4 sm:mb-5 md:mb-6">
             <h2 className="text-lg sm:text-xl font-light text-black dark:text-white flex items-center gap-2">
-              <div className="p-1.5 sm:p-2 rounded-xl bg-[#0A3269]/10">
-                <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-[#0A3269]" />
+              <div className="p-1.5 sm:p-2 rounded-xl bg-[#14235E]/10">
+                <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-[#14235E]" />
               </div>
               {isArabic ? 'اختر خطتك' : 'Choose Your Plan'}
             </h2>
             <Badge
               variant="outline"
-              className=" text-[8px] sm:text-[10px] font-medium border-solid border-[#0A3269]/40 text-[#0A3269] rounded-full px-2 sm:px-3 py-0.5 bg-[#0A3269]/5"
+              className=" text-[8px] sm:text-[10px] font-medium border-solid border-[#14235E]/40 text-[#14235E] rounded-full px-2 sm:px-3 py-0.5 bg-[#14235E]/5"
             >
               {translatedPlans.length} {isArabic ? 'خطط' : 'Plans'}
             </Badge>
@@ -605,14 +605,14 @@ export function MembershipDetailsPage() {
                   className={cn(
                     'group relative flex flex-col rounded-3xl border-2 p-6 transition-all duration-300 bg-white dark:bg-black/40 backdrop-blur-sm',
                     isPopular
-                      ? 'border-[#0A3269] shadow-[0_8px_30px_-8px_rgba(10,50,105,0.15)]'
+                      ? 'border-[#14235E] shadow-[0_8px_30px_-8px_rgba(10,50,105,0.15)]'
                       : 'border-solid border-black/15 dark:border-white/15 hover:border-black/30 dark:hover:border-white/30',
-                    isSelected && !isPopular && 'ring-2 ring-[#0A3269]/60 border-transparent'
+                    isSelected && !isPopular && 'ring-2 ring-[#14235E]/60 border-transparent'
                   )}
                 >
                   {isPopular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                      <Badge className="bg-[#0A3269] text-white px-4 py-1.5 rounded-full text-[10px] font-semibold shadow-lg shadow-[#0A3269]/20">
+                      <Badge className="bg-[#14235E] text-white px-4 py-1.5 rounded-full text-[10px] font-semibold shadow-lg shadow-[#14235E]/20">
                         <Star className="h-3 w-3 mr-1.5 fill-current" />
                         {isArabic ? 'الأكثر شعبية' : 'Most Popular'}
                       </Badge>
@@ -624,20 +624,20 @@ export function MembershipDetailsPage() {
                     <div className={cn(
                       'flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-solid transition-all duration-300 group-hover:scale-105',
                       isPopular
-                        ? 'border-[#0A3269] bg-[#0A3269]/8'
+                        ? 'border-[#14235E] bg-[#14235E]/8'
                         : 'border-black/15 dark:border-white/15 bg-black/[0.02] dark:bg-white/[0.02] group-hover:bg-black/5 dark:group-hover:bg-white/5'
                     )}>
                       <PlanIcon className={cn(
                         'h-5 w-5 transition-all duration-300',
                         isPopular
-                          ? 'text-[#0A3269]'
+                          ? 'text-[#14235E]'
                           : 'text-black/60 dark:text-white/60 group-hover:text-black dark:group-hover:text-white'
                       )} />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-black dark:text-white">{plan.label}</h3>
                       {plan.popular && (
-                        <p className=" text-[10px] text-[#0A3269]">
+                        <p className=" text-[10px] text-[#14235E]">
                           {isArabic ? 'الأفضل قيمة' : 'Best Value'}
                         </p>
                       )}
@@ -663,7 +663,7 @@ export function MembershipDetailsPage() {
                       </Badge>
                     )}
                     {plan.interval !== 'month' && (
-                      <p className=" text-xs text-[#0A3269] mt-1">
+                      <p className=" text-xs text-[#14235E] mt-1">
                         ≈ AED {getPerMonthAmount(plan)}/month
                       </p>
                     )}
@@ -679,7 +679,7 @@ export function MembershipDetailsPage() {
                         <div className={cn(
                           'p-0.5 rounded-full mt-0.5 shrink-0 transition-all duration-300',
                           isPopular
-                            ? 'bg-[#0A3269] group-hover/item:scale-110'
+                            ? 'bg-[#14235E] group-hover/item:scale-110'
                             : 'bg-black/30 dark:bg-white/30 group-hover/item:bg-black/50 dark:group-hover/item:bg-white/50'
                         )}>
                           <Check className="h-3 w-3 text-white" strokeWidth={3} />
@@ -695,13 +695,13 @@ export function MembershipDetailsPage() {
                     className={cn(
                       'w-full rounded-full text-sm font-medium py-5 sm:py-6 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden group/btn',
                       isPopular
-                        ? 'bg-[#0A3269] text-white hover:bg-[#1A4A8A] shadow-lg shadow-[#0A3269]/20'
-                        : 'bg-white text-[#0A3269] border border-[#0A3269]/20 hover:border-[#0A3269]/40'
+                        ? 'bg-[#14235E] text-white hover:bg-[#1A4A8A] shadow-lg shadow-[#14235E]/20'
+                        : 'bg-white text-[#14235E] border border-[#14235E]/20 hover:border-[#14235E]/40'
                     )}
                   >
                     <span className={cn(
                       'absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent to-transparent',
-                      isPopular ? 'via-white/20' : 'via-[#0A3269]/10'
+                      isPopular ? 'via-white/20' : 'via-[#14235E]/10'
                     )} />
                     <span className="relative flex items-center gap-2">
                       {isArabic ? 'اشترك الآن' : 'Subscribe Now'}
@@ -717,7 +717,7 @@ export function MembershipDetailsPage() {
             initial={{ width: 0 }}
             animate={{ width: '100%' }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="mt-6 sm:mt-8 border-t border-solid border-[#0A3269]/20"
+            className="mt-6 sm:mt-8 border-t border-solid border-[#14235E]/20"
           />
         </motion.div>
       </div>
@@ -730,7 +730,7 @@ export function MembershipDetailsPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden fixed bottom-0 inset-x-0 z-50 p-3 bg-white/90 dark:bg-black/90 backdrop-blur-lg border-t-2 border-solid border-[#0A3269]/20 dark:border-white/10"
+            className="lg:hidden fixed bottom-0 inset-x-0 z-50 p-3 bg-white/90 dark:bg-black/90 backdrop-blur-lg border-t-2 border-solid border-[#14235E]/20 dark:border-white/10"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
@@ -742,7 +742,7 @@ export function MembershipDetailsPage() {
               </div>
               <Button
                 onClick={() => handleSubscribe(selectedPlan)}
-                className="rounded-full px-6 py-5 text-sm font-medium bg-[#0A3269] text-white hover:bg-[#0A3269]/90 shrink-0"
+                className="rounded-full px-6 py-5 text-sm font-medium bg-[#14235E] text-white hover:bg-[#14235E]/90 shrink-0"
               >
                 {isArabic ? 'اشترك' : 'Subscribe'}
                 <ArrowRight className="h-4 w-4 ml-1.5" />

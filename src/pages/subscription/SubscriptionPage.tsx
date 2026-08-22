@@ -17,6 +17,7 @@ import {
 import {
   ArrowLeft,
   Crown,
+  Link,
   CreditCard,
   AlertCircle,
   Shield,
@@ -70,12 +71,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-// ─── Signature motif: the "official seal" ──────────────────────────────────
-// A dashed-ring emblem used sparingly across the page — on the popular plan,
-// as a faint watermark behind the hero, and echoed in the savings tag — to
-// carry the "government-backed, verified" idea typographically rather than
-// through another badge-and-pill pattern.
-
 const SealWatermark = () => (
   <svg
     className="pointer-events-none absolute left-1/2 top-1 -translate-x-1/2 -z-10 opacity-[0.05] dark:opacity-[0.06]"
@@ -85,9 +80,9 @@ const SealWatermark = () => (
     fill="none"
     aria-hidden="true"
   >
-    <circle cx="180" cy="180" r="176" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 7" className="text-[#0A3269]" />
-    <circle cx="180" cy="180" r="150" stroke="currentColor" strokeWidth="1" className="text-[#0A3269]" />
-    <circle cx="180" cy="180" r="4" fill="currentColor" className="text-[#0A3269]" />
+    <circle cx="180" cy="180" r="176" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 7" className="text-[#14235E]" />
+    <circle cx="180" cy="180" r="150" stroke="currentColor" strokeWidth="1" className="text-[#14235E]" />
+    <circle cx="180" cy="180" r="4" fill="currentColor" className="text-[#14235E]" />
   </svg>
 );
 
@@ -100,7 +95,7 @@ const SealBadge = ({
 }) => (
   <span
     className={cn(
-      'inline-flex items-center gap-1 rounded-full border border-dashed px-2 py-0.5 text-[10px] font-light uppercase tracking-wider border-[#0A3269]/40 text-[#0A3269]',
+      'inline-flex items-center gap-1 rounded-full border border-dashed px-2 py-0.5 text-[10px] font-light uppercase tracking-wider border-[#14235E]/40 text-[#14235E]',
       className
     )}
   >
@@ -153,7 +148,7 @@ const WhySubscribeSection = () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-black dark:text-white leading-[1.05] tracking-tight" style={{ fontFamily: "'Inter', sans-serif" }}>
           {isArabic ? 'لماذا تشترك مع' : 'Why Subscribe to'}
           <br />
-          <span className="text-[#0A3269] font-normal">
+          <span className="text-[#14235E] font-normal">
             {isArabic ? 'TMMT؟' : 'TMMT?'}
           </span>
         </h2>
@@ -167,14 +162,16 @@ const WhySubscribeSection = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: idx * 0.08, duration: 0.5 }}
       whileHover={{ y: -4 }}
-      className="group relative rounded-xl sm:rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-black p-3 sm:p-4 md:p-5 text-center hover:border-[#0A3269]/40 hover:shadow-xl hover:shadow-[#0A3269]/8 transition-all duration-300"
-    >
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0A3269] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      className="group relative rounded-xl sm:rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0c] p-3 sm:p-4 md:p-5 text-center hover:border-[#14235E]/40 hover:shadow-xl hover:shadow-[#14235E]/8 transition-all duration-300"
+   
+   >
       
-      <div className="p-2 sm:p-3 rounded-xl bg-[#0A3269] w-fit mx-auto mb-2 sm:mb-3 group-hover:bg-[#0A3269]/80 transition-all duration-300">
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#14235E] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      <div className="p-2 sm:p-3 rounded-xl bg-[#14235E] w-fit mx-auto mb-2 sm:mb-3 group-hover:bg-[#14235E]/80 transition-all duration-300">
         <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white group-hover:text-white transition-colors duration-300" strokeWidth={1.75} />
       </div>
-      <p className="font-normal text-black dark:text-white text-sm sm:text-base md:text-lg group-hover:text-[#0A3269] transition-colors duration-300">
+      <p className="font-normal text-black dark:text-white text-sm sm:text-base md:text-lg group-hover:text-[#14235E] transition-colors duration-300">
         {benefit.title}
       </p>
       <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-white/50 mt-1 leading-relaxed font-light">
@@ -203,13 +200,13 @@ const GoldenGuaranteeCard = () => {
       <div className="relative rounded-xl border border-amber-500/30 bg-white/50 dark:bg-black/70 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 group hover:shadow-sm hover:shadow-amber-500/5">
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3">
           <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/15 border border-amber-500/15 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-            <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" strokeWidth={1.5} />
+            <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400" strokeWidth={1.5} />
           </div>
           
           <div className="flex-1 min-w-0">
             <h4 className="font-light text-black dark:text-white text-sm sm:text-base flex flex-wrap items-center gap-1.5 sm:gap-2">
               {isArabic ? 'الضمان الذهبي من TMMT' : 'TMMT Golden Guarantee'}
-              <SealBadge className="border-amber-500/40 text-amber-700 text-[7px] sm:text-[8px] px-1.5 sm:px-2">
+              <SealBadge className="border-amber-500/40 text-amber-400 text-[7px] sm:text-[8px] px-1.5 sm:px-2">
                 ✓ Trusted
               </SealBadge>
             </h4>
@@ -222,7 +219,7 @@ const GoldenGuaranteeCard = () => {
               href="/legal#guarantee"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-600 hover:text-amber-700 font-light transition-all duration-300 group/link hover:gap-1.5"
+              className="inline-flex items-center gap-1 mt-1 text-[10px] sm:text-xs text-amber-400 hover:text-amber-700 font-light transition-all duration-300 group/link hover:gap-1.5"
             >
               {isArabic ? 'اقرأ المزيد' : 'Read more'}
               <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover/link:translate-x-0.5" />
@@ -259,13 +256,13 @@ const HowItWorksSection = () => {
           <>
             كيف يعمل
             <br />
-            <span className="text-[#0A3269] font-normal">بعد اشتراكك</span>
+            <span className="text-[#14235E] font-normal">بعد اشتراكك</span>
           </>
         ) : (
           <>
             How Works After
             <br />
-            <span className="text-[#0A3269] font-normal">subscription</span>
+            <span className="text-[#14235E] font-normal">subscription</span>
           </>
         )}
       </h3>
@@ -277,11 +274,11 @@ const HowItWorksSection = () => {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 + idx * 0.08, duration: 0.5 }}
-      className="group relative text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-black/80 border border-black/5 dark:border-zinc-800 hover:border-[#0A3269]/30 hover:shadow-md transition-all duration-300"
+      className="group relative text-center p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-[#0c0c0c] border border-black/5 dark:border-zinc-800 hover:border-[#14235E]/30 hover:shadow-md transition-all duration-300"
     >
       <div className="flex flex-col items-center">
         <div className="relative">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-[#0A3269] flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-[#0A3269]/80 transition-all duration-300">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-[#14235E] flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-[#14235E]/80 transition-all duration-300">
             <step.icon 
               className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white group-hover:text-white transition-colors duration-300" 
               strokeWidth={1.75} 
@@ -289,15 +286,15 @@ const HowItWorksSection = () => {
           </div>
           
           {idx < steps.length - 1 && (
-            <div className="hidden md:block absolute top-1/2 left-full w-[calc(100%+0.5rem)] h-px bg-gradient-to-r from-[#0A3269]/20 to-transparent -translate-y-1/2" />
+            <div className="hidden md:block absolute top-1/2 left-full w-[calc(100%+0.5rem)] h-px bg-gradient-to-r from-[#14235E]/20 to-transparent -translate-y-1/2" />
           )}
           
-          <div className="absolute -top-1.5 -right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#0A3269] text-white text-[7px] sm:text-[9px] font-medium flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+          <div className="absolute -top-1.5 -right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#14235E] text-white text-[7px] sm:text-[9px] font-medium flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
             {idx + 1}
           </div>
         </div>
         
-        <span className="text-[9px] sm:text-xs md:text-sm font-light text-black dark:text-white/80 max-w-[70px] sm:max-w-[100px] text-center leading-tight group-hover:text-[#0A3269] transition-colors duration-300">
+        <span className="text-[9px] sm:text-xs md:text-sm font-light text-black dark:text-white/80 max-w-[70px] sm:max-w-[100px] text-center leading-tight group-hover:text-[#14235E] transition-colors duration-300">
           {step.label}
         </span>
       </div>
@@ -344,25 +341,21 @@ const TrustSection = () => {
         rounded-xl 
         bg-white/40 dark:bg-white/5 
         backdrop-blur-md 
-        border border-white/20 dark:border-white/10 
-        hover:border-[#0A3269]/40 dark:hover:border-[#0A3269]/30 
-        hover:bg-white/60 dark:hover:bg-white/10 
         transition-all duration-300"
     >
-      {/* Glow Effect */}
       <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 
-        bg-gradient-to-r from-[#0A3269]/5 to-transparent dark:from-[#0A3269]/10" />
+        bg-gradient-to-r from-[#14235E]/5 to-transparent dark:from-[#14235E]/10" />
       
       <item.icon 
         className="relative h-3.5 w-3.5 sm:h-4 sm:w-4 
-          text-[#0A3269] dark:text-[#0A3269] 
+          text-[#14235E] dark:text-[#14235E] 
           group-hover:scale-110 
           transition-all duration-300" 
         strokeWidth={1.75} 
       />
       <span className="relative text-[9px] sm:text-[11px] md:text-xs font-medium 
         text-zinc-700 dark:text-zinc-300 
-        group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] 
+        group-hover:text-[#14235E] dark:group-hover:text-[#14235E] 
         transition-colors duration-300 whitespace-nowrap">
         {item.label}
       </span>
@@ -433,7 +426,7 @@ export function PlanSelectionSection({
               <>
                 الخدمات الحكومية،
                 <br />
-                <span className="relative text-[#0A3269] font-normal" style={{ fontSize: 'clamp(1.2rem, 2.8vw, 2.2rem)' }}>
+                <span className="relative text-[#14235E] font-normal" style={{ fontSize: 'clamp(1.2rem, 2.8vw, 2.2rem)' }}>
                   بدون عناء.
                   <svg className="absolute -bottom-2 left-0 w-full" height="6" viewBox="0 0 300 6" preserveAspectRatio="none">
                     <path d="M0,4 Q75,1 150,3 T300,2.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
@@ -444,7 +437,7 @@ export function PlanSelectionSection({
               <>
                 Government Services,
                 <br />
-                <span className="relative text-[#0A3269] font-normal">
+                <span className="relative text-[#14235E] font-normal">
                   Without the Hassle.
                   <svg className="absolute -bottom-2 left-0 w-full" height="6" viewBox="0 0 300 6" preserveAspectRatio="none">
                     <path d="M0,4 Q75,1 150,3 T300,2.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
@@ -476,11 +469,11 @@ export function PlanSelectionSection({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.5 }}
-            className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#0A3269]/30 bg-[#0A3269]/5 dark:bg-black max-w-3xl mx-auto"
+            className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-[#14235E]/30 bg-[#14235E]/5 dark:bg-black max-w-3xl mx-auto"
           >
             <div className="relative p-3 sm:p-4 md:p-5 flex items-center gap-2 sm:gap-3 md:gap-4">
-              <div className="hidden md:flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-[#0A3269]/20 dark:bg-zinc-800 border border-[#0A3269]/30">
-                <Gift className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#0A3269]" strokeWidth={1.5} />
+              <div className="hidden md:flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-[#14235E]/20 dark:bg-zinc-800 border border-[#14235E]/30">
+                <Gift className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#14235E]" strokeWidth={1.5} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-light text-xs sm:text-sm md:text-[15px] text-black dark:text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -530,11 +523,11 @@ export function PlanSelectionSection({
   whileTap={{ scale: 0.985 }}
   className={cn(
     'relative flex flex-col text-left rounded-[26px] p-7 md:p-7 transition-all duration-300',
-    'border bg-white dark:bg-black',
+    'border bg-white dark:bg-[#0c0c0c]',
     'h-auto min-h-[520px] md:min-h-[560px]',
     isPopular
       ? [
-          'border-[#0A3269]/60',
+          'border-[#14235E]/60',
           'shadow-[0_24px_60px_-16px_rgba(10,50,105,0.12)] dark:shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]',
           'md:-translate-y-3 z-10',
           'min-h-[540px] md:min-h-[590px]',
@@ -543,13 +536,13 @@ export function PlanSelectionSection({
           'border-zinc-200 dark:border-zinc-800',
           'hover:border-zinc-300 dark:hover:border-zinc-700',
         ],
-    isSelected && !isPopular && 'ring-2 ring-[#0A3269]/60 border-transparent'
+    isSelected && !isPopular && 'ring-2 ring-[#14235E]/60 border-transparent'
   )}
 >
   {/* Popular plan: an official-seal badge overlapping the corner */}
   {isPopular && (
-    <div className="absolute -top-4 -right-3 flex h-[60px] w-[60px] rotate-[10deg] items-center justify-center rounded-full border-[1.5px] border-dashed border-[#0A3269] bg-white dark:bg-black shadow-md">
-      <div className="flex flex-col items-center leading-none text-[#0A3269]">
+    <div className="absolute -top-4 -right-3 flex h-[60px] w-[60px] rotate-[10deg] items-center justify-center rounded-full border-[1.5px] border-solid border-[#14235E] bg-white dark:bg-black">
+      <div className="flex flex-col items-center leading-none text-[#14235E] dark:text-white">
         <Star className="h-3 w-3 mb-0.5" strokeWidth={2.5} fill="currentColor" />
         <span className="text-[7px] font-semibold uppercase tracking-wide">Most</span>
         <span className="text-[7px] font-semibold uppercase tracking-wide">Popular</span>
@@ -562,12 +555,12 @@ export function PlanSelectionSection({
       className={cn(
         'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-300',
         isPopular
-          ? 'bg-[#0A3269]/15 border-[#0A3269]/30'
+          ? 'bg-[#14235E]/15 border-[#14235E]/30'
           : 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-800'
       )}
     >
       <PlanIcon
-        className={cn('h-5 w-5', isPopular ? 'text-[#0A3269]' : 'text-zinc-600 dark:text-white/60')}
+        className={cn('h-5 w-5', isPopular ? 'text-[#14235E]' : 'text-zinc-600 dark:text-white/60')}
         strokeWidth={1.75}
       />
     </div>
@@ -613,7 +606,7 @@ export function PlanSelectionSection({
     )}
 
     {plan.interval !== 'month' && (
-      <p className="text-xs mt-2 font-light text-[#0A3269] flex items-center gap-1.5">
+      <p className="text-xs mt-2 font-light text-[#14235E] flex items-center gap-1.5">
         ≈ AED {perMonth}/month
         {savingsPercentage && savingsPercentage > 0 && (
           <SealBadge className="py-0">
@@ -634,7 +627,7 @@ export function PlanSelectionSection({
 
   <ul className="relative space-y-3 flex-1">
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#14235E]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
         <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
@@ -642,7 +635,7 @@ export function PlanSelectionSection({
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#14235E]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
         <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
@@ -650,7 +643,7 @@ export function PlanSelectionSection({
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#14235E]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
         <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
@@ -658,7 +651,7 @@ export function PlanSelectionSection({
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#14235E]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
         <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
@@ -666,7 +659,7 @@ export function PlanSelectionSection({
       </span>
     </li>
     <li className="flex items-start gap-2.5 text-[13px] group/item transition-all duration-200">
-      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#0A3269]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
+      <span className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-[1px] transition-all duration-300', isPopular ? 'bg-[#14235E]' : 'bg-zinc-200 dark:bg-zinc-800 group-hover/item:scale-110')}>
         <Check className={cn('h-3 w-3 transition-all duration-300', isPopular ? 'text-white' : 'text-zinc-500 dark:text-white/50')} strokeWidth={3} />
       </span>
       <span className="text-black/75 dark:text-white/70 leading-snug pt-[1px] font-light">
@@ -678,13 +671,13 @@ export function PlanSelectionSection({
     <p className="text-[10px] text-gray-400 dark:text-white/30 uppercase tracking-wider mb-1.5 font-light">Services included</p>
     <div className="flex flex-wrap gap-1">
       {serviceExamples.slice(0, isMonthly ? 3 : 5).map((service, i) => (
-        <span key={i} className="flex items-center gap-0.5 text-[10px] bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full font-light transition-all duration-200 hover:scale-105 hover:shadow-sm">
-          <service.icon className="h-2.5 w-2.5 text-[#0A3269]" strokeWidth={1.5} />
+        <span key={i} className="flex items-center gap-0.5 text-[10px] bg-gray-100 dark:bg-zinc-900 px-3 py-0.5 rounded-full font-light transition-all duration-200 hover:scale-105 hover:shadow-sm">
+          <service.icon className="h-2.5 w-2.5 text-[#ffffffcc]" strokeWidth={1.5} />
           <span className="text-black/70 dark:text-white/60">{service.label}</span>
         </span>
       ))}
       {!isMonthly && (
-        <span className="text-[10px] text-[#0A3269] font-light">+ more</span>
+        <span className="text-[10px] text-[#14235E] font-light">+ more</span>
       )}
     </div>
   </div>
@@ -697,7 +690,7 @@ export function PlanSelectionSection({
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 100);
     }}
-    className="mt-2 text-xs font-light text-gray-600 dark:text-white/50 hover:text-[#0A3269] transition-colors flex items-center gap-1 self-start group"
+    className="mt-2 text-xs font-light text-gray-600 dark:text-white/50 hover:text-[#14235E] transition-colors flex items-center gap-1 self-start group"
   >
     View Full Details
     <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
@@ -715,7 +708,7 @@ export function PlanSelectionSection({
       'relative mt-5 flex items-center justify-center gap-2.5 h-12 rounded-full text-sm font-medium',
       'transition-all duration-300 cursor-pointer select-none overflow-hidden group/btn',
       isPopular
-        ? 'bg-[#0A3269] text-white shadow-[0_8px_25px_-6px_rgba(10,50,105,0.55)]'
+        ? 'bg-[#14235E] text-white shadow-[0_8px_25px_-6px_rgba(10,50,105,0.55)]'
         : 'bg-black text-white dark:bg-white dark:text-black border border-black dark:border-white'
     )}
   >
@@ -744,10 +737,10 @@ export function PlanSelectionSection({
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mt-4 max-w-3xl mx-auto"
         >
-          <div className="relative rounded-lg sm:rounded-xl border border-[#0A3269]/20 bg-[#0A3269]/5 dark:bg-black p-2.5 sm:p-3 md:p-4">
+          <div className="relative rounded-lg sm:rounded-xl border border-[#14235E]/20 bg-[#14235E]/5 dark:bg-black p-2.5 sm:p-3 md:p-4">
             <div className="flex items-start gap-2">
-              <div className="p-0.5 sm:p-1 rounded-full bg-[#0A3269]/10 dark:bg-zinc-800 mt-0.5 flex-shrink-0">
-                <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#0A3269]" strokeWidth={2.5} />
+              <div className="p-0.5 sm:p-1 rounded-full bg-[#14235E]/10 dark:bg-zinc-800 mt-0.5 flex-shrink-0">
+                <Info className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#14235E]" strokeWidth={2.5} />
               </div>
               <div>
                 <p className="text-[9px] sm:text-[10px] md:text-xs font-light text-black dark:text-white">
@@ -763,17 +756,18 @@ export function PlanSelectionSection({
         <GoldenGuaranteeCard />
         <HowItWorksSection />
 
-        
 {/* ─── Founding Members Section - Compact & Responsive ──────────────────── */}
 <motion.div
   initial={{ opacity: 0, y: 20 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true }}
   transition={{ delay: 0.55, duration: 0.5 }}
-  className="mt-6 sm:mt-8 relative overflow-hidden rounded-xl bg-white/70 dark:bg-black/80 backdrop-blur-sm p-4 sm:p-6 lg:p-8 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-500 group"
+  className="mt-6 sm:mt-8 relative overflow-hidden rounded-2xl bg-white dark:bg-black/80 backdrop-blur-sm p-4 sm:p-6 lg:p-8 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-500 group cursor-pointer"
+  onClick={() => {
+    navigate('/subscription');
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+  }}
 >
-  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-amber-400/5 blur-2xl group-hover:bg-amber-400/8 transition-all duration-700" />
-  <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-orange-400/5 blur-2xl group-hover:bg-orange-400/8 transition-all duration-700" />
 
   <div className="relative">
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
@@ -786,10 +780,10 @@ export function PlanSelectionSection({
             {isArabic ? 'الأعضاء المؤسسون' : 'Founding Members'}
           </h4>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] font-light tracking-wider text-amber-600 bg-amber-500/10 px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] font-light tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full">
               <span className="relative flex h-1 w-1">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60" />
-                <span className="relative inline-flex rounded-full h-1 w-1 bg-amber-500" />
+                <span className="relative inline-flex rounded-full h-1 w-1 bg-amber-400" />
               </span>
               {isArabic ? 'وقت محدود' : 'Limited Time'}
             </span>
@@ -800,22 +794,20 @@ export function PlanSelectionSection({
         </div>
       </div>
 
-<Button
-  onClick={(e) => {
-    e.stopPropagation();
-    navigate('/subscription');
-    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
-  }}
-  className="relative bg-amber-500 hover:bg-amber-400/90 text-white rounded-full px-5 sm:px-7 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-all duration-300 shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:-translate-y-0.5 active:scale-95 overflow-hidden"
->
-  {/* Subtle glow effect */}
-  <span className="absolute inset-0 bg-gradient-to-r from-amber-400/20 via-transparent to-amber-600/20 opacity-0 hover:opacity-100 transition-opacity duration-500" />
-  
-  <span className="relative flex items-center gap-2">
-    {isArabic ? 'اكتشف المزايا' : 'Discover Benefits'}
-    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
-  </span>
-</Button>
+      {/* ─── Arrow Link ────────────────────────────────────────────────────── */}
+      <div 
+        className="group/arrow inline-flex items-center gap-2 text-amber-500 hover:text-amber-400 transition-all duration-300"
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate('/subscription');
+          setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+        }}
+      >
+        <span className="  text-black/40 dark:text-white/60 group-hover/arrow:text-amber-500 dark:group-hover/arrow:text-amber-400 transition-colors duration-300">
+          {isArabic ? 'عرض التفاصيل' : 'View Details'}
+        </span>
+        <ArrowRight className="h-5 w-5 transition-all duration-300 group-hover/arrow:translate-x-1 group-hover/arrow:scale-110" strokeWidth={2.5} />
+      </div>
     </div>
 
     <p className="text-[11px] sm:text-sm text-black/60 dark:text-white/50 max-w-3xl leading-relaxed mt-2 sm:mt-3 font-light">
@@ -838,11 +830,12 @@ export function PlanSelectionSection({
           viewport={{ once: true }}
           transition={{ delay: 0.1 + idx * 0.1, duration: 0.4 }}
           className="group/item relative overflow-hidden rounded-lg bg-white/50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 hover:border-amber-200/30 transition-all duration-300 hover:shadow-sm hover:shadow-amber-500/5"
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="absolute -top-10 -right-10 w-16 h-16 rounded-full bg-amber-400/5 blur-xl group-hover/item:bg-amber-400/10 transition-all duration-500" />
           <div className="relative flex items-start gap-2.5">
             <div className="p-1.5 rounded-lg bg-amber-500/10 group-hover/item:bg-amber-500/20 transition-colors duration-300">
-              <item.icon className="w-4 h-4 text-amber-500" strokeWidth={1.75} />
+              <item.icon className="w-4 h-4 text-amber-400" strokeWidth={1.75} />
             </div>
             <div>
               <h5 className="font-light text-black dark:text-white text-xs sm:text-sm">
@@ -863,11 +856,11 @@ export function PlanSelectionSection({
       viewport={{ once: true }}
       transition={{ delay: 0.4, duration: 0.5 }}
       className="mt-3 sm:mt-4 relative overflow-hidden rounded-lg bg-amber-500/5 border border-amber-200/20 p-2 sm:p-3"
+      onClick={(e) => e.stopPropagation()}
     >
       <div className="relative flex flex-col sm:flex-row items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-amber-500 text-sm font-light">⚡</span>
-          <p className="text-[10px] sm:text-xs text-amber-600 font-light text-center sm:text-left">
+          <p className="text-[10px] sm:text-xs text-amber-400 font-light text-center sm:text-left">
             {isArabic 
               ? 'عضوية المؤسسين محدودة — انضم الآن قبل إغلاق التسجيل.'
               : 'Founding membership is limited — join now before enrollment closes.'
@@ -884,6 +877,8 @@ export function PlanSelectionSection({
     </motion.div>
   </div>
 </motion.div>
+
+
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -902,9 +897,9 @@ export function PlanSelectionSection({
     "w-full sm:w-auto min-w-[200px] sm:min-w-[280px] px-5 sm:px-10 rounded-4xl",
     "text-[13px] sm:text-[15px] md:text-[16px] font-semibold",
     "transition-all duration-300 cursor-pointer select-none",
-    // ─── Light & Dark mode: both use #0A3269 ────────────────────────────
-    "bg-[#0A3269] text-white",
-    "hover:border-[#0A3269]/50 dark:hover:border-white/40",
+    // ─── Light & Dark mode: both use #14235E ────────────────────────────
+    "bg-[#14235E] text-white",
+    "hover:border-[#14235E]/50 dark:hover:border-white/40",
     "active:scale-95",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     "overflow-hidden"
@@ -944,7 +939,7 @@ export function PlanSelectionSection({
       {/* ─── Arrow Circle ────────────────────────────────────────────────── */}
       <span className="flex items-center justify-center rounded-full bg-white w-7 h-7 sm:w-8 sm:h-8 md:w-8 md:h-8 transition-all duration-300 group-hover:translate-x-0.5 group-hover:scale-105">
         <ArrowRight 
-          className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#0A3269]" 
+          className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-[#14235E]" 
           strokeWidth={2.5} 
         />
       </span>
@@ -953,37 +948,37 @@ export function PlanSelectionSection({
 </motion.button>
 <div className="grid grid-cols-3 gap-2 sm:gap-2.5 mt-3 sm:mt-4">
   {/* PCI-DSS Secure */}
-  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30  transition-all duration-300 hover:-translate-y-0.5">
-    <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#0A3269] transition-all duration-300 group-hover:scale-110">
-      <ShieldCheck className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0A3269] dark:text-[#0A3269] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
+  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30  transition-all duration-300 hover:-translate-y-0.5">
+    <div className="p-1.5 sm:p-2 rounded-lg bg-[#14235E]/10 dark:bg-[#14235E]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#14235E] transition-all duration-300 group-hover:scale-110">
+      <ShieldCheck className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#14235E] dark:text-[#14235E] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
     </div>
-    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] transition-colors duration-300">
+    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#14235E] dark:group-hover:text-[#14235E] transition-colors duration-300">
       PCI-DSS Secure
     </span>
     {/* Hover indicator line */}
-    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#0A3269] transition-all duration-300 group-hover:w-8 rounded-full" />
+    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#14235E] dark:bg-[#14235E] transition-all duration-300 group-hover:w-8 rounded-full" />
   </div>
 
   {/* 256-bit Encryption */}
-  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30 transition-all duration-300 hover:-translate-y-0.5">
-    <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#0A3269] transition-all duration-300 group-hover:scale-110">
-      <LockIcon className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0A3269] dark:text-[#0A3269] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
+  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30 transition-all duration-300 hover:-translate-y-0.5">
+    <div className="p-1.5 sm:p-2 rounded-lg bg-[#14235E]/10 dark:bg-[#14235E]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#14235E] transition-all duration-300 group-hover:scale-110">
+      <LockIcon className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#14235E] dark:text-[#14235E] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
     </div>
-    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] transition-colors duration-300">
+    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#14235E] dark:group-hover:text-[#14235E] transition-colors duration-300">
       256-bit Encryption
     </span>
-    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#0A3269] transition-all duration-300 group-hover:w-8 rounded-full" />
+    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#14235E] dark:bg-[#14235E] transition-all duration-300 group-hover:w-8 rounded-full" />
   </div>
 
   {/* Cancel Anytime */}
-  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#0A3269]/30 dark:hover:border-[#4A8ABF]/30  transition-all duration-300 hover:-translate-y-0.5">
-    <div className="p-1.5 sm:p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#4A8ABF]/10 group-hover:bg-[#0A3269] dark:group-hover:bg-[#0A3269] transition-all duration-300 group-hover:scale-110">
-      <ExternalLink className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0A3269] dark:text-[#0A3269] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
+  <div className="group relative flex flex-col items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-zinc-200/60 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30  transition-all duration-300 hover:-translate-y-0.5">
+    <div className="p-1.5 sm:p-2 rounded-lg bg-[#14235E]/10 dark:bg-[#14235E]/10 group-hover:bg-[#14235E] dark:group-hover:bg-[#14235E] transition-all duration-300 group-hover:scale-110">
+      <ExternalLink className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#14235E] dark:text-[#14235E] group-hover:text-white dark:group-hover:text-white transition-all duration-300" strokeWidth={1.75} />
     </div>
-    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#0A3269] dark:group-hover:text-[#0A3269] transition-colors duration-300">
+    <span className="text-[8px] sm:text-[10px] md:text-[11px] text-center text-black/60 dark:text-white/60 leading-tight font-light group-hover:text-[#14235E] dark:group-hover:text-[#14235E] transition-colors duration-300">
       Cancel Anytime
     </span>
-    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#0A3269] dark:bg-[#0A3269] transition-all duration-300 group-hover:w-8 rounded-full" />
+    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#14235E] dark:bg-[#14235E] transition-all duration-300 group-hover:w-8 rounded-full" />
   </div>
 </div>
 
@@ -997,7 +992,7 @@ export function PlanSelectionSection({
               </div>
               <p className="max-w-lg text-[8px] sm:text-[10px] md:text-[11px] leading-4 sm:leading-5 text-black/50 dark:text-white/50 font-light">
                 <span className="font-normal">7-day refund guarantee</span> when no service has been used
-                <span className="mx-1.5 sm:mx-2 text-[#0A3269]">•</span>
+                <span className="mx-1.5 sm:mx-2 text-[#14235E]">•</span>
                 End-to-end encrypted payments
               </p>
             </div>
@@ -1013,7 +1008,7 @@ export function SubscriptionPage() {
     return (
       <div
         className="relative z-10 rounded-t-[2rem] bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden"
-        style={{ '--primary': '#0A3269' } as React.CSSProperties}
+        style={{ '--primary': '#14235E' } as React.CSSProperties}
       >
         <Elements stripe={stripePromise}>
           <SubscriptionPageInner />
@@ -1024,7 +1019,7 @@ export function SubscriptionPage() {
   return (
     <div
       className="relative rounded-t-[2rem] bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden"
-      style={{ '--primary': '#0A3269' } as React.CSSProperties}
+      style={{ '--primary': '#14235E' } as React.CSSProperties}
     >
       <SubscriptionPageInner />
     </div>
@@ -1163,7 +1158,7 @@ export function SubscriptionPageInner() {
   if (loadingCurrent) {
     return (
       <div className="flex items-center justify-center py-24 bg-white dark:bg-black text-zinc-500 dark:text-white/50 gap-2 transition-colors duration-300">
-        <Loader2 className="h-5 w-5 animate-spin text-[#0A3269]" />
+        <Loader2 className="h-5 w-5 animate-spin text-[#14235E]" />
         <span>Loading…</span>
       </div>
     );
@@ -1217,7 +1212,7 @@ export function SubscriptionPageInner() {
 function Feature({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-2 text-sm">
-      <Check className="h-4 w-4 text-[#0A3269] mt-0.5 shrink-0" />
+      <Check className="h-4 w-4 text-[#14235E] mt-0.5 shrink-0" />
       <span>{children}</span>
     </div>
   );
@@ -1324,7 +1319,7 @@ function ElementsPaymentForm({
         color: isDark ? '#ffffff' : '#000000',
         fontFamily: 'inherit',
         '::placeholder': { color: isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.35)' },
-        iconColor: '#0A3269',
+        iconColor: '#14235E',
       },
       invalid: { color: '#ff6b6b', iconColor: '#ff6b6b' },
     },
@@ -1345,7 +1340,7 @@ function ElementsPaymentForm({
 
       <div>
         <h2 className="text-2xl font-light flex items-center gap-2 text-black dark:text-white">
-          <Lock className="h-5 w-5 text-[#0A3269]" />
+          <Lock className="h-5 w-5 text-[#14235E]" />
           Complete subscription
         </h2>
         <p className="text-black/50 dark:text-white/50 mt-1 text-sm font-light">
@@ -1353,7 +1348,7 @@ function ElementsPaymentForm({
         </p>
       </div>
 
-      <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black p-4">
+      <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-[#0c0c0c] p-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-light text-black dark:text-white">Tammat {plan.label}</p>
@@ -1362,7 +1357,7 @@ function ElementsPaymentForm({
           <div className="text-right">
             <p className="text-2xl font-light text-black dark:text-white">AED {effectivePlan.amount}</p>
             {effectivePlan.isOffer && (
-              <Badge className="bg-[#0A3269]/15 text-[#0A3269] border-[#0A3269]/30 text-xs mt-1 font-light">
+              <Badge className="bg-[#14235E]/15 text-[#14235E] border-[#14235E]/30 text-xs mt-1 font-light">
                 Eid offer
               </Badge>
             )}
@@ -1378,14 +1373,14 @@ function ElementsPaymentForm({
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
             placeholder="Name on card"
-            className="h-11 rounded-xl bg-zinc-100/50 dark:bg-black border-zinc-200 dark:border-zinc-800 text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-white/30 focus-visible:ring-[#0A3269] font-light"
+            className="h-11 rounded-xl bg-zinc-100/50 dark:bg-black border-zinc-200 dark:border-zinc-800 text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-white/30 focus-visible:ring-[#14235E] font-light"
             autoComplete="cc-name"
           />
         </div>
 
         <div className="space-y-2">
           <Label className="text-black/70 dark:text-white/70 font-light">Card Number</Label>
-          <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] transition-shadow">
+          <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#14235E] transition-shadow">
             <CreditCard className="h-4 w-4 text-black/40 dark:text-white/40 mr-2 shrink-0" />
             <div className="flex-1">
               <CardNumberElement
@@ -1399,7 +1394,7 @@ function ElementsPaymentForm({
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
             <Label className="text-black/70 dark:text-white/70 font-light">Expiry</Label>
-            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] transition-shadow">
+            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#14235E] transition-shadow">
               <div className="flex-1">
                 <CardExpiryElement
                   options={{ ...cardElementOptions, placeholder: 'MM / YY' }}
@@ -1410,7 +1405,7 @@ function ElementsPaymentForm({
           </div>
           <div className="space-y-2">
             <Label className="text-black/70 dark:text-white/70 font-light">CVC</Label>
-            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#0A3269] transition-shadow">
+            <div className="flex items-center h-11 px-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black focus-within:ring-2 focus-within:ring-[#14235E] transition-shadow">
               <div className="flex-1">
                 <CardCvcElement
                   options={{ ...cardElementOptions, placeholder: 'CVC' }}
@@ -1439,7 +1434,7 @@ function ElementsPaymentForm({
         onClick={handleSubscribe}
         disabled={!stripe || isProcessing || !allFieldsValid}
         size="lg"
-        className="w-full gap-2 rounded-2xl bg-[#0A3269] text-white font-light hover:brightness-110 shadow-lg shadow-[#0A3269]/20 transition-shadow"
+        className="w-full gap-2 rounded-2xl bg-[#14235E] text-white font-light hover:brightness-110 shadow-lg shadow-[#14235E]/20 transition-shadow"
       >
         {isProcessing ? (
           <>
@@ -1487,13 +1482,13 @@ function ManageSubscriptionView({
     <div className="max-w-2xl mx-auto p-6 space-y-6 bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden">
       <div>
         <h2 className="text-2xl font-light flex items-center gap-2 text-black dark:text-white">
-          <Crown className="h-6 w-6 text-[#0A3269]" />
+          <Crown className="h-6 w-6 text-[#14235E]" />
           Your Subscription
         </h2>
         <p className="text-black/50 dark:text-white/50 mt-1 font-light">Manage your Tammat membership</p>
       </div>
 
-      <div className="relative overflow-hidden rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-black p-6 space-y-4">
+      <div className="relative overflow-hidden rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-[#0c0c0c] p-6 space-y-4">
         <div className="relative flex items-center justify-between">
           <div>
             <p className="text-sm text-black/50 dark:text-white/50 font-light">Current plan</p>
@@ -1504,7 +1499,7 @@ function ManageSubscriptionView({
               Canceling
             </Badge>
           ) : (
-            <Badge className="bg-[#0A3269]/15 text-[#0A3269] border-[#0A3269]/30 font-light">
+            <Badge className="bg-[#14235E]/15 text-[#14235E] border-[#14235E]/30 font-light">
               Active
             </Badge>
           )}
@@ -1547,7 +1542,7 @@ function ManageSubscriptionView({
         size="lg"
         onClick={onManageBilling}
         disabled={isRedirecting}
-        className="w-full gap-2 rounded-2xl bg-[#0A3269] text-white font-light hover:brightness-110 shadow-lg shadow-[#0A3269]/20"
+        className="w-full gap-2 rounded-2xl bg-[#14235E] text-white font-light hover:brightness-110 shadow-lg shadow-[#14235E]/20"
       >
         {isRedirecting ? (
           <>

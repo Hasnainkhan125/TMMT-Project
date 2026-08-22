@@ -7,7 +7,8 @@ import {
   Filter as FilterIcon, ChevronDown, ChevronUp, Sparkles, TrendingUp,ShieldCheck,
   Zap, Award, Crown, Star, Plus, MessageCircle, FolderOpen, Search, Package,
   X, LayoutDashboard, Settings, UserCog, ChevronRight, Home,RefreshCw,
-  Phone, Mail, Calendar, User, MapPin, Briefcase, LogOut, DollarSign, CreditCard
+  Phone, Mail, Calendar, User, MapPin, Briefcase, LogOut, DollarSign, CreditCard,
+  Inbox, // ← added for submissions
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -51,6 +52,7 @@ import ChecksReviewPanel from '@/components/AmerDashboard/ChecksReviewPanel';
 import { cn } from '@/lib/utils';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
 import PackageApplicationsAdmin from './Packageapplicationsadmin';
+import { AdminSubmissions } from './AdminSubmissions'; // ← already imported
 
 const apiBase = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:5001';
 
@@ -156,7 +158,7 @@ const MobileBottomNav: React.FC<{
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#000] backdrop-blur-xl border-t border-gray-200/80 dark:border-[#0A3269]/30 shadow-lg dark:shadow-[#0A3269]/20">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#000] backdrop-blur-xl border-t border-gray-200/80 dark:border-[#14235E]/30 shadow-lg dark:shadow-[#14235E]/20">
       <div className="flex items-center justify-around px-2 py-2">
         {tabs.map((tab) => (
           <motion.button
@@ -166,7 +168,7 @@ const MobileBottomNav: React.FC<{
             className={cn(
               'flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200 relative min-w-[56px]',
               activeTab === tab.id 
-                ? 'text-[#0A3269] dark:text-white' 
+                ? 'text-[#14235E] dark:text-white' 
                 : 'text-gray-400 dark:text-white/50 hover:text-gray-600 dark:hover:text-white/80'
             )}
           >
@@ -174,13 +176,13 @@ const MobileBottomNav: React.FC<{
               <div className={cn(
                 'p-1.5 rounded-lg transition-all duration-200',
                 activeTab === tab.id 
-                  ? 'bg-[#0A3269]/10 dark:bg-white/20' 
+                  ? 'bg-[#14235E]/10 dark:bg-white/20' 
                   : 'bg-transparent'
               )}>
                 <tab.icon className={cn(
                   'w-5 h-5 transition-all duration-200',
                   activeTab === tab.id 
-                    ? 'text-[#0A3269] dark:text-white scale-110' 
+                    ? 'text-[#14235E] dark:text-white scale-110' 
                     : 'text-gray-400 dark:text-white/50'
                 )} />
               </div>
@@ -189,7 +191,7 @@ const MobileBottomNav: React.FC<{
             <span className={cn(
               'text-[10px] font-medium transition-colors duration-200',
               activeTab === tab.id 
-                ? 'text-[#0A3269] dark:text-white font-semibold' 
+                ? 'text-[#14235E] dark:text-white font-semibold' 
                 : 'text-gray-400 dark:text-white/50'
             )}>
               {tab.label}
@@ -197,7 +199,7 @@ const MobileBottomNav: React.FC<{
             {activeTab === tab.id && (
               <motion.div
                 layoutId="bottom-nav-indicator"
-                className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-[#0A3269] dark:bg-white"
+                className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-[#14235E] dark:bg-white"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}
@@ -214,25 +216,25 @@ const MobileHeader: React.FC<{
   onMenuToggle: () => void;
   notifications: number;
 }> = ({ user, onMenuToggle, notifications }) => (
-<div className="sticky top-0 z-40 bg-white dark:bg-[#0A1628] border-b border-gray-200/80 dark:border-[#0A3269]/30 shadow-sm dark:shadow-[#0A3269]/20">
+<div className="sticky top-0 z-40 bg-white dark:bg-[#0A1628] border-b border-gray-200/80 dark:border-[#14235E]/30 shadow-sm dark:shadow-[#14235E]/20">
   <div className="flex items-center justify-between px-4 py-3">
     <div className="flex items-center gap-3">
       <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={onMenuToggle}
-        className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-[#0A3269]/20 transition-colors"
+        className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-[#14235E]/20 transition-colors"
       >
         <Menu className="w-5 h-5 text-gray-700 dark:text-white" />
       </motion.button>
       
       <div className="flex items-center gap-2">
         <div className="relative">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#0A3269] shadow-lg shadow-[#0A3269]/25 dark:bg-white dark:shadow-white/20">
-            <Crown className="h-4 w-4 text-white dark:text-[#0A3269]" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#14235E] shadow-lg shadow-[#14235E]/25 dark:bg-white dark:shadow-white/20">
+            <Crown className="h-4 w-4 text-white dark:text-[#14235E]" />
           </div>
         </div>
         <div>
-          <span className="text-[#0A3269] dark:text-white text-base font-medium">
+          <span className="text-[#14235E] dark:text-white text-base font-medium">
             TMMT Portal
           </span>
           <p className="text-[10px] text-gray-500 dark:text-white/70">Government Services</p>
@@ -253,8 +255,8 @@ const MobileHeader: React.FC<{
         </motion.button>
         
         <div className="relative">
-   <Avatar className="w-8 h-8 ring-2 ring-[#0A3269]/20 dark:ring-white/20">
-  <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] text-xs font-medium">
+   <Avatar className="w-8 h-8 ring-2 ring-[#14235E]/20 dark:ring-white/20">
+  <AvatarFallback className="bg-[#14235E] dark:bg-white text-white dark:text-[#14235E] text-xs font-medium">
     {(user as any)?.firstName?.[0] || ''}{(user as any)?.lastName?.[0] || ''}
   </AvatarFallback>
 </Avatar>
@@ -274,8 +276,10 @@ const MobileSidebar: React.FC<{
 }> = ({ isOpen, onClose, user, onNavigate, activeTab = 'applications', onLogout }) => {
   const menuItems = [
     { id: 'applications', icon: LayoutDashboard, label: 'Dashboard' },
-    { id: 'packages', icon: Package, label: 'Package Applications' }, // ✅ changed from 'package-applications' to 'packages'
+    { id: 'packages', icon: Package, label: 'Package Applications' },
     { id: 'checks', icon: CheckCircle, label: 'Status Checks' },
+    // ─── NEW: Submissions menu item ───────────────────────────────
+    { id: 'submissions', icon: Inbox, label: 'Submissions' },
     { id: 'fraud', icon: Shield, label: 'Fraud Detection' },
     { id: 'penalties', icon: Gavel, label: 'Penalties' },
     { id: 'otp', icon: Key, label: 'OTP Management' },
@@ -307,7 +311,7 @@ const MobileSidebar: React.FC<{
               <div className="p-4 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <Avatar className="w-10 h-10 ring-2 ring-[#0A3269]/20 dark:ring-white/20">
+                    <Avatar className="w-10 h-10 ring-2 ring-[#14235E]/20 dark:ring-white/20">
                       <AvatarFallback className="bg-gradient-to-br from-[#fff] to-[#fff] text-black font-medium">
                         {(user as any)?.firstName?.[0] || ''}{(user as any)?.lastName?.[0] || ''}
                       </AvatarFallback>
@@ -318,7 +322,7 @@ const MobileSidebar: React.FC<{
                       {(user as any)?.firstName || ''} {(user as any)?.lastName || ''}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{(user as any)?.email || ''}</p>
-                    <Badge className="mt-1 bg-[#0A3269]/10 text-[#0A3269] dark:bg-[#0A3269]/30 dark:text-[#1a4a7a] border-0 text-[10px]">
+                    <Badge className="mt-1 bg-[#14235E]/10 text-[#14235E] dark:bg-[#14235E]/30 dark:text-[#1a4a7a] border-0 text-[10px]">
                       TMMT Portal
                     </Badge>
                   </div>
@@ -340,7 +344,7 @@ const MobileSidebar: React.FC<{
                       className={cn(
                         'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200',
                         isActive
-                          ? 'bg-[#0A3269] text-white shadow-lg shadow-[#0A3269]/25'
+                          ? 'bg-[#14235E] text-white shadow-lg shadow-[#14235E]/25'
                           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                       )}
                     >
@@ -385,17 +389,17 @@ const MobileApplicationCard: React.FC<{
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-white dark:bg-gray-900 rounded-2xl border-2 border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl hover:border-[#0A3269]/30 dark:hover:border-[#0A3269]/30 transition-all duration-300 overflow-hidden"
+      className="bg-white dark:bg-gray-900 rounded-2xl border-2 border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30 transition-all duration-300 overflow-hidden"
     >
       {/* Top Accent Bar */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#0A3269] via-[#1A4A8A] to-[#0A3269] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="h-1 w-full bg-gradient-to-r from-[#14235E] via-[#1A4A8A] to-[#14235E] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       
       <div className="p-4" onClick={onPress}>
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3">
               {/* Avatar with FileText Icon - Premium */}
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0A3269] to-[#1A4A8A] flex items-center justify-center shadow-lg shadow-[#0A3269]/25 flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#14235E] to-[#1A4A8A] flex items-center justify-center shadow-lg shadow-[#14235E]/25 flex-shrink-0">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div className="min-w-0">
@@ -423,11 +427,11 @@ const MobileApplicationCard: React.FC<{
         {/* Info Chips - Modern */}
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
           <span className="flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-full">
-            <FileText className="w-3 h-3 text-[#0A3269]" />
+            <FileText className="w-3 h-3 text-[#14235E]" />
             {application.applicationType.replace('_', ' ')}
           </span>
           <span className="flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-full">
-            <FileCheck className="w-3 h-3 text-[#0A3269]" />
+            <FileCheck className="w-3 h-3 text-[#14235E]" />
             {application.attachments.length} docs
           </span>
         </div>
@@ -445,7 +449,7 @@ const MobileApplicationCard: React.FC<{
           >
             <div className="p-3 grid grid-cols-3 gap-2">
               {[
-                { icon: Eye, label: 'View', action: 'view', color: 'text-[#0A3269]' },
+                { icon: Eye, label: 'View', action: 'view', color: 'text-[#14235E]' },
                 { icon: Upload, label: 'Upload', action: 'upload', color: 'text-emerald-600' },
                 { icon: FileCheck, label: 'Review', action: 'review', disabled: !application.attachments?.length, color: 'text-amber-600' },
                 { icon: Key, label: 'OTP', action: 'otp', color: 'text-blue-600' },
@@ -465,8 +469,8 @@ const MobileApplicationCard: React.FC<{
                   className={cn(
                     'flex flex-col items-center gap-1 py-3 h-auto rounded-xl transition-all duration-200',
                     'border-gray-200 dark:border-gray-700',
-                    'hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/10',
-                    'hover:border-[#0A3269]/30 dark:hover:border-[#0A3269]/30',
+                    'hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/10',
+                    'hover:border-[#14235E]/30 dark:hover:border-[#14235E]/30',
                     action.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                   )}
                 >
@@ -520,8 +524,8 @@ const ApplicationRow: React.FC<{
         className={cn(
           'bg-white dark:bg-gray-900 rounded-2xl border-2 transition-all duration-400 overflow-hidden',
           isExpanded 
-            ? 'border-[#0A3269] shadow-2xl shadow-[#0A3269]/15 dark:shadow-[#0A3269]/30' 
-            : 'border-gray-200 dark:border-gray-800 hover:border-[#0A3269]/40 dark:hover:border-[#0A3269]/30 hover:shadow-xl hover:shadow-[#0A3269]/5',
+            ? 'border-[#14235E] shadow-2xl shadow-[#14235E]/15 dark:shadow-[#14235E]/30' 
+            : 'border-gray-200 dark:border-gray-800 hover:border-[#14235E]/40 dark:hover:border-[#14235E]/30 hover:shadow-xl hover:shadow-[#14235E]/5',
           'cursor-pointer'
         )}
         onClick={onToggle}
@@ -529,14 +533,14 @@ const ApplicationRow: React.FC<{
         {/* Top Accent Bar */}
         <div className={cn(
           'h-1 w-full transition-all duration-400',
-          isExpanded ? 'bg-[#0A3269]' : 'bg-transparent group-hover:bg-[#0A3269]/40'
+          isExpanded ? 'bg-[#14235E]' : 'bg-transparent group-hover:bg-[#14235E]/40'
         )} />
 
         <div className="p-5 sm:p-6">
           <div className="flex flex-wrap items-center gap-4">
             {/* Avatar - Premium */}
             <div className="relative flex-shrink-0">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0A3269] to-[#1A4A8A] flex items-center justify-center shadow-lg shadow-[#0A3269]/25">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#14235E] to-[#1A4A8A] flex items-center justify-center shadow-lg shadow-[#14235E]/25">
                 <FileText className="w-6 h-6 text-white" />
               </div>
             </div>
@@ -605,7 +609,7 @@ const ApplicationRow: React.FC<{
         }}
         className={cn(
           'w-full flex items-center gap-2.5 px-3.5 py-2 text-xs transition-all duration-200',
-          'hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/10',
+          'hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/10',
           action.disabled ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 dark:text-gray-200'
         )}
       >
@@ -623,9 +627,9 @@ const ApplicationRow: React.FC<{
             onSetGovStage(application._id, stage);
             setShowActions(false);
           }}
-          className="w-full flex items-center gap-2.5 px-3.5 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/10 rounded-lg transition-colors"
+          className="w-full flex items-center gap-2.5 px-3.5 py-1.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/10 rounded-lg transition-colors"
         >
-          <Crown className="w-3.5 h-3.5 flex-shrink-0 text-[#0A3269]" />
+          <Crown className="w-3.5 h-3.5 flex-shrink-0 text-[#14235E]" />
           <span className="truncate text-[10px]">{stage.replace('_', ' ').toUpperCase()}</span>
         </button>
       ))}
@@ -640,9 +644,9 @@ const ApplicationRow: React.FC<{
                 onClick={(e) => { e.stopPropagation(); onToggle(); }}
               >
                 {isExpanded ? (
-                  <ChevronUp className="w-5 h-5 text-[#0A3269]" />
+                  <ChevronUp className="w-5 h-5 text-[#14235E]" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0A3269] transition-colors" />
+                  <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#14235E] transition-colors" />
                 )}
               </Button>
             </div>
@@ -741,8 +745,8 @@ const ApplicationRow: React.FC<{
 {/* Documents - Premium Card with Image Preview */}
 <div className="space-y-3">
   <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-    <div className="p-1.5 rounded-lg bg-[#0A3269]/10">
-      <FolderOpen className="w-4 h-4 text-[#0A3269]" />
+    <div className="p-1.5 rounded-lg bg-[#14235E]/10">
+      <FolderOpen className="w-4 h-4 text-[#14235E]" />
     </div>
     Documents ({application.attachments.length})
   </h4>
@@ -785,7 +789,7 @@ const ApplicationRow: React.FC<{
           return (
             <div 
               key={idx} 
-              className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-[#0A3269]/30 transition-all duration-200 group/doc"
+              className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-[#14235E]/30 transition-all duration-200 group/doc"
             >
               {/* Document Preview / Icon */}
               <div className="relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
@@ -881,7 +885,7 @@ const ApplicationRow: React.FC<{
                 {/* Preview action - only if we have a URL */}
                 {fileUrl && (
                   <button 
-                    className="text-[10px] text-[#0A3269] dark:text-[#4A8ABF] hover:underline mt-0.5 flex items-center gap-1"
+                    className="text-[10px] text-[#14235E] dark:text-[#4A8ABF] hover:underline mt-0.5 flex items-center gap-1"
                     onClick={(e) => {
                       e.stopPropagation();
                       window.open(fileUrl, '_blank');
@@ -902,7 +906,7 @@ const ApplicationRow: React.FC<{
         </div>
       )}
       {application.attachments.length > 6 && (
-        <div className="text-xs text-center text-[#0A3269] font-medium py-2.5 bg-[#0A3269]/5 rounded-xl border border-[#0A3269]/20">
+        <div className="text-xs text-center text-[#14235E] font-medium py-2.5 bg-[#14235E]/5 rounded-xl border border-[#14235E]/20">
           +{application.attachments.length - 6} more documents
         </div>
       )}
@@ -1643,7 +1647,7 @@ const filteredStats = useMemo(() => {
       value: applications.length, 
       trend: '+12%',
       trendLabel: 'vs last month',
-      color: '#0A3269',
+      color: '#14235E',
     },
     { 
       icon: Clock, 
@@ -1733,9 +1737,9 @@ const filteredStats = useMemo(() => {
   className="flex items-center justify-between mb-4"
 >
   <div className="flex items-center gap-3">
-    <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#0A3269] to-[#1A4A8A]" />
-  <h2 className="text-lg font-bold text-[#0A3269] dark:text-white flex items-center gap-2">
-  <FileText className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+    <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#14235E] to-[#1A4A8A]" />
+  <h2 className="text-lg font-bold text-[#14235E] dark:text-white flex items-center gap-2">
+  <FileText className="w-5 h-5 text-[#14235E] dark:text-[#4A8ABF]" />
   Applications
 </h2>
  
@@ -2061,7 +2065,7 @@ const filteredStats = useMemo(() => {
     {/* ─── Modern Profile Card ──────────────────────────────────── */}
     <Card className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl  overflow-hidden">
       {/* Cover gradient */}
-      <div className="h-20 bg-gradient-to-r from-[#0A3269] to-[#1A4A8A] dark:from-[#0A1628] dark:to-[#0A3269] relative">
+      <div className="h-20 bg-gradient-to-r from-[#14235E] to-[#1A4A8A] dark:from-[#0A1628] dark:to-[#14235E] relative">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-20" />
       </div>
 
@@ -2070,15 +2074,15 @@ const filteredStats = useMemo(() => {
         <div className="flex flex-col items-center text-center -mt-12">
           <div className="relative group">
             <Avatar className="w-24 h-24 ring-4 ring-white dark:ring-gray-800 shadow-xl">
-              <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] text-2xl font-medium">
+              <AvatarFallback className="bg-[#14235E] dark:bg-white text-white dark:text-[#14235E] text-2xl font-medium">
                 {(user as any)?.firstName?.[0]}{(user as any)?.lastName?.[0]}
               </AvatarFallback>
             </Avatar>
             {/* Status dot */}
             <div className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
             {/* Edit button (optional) – uncomment if you want it
-            <button className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-[#0A3269] dark:bg-white border-2 border-white dark:border-gray-900 shadow-lg hover:scale-110 transition-transform">
-              <Edit className="w-3.5 h-3.5 text-white dark:text-[#0A3269]" />
+            <button className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-[#14235E] dark:bg-white border-2 border-white dark:border-gray-900 shadow-lg hover:scale-110 transition-transform">
+              <Edit className="w-3.5 h-3.5 text-white dark:text-[#14235E]" />
             </button>
             */}
           </div>
@@ -2087,7 +2091,7 @@ const filteredStats = useMemo(() => {
             {(user as any)?.firstName} {(user as any)?.lastName}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">{(user as any)?.email}</p>
-          <Badge className="mt-2 bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] border-0 px-3 py-1 shadow-sm rounded-full">
+          <Badge className="mt-2 bg-[#14235E] dark:bg-white text-white dark:text-[#14235E] border-0 px-3 py-1 shadow-sm rounded-full">
             Amer Officer
           </Badge>
         </div>
@@ -2127,7 +2131,7 @@ const filteredStats = useMemo(() => {
   <CardContent className="p-5">
     <div className="flex items-center justify-between mb-4">
       <h4 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-        <TrendingUp className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF]" />
+        <TrendingUp className="w-4 h-4 text-[#14235E] dark:text-[#4A8ABF]" />
         Quick Stats
       </h4>
 
@@ -2150,16 +2154,16 @@ const filteredStats = useMemo(() => {
       {/* Total Applications */}
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group">
         <div className="flex justify-center mb-1">
-          <div className="p-2 rounded-lg bg-[#0A3269]/10 dark:bg-[#0A3269]/20 group-hover:bg-[#0A3269] transition-colors">
-            <FileText className="w-4 h-4 text-[#0A3269] dark:text-[#4A8ABF] group-hover:text-white" />
+          <div className="p-2 rounded-lg bg-[#14235E]/10 dark:bg-[#14235E]/20 group-hover:bg-[#14235E] transition-colors">
+            <FileText className="w-4 h-4 text-[#14235E] dark:text-[#4A8ABF] group-hover:text-white" />
           </div>
         </div>
-        <p className="text-2xl font-bold text-[#0A3269] dark:text-white">
+        <p className="text-2xl font-bold text-[#14235E] dark:text-white">
           {filteredStats.total}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Apps</p>
         <div className="mt-2 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          <div className="h-full w-full bg-[#0A3269] dark:bg-white rounded-full" />
+          <div className="h-full w-full bg-[#14235E] dark:bg-white rounded-full" />
         </div>
       </div>
 
@@ -2258,7 +2262,7 @@ const filteredStats = useMemo(() => {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0A3269] via-[#1A4A8A] to-[#2A5A9A] flex items-center justify-center shadow-lg shadow-[#0A3269]/30 flex-shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#14235E] via-[#1A4A8A] to-[#2A5A9A] flex items-center justify-center shadow-lg shadow-[#14235E]/30 flex-shrink-0">
                     <FileText className="w-6 h-6 text-white" />
                   </div>
                   <div className={cn(
@@ -2307,7 +2311,7 @@ const filteredStats = useMemo(() => {
             className="space-y-2"
           >
             <div className="flex items-center gap-2">
-              <div className="w-1 h-4 rounded-full bg-gradient-to-b from-[#0A3269] to-[#4A8ABF]" />
+              <div className="w-1 h-4 rounded-full bg-gradient-to-b from-[#14235E] to-[#4A8ABF]" />
               <h4 className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Application Details
               </h4>
@@ -2333,7 +2337,7 @@ const filteredStats = useMemo(() => {
                 <span className="text-xs text-gray-500 dark:text-gray-400">Documents</span>
                 <span className="font-medium text-xs text-gray-900 dark:text-white flex items-center gap-1.5">
                   <div className="flex items-center gap-1">
-                    <FileText className="w-3.5 h-3.5 text-[#0A3269]" />
+                    <FileText className="w-3.5 h-3.5 text-[#14235E]" />
                     <span>{selectedMobileApp.attachments.length} uploaded</span>
                   </div>
                 </span>
@@ -2341,7 +2345,7 @@ const filteredStats = useMemo(() => {
               {(selectedMobileApp.metadata as any)?.govStage && (
                 <div className="flex justify-between items-center pt-1.5">
                   <span className="text-xs text-gray-500 dark:text-gray-400">Government Stage</span>
-                  <Badge className="bg-[#0A3269]/10 text-[#0A3269] dark:bg-[#0A3269]/20 dark:text-[#4A8ABF] border-0 rounded-full px-3 py-1 text-[10px] font-medium">
+                  <Badge className="bg-[#14235E]/10 text-[#14235E] dark:bg-[#14235E]/20 dark:text-[#4A8ABF] border-0 rounded-full px-3 py-1 text-[10px] font-medium">
                     {(selectedMobileApp.metadata as any).govStage}
                   </Badge>
                 </div>
@@ -2359,7 +2363,7 @@ const filteredStats = useMemo(() => {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-4 rounded-full bg-gradient-to-b from-[#0A3269] to-[#4A8ABF]" />
+                  <div className="w-1 h-4 rounded-full bg-gradient-to-b from-[#14235E] to-[#4A8ABF]" />
                   <h4 className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Uploaded Documents ({selectedMobileApp.attachments.length})
                   </h4>
@@ -2381,7 +2385,7 @@ const filteredStats = useMemo(() => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.05 }}
                       whileHover={{ scale: 1.01, x: 2 }}
-                      className="flex items-center gap-3 bg-white dark:bg-white/5 p-3 rounded-xl border border-gray-100/80 dark:border-white/5 hover:border-[#0A3269]/20 dark:hover:border-[#0A3269]/30 transition-all duration-300 shadow-sm hover:shadow-md"
+                      className="flex items-center gap-3 bg-white dark:bg-white/5 p-3 rounded-xl border border-gray-100/80 dark:border-white/5 hover:border-[#14235E]/20 dark:hover:border-[#14235E]/30 transition-all duration-300 shadow-sm hover:shadow-md"
                     >
                       {/* Document Thumbnail Preview */}
                       <div 
@@ -2409,8 +2413,8 @@ const filteredStats = useMemo(() => {
                             }}
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A3269]/10 to-[#4A8ABF]/10 dark:from-[#0A3269]/20 dark:to-[#4A8ABF]/20">
-                            <FileText className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#14235E]/10 to-[#4A8ABF]/10 dark:from-[#14235E]/20 dark:to-[#4A8ABF]/20">
+                            <FileText className="w-5 h-5 text-[#14235E] dark:text-[#4A8ABF]" />
                           </div>
                         )}
                         
@@ -2452,7 +2456,7 @@ const filteredStats = useMemo(() => {
                             <>
                               <span className="w-px h-2 bg-gray-300 dark:bg-gray-600" />
                               <button 
-                                className="text-[9px] text-[#0A3269] dark:text-[#4A8ABF] hover:underline flex items-center gap-0.5"
+                                className="text-[9px] text-[#14235E] dark:text-[#4A8ABF] hover:underline flex items-center gap-0.5"
                                 onClick={() => window.open(fileUrl, '_blank')}
                               >
                                 <Eye className="w-2.5 h-2.5" />
@@ -2487,9 +2491,9 @@ const filteredStats = useMemo(() => {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-1 h-4 rounded-full bg-gradient-to-b from-[#0A3269] to-[#4A8ABF]" />
+                <div className="w-1 h-4 rounded-full bg-gradient-to-b from-[#14235E] to-[#4A8ABF]" />
                 <h4 className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Zap className="w-3 h-3 text-[#0A3269]" />
+                  <Zap className="w-3 h-3 text-[#14235E]" />
                   Quick Actions
                 </h4>
               </div>
@@ -2508,7 +2512,7 @@ const filteredStats = useMemo(() => {
                 { icon: AlertCircle, label: 'Status', action: () => handleStatusUpdateClick(selectedMobileApp._id, selectedMobileApp.status), color: 'blue', desc: 'Update status' },
               ].map((action, idx) => {
                 const colorMap: Record<string, string> = {
-                  blue: 'hover:border-[#0A3269]/40 hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/20 hover:text-[#0A3269] dark:hover:text-[#4A8ABF]',
+                  blue: 'hover:border-[#14235E]/40 hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/20 hover:text-[#14235E] dark:hover:text-[#4A8ABF]',
                   emerald: 'hover:border-emerald-300 hover:bg-emerald-50/80 dark:hover:bg-emerald-900/20 hover:text-emerald-600 dark:hover:text-emerald-400',
                   purple: 'hover:border-purple-300 hover:bg-purple-50/80 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400',
                   amber: 'hover:border-amber-300 hover:bg-amber-50/80 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400',
@@ -2516,7 +2520,7 @@ const filteredStats = useMemo(() => {
                 };
                 
                 const iconColorMap: Record<string, string> = {
-                  blue: 'text-[#0A3269] dark:text-[#4A8ABF]',
+                  blue: 'text-[#14235E] dark:text-[#4A8ABF]',
                   emerald: 'text-emerald-500',
                   purple: 'text-purple-500',
                   amber: 'text-amber-500',
@@ -2543,7 +2547,7 @@ const filteredStats = useMemo(() => {
                   >
                     <div className={cn(
                       'absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full transition-all duration-300',
-                      colorMap[action.color].includes('[#0A3269]') ? 'bg-gradient-to-b from-[#0A3269] to-[#4A8ABF]' :
+                      colorMap[action.color].includes('[#14235E]') ? 'bg-gradient-to-b from-[#14235E] to-[#4A8ABF]' :
                       colorMap[action.color].includes('emerald') ? 'bg-gradient-to-b from-emerald-400 to-emerald-600' :
                       colorMap[action.color].includes('purple') ? 'bg-gradient-to-b from-purple-400 to-purple-600' :
                       colorMap[action.color].includes('amber') ? 'bg-gradient-to-b from-amber-400 to-amber-600' :
@@ -2641,7 +2645,7 @@ const filteredStats = useMemo(() => {
   <DialogContent className="sm:max-w-md rounded-2xl bg-white dark:bg-gray-900/95 backdrop-blur-sm border border-gray-200 dark:border-gray-800 shadow-2xl">
     <DialogHeader>
       <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-        <RefreshCw className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+        <RefreshCw className="w-5 h-5 text-[#14235E] dark:text-[#4A8ABF]" />
         Update Status
       </DialogTitle>
       <DialogDescription className="text-gray-500 dark:text-gray-400">
@@ -2661,7 +2665,7 @@ const filteredStats = useMemo(() => {
           value={statusUpdateData?.newStatus || ''} 
           onValueChange={(value) => setStatusUpdateData(prev => prev ? {...prev, newStatus: value} : null)}
         >
-          <SelectTrigger className="rounded-xl border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 transition-colors">
+          <SelectTrigger className="rounded-xl border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 transition-colors">
             <SelectValue placeholder="Select new status" />
           </SelectTrigger>
           <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-lg">
@@ -2710,7 +2714,7 @@ const filteredStats = useMemo(() => {
           placeholder="Add a note about this status change..."
           value={statusUpdateData?.note || ''}
           onChange={(e) => setStatusUpdateData(prev => prev ? {...prev, note: e.target.value} : null)}
-          className="rounded-xl border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          className="rounded-xl border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 focus:border-[#14235E]/40 dark:focus:border-[#4A8ABF]/40 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
         />
       </div>
       <div className="flex gap-2 pt-2">
@@ -2721,7 +2725,7 @@ const filteredStats = useMemo(() => {
             }
           }}
           disabled={!statusUpdateData?.newStatus || statusUpdateData?.newStatus === statusUpdateData?.currentStatus}
-          className="flex-1 rounded-xl bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-0"
+          className="flex-1 rounded-xl bg-[#14235E] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#14235E]/25 hover:shadow-xl hover:shadow-[#14235E]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-0"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Update Status
@@ -2744,7 +2748,7 @@ const filteredStats = useMemo(() => {
   <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-gray-900/95 backdrop-blur-sm border border-gray-200 dark:border-gray-800 shadow-2xl">
     <DialogHeader className="sticky top-0 bg-white dark:bg-gray-900/95 z-10 pb-4 border-b border-gray-100 dark:border-gray-800">
       <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-        <Key className="w-5 h-5 text-[#0A3269] dark:text-[#4A8ABF]" />
+        <Key className="w-5 h-5 text-[#14235E] dark:text-[#4A8ABF]" />
         Request OTP
       </DialogTitle>
       <DialogDescription className="text-gray-500 dark:text-gray-400">
@@ -2764,8 +2768,8 @@ const filteredStats = useMemo(() => {
               className={cn(
                 'rounded-xl h-11 transition-all duration-300',
                 otpMinutes === m 
-                  ? 'bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 border-0 hover:shadow-xl hover:shadow-[#0A3269]/30' 
-                  : 'border-gray-200 dark:border-gray-700 hover:border-[#0A3269]/40 dark:hover:border-[#4A8ABF]/40 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                  ? 'bg-[#14235E] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#14235E]/25 border-0 hover:shadow-xl hover:shadow-[#14235E]/30' 
+                  : 'border-gray-200 dark:border-gray-700 hover:border-[#14235E]/40 dark:hover:border-[#4A8ABF]/40 hover:bg-gray-50 dark:hover:bg-gray-800/50'
               )}
               onClick={() => setOtpMinutes(m)}
             >
@@ -2784,7 +2788,7 @@ const filteredStats = useMemo(() => {
             value={otpPhone} 
             onChange={(e) => setOtpPhone(e.target.value)} 
             placeholder="e.g. +971 50 123 4567"
-            className="pl-10 rounded-xl h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
+            className="pl-10 rounded-xl h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 focus:border-[#14235E]/40 dark:focus:border-[#4A8ABF]/40 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
           />
         </div>
       </div>
@@ -2810,7 +2814,7 @@ const filteredStats = useMemo(() => {
               toast.error('Failed to send OTP');
             } finally { setOtpLoading(false); }
           }}
-          className="w-full rounded-xl h-11 bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-0"
+          className="w-full rounded-xl h-11 bg-[#14235E] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#14235E]/25 hover:shadow-xl hover:shadow-[#14235E]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-0"
         >
           {otpLoading ? (
             <>
@@ -2835,7 +2839,7 @@ const filteredStats = useMemo(() => {
               <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <span className="text-sm text-gray-600 dark:text-gray-300">Expires in</span>
             </div>
-            <span className="font-mono font-bold text-lg text-[#0A3269] dark:text-[#4A8ABF]">
+            <span className="font-mono font-bold text-lg text-[#14235E] dark:text-[#4A8ABF]">
               {otpCountdown}
             </span>
           </div>
@@ -2848,14 +2852,14 @@ const filteredStats = useMemo(() => {
               value={otpCode} 
               onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))} 
               placeholder="Enter 6-digit code"
-              className="text-center text-lg font-mono tracking-[0.3em] rounded-xl h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 focus:border-[#0A3269]/40 dark:focus:border-[#4A8ABF]/40 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
+              className="text-center text-lg font-mono tracking-[0.3em] rounded-xl h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 focus:border-[#14235E]/40 dark:focus:border-[#4A8ABF]/40 transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
             />
           </div>
 
           {/* Action Buttons */}
           <div className="flex gap-2 pt-2">
             <Button 
-              className="flex-1 rounded-xl h-11 bg-[#0A3269] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#0A3269]/25 hover:shadow-xl hover:shadow-[#0A3269]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-0"
+              className="flex-1 rounded-xl h-11 bg-[#14235E] hover:bg-[#1A4A8A] text-white shadow-lg shadow-[#14235E]/25 hover:shadow-xl hover:shadow-[#14235E]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-0"
               disabled={otpCode.length !== 6 || otpLoading}
               onClick={async () => {
                 try {
@@ -2941,16 +2945,16 @@ const filteredStats = useMemo(() => {
   <div className="flex items-center justify-between h-14 sm:h-16">
     {/* Logo Section */}
     <div className="flex items-center gap-2 sm:gap-3">
-      <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0A3269] dark:bg-white flex items-center justify-center shadow-lg shadow-[#0A3269]/25 dark:shadow-white/25">
-        <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-[#0A3269]" strokeWidth={1.8} />
+      <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#14235E] dark:bg-white flex items-center justify-center shadow-lg shadow-[#14235E]/25 dark:shadow-white/25">
+        <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-[#14235E]" strokeWidth={1.8} />
       </div>
       <div>
-        <h1 className="text-sm sm:text-lg font-bold text-[#0A3269] dark:text-white tracking-tight flex items-center gap-1.5">
-          <span className="text-[#0A3269] dark:text-white text-base font-medium">
+        <h1 className="text-sm sm:text-lg font-bold text-[#14235E] dark:text-white tracking-tight flex items-center gap-1.5">
+          <span className="text-[#14235E] dark:text-white text-base font-medium">
             TMMT Portal
           </span>
         </h1>
-        <p className="text-[9px] sm:text-[11px] text-[#0A3269]/60 dark:text-white/60 font-medium hidden xs:block">
+        <p className="text-[9px] sm:text-[11px] text-[#14235E]/60 dark:text-white/60 font-medium hidden xs:block">
           Government Services
         </p>
       </div>
@@ -2967,7 +2971,7 @@ const filteredStats = useMemo(() => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative p-1.5 sm:p-2 rounded-xl hover:bg-[#0A3269]/5 dark:hover:bg-[#0A3269]/10 transition-colors"
+          className="relative p-1.5 sm:p-2 rounded-xl hover:bg-[#14235E]/5 dark:hover:bg-[#14235E]/10 transition-colors"
         >
           <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-300" />
           <span className="absolute -top-0.5 -right-0.5 min-w-[16px] sm:min-w-[20px] h-4 sm:h-5 px-1 sm:px-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-[8px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg shadow-red-500/30">
@@ -2981,15 +2985,15 @@ const filteredStats = useMemo(() => {
         {/* User Profile */}
         <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group">
           <div className="text-right hidden sm:block">
-            <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#0A3269] transition-colors">
+            <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#14235E] transition-colors">
               {(user as any)?.firstName} {(user as any)?.lastName}
             </p>
             <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium">Amer Officer</p>
           </div>
           <div className="relative">
- <Avatar className="w-8 h-8 sm:w-10 sm:h-10 ring-2 ring-[#0A3269]/20 dark:ring-white/10 group-hover:ring-[#0A3269]/40 dark:group-hover:ring-white/30 transition-all duration-300 ring-offset-2 shadow-sm">
+ <Avatar className="w-8 h-8 sm:w-10 sm:h-10 ring-2 ring-[#14235E]/20 dark:ring-white/10 group-hover:ring-[#14235E]/40 dark:group-hover:ring-white/30 transition-all duration-300 ring-offset-2 shadow-sm">
   <AvatarImage src={(user as any)?.avatar} />
-  <AvatarFallback className="bg-[#0A3269] dark:bg-white text-white dark:text-[#0A3269] font-medium text-xs sm:text-sm">
+  <AvatarFallback className="bg-[#14235E] dark:bg-white text-white dark:text-[#14235E] font-medium text-xs sm:text-sm">
     {(user as any)?.firstName?.[0]}{(user as any)?.lastName?.[0]}
   </AvatarFallback>
 </Avatar>
@@ -3066,7 +3070,7 @@ const filteredStats = useMemo(() => {
       value: applications.length,
       trend: '+12%',
       trendLabel: 'vs last month',
-      color: '#0A3269',
+      color: '#14235E',
     },
     {
       icon: Clock,
@@ -3193,8 +3197,6 @@ const filteredStats = useMemo(() => {
 
 
 
-
-
 {/* ─── Tabs ────────────────────────────────────────────────────────── */}
 <Tabs defaultValue="applications" className="w-full">
  <TabsList className={cn(
@@ -3205,6 +3207,8 @@ const filteredStats = useMemo(() => {
     { id: 'applications', label: 'Applications', icon: FileText },
     { id: 'package-applications', label: 'Package Apps', icon: Package },
     { id: 'checks', label: 'Status Checks', icon: CheckCircle },
+    // ─── NEW: Submissions tab ───────────────────────────────
+    { id: 'submissions', label: 'Submissions', icon: Inbox },
     { id: 'fraud', label: 'Fraud', icon: Shield },
     { id: 'penalties', label: 'Penalties', icon: Gavel },
     { id: 'otp', label: 'OTP', icon: Key },
@@ -3223,7 +3227,7 @@ const filteredStats = useMemo(() => {
         className={cn(
           'relative rounded-lg px-3 py-1.5 text-xs font-light transition-all duration-300 w-full',
           isTablet ? 'min-w-[60px]' : 'w-full',
-          'data-[state=active]:bg-[#0A3269] dark:data-[state=active]:bg-white',
+          'data-[state=active]:bg-[#14235E] dark:data-[state=active]:bg-white',
           'data-[state=active]:text-white dark:data-[state=active]:text-black',
           'data-[state=active]:shadow-sm',
           'data-[state=inactive]:text-gray-500 dark:data-[state=inactive]:text-gray-400',
@@ -3256,13 +3260,13 @@ const filteredStats = useMemo(() => {
       <div className="flex-1 min-w-[180px]">
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-            <Search className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 group-focus-within:text-[#0A3269] dark:group-focus-within:text-white transition-colors" />
+            <Search className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 group-focus-within:text-[#14235E] dark:group-focus-within:text-white transition-colors" />
           </div>
           <Input
             placeholder="Search applications..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 pr-3 py-2 bg-white dark:bg-black/10 border-gray-200/60 dark:border-white/10 rounded-lg focus:ring-1 focus:ring-[#0A3269]/30 dark:focus:ring-white/20 focus:border-[#0A3269] dark:focus:border-white transition-all text-sm font-light text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 h-9"
+            className="pl-9 pr-3 py-2 bg-white dark:bg-black/10 border-gray-200/60 dark:border-white/10 rounded-lg focus:ring-1 focus:ring-[#14235E]/30 dark:focus:ring-white/20 focus:border-[#14235E] dark:focus:border-white transition-all text-sm font-light text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 h-9"
           />
         </div>
       </div>
@@ -3315,12 +3319,12 @@ const filteredStats = useMemo(() => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="p-2 rounded-lg bg-white dark:bg-black/40 border border-gray-200/60 dark:border-white/10 hover:border-[#0A3269]/30 dark:hover:border-white/20 transition-all duration-300 h-9 w-9 flex items-center justify-center"
+          className="p-2 rounded-lg bg-white dark:bg-black/40 border border-gray-200/60 dark:border-white/10 hover:border-[#14235E]/30 dark:hover:border-white/20 transition-all duration-300 h-9 w-9 flex items-center justify-center"
           onClick={() => setShowFilters(!showFilters)}
         >
           <FilterIcon className={cn(
             "w-3.5 h-3.5 transition-colors duration-300",
-            showFilters ? "text-[#0A3269] dark:text-white" : "text-gray-400 dark:text-gray-500"
+            showFilters ? "text-[#14235E] dark:text-white" : "text-gray-400 dark:text-gray-500"
           )} />
         </motion.button>
       </div>
@@ -3344,7 +3348,7 @@ const filteredStats = useMemo(() => {
             className={cn(
               'px-3 py-1 rounded-full text-[10px] font-light transition-all duration-300',
               isActive
-                ? 'bg-[#0A3269] dark:bg-white text-white dark:text-black shadow-sm shadow-[#0A3269]/20'
+                ? 'bg-[#14235E] dark:bg-white text-white dark:text-black shadow-sm shadow-[#14235E]/20'
                 : 'bg-gray-100/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200/60 dark:hover:bg-white/10'
             )}
             onClick={() => setStatusFilter(chip.label === 'All' ? 'all' : chip.label.toLowerCase())}
@@ -3444,6 +3448,11 @@ const filteredStats = useMemo(() => {
 
   <TabsContent value="checks" className="space-y-4">
     <ChecksReviewPanel />
+  </TabsContent>
+
+  {/* ─── NEW: Submissions Tab Content ────────────────────────────────────── */}
+  <TabsContent value="submissions" className="space-y-4">
+    <AdminSubmissions />
   </TabsContent>
 
   {/* ─── Other Tabs (Fraud, Penalties, OTP, Stats, Chat) ──────────────────── */}
